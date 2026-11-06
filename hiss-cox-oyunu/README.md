@@ -1,6 +1,6 @@
 # Hiss — «… çox ?» söz oyunu (sosial media montajı)
 
-- `Hiss_cox_oyunu.mp4`: final montaj. 1080×1920, 30 fps, H.264 High + AAC 192 kbps, 79.5 san, −14 LUFS.
+- `Hiss_cox_oyunu_v2.mp4`: final montaj (v2). 1080×1920, 30 fps, H.264 High + AAC 192 kbps, 90.2 san, −14 LUFS.
 - `Hiss_cox_oyunu.az.srt`: Azərbaycan dilində altyazılar və cavab yazıları (hazır videoda onsuz da var; bu fayl ayrıca istifadə üçündür).
 - `project/hyperframes/`: redaktə edilə bilən HyperFrames kompozisiyası. Kartlar, altyazılar, cavab ştampları və zoom-lar burada qurulub. Video kəsimi `base.mp4` faylındadır.
   Yenidən render: `npx hyperframes@0.9.19 render project/hyperframes -q delivery --sdr`

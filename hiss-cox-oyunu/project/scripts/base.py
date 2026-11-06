@@ -2,8 +2,8 @@ import subprocess,json,os
 from segs import *
 tl,T=timeline(); print("total",round(T,2))
 json.dump(tl,open('timeline.json','w'),indent=1)
-SRC='../src/proxy709.mov'; os.makedirs('parts',exist_ok=True)
-GRADE="eq=contrast=1.03:saturation=0.93:gamma=1.0,unsharp=5:5:0.3"
+SRC='../src/proxy709b.mov'; os.makedirs('parts',exist_ok=True)
+GRADE="eq=saturation=0.72:contrast=0.98,colorbalance=rm=-0.025:gm=0.005:bm=0.01,unsharp=5:5:0.25"
 lst=[];alst=[]
 for i,s in enumerate(tl):
   v=f"parts/{i:02d}.mp4"; a=f"parts/{i:02d}.wav"

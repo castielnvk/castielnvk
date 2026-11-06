@@ -162,8 +162,8 @@ D.revs.forEach(r => {
   const extra = (r.strike?`<div class="strike">${esc(r.strike)}</div>`:'') + (r.style==='combo'?`<div class="combo">Ə ×${r.n}</div>`:'');
   const n = el(`<div class="rev abs hide ${r.style}"><div class="ring"></div><div style="position:relative">${extra}<div class="stamp" style="font-size:${fs}px"><span class="t">${esc(first)}</span><span class="rest">${restHtml}</span></div></div></div>`);
   const st = n.querySelector('.stamp');
-  show(n,r.a-0.02);
-  tl.fromTo(st,{scale:1.9,opacity:0,rotation:-9},{scale:1,opacity:1,rotation:-3,duration:.17,ease:'power4.in'},r.a-0.02);
+  show(n,r.a);
+  tl.fromTo(st,{scale:1.9,opacity:0,rotation:-9},{scale:1,opacity:1,rotation:-3,duration:.17,ease:'power4.in'},r.a);
   tl.fromTo(st,{y:0},{y:6,duration:.06,yoyo:true,repeat:1,ease:'sine.inOut'},r.a+0.15);
   tl.fromTo(n.querySelector('.ring'),{scale:.3,opacity:.9},{scale:2.2,opacity:0,duration:.45,ease:'power2.out'},r.a+0.13);
   if (r.pulse) tl.fromTo(st,{scale:1.14},{scale:1,duration:.22,ease:'back.out(3)'},r.pulse);

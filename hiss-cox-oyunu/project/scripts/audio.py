@@ -26,7 +26,6 @@ def seg_t(i): return TL[i]['ostart']
 def seg_e(i): return TL[i]['ostart'] + TL[i]['odur']
 t = np.arange(len(gdb)) / 100
 gdb[t < 0.45] = -6.0                                   # punchy start under the title
-gdb[(t >= seg_t('Q2') - 0.04) & (t < seg_t('Q3'))] = -80  # silence for the whispered "seksi"
 gdb[(t >= seg_t('FZ')) & (t < seg_e('FZ'))] = -13      # freeze-frame beat
 gdb[t >= seg_t('FE') + 0.1] = -5.0                     # outro swell
 # smooth: fast attack (duck down), slower release
