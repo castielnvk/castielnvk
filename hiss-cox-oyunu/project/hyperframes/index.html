@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="az">
+<head>
+<meta charset="utf-8">
+<title>Hiss — çox oyunu</title>
+<style>
+@font-face{font-family:"Unb";font-weight:800;src:url(fonts/unbounded-latin-800-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Unb";font-weight:800;src:url(fonts/unbounded-latin-ext-800-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Unb";font-weight:900;src:url(fonts/unbounded-latin-900-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Unb";font-weight:900;src:url(fonts/unbounded-latin-ext-900-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+2C60-2C7F,U+A720-A7FF}
+:root{--ink:#16131F;--cream:#FFF4E6;--coral:#FF4F2E;--lav:#C7B5FF;--sun:#FFC83D;--mint:#59D6B0}
+html,body{margin:0;background:#000}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000;font-family:"Inter Display",Inter,sans-serif}
+#cam{position:absolute;inset:0;transform-origin:600px 690px;will-change:transform}
+#cam video{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover}
+#flash{position:absolute;inset:0;background:#fff;opacity:0}
+#vig{position:absolute;inset:0;opacity:0;background:radial-gradient(ellipse at 50% 38%,rgba(22,19,31,0) 35%,rgba(22,19,31,.55) 100%)}
+.abs{position:absolute}
+.hide{visibility:hidden}
+
+/* title */
+#title{left:70px;top:150px;width:940px}
+#title .kick{display:inline-block;background:var(--ink);color:var(--lav);font:700 28px "Inter Display";letter-spacing:.2em;padding:12px 20px;border-radius:14px}
+#title .big{font:900 168px/1 "Unb";color:var(--coral);letter-spacing:-.02em;margin:14px 0 0 -6px;text-shadow:7px 7px 0 var(--ink)}
+#title .row{display:flex;gap:14px;align-items:center;margin-top:18px}
+#title .pill{background:var(--ink);color:var(--cream);font:800 46px "Unb";padding:12px 22px;border-radius:18px}
+#title .pill b{color:var(--lav);font-weight:800}
+#title .rule{background:var(--cream);color:var(--ink);font:800 30px "Inter Display";padding:14px 20px;border-radius:16px;box-shadow:5px 5px 0 var(--ink)}
+
+/* question card */
+.card{left:64px;top:150px;transform-origin:0 0}
+.card .plate{position:relative;background:var(--ink);border-radius:34px;padding:22px 200px 26px 34px;min-height:178px;box-sizing:border-box;box-shadow:0 18px 40px rgba(0,0,0,.18)}
+.card .hdr{display:flex;gap:16px;align-items:center;font:700 23px "Inter Display";letter-spacing:.2em;color:var(--lav)}
+.card .hdr .num{color:var(--cream);opacity:.55}
+.card .name{font:800 54px/1.06 "Unb";color:var(--cream);margin-top:14px;white-space:nowrap;letter-spacing:-.01em}
+.card .cox{font:italic 700 40px "Inter Display";color:var(--lav);margin-top:6px}
+.card .tile{position:absolute;right:-26px;top:50%;width:176px;height:176px;margin-top:-88px;border-radius:36px;background:var(--coral);display:flex;align-items:center;justify-content:center;box-shadow:8px 8px 0 var(--cream),8px 8px 0 2px var(--ink)}
+.card .tile span{font:900 112px/1 "Unb";color:var(--cream);transform:translateY(-4px)}
+.card .tile i{position:absolute;right:16px;bottom:10px;font:900 40px/1 "Unb";color:var(--ink);font-style:normal}
+
+/* captions */
+.cap{left:90px;width:900px;top:1310px;display:flex;justify-content:center}
+.cap .box{background:rgba(22,19,31,.86);color:var(--cream);font:800 60px/1.16 "Inter Display";padding:14px 28px 18px;border-radius:24px;text-align:center;max-width:900px;box-sizing:border-box;letter-spacing:-.005em}
+.cap .hl{background:var(--coral);color:var(--cream);border-radius:12px;padding:0 10px;margin:0 -2px;display:inline-block}
+.cap .w{display:inline-block}
+
+/* reveal stamp */
+.rev{left:0;width:1080px;top:1150px;display:flex;justify-content:center;align-items:center}
+.rev .stamp{display:flex;align-items:center;gap:14px;background:var(--coral);padding:18px 30px 20px 20px;border-radius:30px;box-shadow:10px 10px 0 var(--ink);transform:rotate(-3deg)}
+.rev .t{flex:none;background:var(--cream);color:var(--ink);border-radius:20px;font:900 1em/1 "Unb";padding:.14em .2em .16em;min-width:.9em;text-align:center}
+.rev .rest{font:900 1em/1 "Unb";color:var(--cream);white-space:nowrap;letter-spacing:-.01em}
+.rev.tease .stamp{background:var(--lav)}
+.rev.tease .rest{color:var(--ink)}
+.rev.tease .t{background:var(--ink);color:var(--lav)}
+.rev .ring{position:absolute;left:50%;top:50%;width:300px;height:300px;margin:-150px 0 0 -150px;border-radius:50%;border:10px solid var(--coral);opacity:0}
+.rev .strike{position:absolute;top:-92px;left:50%;transform:translateX(-50%) rotate(-3deg);font:900 54px/1 "Unb";color:var(--ink);background:var(--lav);padding:10px 18px;border-radius:16px;white-space:nowrap}
+.rev .strike::after{content:"";position:absolute;left:8px;right:8px;top:50%;height:8px;margin-top:-4px;background:var(--coral);border-radius:4px;transform:scaleX(var(--sx,0));transform-origin:left center}
+.rev .combo{position:absolute;right:70px;top:-86px;background:var(--ink);color:var(--sun);font:900 46px/1 "Unb";padding:12px 18px;border-radius:16px;transform:rotate(4deg)}
+.rev.rainbow .stamp{background:var(--ink)}
+.rev.rainbow .rest span{display:inline-block}
+
+/* misc */
+#freeze{left:0;width:1080px;top:1120px;display:flex;justify-content:center;align-items:center;gap:28px}
+#freeze .tl{width:190px;height:190px;border-radius:40px;display:flex;align-items:center;justify-content:center;font:900 120px/1 "Unb";box-shadow:9px 9px 0 var(--ink)}
+#freeze .neq{font:900 120px/1 "Inter Display";color:var(--cream);text-shadow:6px 6px 0 var(--ink)}
+#later{left:64px;top:420px;background:var(--sun);color:var(--ink);font:900 40px/1 "Unb";padding:16px 22px;border-radius:18px;box-shadow:6px 6px 0 var(--ink);transform:rotate(-2deg)}
+#endcard{left:0;width:1080px;top:1080px;display:flex;flex-direction:column;align-items:center;gap:16px}
+#endcard .big{font:900 150px/1 "Unb";color:var(--coral);text-shadow:7px 7px 0 var(--ink)}
+#endcard .pill{background:var(--ink);color:var(--cream);font:800 46px "Unb";padding:12px 24px;border-radius:18px}
+#endcard .pill b{color:var(--lav)}
+#endshade{left:0;top:0;width:1080px;height:1920px;background:linear-gradient(to bottom,rgba(22,19,31,0) 40%,rgba(22,19,31,.62) 75%)}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="root" data-width="1080" data-height="1920" data-start="0" data-duration="79.467">
+  <div id="cam"><video id="v" class="clip" src="base.mp4" data-start="0" data-duration="79.467" muted playsinline></video></div>
+  <div id="vig"></div>
+  <div id="endshade" class="abs hide"></div>
+  <div id="layer"></div>
+  <div id="flash"></div>
+</div>
+<script src="gsap.min.js"></script>
+<script>
+const D = {"T": 79.467, "cards": [{"i": 1, "n": 9, "name": "NİGAR CAMAL", "letter": "M", "t_in": 1.55, "t_letter": 1.95, "t_end": 6.533}, {"i": 2, "n": 9, "name": "AYGÜN KAZIMOVA", "letter": "P", "t_in": 6.593, "t_letter": 7.993, "t_end": 10.833}, {"i": 3, "n": 9, "name": "AYAZ BABAYEV", "letter": "D", "t_in": 10.913, "t_letter": 12.233, "t_end": 17.833}, {"i": 4, "n": 9, "name": "RÖYA AYXAN", "letter": "Q", "t_in": 17.873, "t_letter": 20.173, "t_end": 24.767}, {"i": 5, "n": 9, "name": "ROZA ZƏRGƏRLİ", "letter": "G", "t_in": 24.817, "t_letter": 26.087, "t_end": 36.867}, {"i": 6, "n": 9, "name": "SAMRA", "letter": "Ə", "t_in": 36.917, "t_letter": 38.317, "t_end": 47.3}, {"i": 7, "n": 9, "name": "PROMETE", "letter": "Z", "t_in": 47.3, "t_letter": 48.63, "t_end": 55.667}, {"i": 8, "n": 9, "name": "ZAMİQ", "letter": "S", "t_in": 55.737, "t_letter": 57.037, "t_end": 61.767}, {"i": 9, "n": 9, "name": "ELZA SEYİDCAHAN", "letter": "R", "t_in": 61.817, "t_letter": 63.967, "t_end": 77.267}], "caps": [{"a": 4.027, "b": 5.077, "text": "Birinci ağlıma…", "hl": [], "late": {}}, {"a": 5.097, "b": 6.527, "text": "gizli-gizli şeylər gəlir", "hl": ["gizli-gizli"], "late": {}}, {"a": 13.2, "b": 14.64, "text": "Ayaz Babayev çox…", "hl": [], "late": {}}, {"a": 21.033, "b": 22.773, "text": "Röya Ayxan çox…", "hl": [], "late": {}}, {"a": 26.667, "b": 27.8, "text": "Gü…", "hl": [], "late": {}}, {"a": 28.12, "b": 29.72, "text": "Qeyrətdi də…", "hl": ["Qeyrətdi"], "late": {}}, {"a": 29.77, "b": 31.17, "text": "qeyrətdi də… yox", "hl": [], "late": {}}, {"a": 31.22, "b": 32.73, "text": "Nə deyim… gü…", "hl": [], "late": {}}, {"a": 35.153, "b": 36.283, "text": "Gü ola bilər də…", "hl": [], "late": {}}, {"a": 39.197, "b": 41.067, "text": "Samra… Ə…", "hl": [], "late": {}}, {"a": 42.553, "b": 44.473, "text": "Doğrudan, Ə… başqa nə ola bilər?", "hl": [], "late": {}}, {"a": 49.38, "b": 51.01, "text": "Niyə bilmirəm?", "hl": [], "late": {}}, {"a": 52.78, "b": 55.667, "text": "…çox zarafatcıldır!", "hl": ["zarafatcıldır!"], "late": {}}, {"a": 59.61, "b": 60.73, "text": "Zamiq çox…", "hl": [], "late": {}}, {"a": 65.967, "b": 66.697, "text": "R…", "hl": [], "late": {}}, {"a": 66.71, "b": 68.86, "text": "R deyəndə ağlıma heç gəlmir…", "hl": [], "late": {}}, {"a": 69.26, "b": 70.16, "text": "Qəribə.", "hl": [], "late": {}}, {"a": 70.46, "b": 72.41, "text": "Rus gəldi ilk ağlıma.", "hl": ["Rus"], "late": {}}, {"a": 72.43, "b": 73.6, "text": "Rus sözü.", "hl": ["Rus"], "late": {}}, {"a": 75.1, "b": 77.26, "text": "Elza Seyidcahan çox rəngarəngdir.", "hl": ["rəngarəngdir."], "late": {"rəngarəngdir.": 76.31}}], "revs": [{"word": "PEŞƏKARDIR", "a": 9.587, "b": 10.827, "style": "main"}, {"word": "DÜRÜSTDÜR", "a": 14.66, "b": 17.82, "style": "main"}, {"word": "QÜSURSUZDUR", "a": 22.803, "b": 24.743, "style": "main"}, {"word": "GÖZƏLDİR!", "a": 34.563, "b": 36.843, "style": "main", "pulse": 36.323}, {"word": "ƏLADI!", "a": 41.187, "b": 42.507, "style": "combo", "n": 1}, {"word": "ƏYLƏNCƏLİDİR!", "a": 44.553, "b": 46.093, "style": "combo", "n": 2}, {"word": "ƏNTİQƏDİR!", "a": 46.22, "b": 47.28, "style": "combo", "n": 3}, {"word": "ZARAFATCIL…", "a": 51.34, "b": 52.73, "style": "main"}, {"word": "SEKSİ…", "a": 58.3, "b": 59.6, "style": "tease"}, {"word": "SADƏDİR.", "a": 60.78, "b": 61.76, "style": "main", "strike": "SEKSİ"}, {"word": "RƏNGARƏNGDİR!", "a": 73.65, "b": 75.05, "style": "rainbow"}], "zooms": [{"t": 0, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 5.097, "s": 1.3, "x": 617, "y": 679, "d": 0}, {"t": 6.533, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 14.66, "s": 1.0, "x": 667, "y": 699, "d": 0}, {"t": 14.7, "s": 1.13, "x": 667, "y": 699, "d": 3.0}, {"t": 17.833, "s": 1.0, "x": 640, "y": 660, "d": 0}, {"t": 22.803, "s": 1.16, "x": 640, "y": 660, "d": 0}, {"t": 24.767, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 32.733, "s": 1.08, "x": 579, "y": 620, "d": 0}, {"t": 32.743, "s": 1.2, "x": 579, "y": 620, "d": 0.95}, {"t": 33.733, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 44.553, "s": 1.18, "x": 644, "y": 712, "d": 0}, {"t": 46.1, "s": 1.36, "x": 644, "y": 712, "d": 0}, {"t": 47.3, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 51.34, "s": 1.2, "x": 597, "y": 679, "d": 0}, {"t": 55.667, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 57.8, "s": 1.42, "x": 596, "y": 740, "d": 0}, {"t": 59.6, "s": 1.0, "x": 635, "y": 690, "d": 0}, {"t": 66.7, "s": 1.07, "x": 599, "y": 729, "d": 0}, {"t": 73.6, "s": 1.0, "x": 586, "y": 690, "d": 0}, {"t": 76.31, "s": 1.18, "x": 586, "y": 690, "d": 0}, {"t": 77.267, "s": 1.18, "x": 586, "y": 690, "d": 0}, {"t": 77.277, "s": 1.27, "x": 586, "y": 690, "d": 2.1}], "extras": {"freeze": {"a": 32.733, "b": 33.733}, "later": {"a": 66.7, "b": 68.3, "text": "+10 SANİYƏ"}, "end": {"a": 77.267, "b": 79.46666666666668}}, "title_end": 1.55};
+const L = document.getElementById('layer');
+const tl = gsap.timeline({paused:true});
+const el = (html) => { const d=document.createElement('div'); d.innerHTML=html.trim(); const n=d.firstChild; L.appendChild(n); return n; };
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const show = (n,t) => tl.set(n,{visibility:'visible'},t);
+const hide = (n,t) => tl.set(n,{visibility:'hidden'},t);
+
+/* ---------- reframing ---------- */
+D.zooms.forEach(z => {
+  const v = {scale:z.s, transformOrigin:`${z.x}px ${z.y}px`};
+  if (z.d>0) tl.to('#cam',{...v,duration:z.d,ease:'sine.inOut'},z.t); else tl.set('#cam',v,z.t);
+});
+
+/* ---------- opening title ---------- */
+const title = el(`<div id="title" class="abs">
+  <div class="kick">SÖZ OYUNU</div>
+  <div class="big">HISS</div>
+  <div class="row"><div class="pill">«… <b>ÇOX</b> ?»</div><div class="rule">ad + hərf → bir söz</div></div></div>`);
+tl.fromTo(title.querySelector('.kick'),{y:-30,opacity:0},{y:0,opacity:1,duration:.28,ease:'power3.out'},0.0);
+tl.fromTo(title.querySelector('.big'),{scale:.6,opacity:0,transformOrigin:'0% 70%'},{scale:1,opacity:1,duration:.38,ease:'back.out(2.2)'},0.05);
+tl.fromTo(title.querySelectorAll('.row > div'),{y:40,opacity:0},{y:0,opacity:1,duration:.3,stagger:.08,ease:'power3.out'},0.22);
+tl.to(title,{y:-40,opacity:0,duration:.25,ease:'power2.in'},D.title_end-0.25);
+hide(title,D.title_end);
+
+/* ---------- question cards ---------- */
+D.cards.forEach((c,k) => {
+  const n = el(`<div class="card abs hide"><div class="plate">
+     <div class="hdr"><span>HISS · «ÇOX…»</span><span class="num">${String(c.i).padStart(2,'0')} / ${String(c.n).padStart(2,'0')}</span></div>
+     <div class="name">${esc(c.name)}</div><div class="cox">çox …</div>
+     <div class="tile"><span>${c.letter}</span><i>…</i></div></div></div>`);
+  const nm = n.querySelector('.name'); const w = c.name.length;
+  if (w>12) nm.style.fontSize = Math.round(54*12.5/w)+'px';
+  const plate=n.querySelector('.plate'), tile=n.querySelector('.tile'), let_=tile.querySelector('span');
+  show(n,c.t_in);
+  tl.fromTo(plate,{x:-120,opacity:0},{x:0,opacity:1,duration:.32,ease:'power3.out'},c.t_in);
+  tl.fromTo(tile,{scale:0,rotation:-25},{scale:1,rotation:0,duration:.3,ease:'back.out(2.4)'},c.t_in+0.08);
+  tl.set(let_,{opacity:0},c.t_in);
+  // the letter flips in exactly when it is spoken
+  tl.fromTo(tile,{rotationY:90},{rotationY:0,duration:.22,ease:'power2.out'},c.t_letter-0.05);
+  tl.set(let_,{opacity:1},c.t_letter-0.05);
+  tl.fromTo(let_,{scale:1.5},{scale:1,duration:.25,ease:'back.out(3)'},c.t_letter-0.05);
+  // condense into a corner badge so faces stay clear
+  const tb = Math.min(c.t_letter+1.1, c.t_end-0.3);
+  tl.to(n,{scale:.5,x:-14,y:-10,duration:.35,ease:'power3.inOut'},tb);
+  tl.to(n.querySelector('.cox'),{opacity:0,duration:.2},tb);
+  tl.to(n,{x:-460,opacity:0,duration:.25,ease:'power2.in'},c.t_end-0.25);
+  hide(n,c.t_end);
+  c._tile = tile;
+});
+// badge tile reacts on each reveal of its round
+const cardAt = t => D.cards.find(c => t>=c.t_in && t<c.t_end);
+
+/* ---------- captions ---------- */
+D.caps.forEach(c => {
+  const words = c.text.split(' ');
+  const html = words.map(w => {
+    const isHl = c.hl.includes(w); return `<span class="w${isHl?' hl':''}" data-w="${esc(w)}">${esc(w)}</span>`;
+  }).join(' ');
+  const n = el(`<div class="cap abs hide"><div class="box">${html}</div></div>`);
+  show(n,c.a);
+  tl.fromTo(n.querySelector('.box'),{y:22,opacity:0,scale:.96},{y:0,opacity:1,scale:1,duration:.16,ease:'power2.out'},c.a);
+  n.querySelectorAll('.w').forEach(s => {
+    const lt = c.late[s.dataset.w];
+    if (lt!==undefined){ tl.set(s,{opacity:0},c.a); tl.fromTo(s,{opacity:0,scale:1.6},{opacity:1,scale:1,duration:.2,ease:'back.out(3)'},lt); }
+    else if (s.classList.contains('hl')) tl.fromTo(s,{scale:.7},{scale:1,duration:.22,ease:'back.out(3)'},c.a+0.05);
+  });
+  tl.to(n,{opacity:0,duration:.08},c.b-0.08);
+  hide(n,c.b);
+});
+
+/* ---------- answer reveals ---------- */
+const RAIN = ['#FF4F2E','#FFC83D','#59D6B0','#C7B5FF','#FF7AB6','#FFF4E6'];
+D.revs.forEach(r => {
+  const first = r.word[0], rest = r.word.slice(1);
+  const fs = Math.min(116, Math.round(840/(r.word.length*0.98+0.9)));
+  let restHtml = esc(rest);
+  if (r.style==='rainbow') restHtml = [...rest].map((ch,i)=>`<span style="color:${RAIN[i%RAIN.length]}">${esc(ch)}</span>`).join('');
+  const extra = (r.strike?`<div class="strike">${esc(r.strike)}</div>`:'') + (r.style==='combo'?`<div class="combo">Ə ×${r.n}</div>`:'');
+  const n = el(`<div class="rev abs hide ${r.style}"><div class="ring"></div><div style="position:relative">${extra}<div class="stamp" style="font-size:${fs}px"><span class="t">${esc(first)}</span><span class="rest">${restHtml}</span></div></div></div>`);
+  const st = n.querySelector('.stamp');
+  show(n,r.a-0.02);
+  tl.fromTo(st,{scale:1.9,opacity:0,rotation:-9},{scale:1,opacity:1,rotation:-3,duration:.17,ease:'power4.in'},r.a-0.02);
+  tl.fromTo(st,{y:0},{y:6,duration:.06,yoyo:true,repeat:1,ease:'sine.inOut'},r.a+0.15);
+  tl.fromTo(n.querySelector('.ring'),{scale:.3,opacity:.9},{scale:2.2,opacity:0,duration:.45,ease:'power2.out'},r.a+0.13);
+  if (r.pulse) tl.fromTo(st,{scale:1.14},{scale:1,duration:.22,ease:'back.out(3)'},r.pulse);
+  if (r.style==='rainbow'){
+    const sp = n.querySelectorAll('.rest span');
+    tl.fromTo(sp,{y:30,opacity:0},{y:0,opacity:1,duration:.18,stagger:.03,ease:'back.out(3)'},r.a+0.05);
+    tl.to(sp,{y:-10,duration:.18,stagger:{each:.04,yoyo:true,repeat:1},ease:'sine.inOut'},r.a+0.5);
+  }
+  if (r.strike){
+    const s = n.querySelector('.strike');
+    tl.fromTo(s,{opacity:0,y:20},{opacity:1,y:0,duration:.18,ease:'power2.out'},r.a+0.2);
+    tl.fromTo(s,{'--sx':0},{'--sx':1,duration:.22,ease:'power2.inOut'},r.a+0.42);
+  }
+  if (r.style==='combo'){
+    tl.fromTo(n.querySelector('.combo'),{scale:0,rotation:-30},{scale:1,rotation:4,duration:.25,ease:'back.out(3)'},r.a+0.12);
+  }
+  const c = cardAt(r.a);
+  if (c && c._tile){
+    tl.to(c._tile,{backgroundColor:r.style==='tease'?'#C7B5FF':'#59D6B0',duration:.12},r.a);
+    tl.fromTo(c._tile,{scale:1.25},{scale:1,duration:.3,ease:'back.out(3)'},r.a);
+  }
+  tl.to(n,{opacity:0,y:-14,duration:.12,ease:'power2.in'},r.b-0.12);
+  hide(n,r.b);
+});
+
+/* ---------- freeze frame joke: Q ≠ G ---------- */
+const F = D.extras.freeze;
+const fz = el(`<div id="freeze" class="abs hide"><div class="tl" style="background:#C7B5FF;color:#16131F">Q</div><div class="neq">≠</div><div class="tl" style="background:#FF4F2E;color:#FFF4E6">G</div></div>`);
+tl.set('#flash',{opacity:0},0); tl.set('#flash',{opacity:.85},F.a); tl.to('#flash',{opacity:0,duration:.18,ease:'power2.out'},F.a+0.01);
+tl.to('#vig',{opacity:1,duration:.15},F.a); tl.to('#vig',{opacity:0,duration:.12},F.b-0.1);
+show(fz,F.a+0.06);
+const ft = fz.querySelectorAll('.tl'), fn = fz.querySelector('.neq');
+tl.fromTo(ft[0],{x:-300,rotation:-30,opacity:0},{x:0,rotation:-6,opacity:1,duration:.22,ease:'back.out(2)'},F.a+0.06);
+tl.fromTo(ft[1],{x:300,rotation:30,opacity:0},{x:0,rotation:6,opacity:1,duration:.22,ease:'back.out(2)'},F.a+0.14);
+tl.fromTo(fn,{scale:0},{scale:1,duration:.2,ease:'back.out(3)'},F.a+0.3);
+tl.to(fz,{opacity:0,duration:.08},F.b-0.08); hide(fz,F.b);
+
+/* ---------- time-skip chip ---------- */
+const LA = D.extras.later;
+const la = el(`<div id="later" class="abs hide">${LA.text}</div>`);
+show(la,LA.a);
+tl.fromTo(la,{scale:0,rotation:-20},{scale:1,rotation:-2,duration:.25,ease:'back.out(2.6)'},LA.a);
+tl.to(la,{opacity:0,y:-10,duration:.15},LA.b-0.15); hide(la,LA.b);
+
+/* ---------- end card ---------- */
+const E = D.extras.end;
+tl.set('#endshade',{opacity:0},0); show('#endshade',E.a); tl.to('#endshade',{opacity:1,duration:.4},E.a+0.1);
+const ec = el(`<div id="endcard" class="abs hide"><div class="big">HISS</div><div class="pill">«… <b>ÇOX</b> ?»</div></div>`);
+show(ec,E.a+0.35);
+tl.fromTo(ec.querySelector('.big'),{scale:.6,opacity:0},{scale:1,opacity:1,duration:.35,ease:'back.out(2.2)'},E.a+0.35);
+tl.fromTo(ec.querySelector('.pill'),{y:30,opacity:0},{y:0,opacity:1,duration:.3,ease:'power3.out'},E.a+0.5);
+
+tl.set({}, {}, D.T);
+window.__timelines = {root: tl};
+</script>
+</body>
+</html>

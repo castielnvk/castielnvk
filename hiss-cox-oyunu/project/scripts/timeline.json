@@ -1,0 +1,234 @@
+[
+ {
+  "id": "N1",
+  "round": "nigar",
+  "freeze": false,
+  "src_in": 68.35,
+  "src_out": 71.31666666666666,
+  "ostart": 0.0,
+  "odur": 2.966666666666667
+ },
+ {
+  "id": "N2",
+  "round": "nigar",
+  "freeze": false,
+  "src_in": 71.39,
+  "src_out": 74.95666666666666,
+  "ostart": 2.966666666666667,
+  "odur": 3.566666666666667
+ },
+ {
+  "id": "A1",
+  "round": "aygun",
+  "freeze": false,
+  "src_in": 5.09,
+  "src_out": 7.223333333333333,
+  "ostart": 6.533333333333333,
+  "odur": 2.1333333333333333
+ },
+ {
+  "id": "A2",
+  "round": "aygun",
+  "freeze": false,
+  "src_in": 7.8,
+  "src_out": 9.966666666666667,
+  "ostart": 8.666666666666666,
+  "odur": 2.1666666666666665
+ },
+ {
+  "id": "Y1",
+  "round": "ayaz",
+  "freeze": false,
+  "src_in": 10.27,
+  "src_out": 12.636666666666667,
+  "ostart": 10.833333333333332,
+  "odur": 2.3666666666666667
+ },
+ {
+  "id": "Y2",
+  "round": "ayaz",
+  "freeze": false,
+  "src_in": 17.4,
+  "src_out": 22.03333333333333,
+  "ostart": 13.2,
+  "odur": 4.633333333333334
+ },
+ {
+  "id": "R1",
+  "round": "roya",
+  "freeze": false,
+  "src_in": 61.11,
+  "src_out": 64.31,
+  "ostart": 17.833333333333332,
+  "odur": 3.2
+ },
+ {
+  "id": "R2",
+  "round": "roya",
+  "freeze": false,
+  "src_in": 64.48,
+  "src_out": 68.21333333333334,
+  "ostart": 21.03333333333333,
+  "odur": 3.7333333333333334
+ },
+ {
+  "id": "Z1",
+  "round": "roza",
+  "freeze": false,
+  "src_in": 38.0,
+  "src_out": 41.03333333333333,
+  "ostart": 24.766666666666666,
+  "odur": 3.033333333333333
+ },
+ {
+  "id": "Z2",
+  "round": "roza",
+  "freeze": false,
+  "src_in": 43.48,
+  "src_out": 48.41333333333333,
+  "ostart": 27.799999999999997,
+  "odur": 4.933333333333334
+ },
+ {
+  "id": "FZ",
+  "round": "roza",
+  "freeze": true,
+  "src": 48.379999999999995,
+  "ostart": 32.733333333333334,
+  "odur": 1.0
+ },
+ {
+  "id": "Z3",
+  "round": "roza",
+  "freeze": false,
+  "src_in": 50.03,
+  "src_out": 53.163333333333334,
+  "ostart": 33.733333333333334,
+  "odur": 3.1333333333333333
+ },
+ {
+  "id": "S1",
+  "round": "samra",
+  "freeze": false,
+  "src_in": 80.0,
+  "src_out": 82.3,
+  "ostart": 36.86666666666667,
+  "odur": 2.3
+ },
+ {
+  "id": "S2",
+  "round": "samra",
+  "freeze": false,
+  "src_in": 83.85,
+  "src_out": 85.75,
+  "ostart": 39.166666666666664,
+  "odur": 1.9
+ },
+ {
+  "id": "S3",
+  "round": "samra",
+  "freeze": false,
+  "src_in": 86.3,
+  "src_out": 87.76666666666667,
+  "ostart": 41.06666666666666,
+  "odur": 1.4666666666666666
+ },
+ {
+  "id": "S4",
+  "round": "samra",
+  "freeze": false,
+  "src_in": 89.03,
+  "src_out": 92.59666666666666,
+  "ostart": 42.53333333333333,
+  "odur": 3.566666666666667
+ },
+ {
+  "id": "S5",
+  "round": "samra",
+  "freeze": false,
+  "src_in": 93.86,
+  "src_out": 95.06,
+  "ostart": 46.1,
+  "odur": 1.2
+ },
+ {
+  "id": "P1",
+  "round": "promete",
+  "freeze": false,
+  "src_in": 95.05,
+  "src_out": 97.05,
+  "ostart": 47.300000000000004,
+  "odur": 2.0
+ },
+ {
+  "id": "P2",
+  "round": "promete",
+  "freeze": false,
+  "src_in": 101.62,
+  "src_out": 107.98666666666666,
+  "ostart": 49.300000000000004,
+  "odur": 6.366666666666666
+ },
+ {
+  "id": "Q1",
+  "round": "zamiq",
+  "freeze": false,
+  "src_in": 115.03,
+  "src_out": 117.16333333333334,
+  "ostart": 55.66666666666667,
+  "odur": 2.1333333333333333
+ },
+ {
+  "id": "Q2",
+  "round": "zamiq",
+  "freeze": false,
+  "src_in": 118.89,
+  "src_out": 120.69,
+  "ostart": 57.800000000000004,
+  "odur": 1.8
+ },
+ {
+  "id": "Q3",
+  "round": "zamiq",
+  "freeze": false,
+  "src_in": 128.72,
+  "src_out": 130.88666666666666,
+  "ostart": 59.6,
+  "odur": 2.1666666666666665
+ },
+ {
+  "id": "E1",
+  "round": "elza",
+  "freeze": false,
+  "src_in": 132.1,
+  "src_out": 137.03333333333333,
+  "ostart": 61.766666666666666,
+  "odur": 4.933333333333334
+ },
+ {
+  "id": "E2",
+  "round": "elza",
+  "freeze": false,
+  "src_in": 147.09,
+  "src_out": 153.99,
+  "ostart": 66.7,
+  "odur": 6.9
+ },
+ {
+  "id": "E4",
+  "round": "elza",
+  "freeze": false,
+  "src_in": 161.05,
+  "src_out": 164.71666666666667,
+  "ostart": 73.60000000000001,
+  "odur": 3.6666666666666665
+ },
+ {
+  "id": "FE",
+  "round": "elza",
+  "freeze": true,
+  "src": 164.68333333333334,
+  "ostart": 77.26666666666668,
+  "odur": 2.2
+ }
+]
