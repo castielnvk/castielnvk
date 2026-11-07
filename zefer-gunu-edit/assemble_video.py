@@ -69,14 +69,28 @@ def crop_rect(src_t):
     cy = np.clip(560 - 0.40 * h + h / 2, 142 + h / 2, 998 - h / 2)
     return cx, cy, h
 
-def render_crop(frame, cx, cy, ch):
+SR_MODEL = None
+SR_MIX = 0.6          # share of AI detail; the rest is a natural Lanczos upscale (keeps skin and texture honest)
+def render_crop(frame, cx, cy, ch, use_sr=False):
     cw = ch * 9 / 16
     # keep inside programme area and above the station banner
     cx = float(np.clip(cx, PROG_X0 + cw / 2, PROG_X1 - cw / 2))
     cy = float(np.clip(cy, ch / 2, BANNER_Y - ch / 2)) if ch <= BANNER_Y else BANNER_Y / 2
     s = W / cw
     M = np.array([[s, 0, W / 2 - s * cx], [0, s, H / 2 - s * cy]], np.float32)
-    return cv2.warpAffine(frame, M, (W, H), flags=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_REFLECT)
+    lan = cv2.warpAffine(frame, M, (W, H), flags=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_REFLECT)
+    if not (use_sr and SR_MODEL):
+        return lan
+    # super-resolve only the crop window (+margin), then place it with the same geometry
+    x0 = max(0, int(cx - cw / 2) - 8); x1 = min(SRC_W, int(cx + cw / 2) + 9)
+    y0 = max(0, int(cy - ch / 2) - 8); y1 = min(SRC_H, int(cy + ch / 2) + 9)
+    up = SR_MODEL(np.ascontiguousarray(frame[y0:y1, x0:x1]))
+    s4 = s / 4.0
+    M4 = np.array([[s4, 0, W / 2 - s * (cx - x0) - s4 * 1.5], [0, s4, H / 2 - s * (cy - y0) - s4 * 1.5]], np.float32)  # SR pixel u <-> src x0 + u/4 - 0.375
+    srimg = cv2.warpAffine(cv2.resize(up, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA) if s4 < 0.5 else up,
+                           M4 * (np.array([[2, 2, 1], [2, 2, 1]], np.float32) if s4 < 0.5 else 1), (W, H),
+                           flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REFLECT)
+    return np.clip(SR_MIX * srimg + (1 - SR_MIX) * lan.astype(np.float32), 0, 255).astype(np.uint8)
 
 # ---------- grade ----------
 def build_lut():
@@ -94,7 +108,7 @@ VIG = (1 - 0.20 * np.clip(np.sqrt(((xx - W / 2) / (W * 0.72)) ** 2 + ((yy - H * 
 rng = np.random.default_rng(3)
 GRAIN = [rng.normal(0, 3.0, (H // 2, W // 2)).astype(np.float32) for _ in range(8)]
 
-def grade(img):
+def grade(img, sharpen=0.45):
     img = cv2.LUT(img, LUT)
     f = img.astype(np.float32)
     # restrained warmth in mids, a whisper of depth in shadows
@@ -107,7 +121,7 @@ def grade(img):
     f = f + 0.22 * cv2.resize(bloom, (W, H), interpolation=cv2.INTER_LINEAR)
     # clarity: mild luma sharpening after the upscale
     blur = cv2.GaussianBlur(f, (0, 0), 1.6)
-    f = f + 0.45 * (f - blur)
+    f = f + sharpen * (f - blur)
     f = f * VIG
     return f
 
@@ -139,13 +153,20 @@ class ClipReader:
             self.cur = cv2.cvtColor(fr, cv2.COLOR_BGR2RGB); self.idx += 1
         return self.cur
 
+import os
+if os.environ.get('SR_ONNX'):
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from sr import SR
+    SR_MODEL = SR(os.environ['SR_ONNX'])
+
 if len(sys.argv) > 5:          # preview mode: python assemble_video.py SRC FACES SCENES OUTDIR preview t1,t2,...
     for t in [float(v) for v in sys.argv[6].split(',')]:
         st = ot_to_src(t)
         fr = subprocess.run(['ffmpeg', '-v', 'error', '-ss', f'{st:.3f}', '-i', sys.argv[1], '-frames:v', '1', '-f', 'rawvideo',
                              '-pix_fmt', 'rgb24', '-'], capture_output=True).stdout
         fr = np.frombuffer(fr, np.uint8).reshape(SRC_H, SRC_W, 3)
-        img = finish(grade(render_crop(fr, *crop_rect(st))), 0)
+        sr_on = st >= 44.39
+        img = finish(grade(render_crop(fr, *crop_rect(st), use_sr=sr_on), 0.15 if sr_on and SR_MODEL else 0.45), 0)
         cv2.imwrite(f'{sys.argv[4]}/prev_{t:06.2f}.png', cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
     sys.exit(0)
 
@@ -172,7 +193,8 @@ for k in range(n):
     her = None
     if st is not None:
         fr = src.get(st)
-        her = grade(render_crop(fr, *crop_rect(st)))
+        sr_on = st >= 44.39
+        her = grade(render_crop(fr, *crop_rect(st), use_sr=sr_on), 0.15 if sr_on and SR_MODEL else 0.45)
         last_her = her
     def scene(reader, t0):
         return reader.get(ot - t0).astype(np.float32)
