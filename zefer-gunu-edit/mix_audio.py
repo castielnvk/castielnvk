@@ -35,10 +35,13 @@ voice *= g
 
 # voice activity envelope (for gentle music ducking)
 hop = SR // 100
-env = np.sqrt(np.convolve(voice[:, 0] ** 2, np.ones(hop * 4) / (hop * 4), 'same'))
+def movavg(x, n):                       # O(N) centred moving average (same result as np.convolve(..., 'same'))
+    c = np.concatenate([[0.0], np.cumsum(x, dtype=np.float64)])
+    i = np.arange(len(x)); lo = np.clip(i - n // 2, 0, len(x)); hi = np.clip(i - n // 2 + n, 0, len(x))
+    return ((c[hi] - c[lo]) / n).astype(np.float32)
+env = np.sqrt(movavg(voice[:, 0] ** 2, hop * 4))
 vad = (env > 10 ** (-38 / 20)).astype(np.float32)
-k = np.ones(int(0.35 * SR)) / int(0.35 * SR)
-vad = np.clip(np.convolve(vad, k, 'same') * 1.6, 0, 1)
+vad = np.clip(movavg(vad, int(0.35 * SR)) * 1.6, 0, 1)
 
 # Music: score with a hand-set level curve (dB) + light ducking under words
 music = load(sys.argv[2])[:out_len]
