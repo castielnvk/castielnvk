@@ -2,216 +2,298 @@
 <html lang="az">
 <head>
 <meta charset="utf-8">
-<title>Hiss — çox oyunu</title>
+<title>Hiss — çox oyunu v3</title>
 <style>
 @font-face{font-family:"Unb";font-weight:800;src:url(fonts/unbounded-latin-800-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:"Unb";font-weight:800;src:url(fonts/unbounded-latin-ext-800-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:"Unb";font-weight:900;src:url(fonts/unbounded-latin-900-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:"Unb";font-weight:900;src:url(fonts/unbounded-latin-ext-900-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+2C60-2C7F,U+A720-A7FF}
-:root{--ink:#16131F;--cream:#FFF4E6;--coral:#FF4F2E;--lav:#C7B5FF;--sun:#FFC83D;--mint:#59D6B0}
+:root{--ink:#16131F;--cream:#FFF4E6;--coral:#FF4F2E;--lav:#C7B5FF;--sun:#FFC83D;--mint:#59D6B0;--pink:#FF7AB6}
 html,body{margin:0;background:#000}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000;font-family:"Inter Display",Inter,sans-serif}
-#cam{position:absolute;inset:0;transform-origin:600px 690px;will-change:transform}
+#cam{position:absolute;inset:0;will-change:transform}
 #cam video{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover}
-#flash{position:absolute;inset:0;background:#fff;opacity:0}
-#vig{position:absolute;inset:0;opacity:0;background:radial-gradient(ellipse at 50% 38%,rgba(22,19,31,0) 35%,rgba(22,19,31,.55) 100%)}
+.full{position:absolute;inset:0;pointer-events:none}
+#flash{background:#fff;opacity:0}
+#vig{opacity:0;background:radial-gradient(ellipse at 50% 36%,rgba(22,19,31,0) 38%,rgba(22,19,31,.5) 100%)}
+#desat{background:#808080;mix-blend-mode:saturation;opacity:0}
 .abs{position:absolute}
 .hide{visibility:hidden}
+.emo{font-family:"Noto Color Emoji";line-height:1}
 
 /* title */
-#title{left:70px;top:150px;width:940px}
+#title{left:70px;top:330px;width:940px}
 #title .kick{display:inline-block;background:var(--ink);color:var(--lav);font:700 28px "Inter Display";letter-spacing:.2em;padding:12px 20px;border-radius:14px}
 #title .big{font:900 168px/1 "Unb";color:var(--coral);letter-spacing:-.02em;margin:14px 0 0 -6px;text-shadow:7px 7px 0 var(--ink)}
 #title .row{display:flex;gap:14px;align-items:center;margin-top:18px}
 #title .pill{background:var(--ink);color:var(--cream);font:800 46px "Unb";padding:12px 22px;border-radius:18px}
 #title .pill b{color:var(--lav);font-weight:800}
 #title .rule{background:var(--cream);color:var(--ink);font:800 30px "Inter Display";padding:14px 20px;border-radius:16px;box-shadow:5px 5px 0 var(--ink)}
+#hooklbl{left:262px;top:178px;background:var(--sun);color:var(--ink);font:900 34px/1 "Unb";padding:14px 20px;border-radius:16px;box-shadow:6px 6px 0 var(--ink);transform:rotate(-3deg)}
 
-/* question card */
-.card{left:64px;top:150px;transform-origin:0 0}
+/* question card + letter motif */
+.card{left:250px;top:150px;transform-origin:0 0}
 .card .plate{position:relative;background:var(--ink);border-radius:34px;padding:22px 200px 26px 34px;min-height:178px;box-sizing:border-box;box-shadow:0 18px 40px rgba(0,0,0,.18)}
 .card .hdr{display:flex;gap:16px;align-items:center;font:700 23px "Inter Display";letter-spacing:.2em;color:var(--lav)}
 .card .hdr .num{color:var(--cream);opacity:.55}
 .card .name{font:800 54px/1.06 "Unb";color:var(--cream);margin-top:14px;white-space:nowrap;letter-spacing:-.01em}
 .card .cox{font:italic 700 40px "Inter Display";color:var(--lav);margin-top:6px}
-.card .tile{position:absolute;right:-26px;top:50%;width:176px;height:176px;margin-top:-88px;border-radius:36px;background:var(--coral);display:flex;align-items:center;justify-content:center;box-shadow:8px 8px 0 var(--cream),8px 8px 0 2px var(--ink)}
-.card .tile span{font:900 112px/1 "Unb";color:var(--cream);transform:translateY(-4px)}
-.card .tile i{position:absolute;right:16px;bottom:10px;font:900 40px/1 "Unb";color:var(--ink);font-style:normal}
+.tile{position:absolute;right:-26px;top:50%;width:176px;height:176px;margin-top:-88px;border-radius:36px;background:var(--coral);display:flex;align-items:center;justify-content:center;box-shadow:8px 8px 0 var(--cream),8px 8px 0 2px var(--ink)}
+.tile span{font:900 112px/1 "Unb";color:var(--cream);transform:translateY(-4px)}
+.tile i{position:absolute;right:16px;bottom:10px;font:900 40px/1 "Unb";color:var(--ink);font-style:normal}
 
 /* captions */
-.cap{left:90px;width:900px;top:1310px;display:flex;justify-content:center}
-.cap .box{background:rgba(22,19,31,.86);color:var(--cream);font:800 60px/1.16 "Inter Display";padding:14px 28px 18px;border-radius:24px;text-align:center;max-width:900px;box-sizing:border-box;letter-spacing:-.005em}
-.cap .hl{background:var(--coral);color:var(--cream);border-radius:12px;padding:0 10px;margin:0 -2px;display:inline-block}
+.cap{left:90px;width:900px;top:1425px;display:flex;justify-content:center}
+.cap .box{background:rgba(22,19,31,.86);color:var(--cream);font:800 60px/1.16 "Inter Display";padding:14px 28px 18px;border-radius:24px;text-align:center;max-width:900px;box-sizing:border-box}
+.cap .hl{background:var(--coral);color:var(--cream);border-radius:12px;padding:0 10px;display:inline-block}
 .cap .w{display:inline-block}
 
-/* reveal stamp */
-.rev{left:0;width:1080px;top:1150px;display:flex;justify-content:center;align-items:center}
-.rev .stamp{display:flex;align-items:center;gap:14px;background:var(--coral);padding:18px 30px 20px 20px;border-radius:30px;box-shadow:10px 10px 0 var(--ink);transform:rotate(-3deg)}
+/* answer stamps (one family, per-moment variants) */
+.rev{left:0;width:1080px;top:1190px;display:flex;justify-content:center;align-items:center}
+.rev .stamp{display:flex;align-items:center;gap:14px;background:var(--coral);padding:18px 30px 20px 20px;border-radius:30px;box-shadow:10px 10px 0 var(--ink);transform:rotate(-3deg);position:relative;overflow:hidden}
 .rev .t{flex:none;background:var(--cream);color:var(--ink);border-radius:20px;font:900 1em/1 "Unb";padding:.14em .2em .16em;min-width:.9em;text-align:center}
 .rev .rest{font:900 1em/1 "Unb";color:var(--cream);white-space:nowrap;letter-spacing:-.01em}
-.rev.tease .stamp{background:var(--lav)}
-.rev.tease .rest{color:var(--ink)}
-.rev.tease .t{background:var(--ink);color:var(--lav)}
 .rev .ring{position:absolute;left:50%;top:50%;width:300px;height:300px;margin:-150px 0 0 -150px;border-radius:50%;border:10px solid var(--coral);opacity:0}
-.rev .strike{position:absolute;top:-92px;left:50%;transform:translateX(-50%) rotate(-3deg);font:900 54px/1 "Unb";color:var(--ink);background:var(--lav);padding:10px 18px;border-radius:16px;white-space:nowrap}
-.rev .strike::after{content:"";position:absolute;left:8px;right:8px;top:50%;height:8px;margin-top:-4px;background:var(--coral);border-radius:4px;transform:scaleX(var(--sx,0));transform-origin:left center}
-.rev .combo{position:absolute;right:70px;top:-86px;background:var(--ink);color:var(--sun);font:900 46px/1 "Unb";padding:12px 18px;border-radius:16px;transform:rotate(4deg)}
-.rev.rainbow .stamp{background:var(--ink)}
-.rev.rainbow .rest span{display:inline-block}
+.rev .badge{position:absolute;right:40px;top:-92px;font:900 46px/1 "Unb";padding:12px 18px;border-radius:16px;transform:rotate(5deg);box-shadow:5px 5px 0 var(--ink)}
+.rev.pro .badge{background:var(--sun);color:var(--ink)}
+.rev.halo .stamp{background:var(--cream)} .rev.halo .rest{color:var(--ink)} .rev.halo .t{background:var(--sun)}
+.rev.gloss .stamp{background:linear-gradient(135deg,#B9A3FF,#7FE3D0)} .rev.gloss .rest{color:var(--ink)} .rev.gloss .t{background:var(--ink);color:var(--cream)}
+.rev.gloss .shine{position:absolute;top:-40%;left:-60%;width:40%;height:180%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.85),rgba(255,255,255,0));transform:rotate(20deg)}
+.rev.love .stamp{background:var(--pink)}
+.rev.combo1 .stamp,.rev.combo2 .stamp,.rev.combo3 .stamp{background:var(--coral)}
+.rev .combo{position:absolute;right:60px;top:-90px;background:var(--ink);color:var(--sun);font:900 46px/1 "Unb";padding:12px 18px;border-radius:16px;transform:rotate(4deg)}
+.rev.flat .stamp{background:#9A97A3;box-shadow:none;transform:none;border-radius:8px} .rev.flat .t{background:#E6E4EA}
+.rev.plain .stamp{background:#fff;box-shadow:none;transform:none;border-radius:0;padding:14px 26px;border:3px solid #111}
+.rev.plain .t{background:none;font-family:Georgia,serif;font-weight:400;padding:0;min-width:0} .rev.plain .rest{color:#111;font-family:Georgia,serif;font-weight:400;letter-spacing:0}
+.rev.gold .stamp{background:linear-gradient(180deg,#FFE27A,#F5B700)} .rev.gold .rest{color:var(--ink)} .rev.gold .t{background:var(--ink);color:var(--sun)}
+.rev.rainbow .stamp{background:var(--ink)} .rev.rainbow .rest span{display:inline-block}
 
-/* misc */
-#freeze{left:0;width:1080px;top:1120px;display:flex;justify-content:center;align-items:center;gap:28px}
+/* stickers */
+.stk{transform-origin:50% 50%}
+.stk .emo{filter:drop-shadow(0 0 0 #fff) drop-shadow(4px 0 0 #fff) drop-shadow(-4px 0 0 #fff) drop-shadow(0 4px 0 #fff) drop-shadow(0 -4px 0 #fff) drop-shadow(4px 6px 6px rgba(0,0,0,.25))}
+
+/* fx */
+#loading{left:190px;width:700px;top:1215px;background:var(--ink);border-radius:28px;padding:22px 28px;box-sizing:border-box;box-shadow:8px 8px 0 var(--lav)}
+#loading .lt{font:900 40px/1 "Unb";color:var(--cream);display:flex;align-items:center;gap:16px}
+#loading .lt .tl{width:64px;height:64px;border-radius:16px;background:var(--coral);display:flex;align-items:center;justify-content:center;font:900 42px/1 "Unb"}
+#loading .bar{margin-top:18px;height:22px;border-radius:11px;background:#3a3550;overflow:hidden}
+#loading .bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--coral),var(--sun));transform-origin:0 50%;transform:scaleX(0)}
+#halo{left:450px;top:330px;width:300px;height:70px;border-radius:50%;border:16px solid #FFE27A;box-sizing:border-box;box-shadow:0 0 30px 8px rgba(255,226,122,.75),inset 0 0 18px rgba(255,226,122,.8)}
+#gloss{left:-500px;top:0;width:360px;height:1920px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.45),rgba(255,255,255,0));transform:rotate(18deg);transform-origin:50% 50%}
+#freeze{left:0;width:1080px;top:1200px;display:flex;justify-content:center;align-items:center;gap:28px}
 #freeze .tl{width:190px;height:190px;border-radius:40px;display:flex;align-items:center;justify-content:center;font:900 120px/1 "Unb";box-shadow:9px 9px 0 var(--ink)}
 #freeze .neq{font:900 120px/1 "Inter Display";color:var(--cream);text-shadow:6px 6px 0 var(--ink)}
-#later{left:64px;top:420px;background:var(--sun);color:var(--ink);font:900 40px/1 "Unb";padding:16px 22px;border-radius:18px;box-shadow:6px 6px 0 var(--ink);transform:rotate(-2deg)}
-#endcard{left:0;width:1080px;top:1080px;display:flex;flex-direction:column;align-items:center;gap:16px}
+#freeze .x{position:absolute;font:900 54px/1 "Unb";color:var(--cream);background:var(--coral);padding:10px 18px;border-radius:14px;top:-80px;transform:rotate(-6deg);box-shadow:5px 5px 0 var(--ink)}
+.heart{font-size:90px}
+#combo{left:0;width:1080px;top:1000px;text-align:center;font:900 120px/1 "Unb";color:var(--sun);text-shadow:7px 7px 0 var(--ink),-2px -2px 0 var(--ink)}
+.star{font-size:80px}
+.conf{width:64px;height:64px;border-radius:14px;display:flex;align-items:center;justify-content:center;font:900 40px/1 "Unb";color:var(--cream);box-shadow:4px 4px 0 var(--ink)}
+#later{left:56px;top:430px;background:var(--sun);color:var(--ink);font:900 40px/1 "Unb";padding:16px 22px;border-radius:18px;box-shadow:6px 6px 0 var(--ink);transform:rotate(-2deg)}
+#endcard{left:0;width:1080px;top:1130px;display:flex;flex-direction:column;align-items:center;gap:16px}
 #endcard .big{font:900 150px/1 "Unb";color:var(--coral);text-shadow:7px 7px 0 var(--ink)}
 #endcard .pill{background:var(--ink);color:var(--cream);font:800 46px "Unb";padding:12px 24px;border-radius:18px}
 #endcard .pill b{color:var(--lav)}
-#endshade{left:0;top:0;width:1080px;height:1920px;background:linear-gradient(to bottom,rgba(22,19,31,0) 40%,rgba(22,19,31,.62) 75%)}
+#logos{position:absolute;inset:0;width:1080px;height:1920px;filter:drop-shadow(0 2px 5px rgba(0,0,0,.45))}
+#endshade{background:linear-gradient(to bottom,rgba(22,19,31,0) 45%,rgba(22,19,31,.6) 78%)}
 </style>
 </head>
 <body>
-<div id="root" data-composition-id="root" data-width="1080" data-height="1920" data-start="0" data-duration="90.167">
-  <div id="cam"><video id="v" class="clip" src="base.mp4" data-start="0" data-duration="90.167" muted playsinline></video></div>
-  <div id="vig"></div>
-  <div id="endshade" class="abs hide"></div>
+<div id="root" data-composition-id="root" data-width="1080" data-height="1920" data-start="0" data-duration="89.4">
+  <div id="cam"><video id="v" class="clip" src="base.mp4" data-start="0" data-duration="89.4" muted playsinline></video></div>
+  <div id="desat" class="full"></div>
+  <div id="vig" class="full"></div>
+  <div id="endshade" class="full hide"></div>
   <div id="layer"></div>
-  <div id="flash"></div>
+  <img id="logos" src="logos.png" alt="">
+  <div id="flash" class="full"></div>
 </div>
 <script src="gsap.min.js"></script>
 <script>
-const D = {"T": 90.167, "cards": [{"i": 1, "n": 11, "name": "NİGAR CAMAL", "letter": "M", "t_in": 1.55, "t_letter": 1.8, "t_end": 4.2}, {"i": 2, "n": 11, "name": "AYGÜN KAZIMOVA", "letter": "P", "t_in": 4.26, "t_letter": 5.66, "t_end": 9.167}, {"i": 3, "n": 11, "name": "AYAZ BABAYEV", "letter": "D", "t_in": 8.9, "t_letter": 10.437, "t_end": 16.733}, {"i": 4, "n": 11, "name": "RÖYA AYXAN", "letter": "Q", "t_in": 16.773, "t_letter": 19.073, "t_end": 24.3}, {"i": 5, "n": 11, "name": "ROZA ZƏRGƏRLİ", "letter": "G", "t_in": 24.35, "t_letter": 25.62, "t_end": 36.4}, {"i": 6, "n": 11, "name": "SAMRA", "letter": "Ə", "t_in": 36.45, "t_letter": 37.85, "t_end": 48.1}, {"i": 7, "n": 11, "name": "PROMETE", "letter": "Z", "t_in": 47.567, "t_letter": 49.18, "t_end": 56.2}, {"i": 8, "n": 11, "name": "NATAVAN HƏBİBİ", "letter": "L", "t_in": 56.27, "t_letter": 57.71, "t_end": 61.767}, {"i": 9, "n": 11, "name": "ZAMİQ", "letter": "S", "t_in": 61.837, "t_letter": 63.137, "t_end": 66.467}, {"i": 10, "n": 11, "name": "NURAN", "letter": "İ", "t_in": 66.517, "t_letter": 67.717, "t_end": 72.467}, {"i": 11, "n": 11, "name": "ELZA SEYİDCAHAN", "letter": "R", "t_in": 72.517, "t_letter": 74.667, "t_end": 87.967}], "caps": [{"a": 11.4, "b": 12.9, "text": "Ayaz Babayev çox…", "hl": [], "late": {}}, {"a": 19.933, "b": 21.653, "text": "Röya Ayxan çox…", "hl": [], "late": {}}, {"a": 26.2, "b": 27.333, "text": "Gü…", "hl": [], "late": {}}, {"a": 27.653, "b": 29.253, "text": "Qeyrətdi də…", "hl": ["Qeyrətdi"], "late": {}}, {"a": 29.303, "b": 30.703, "text": "qeyrətdi də… yox", "hl": [], "late": {}}, {"a": 30.753, "b": 32.263, "text": "Nə deyim… gü…", "hl": [], "late": {}}, {"a": 34.837, "b": 35.817, "text": "Gü ola bilər də…", "hl": [], "late": {}}, {"a": 38.73, "b": 40.6, "text": "Samra… Ə…", "hl": [], "late": {}}, {"a": 42.587, "b": 44.507, "text": "Doğrudan, Ə… başqa nə ola bilər?", "hl": [], "late": {}}, {"a": 49.913, "b": 51.543, "text": "Niyə bilmirəm?", "hl": [], "late": {}}, {"a": 53.313, "b": 56.2, "text": "…çox zarafatcıldır!", "hl": ["zarafatcıldır!"], "late": {}}, {"a": 63.91, "b": 65.03, "text": "Zamiq çox…", "hl": [], "late": {}}, {"a": 68.717, "b": 70.137, "text": "Nuran çox…", "hl": [], "late": {}}, {"a": 76.667, "b": 77.397, "text": "R…", "hl": [], "late": {}}, {"a": 77.41, "b": 79.56, "text": "R deyəndə ağlıma heç gəlmir…", "hl": [], "late": {}}, {"a": 79.96, "b": 80.86, "text": "Qəribə.", "hl": [], "late": {}}, {"a": 81.16, "b": 83.11, "text": "Rus gəldi ilk ağlıma.", "hl": ["Rus"], "late": {}}, {"a": 83.13, "b": 84.3, "text": "Rus sözü.", "hl": ["Rus"], "late": {}}, {"a": 85.8, "b": 87.96, "text": "Elza Seyidcahan çox…", "hl": [], "late": {}}], "revs": [{"word": "MATANDIR", "a": 3.233, "b": 4.45, "style": "main"}, {"word": "PEŞƏKARDIR", "a": 8.303, "b": 9.417, "style": "main"}, {"word": "DÜRÜSTDÜR", "a": 15.77, "b": 16.983, "style": "main"}, {"word": "QÜSURSUZDUR", "a": 23.563, "b": 24.55, "style": "main"}, {"word": "GÖZƏLDİR!", "a": 34.627, "b": 36.65, "style": "main"}, {"word": "ƏLADIR!", "a": 41.81, "b": 42.55, "style": "combo", "n": 1}, {"word": "ƏYLƏNCƏLİDİR!", "a": 45.387, "b": 46.133, "style": "combo", "n": 2}, {"word": "ƏNTİQƏDİR!", "a": 47.373, "b": 48.35, "style": "combo", "n": 3}, {"word": "ZARAFATCIL…", "a": 52.523, "b": 53.263, "style": "main"}, {"word": "LAQEYDDİR", "a": 60.4, "b": 62.017, "style": "main"}, {"word": "SADƏDİR.", "a": 65.81, "b": 66.717, "style": "main"}, {"word": "İSTEDADLIDIR", "a": 71.767, "b": 72.717, "style": "main"}, {"word": "RƏNGARƏNGDİR!", "a": 85.24, "b": 88.017, "style": "rainbow", "pulse": 87.88}], "zooms": [{"t": 0, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 2.333, "s": 1.22, "x": 589, "y": 702, "d": 0}, {"t": 3.733, "s": 1.22, "x": 589, "y": 702, "d": 0}, {"t": 3.743, "s": 1.27, "x": 589, "y": 702, "d": 0.45}, {"t": 4.2, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 8.9, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 8.91, "s": 1.04, "x": 600, "y": 690, "d": 0.25}, {"t": 9.167, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 12.9, "s": 1.0, "x": 667, "y": 699, "d": 0}, {"t": 12.95, "s": 1.13, "x": 667, "y": 699, "d": 2.6}, {"t": 16.033, "s": 1.13, "x": 667, "y": 699, "d": 0}, {"t": 16.043, "s": 1.18, "x": 667, "y": 699, "d": 0.7}, {"t": 16.733, "s": 1.0, "x": 640, "y": 660, "d": 0}, {"t": 22.403, "s": 1.16, "x": 640, "y": 660, "d": 0}, {"t": 24.3, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 32.267, "s": 1.08, "x": 579, "y": 620, "d": 0}, {"t": 32.277, "s": 1.2, "x": 579, "y": 620, "d": 0.95}, {"t": 33.267, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 44.587, "s": 1.18, "x": 644, "y": 712, "d": 0}, {"t": 46.133, "s": 1.36, "x": 644, "y": 712, "d": 0}, {"t": 47.567, "s": 1.36, "x": 644, "y": 712, "d": 0}, {"t": 47.577, "s": 1.4, "x": 644, "y": 712, "d": 0.55}, {"t": 48.1, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 51.813, "s": 1.2, "x": 597, "y": 679, "d": 0}, {"t": 56.2, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 59.2, "s": 1.2, "x": 529, "y": 714, "d": 0}, {"t": 61.767, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 65.08, "s": 1.15, "x": 635, "y": 690, "d": 0}, {"t": 66.467, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 70.117, "s": 1.15, "x": 564, "y": 683, "d": 0}, {"t": 72.467, "s": 1.0, "x": 600, "y": 690, "d": 0}, {"t": 77.4, "s": 1.07, "x": 599, "y": 729, "d": 0}, {"t": 84.3, "s": 1.0, "x": 586, "y": 690, "d": 0}, {"t": 87.01, "s": 1.18, "x": 586, "y": 690, "d": 0}, {"t": 87.967, "s": 1.18, "x": 586, "y": 690, "d": 0}, {"t": 87.977, "s": 1.27, "x": 586, "y": 690, "d": 2.1}], "extras": {"freeze": {"a": 32.267, "b": 33.267}, "later": {"a": 77.4, "b": 79.0, "text": "+10 SANİYƏ"}, "end": {"a": 87.967, "b": 90.16666666666667}}, "title_end": 1.55};
+const D = {"T": 89.4, "FX": 600, "FY": 690, "cards": [{"i": 1, "n": 11, "name": "NİGAR CAMAL", "letter": "M", "t_in": 4.7669999999999995, "t_letter": 5.0169999999999995, "t_end": 7.367}, {"i": 2, "n": 11, "name": "AYGÜN KAZIMOVA", "letter": "P", "t_in": 7.427, "t_letter": 8.827, "t_end": 12.367}, {"i": 3, "n": 11, "name": "AYAZ BABAYEV", "letter": "D", "t_in": 12.387, "t_letter": 13.637, "t_end": 19.067}, {"i": 4, "n": 11, "name": "RÖYA AYXAN", "letter": "Q", "t_in": 19.107, "t_letter": 21.407, "t_end": 26.633}, {"i": 5, "n": 11, "name": "ROZA ZƏRGƏRLİ", "letter": "G", "t_in": 26.683, "t_letter": 27.953, "t_end": 38.833}, {"i": 6, "n": 11, "name": "SAMRA", "letter": "Ə", "t_in": 38.883, "t_letter": 40.283, "t_end": 50.6}, {"i": 7, "n": 11, "name": "PROMETE", "letter": "Z", "t_in": 50.62, "t_letter": 51.68, "t_end": 58.7}, {"i": 8, "n": 11, "name": "NATAVAN HƏBİBİ", "letter": "L", "t_in": 58.77, "t_letter": 60.21, "t_end": 64.267}, {"i": 9, "n": 11, "name": "ZAMİQ", "letter": "S", "t_in": 64.337, "t_letter": 65.637, "t_end": 68.967}, {"i": 10, "n": 11, "name": "NURAN", "letter": "İ", "t_in": 69.017, "t_letter": 70.217, "t_end": 74.967}, {"i": 11, "n": 11, "name": "ELZA SEYİDCAHAN", "letter": "R", "t_in": 75.017, "t_letter": 77.167, "t_end": 87.2}], "caps": [{"a": 0.0, "b": 1.95, "text": "Rus gəldi ilk ağlıma.", "hl": ["Rus"]}, {"a": 1.97, "b": 3.14, "text": "Rus sözü.", "hl": ["Rus"]}, {"a": 14.6, "b": 16.15, "text": "Ayaz Babayev çox…", "hl": []}, {"a": 22.267, "b": 23.987, "text": "Röya Ayxan çox…", "hl": []}, {"a": 28.533, "b": 29.667, "text": "Gü…", "hl": []}, {"a": 29.987, "b": 31.587, "text": "Qeyrətdi də…", "hl": ["Qeyrətdi"]}, {"a": 31.637, "b": 33.037, "text": "qeyrətdi də… yox", "hl": []}, {"a": 33.087, "b": 34.597, "text": "Nə deyim… gü…", "hl": []}, {"a": 37.27, "b": 38.25, "text": "Gü ola bilər də…", "hl": []}, {"a": 41.163, "b": 43.033, "text": "Samra… Ə…", "hl": []}, {"a": 45.02, "b": 46.94, "text": "Doğrudan, Ə… başqa nə ola bilər?", "hl": []}, {"a": 52.413, "b": 54.043, "text": "Niyə bilmirəm?", "hl": []}, {"a": 55.813, "b": 58.7, "text": "…çox zarafatcıldır!", "hl": ["zarafatcıldır!"]}, {"a": 66.41, "b": 67.53, "text": "Zamiq çox…", "hl": []}, {"a": 71.217, "b": 72.637, "text": "Nuran çox…", "hl": []}, {"a": 79.167, "b": 79.897, "text": "R…", "hl": []}, {"a": 79.91, "b": 82.06, "text": "R deyəndə ağlıma heç gəlmir…", "hl": []}, {"a": 82.46, "b": 83.36, "text": "Qəribə.", "hl": []}, {"a": 85.033, "b": 87.193, "text": "Elza Seyidcahan çox…", "hl": []}], "revs": [{"word": "MATANDIR", "a": 6.4, "b": 7.617, "style": "main", "round": "nigar"}, {"word": "PEŞƏKARDIR", "a": 11.47, "b": 12.617, "style": "pro", "round": "aygun"}, {"word": "DÜRÜSTDÜR", "a": 18.12, "b": 19.317, "style": "halo", "round": "ayaz"}, {"word": "QÜSURSUZDUR", "a": 25.897, "b": 26.883, "style": "gloss", "round": "roya"}, {"word": "GÖZƏLDİR!", "a": 37.06, "b": 39.083, "style": "love", "round": "roza"}, {"word": "ƏLADIR!", "a": 44.243, "b": 44.983, "style": "combo1", "round": "samra"}, {"word": "ƏYLƏNCƏLİDİR!", "a": 47.82, "b": 48.567, "style": "combo2", "round": "samra"}, {"word": "ƏNTİQƏDİR!", "a": 49.807, "b": 50.85, "style": "combo3", "round": "samra"}, {"word": "ZARAFATCIL…", "a": 55.023, "b": 55.763, "style": "main", "round": "promete"}, {"word": "LAQEYDDİR", "a": 62.9, "b": 64.517, "style": "flat", "round": "natavan"}, {"word": "SADƏDİR.", "a": 68.31, "b": 69.217, "style": "plain", "round": "zamiq"}, {"word": "İSTEDADLIDIR", "a": 74.267, "b": 75.217, "style": "gold", "round": "nuran"}, {"word": "RƏNGARƏNGDİR!", "a": 84.473, "b": 87.25, "style": "rainbow", "round": "elza"}], "stickers": [{"e": "🤔", "x": 870, "y": 600, "s": 170, "a": 0.25, "b": 3.117, "anim": "bob", "rot": 10}, {"e": "😌", "x": 860, "y": 640, "s": 160, "a": 6.5, "b": 7.367, "anim": "pop", "rot": 8}, {"e": "🎤", "x": 200, "y": 640, "s": 170, "a": 11.55, "b": 12.517, "anim": "pop", "rot": -14}, {"e": "😇", "x": 870, "y": 550, "s": 170, "a": 18.24, "b": 19.067, "anim": "pop", "rot": 10}, {"e": "💎", "x": 870, "y": 600, "s": 150, "a": 25.997, "b": 26.833, "anim": "spin", "rot": 0}, {"e": "🙈", "x": 860, "y": 640, "s": 180, "a": 34.9, "b": 35.7, "anim": "pop", "rot": 10}, {"e": "😍", "x": 870, "y": 600, "s": 170, "a": 37.16, "b": 37.27, "anim": "pop", "rot": 8}, {"e": "😅", "x": 870, "y": 620, "s": 160, "a": 37.32, "b": 38.833, "anim": "bob", "rot": 8}, {"e": "🤷‍♀️", "x": 190, "y": 640, "s": 160, "a": 45.37, "b": 46.94, "anim": "pop", "rot": -8}, {"e": "🔥", "x": 870, "y": 560, "s": 170, "a": 49.907, "b": 50.6, "anim": "shake", "rot": 6}, {"e": "😩", "x": 200, "y": 620, "s": 160, "a": 53.113, "b": 54.043, "anim": "shake", "rot": -8}, {"e": "😜", "x": 870, "y": 600, "s": 160, "a": 55.123, "b": 58.613, "anim": "bob", "rot": 8}, {"e": "😐", "x": 870, "y": 620, "s": 160, "a": 63.35, "b": 64.267, "anim": "none", "rot": 0}, {"e": "🙂", "x": 860, "y": 640, "s": 120, "a": 68.66, "b": 68.967, "anim": "none", "rot": 0}, {"e": "👏", "x": 200, "y": 640, "s": 170, "a": 74.367, "b": 75.167, "anim": "clap", "rot": -10}, {"e": "🤯", "x": 870, "y": 560, "s": 170, "a": 80.41, "b": 83.41, "anim": "shake", "rot": 8}, {"e": "⏳", "x": 300, "y": 550, "s": 90, "a": 83.533, "b": 84.933, "anim": "spin", "rot": 0}, {"e": "🌈", "x": 860, "y": 550, "s": 180, "a": 84.573, "b": 87.5, "anim": "pop", "rot": 8}], "fx": {"title": {"a": 3.167, "b": 4.7669999999999995}, "hook_label": {"a": 0.15, "b": 3.0669999999999997}, "smash": 3.167, "loading": {"a": 16.15, "b": 18.1}, "halo": {"a": 18.17, "b": 19.067}, "gloss": 25.947, "freeze": {"a": 34.6, "b": 35.7}, "hearts": {"a": 37.14, "b": 38.660000000000004}, "combo": {"a": 49.887, "b": 50.6}, "deadpan": {"a": 62.9, "b": 64.267}, "stars": {"a": 74.317}, "later": {"a": 83.533, "b": 84.933, "text": "+10 SANİYƏ"}, "confetti": {"a": 84.523}, "final_pulse": 87.113, "end": {"a": 87.2, "b": 89.40000000000002}}, "zooms": [{"t": 0, "s": 1.0, "d": 0}], "sfx": [{"t": 0.0, "k": "whoosh", "g": -8}, {"t": 3.147, "k": "smash", "g": -2}, {"t": 3.217, "k": "whoosh", "g": -6}, {"t": 4.977, "k": "tick", "g": -7}, {"t": 7.347, "k": "whoosh", "g": -8}, {"t": 8.787, "k": "tick", "g": -7}, {"t": 12.307, "k": "whoosh", "g": -8}, {"t": 13.597, "k": "tick", "g": -7}, {"t": 19.027, "k": "whoosh", "g": -8}, {"t": 21.367, "k": "tick", "g": -7}, {"t": 26.603, "k": "whoosh", "g": -8}, {"t": 27.913, "k": "tick", "g": -7}, {"t": 38.803, "k": "whoosh", "g": -8}, {"t": 40.243, "k": "tick", "g": -7}, {"t": 50.54, "k": "whoosh", "g": -8}, {"t": 51.64, "k": "tick", "g": -7}, {"t": 58.69, "k": "whoosh", "g": -8}, {"t": 60.17, "k": "tick", "g": -7}, {"t": 64.257, "k": "whoosh", "g": -8}, {"t": 65.597, "k": "tick", "g": -7}, {"t": 68.937, "k": "whoosh", "g": -8}, {"t": 70.177, "k": "tick", "g": -7}, {"t": 74.937, "k": "whoosh", "g": -8}, {"t": 77.127, "k": "tick", "g": -7}, {"t": 6.39, "k": "stamp", "g": -3}, {"t": 6.42, "k": "stamp", "g": -5}, {"t": 11.46, "k": "stamp", "g": -3}, {"t": 11.49, "k": "stamp", "g": -5}, {"t": 18.11, "k": "stamp_soft", "g": -3}, {"t": 18.14, "k": "angel", "g": -5}, {"t": 25.887, "k": "stamp_soft", "g": -3}, {"t": 25.917, "k": "sparkle", "g": -5}, {"t": 37.05, "k": "stamp", "g": -3}, {"t": 37.08, "k": "stamp", "g": -5}, {"t": 44.233, "k": "stamp", "g": -3}, {"t": 44.263, "k": "ding1", "g": -5}, {"t": 47.81, "k": "stamp", "g": -3}, {"t": 47.84, "k": "ding2", "g": -5}, {"t": 49.797, "k": "stamp", "g": -3}, {"t": 49.827, "k": "ding3", "g": -5}, {"t": 55.013, "k": "stamp", "g": -3}, {"t": 55.043, "k": "stamp", "g": -5}, {"t": 62.92, "k": "boop", "g": -5}, {"t": 68.33, "k": "pop", "g": -5}, {"t": 74.257, "k": "stamp_soft", "g": -3}, {"t": 74.287, "k": "tada", "g": -5}, {"t": 84.463, "k": "stamp", "g": -3}, {"t": 84.493, "k": "stamp", "g": -5}, {"t": 0.25, "k": "pop", "g": -12}, {"t": 6.5, "k": "pop", "g": -12}, {"t": 11.55, "k": "pop", "g": -12}, {"t": 18.24, "k": "pop", "g": -12}, {"t": 25.997, "k": "pop", "g": -12}, {"t": 34.9, "k": "pop", "g": -12}, {"t": 37.16, "k": "pop", "g": -12}, {"t": 37.32, "k": "pop", "g": -12}, {"t": 45.37, "k": "pop", "g": -12}, {"t": 49.907, "k": "pop", "g": -12}, {"t": 53.113, "k": "pop", "g": -12}, {"t": 55.123, "k": "pop", "g": -12}, {"t": 74.367, "k": "pop", "g": -12}, {"t": 80.41, "k": "pop", "g": -12}, {"t": 83.533, "k": "pop", "g": -12}, {"t": 84.573, "k": "pop", "g": -12}, {"t": 34.6, "k": "tapestop", "g": -3}, {"t": 34.88, "k": "buzzer", "g": -8}, {"t": 34.92, "k": "boing", "g": -9}, {"t": 16.15, "k": "ticktock", "g": -10}, {"t": 83.553, "k": "ticktock", "g": -11}, {"t": 83.573, "k": "riser", "g": -10}, {"t": 87.113, "k": "tick", "g": -8}, {"t": 87.55, "k": "stamp", "g": -6}, {"t": 53.113, "k": "boing", "g": -12}], "music": {"start": 3.167, "stops": [[16.099999999999998, 18.12], [34.6, 35.7], [62.85, 64.267]], "outro": 87.2}};
 const L = document.getElementById('layer');
 const tl = gsap.timeline({paused:true});
 const el = (html) => { const d=document.createElement('div'); d.innerHTML=html.trim(); const n=d.firstChild; L.appendChild(n); return n; };
 const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
 const show = (n,t) => tl.set(n,{visibility:'visible'},t);
 const hide = (n,t) => tl.set(n,{visibility:'hidden'},t);
+tl.set('#flash',{opacity:0},0); tl.set('#desat',{opacity:0},0); tl.set('#endshade',{opacity:0},0);
+const flash = (t,o=.8) => { tl.set('#flash',{opacity:o},t); tl.to('#flash',{opacity:0,duration:.18,ease:'power2.out'},t+0.01); };
 
-/* ---------- reframing ---------- */
-D.zooms.forEach(z => {
-  const v = {scale:z.s, transformOrigin:`${z.x}px ${z.y}px`};
-  if (z.d>0) tl.to('#cam',{...v,duration:z.d,ease:'sine.inOut'},z.t); else tl.set('#cam',v,z.t);
-});
+/* ---------- reframing (relative punch-ins around the face) ---------- */
+tl.set('#cam',{transformOrigin:`${D.FX}px ${D.FY}px`},0);
+D.zooms.forEach(z => { if (z.d>0) tl.to('#cam',{scale:z.s,duration:z.d,ease:'sine.inOut'},z.t); else tl.set('#cam',{scale:z.s},z.t); });
 
-/* ---------- opening title ---------- */
-const title = el(`<div id="title" class="abs">
-  <div class="kick">SÖZ OYUNU</div>
-  <div class="big">HISS</div>
+/* ---------- cold-open label + title smash ---------- */
+const hk = el(`<div id="hooklbl" class="abs hide">HISS, R HƏRFİ İLƏ…</div>`);
+show(hk,D.fx.hook_label.a); tl.fromTo(hk,{scale:0,rotation:-20},{scale:1,rotation:-3,duration:.28,ease:'back.out(2.5)'},D.fx.hook_label.a);
+tl.to(hk,{opacity:0,duration:.12},D.fx.hook_label.b-0.12); hide(hk,D.fx.hook_label.b);
+flash(D.fx.smash,.9);
+tl.fromTo('#cam',{x:0},{x:14,duration:.04,yoyo:true,repeat:5,ease:'none'},D.fx.smash);
+const title = el(`<div id="title" class="abs hide"><div class="kick">SÖZ OYUNU</div><div class="big">HISS</div>
   <div class="row"><div class="pill">«… <b>ÇOX</b> ?»</div><div class="rule">ad + hərf → bir söz</div></div></div>`);
-tl.fromTo(title.querySelector('.kick'),{y:-30,opacity:0},{y:0,opacity:1,duration:.28,ease:'power3.out'},0.0);
-tl.fromTo(title.querySelector('.big'),{scale:.6,opacity:0,transformOrigin:'0% 70%'},{scale:1,opacity:1,duration:.38,ease:'back.out(2.2)'},0.05);
-tl.fromTo(title.querySelectorAll('.row > div'),{y:40,opacity:0},{y:0,opacity:1,duration:.3,stagger:.08,ease:'power3.out'},0.22);
-tl.to(title,{y:-40,opacity:0,duration:.25,ease:'power2.in'},D.title_end-0.25);
-hide(title,D.title_end);
+show(title,D.fx.title.a);
+tl.fromTo(title.querySelector('.big'),{scale:2.2,opacity:0,transformOrigin:'0% 70%'},{scale:1,opacity:1,duration:.22,ease:'power4.in'},D.fx.title.a);
+tl.fromTo(title.querySelector('.kick'),{y:-30,opacity:0},{y:0,opacity:1,duration:.25,ease:'power3.out'},D.fx.title.a+0.15);
+tl.fromTo(title.querySelectorAll('.row > div'),{y:40,opacity:0},{y:0,opacity:1,duration:.28,stagger:.08,ease:'power3.out'},D.fx.title.a+0.25);
+tl.to(title,{y:-40,opacity:0,duration:.25,ease:'power2.in'},D.fx.title.b-0.25); hide(title,D.fx.title.b);
 
-/* ---------- question cards ---------- */
-D.cards.forEach((c,k) => {
+/* ---------- question cards: the letter tile is the recurring character ---------- */
+D.cards.forEach(c => {
   const n = el(`<div class="card abs hide"><div class="plate">
      <div class="hdr"><span>HISS · «ÇOX…»</span><span class="num">${String(c.i).padStart(2,'0')} / ${String(c.n).padStart(2,'0')}</span></div>
      <div class="name">${esc(c.name)}</div><div class="cox">çox …</div>
      <div class="tile"><span>${c.letter}</span><i>…</i></div></div></div>`);
-  const nm = n.querySelector('.name'); const w = c.name.length;
-  if (w>12) nm.style.fontSize = Math.round(54*12.5/w)+'px';
+  const nm=n.querySelector('.name'); if (c.name.length>12) nm.style.fontSize=Math.round(54*12.5/c.name.length)+'px';
   const plate=n.querySelector('.plate'), tile=n.querySelector('.tile'), let_=tile.querySelector('span');
-  show(n,c.t_in);
-  tl.fromTo(plate,{x:-120,opacity:0},{x:0,opacity:1,duration:.32,ease:'power3.out'},c.t_in);
+  show(n,c.t_in); tl.set(n,{scale:.66},c.t_in);
+  tl.fromTo(plate,{y:-60,opacity:0},{y:0,opacity:1,duration:.3,ease:'back.out(1.8)'},c.t_in);
   tl.fromTo(tile,{scale:0,rotation:-25},{scale:1,rotation:0,duration:.3,ease:'back.out(2.4)'},c.t_in+0.08);
   tl.set(let_,{opacity:0},c.t_in);
-  // the letter flips in exactly when it is spoken
   tl.fromTo(tile,{rotationY:90},{rotationY:0,duration:.22,ease:'power2.out'},c.t_letter-0.05);
   tl.set(let_,{opacity:1},c.t_letter-0.05);
-  tl.fromTo(let_,{scale:1.5},{scale:1,duration:.25,ease:'back.out(3)'},c.t_letter-0.05);
-  // condense into a corner badge so faces stay clear
-  const tb = Math.min(c.t_letter+1.1, c.t_end-0.3);
-  tl.to(n,{scale:.5,x:-14,y:-10,duration:.35,ease:'power3.inOut'},tb);
+  tl.fromTo(let_,{scale:1.6},{scale:1,duration:.25,ease:'back.out(3)'},c.t_letter-0.05);
+  const tb = Math.min(c.t_letter+1.0, c.t_end-0.3);
+  tl.to(n,{scale:.5,duration:.32,ease:'power3.inOut'},tb);
   tl.to(n.querySelector('.cox'),{opacity:0,duration:.2},tb);
-  tl.to(n,{x:-460,opacity:0,duration:.25,ease:'power2.in'},c.t_end-0.25);
-  hide(n,c.t_end);
-  c._tile = tile;
+  // impatient tile: taps while she thinks (until the round's first reveal)
+  const firstRev = D.revs.find(r => r.a>=c.t_in && r.a<c.t_end);
+  const thinkEnd = firstRev ? firstRev.a-0.1 : c.t_end-0.5;
+  for (let t=tb+0.8; t<thinkEnd-0.4; t+=1.3) tl.fromTo(tile,{rotation:0},{rotation:8,duration:.09,yoyo:true,repeat:3,ease:'sine.inOut'},t);
+  tl.to(n,{y:-60,opacity:0,duration:.25,ease:'power2.in'},c.t_end-0.25); hide(n,c.t_end);
+  c._tile=tile;
 });
-// badge tile reacts on each reveal of its round
 const cardAt = t => D.cards.find(c => t>=c.t_in && t<c.t_end);
 
 /* ---------- captions ---------- */
 D.caps.forEach(c => {
-  const words = c.text.split(' ');
-  const html = words.map(w => {
-    const isHl = c.hl.includes(w); return `<span class="w${isHl?' hl':''}" data-w="${esc(w)}">${esc(w)}</span>`;
-  }).join(' ');
+  const html = c.text.split(' ').map(w => `<span class="w${c.hl.includes(w)?' hl':''}">${esc(w)}</span>`).join(' ');
   const n = el(`<div class="cap abs hide"><div class="box">${html}</div></div>`);
-  show(n,c.a);
-  tl.fromTo(n.querySelector('.box'),{y:22,opacity:0,scale:.96},{y:0,opacity:1,scale:1,duration:.16,ease:'power2.out'},c.a);
-  n.querySelectorAll('.w').forEach(s => {
-    const lt = c.late[s.dataset.w];
-    if (lt!==undefined){ tl.set(s,{opacity:0},c.a); tl.fromTo(s,{opacity:0,scale:1.6},{opacity:1,scale:1,duration:.2,ease:'back.out(3)'},lt); }
-    else if (s.classList.contains('hl')) tl.fromTo(s,{scale:.7},{scale:1,duration:.22,ease:'back.out(3)'},c.a+0.05);
-  });
-  tl.to(n,{opacity:0,duration:.08},c.b-0.08);
-  hide(n,c.b);
+  show(n,c.a); tl.fromTo(n.querySelector('.box'),{y:22,opacity:0,scale:.96},{y:0,opacity:1,scale:1,duration:.16,ease:'power2.out'},c.a);
+  n.querySelectorAll('.hl').forEach(s => tl.fromTo(s,{scale:.7},{scale:1,duration:.22,ease:'back.out(3)'},c.a+0.05));
+  tl.to(n,{opacity:0,duration:.08},c.b-0.08); hide(n,c.b);
 });
 
-/* ---------- answer reveals ---------- */
-const RAIN = ['#FF4F2E','#FFC83D','#59D6B0','#C7B5FF','#FF7AB6','#FFF4E6'];
+/* ---------- answer stamps (variants per moment) ---------- */
+const RAIN=['#FF4F2E','#FFC83D','#59D6B0','#C7B5FF','#FF7AB6','#FFF4E6'];
 D.revs.forEach(r => {
-  const first = r.word[0], rest = r.word.slice(1);
-  const fs = Math.min(116, Math.round(840/(r.word.length*0.98+0.9)));
-  let restHtml = esc(rest);
-  if (r.style==='rainbow') restHtml = [...rest].map((ch,i)=>`<span style="color:${RAIN[i%RAIN.length]}">${esc(ch)}</span>`).join('');
-  const extra = (r.strike?`<div class="strike">${esc(r.strike)}</div>`:'') + (r.style==='combo'?`<div class="combo">Ə ×${r.n}</div>`:'');
-  const n = el(`<div class="rev abs hide ${r.style}"><div class="ring"></div><div style="position:relative">${extra}<div class="stamp" style="font-size:${fs}px"><span class="t">${esc(first)}</span><span class="rest">${restHtml}</span></div></div></div>`);
-  const st = n.querySelector('.stamp');
+  const first=r.word[0], rest=r.word.slice(1);
+  const fs=Math.min(112, Math.round(840/(r.word.length*0.98+0.9)));
+  let restHtml=esc(rest);
+  if (r.style==='rainbow') restHtml=[...rest].map((ch,i)=>`<span style="color:${RAIN[i%RAIN.length]}">${esc(ch)}</span>`).join('');
+  let extra='';
+  if (r.style==='pro') extra=`<div class="badge">PRO ★</div>`;
+  if (r.style.startsWith('combo')) extra=`<div class="combo">Ə ×${r.style.slice(-1)}</div>`;
+  const n = el(`<div class="rev abs hide ${r.style}"><div class="ring"></div><div style="position:relative">${extra}<div class="stamp" style="font-size:${fs}px">${r.style==='gloss'?'<div class="shine"></div>':''}<span class="t">${esc(first)}</span><span class="rest">${restHtml}</span></div></div></div>`);
+  const st=n.querySelector('.stamp'), t1=n.querySelector('.t');
   show(n,r.a);
-  tl.fromTo(st,{scale:1.9,opacity:0,rotation:-9},{scale:1,opacity:1,rotation:-3,duration:.17,ease:'power4.in'},r.a);
-  tl.fromTo(st,{y:0},{y:6,duration:.06,yoyo:true,repeat:1,ease:'sine.inOut'},r.a+0.15);
-  tl.fromTo(n.querySelector('.ring'),{scale:.3,opacity:.9},{scale:2.2,opacity:0,duration:.45,ease:'power2.out'},r.a+0.13);
-  if (r.pulse) tl.fromTo(st,{scale:1.14},{scale:1,duration:.22,ease:'back.out(3)'},r.pulse);
-  if (r.style==='rainbow'){
-    const sp = n.querySelectorAll('.rest span');
+  if (r.style==='flat') {            // deadpan: no bounce, slow slide, no ring
+    tl.fromTo(st,{x:-80,opacity:0},{x:0,opacity:1,duration:.7,ease:'none'},r.a);
+  } else if (r.style==='plain') {    // "sadə": deliberately plain, just appears
+    tl.fromTo(st,{opacity:0},{opacity:1,duration:.05},r.a);
+  } else {
+    tl.fromTo(st,{scale:1.9,opacity:0,rotation:-9},{scale:1,opacity:1,rotation:-3,duration:.17,ease:'power4.in'},r.a);
+    tl.fromTo(st,{y:0},{y:6,duration:.06,yoyo:true,repeat:1,ease:'sine.inOut'},r.a+0.15);
+    tl.fromTo(n.querySelector('.ring'),{scale:.3,opacity:.9},{scale:2.2,opacity:0,duration:.45,ease:'power2.out'},r.a+0.13);
+    // letter motif: the initial tile drops in on top of the word
+    tl.fromTo(t1,{y:-220,rotation:-30},{y:0,rotation:0,duration:.32,ease:'bounce.out'},r.a+0.02);
+  }
+  if (r.style==='pro') tl.fromTo(n.querySelector('.badge'),{scale:0,rotation:-40},{scale:1,rotation:5,duration:.3,ease:'back.out(3)'},r.a+0.2);
+  if (r.style.startsWith('combo')) tl.fromTo(n.querySelector('.combo'),{scale:0,rotation:-30},{scale:1,rotation:4,duration:.25,ease:'back.out(3)'},r.a+0.12);
+  if (r.style==='gloss') tl.fromTo(n.querySelector('.shine'),{x:0},{x:1400,duration:.6,ease:'power2.inOut'},r.a+0.2);
+  if (r.style==='rainbow') { const sp=n.querySelectorAll('.rest span');
     tl.fromTo(sp,{y:30,opacity:0},{y:0,opacity:1,duration:.18,stagger:.03,ease:'back.out(3)'},r.a+0.05);
     tl.to(sp,{y:-10,duration:.18,stagger:{each:.04,yoyo:true,repeat:1},ease:'sine.inOut'},r.a+0.5);
-  }
-  if (r.strike){
-    const s = n.querySelector('.strike');
-    tl.fromTo(s,{opacity:0,y:20},{opacity:1,y:0,duration:.18,ease:'power2.out'},r.a+0.2);
-    tl.fromTo(s,{'--sx':0},{'--sx':1,duration:.22,ease:'power2.inOut'},r.a+0.42);
-  }
-  if (r.style==='combo'){
-    tl.fromTo(n.querySelector('.combo'),{scale:0,rotation:-30},{scale:1,rotation:4,duration:.25,ease:'back.out(3)'},r.a+0.12);
-  }
-  const c = cardAt(r.a);
-  if (c && c._tile){
-    tl.to(c._tile,{backgroundColor:r.style==='tease'?'#C7B5FF':'#59D6B0',duration:.12},r.a);
-    tl.fromTo(c._tile,{scale:1.25},{scale:1,duration:.3,ease:'back.out(3)'},r.a);
-  }
-  tl.to(n,{opacity:0,y:-14,duration:.12,ease:'power2.in'},r.b-0.12);
-  hide(n,r.b);
+    tl.fromTo(st,{scale:1.12},{scale:1,duration:.25,ease:'back.out(3)'},D.fx.final_pulse); }
+  const c=cardAt(r.a);
+  if (c && c._tile) { tl.to(c._tile,{backgroundColor:r.style==='flat'?'#9A97A3':'#59D6B0',duration:.12},r.a);
+    tl.fromTo(c._tile,{scale:1.3,rotation:-12},{scale:1,rotation:0,duration:.35,ease:'back.out(3)'},r.a); }
+  tl.to(n,{opacity:0,y:-14,duration:.12,ease:'power2.in'},r.b-0.12); hide(n,r.b);
 });
 
-/* ---------- freeze frame joke: Q ≠ G ---------- */
-const F = D.extras.freeze;
-const fz = el(`<div id="freeze" class="abs hide"><div class="tl" style="background:#C7B5FF;color:#16131F">Q</div><div class="neq">≠</div><div class="tl" style="background:#FF4F2E;color:#FFF4E6">G</div></div>`);
-tl.set('#flash',{opacity:0},0); tl.set('#flash',{opacity:.85},F.a); tl.to('#flash',{opacity:0,duration:.18,ease:'power2.out'},F.a+0.01);
+/* ---------- emoji stickers (beside the head) ---------- */
+D.stickers.forEach(s => {
+  const n = el(`<div class="stk abs hide" style="left:${s.x-s.s/2}px;top:${s.y-s.s/2}px;width:${s.s}px;height:${s.s}px"><div class="emo" style="font-size:${Math.round(s.s*0.82)}px;text-align:center">${s.e}</div></div>`);
+  show(n,s.a);
+  if (s.anim==='none') tl.fromTo(n,{opacity:0},{opacity:1,duration:.25},s.a);
+  else tl.fromTo(n,{scale:0,rotation:s.rot-40},{scale:1,rotation:s.rot,duration:.3,ease:'back.out(3)'},s.a);
+  const dur=s.b-s.a-0.4;
+  if (s.anim==='bob' && dur>0) tl.to(n,{y:-14,duration:.35,yoyo:true,repeat:Math.max(1,Math.floor(dur/.35)),ease:'sine.inOut'},s.a+0.3);
+  if (s.anim==='shake' && dur>0) tl.to(n,{rotation:s.rot+12,duration:.07,yoyo:true,repeat:Math.max(1,Math.floor(dur/.07/2)*2-1),ease:'none'},s.a+0.3);
+  if (s.anim==='spin') tl.to(n,{rotation:360,duration:Math.max(.6,dur),ease:'none'},s.a+0.3);
+  if (s.anim==='clap' && dur>0) tl.to(n,{scale:1.18,duration:.12,yoyo:true,repeat:Math.max(1,Math.floor(dur/.12/2)*2-1),ease:'sine.inOut'},s.a+0.3);
+  tl.to(n,{scale:0,opacity:0,duration:.14,ease:'power2.in'},s.b-0.14); hide(n,s.b);
+});
+
+/* ---------- loading bar during Ayaz pause ---------- */
+const LD=D.fx.loading;
+const ld = el(`<div id="loading" class="abs hide"><div class="lt"><div class="tl">D</div>HISS DÜŞÜNÜR<span class="dots"></span></div><div class="bar"><i></i></div></div>`);
+show(ld,LD.a); tl.fromTo(ld,{y:60,opacity:0},{y:0,opacity:1,duration:.22,ease:'back.out(2)'},LD.a);
+tl.fromTo(ld.querySelector('.bar i'),{scaleX:0},{scaleX:.93,duration:LD.b-LD.a-0.15,ease:'power1.out'},LD.a+0.1);
+tl.to(ld.querySelector('.tl'),{rotation:360,duration:.6,repeat:Math.max(0,Math.floor((LD.b-LD.a)/.6)-1),ease:'none'},LD.a+0.1);
+const dots=ld.querySelector('.dots'); for (let t=LD.a,k=0; t<LD.b; t+=0.3,k++) tl.set(dots,{textContent:'.'.repeat(k%4)},t);
+tl.set(ld.querySelector('.bar i'),{scaleX:1},LD.b-0.04); hide(ld,LD.b);
+
+/* ---------- halo for "dürüst" ---------- */
+const H=D.fx.halo; const halo=el(`<div id="halo" class="abs hide"></div>`);
+show(halo,H.a); tl.fromTo(halo,{y:-140,opacity:0,scale:.6},{y:0,opacity:1,scale:1,duration:.4,ease:'back.out(2)'},H.a);
+tl.to(halo,{y:-10,duration:.4,yoyo:true,repeat:Math.max(1,Math.floor((H.b-H.a-.5)/.4)),ease:'sine.inOut'},H.a+0.4);
+tl.to(halo,{opacity:0,duration:.15},H.b-0.15); hide(halo,H.b);
+
+/* ---------- "flawless" gloss sweep ---------- */
+const gl=el(`<div id="gloss" class="abs hide"></div>`); show(gl,D.fx.gloss);
+tl.fromTo(gl,{x:0},{x:2100,duration:.55,ease:'power2.inOut'},D.fx.gloss); hide(gl,D.fx.gloss+0.6);
+
+/* ---------- freeze: Q ≠ G ---------- */
+const F=D.fx.freeze; flash(F.a,.85);
 tl.to('#vig',{opacity:1,duration:.15},F.a); tl.to('#vig',{opacity:0,duration:.12},F.b-0.1);
-show(fz,F.a+0.06);
-const ft = fz.querySelectorAll('.tl'), fn = fz.querySelector('.neq');
+const fz=el(`<div id="freeze" class="abs hide"><div class="x">YANLIŞ HƏRF!</div><div class="tl" style="background:#C7B5FF;color:#16131F">Q</div><div class="neq">≠</div><div class="tl" style="background:#FF4F2E;color:#FFF4E6">G</div></div>`);
+show(fz,F.a+0.06); const ft=fz.querySelectorAll('.tl');
 tl.fromTo(ft[0],{x:-300,rotation:-30,opacity:0},{x:0,rotation:-6,opacity:1,duration:.22,ease:'back.out(2)'},F.a+0.06);
 tl.fromTo(ft[1],{x:300,rotation:30,opacity:0},{x:0,rotation:6,opacity:1,duration:.22,ease:'back.out(2)'},F.a+0.14);
-tl.fromTo(fn,{scale:0},{scale:1,duration:.2,ease:'back.out(3)'},F.a+0.3);
+tl.fromTo(fz.querySelector('.neq'),{scale:0},{scale:1,duration:.2,ease:'back.out(3)'},F.a+0.28);
+tl.fromTo(fz.querySelector('.x'),{scale:0,rotation:-30},{scale:1,rotation:-6,duration:.22,ease:'back.out(3)'},F.a+0.36);
 tl.to(fz,{opacity:0,duration:.08},F.b-0.08); hide(fz,F.b);
 
-/* ---------- time-skip chip ---------- */
-const LA = D.extras.later;
-const la = el(`<div id="later" class="abs hide">${LA.text}</div>`);
-show(la,LA.a);
-tl.fromTo(la,{scale:0,rotation:-20},{scale:1,rotation:-2,duration:.25,ease:'back.out(2.6)'},LA.a);
+/* ---------- hearts for "gözəldir" ---------- */
+const HT=D.fx.hearts;
+[[780,620],[880,700],[700,520],[930,560],[820,460]].forEach(([x,y],i)=>{
+  const h=el(`<div class="abs hide emo heart" style="left:${x}px;top:${y}px">💕</div>`); const t=HT.a+i*0.12;
+  show(h,t); tl.fromTo(h,{y:60,scale:.3,opacity:0},{y:-220,scale:1,opacity:1,duration:1.1,ease:'power1.out'},t);
+  tl.to(h,{opacity:0,duration:.25},t+0.9); hide(h,t+1.2);
+});
+
+/* ---------- combo banner ---------- */
+const CB=D.fx.combo; const cb=el(`<div id="combo" class="abs hide">COMBO!</div>`);
+show(cb,CB.a); tl.fromTo(cb,{scale:3,opacity:0,rotation:-8},{scale:1,opacity:1,rotation:-4,duration:.22,ease:'power4.in'},CB.a);
+tl.fromTo(cb,{x:0},{x:10,duration:.05,yoyo:true,repeat:5,ease:'none'},CB.a+0.22);
+tl.to(cb,{opacity:0,duration:.12},CB.b-0.12); hide(cb,CB.b);
+
+/* ---------- deadpan: colour drains for "laqeyddir" ---------- */
+const DP=D.fx.deadpan; tl.to('#desat',{opacity:.75,duration:.5,ease:'none'},DP.a); tl.to('#desat',{opacity:0,duration:.15},DP.b-0.15);
+
+/* ---------- stars for "istedadlıdır" ---------- */
+const SA=D.fx.stars.a;
+[[180,380,-260,-200],[880,360,240,-220],[120,820,-280,60],[960,800,260,40],[540,260,0,-260],[300,1080,-220,180],[800,1060,220,170]].forEach(([x,y,dx,dy],i)=>{
+  const s=el(`<div class="abs hide emo star" style="left:${x}px;top:${y}px">⭐</div>`);
+  show(s,SA); tl.fromTo(s,{x:0,y:0,scale:.2,opacity:1,rotation:0},{x:dx*.5,y:dy*.5,scale:1,rotation:180,duration:.7,ease:'power3.out'},SA+i*0.02);
+  tl.to(s,{opacity:0,duration:.25},SA+0.75); hide(s,SA+1.0);
+});
+
+/* ---------- "+10 SANİYƏ" chip ---------- */
+const LA=D.fx.later; const la=el(`<div id="later" class="abs hide">${LA.text}</div>`);
+show(la,LA.a); tl.fromTo(la,{scale:0,rotation:-20},{scale:1,rotation:-2,duration:.25,ease:'back.out(2.6)'},LA.a);
 tl.to(la,{opacity:0,y:-10,duration:.15},LA.b-0.15); hide(la,LA.b);
 
+/* ---------- confetti of R tiles for the finale ---------- */
+const CA=D.fx.confetti.a;
+for (let i=0;i<10;i++){ const x=(i%2? 880+((i*53)%120) : 30+((i*61)%140)), col=RAIN[i%5];
+  const c=el(`<div class="abs hide conf" style="left:${x}px;top:320px;background:${col}">${i%3? 'R':'Ə'}</div>`);
+  show(c,CA+i*0.03); tl.fromTo(c,{y:0,rotation:0},{y:600+((i*71)%400),rotation:(i%2?1:-1)*(200+i*20),duration:1.6,ease:'power1.in'},CA+i*0.03);
+  tl.to(c,{opacity:0,duration:.3},CA+i*0.03+1.3); hide(c,CA+i*0.03+1.65); }
+
 /* ---------- end card ---------- */
-const E = D.extras.end;
-tl.set('#endshade',{opacity:0},0); show('#endshade',E.a); tl.to('#endshade',{opacity:1,duration:.4},E.a+0.1);
-const ec = el(`<div id="endcard" class="abs hide"><div class="big">HISS</div><div class="pill">«… <b>ÇOX</b> ?»</div></div>`);
+const E=D.fx.end; show('#endshade',E.a); tl.to('#endshade',{opacity:1,duration:.4},E.a+0.1);
+const ec=el(`<div id="endcard" class="abs hide"><div class="big">HISS</div><div class="pill">«… <b>ÇOX</b> ?»</div></div>`);
 show(ec,E.a+0.35);
 tl.fromTo(ec.querySelector('.big'),{scale:.6,opacity:0},{scale:1,opacity:1,duration:.35,ease:'back.out(2.2)'},E.a+0.35);
 tl.fromTo(ec.querySelector('.pill'),{y:30,opacity:0},{y:0,opacity:1,duration:.3,ease:'power3.out'},E.a+0.5);

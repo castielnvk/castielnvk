@@ -25,23 +25,25 @@ gdb = np.where(sp, -17.0, -9.0)
 def seg_t(i): return TL[i]['ostart']
 def seg_e(i): return TL[i]['ostart'] + TL[i]['odur']
 t = np.arange(len(gdb)) / 100
-gdb[t < 0.45] = -6.0                                   # punchy start under the title
-gdb[(t >= seg_t('FZ')) & (t < seg_e('FZ'))] = -13      # freeze-frame beat
-gdb[t >= seg_t('FE') + 0.1] = -5.0                     # outro swell
+M = G['music']
+gdb[t < M['start']] = -80                              # cold open plays dry
+gdb[(t >= M['start']) & (t < M['start'] + 0.5)] = -6.0  # music hits on the title smash
+for a, b in M['stops']: gdb[(t >= a) & (t < b)] = -80  # joke stops
+gdb[t >= M['outro'] + 0.1] = -5.0                      # outro swell
 # smooth: fast attack (duck down), slower release
 sm = np.empty_like(gdb); cur = gdb[0]
 for i, g in enumerate(gdb):
     a = 0.35 if g < cur else 0.06
-    if g <= -79: a = 1.0
+    if g <= -79: a = 0.5
     if i and gdb[i - 1] <= -79 and g > -79: cur = g  # music re-enters hard on the cut back
     cur += (g - cur) * a; sm[i] = cur
 env = np.repeat(10 ** (sm / 20), hop)
 env = np.pad(env, (0, N - len(env)), 'edge')[:N]
 
-# ---------- music: Hep Cats (Kevin MacLeod, CC BY 4.0)
+# ---------- music: Hep Cats (Kevin MacLeod, CC BY 4.0) — starts on the title smash
 mus = load('../music/Hep_Cats.mp3', 2, '-af "loudnorm=I=-16:TP=-2:LRA=11"')
-off = int(0.0 * SR)
-mus = mus[off:off + N]
+st = int(M['start'] * SR)
+mus = np.concatenate([np.zeros((st, 2), np.float32), mus])[:N]
 if len(mus) < N: mus = np.pad(mus, ((0, N - len(mus)), (0, 0)))
 fo = int(1.4 * SR); mus[-fo:] *= np.linspace(1, 0, fo)[:, None] ** 2
 mus *= env[:, None]
@@ -89,29 +91,57 @@ def riser(d=1.0):
     x = bp_noise(n, 300, 5000, 3) * 0.6 + 0.25 * np.sin(2 * np.pi * (220 * tt + 300 * tt ** 2 / d))
     return x * (tt / d) ** 2 * 0.35
 
+
+def pop(f0=500, f1=1300):
+    n = int(0.09 * SR); tt = np.arange(n) / SR; f = f0 + (f1 - f0) * tt / tt[-1]
+    return np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-tt * 40) * 0.5
+def chord(fs, d=1.0, dec=3.0, bright=0.4):
+    n = int(d * SR); tt = np.arange(n) / SR; x = 0
+    for f in fs: x = x + np.sin(2 * np.pi * f * tt) + bright * np.sin(2 * np.pi * 2 * f * tt) * np.exp(-tt * 6)
+    return x / len(fs) * np.minimum(1, tt / 0.01) * np.exp(-tt * dec) * 0.45
+def angel(): return chord([523.3, 659.3, 784.0, 1046.5], 1.2, 2.2, 0.6)
+def sparkle():
+    out = np.zeros(int(0.9 * SR))
+    for i, f in enumerate([1568, 2093, 2637, 3136, 2349, 3520]):
+        s = ding(f)[:int(0.4 * SR)] * 0.6; a = int(i * 0.07 * SR); out[a:a + len(s)] += s[:len(out) - a]
+    return out
+def boop():
+    n = int(0.35 * SR); tt = np.arange(n) / SR
+    return np.sin(2 * np.pi * (220 - 60 * tt / tt[-1]) * tt) * np.exp(-tt * 6) * 0.45
+def tada():
+    a = chord([392.0, 493.9, 587.3], 0.18, 4, 0.8); b = chord([523.3, 659.3, 784.0, 1046.5], 1.2, 2.0, 0.8)
+    out = np.zeros(len(a) + len(b)); out[:len(a)] += a; out[int(0.16 * SR):int(0.16 * SR) + len(b)] += b; return out
+def buzzer():
+    n = int(0.45 * SR); tt = np.arange(n) / SR
+    x = np.sign(np.sin(2 * np.pi * 110 * tt)) * 0.5 + np.sign(np.sin(2 * np.pi * 116 * tt)) * 0.5
+    return x * np.minimum(1, (tt[-1] - tt) / 0.04) * 0.22
+def boing():
+    n = int(0.55 * SR); tt = np.arange(n) / SR
+    f = 180 + 140 * np.sin(2 * np.pi * 9 * tt) * np.exp(-tt * 5) + 120 * tt
+    return np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-tt * 4) * 0.45
+def ticktock(k=4):
+    out = np.zeros(int((k * 0.3 + 0.1) * SR))
+    for i in range(k):
+        s = tick(2600 if i % 2 == 0 else 1900); a = int(i * 0.3 * SR); out[a:a + len(s)] += s
+    return out
+def smash():
+    s = stamp(); n = int(0.6 * SR); tt = np.arange(n) / SR
+    boom = np.sin(2 * np.pi * (60 * np.exp(-tt * 3) + 35) * tt) * np.exp(-tt * 5)
+    out = np.zeros(n); out[:len(s)] += s; out += boom * 0.8 + rng.standard_normal(n) * np.exp(-tt * 30) * 0.25
+    return out * 0.8
 sfx = np.zeros(N)
 def put(sig, at, gain_db=0):
     i = int(at * SR)
     if i >= N or i + len(sig) <= 0: return
     j = min(N, i + len(sig)); sfx[max(i, 0):j] += sig[max(0, -i):j - i] * 10 ** (gain_db / 20)
-
-put(whoosh(0.4), 0.0, -4)
-for c in G['cards']:
-    if c['i'] > 1: put(whoosh(), c['t_in'] - 0.08, -7)
-    put(tick(), c['t_letter'] - 0.04, -6)
-for r in G['revs']:
-    if r['style'] == 'tease': continue           # silence sells the whisper
-    put(stamp(), r['a'] - 0.01, -3)
-    if r.get('pulse'): put(tick(1400), r['pulse'], -9)
-    if r['style'] == 'combo': put(ding([784, 988, 1175][r['n'] - 1]), r['a'] + 0.02, -6)
-    if r.get('strike'): put(swipe(), r['a'] + 0.42, -4)
-F = G['extras']['freeze']; put(tapestop(), F['a'], -3); put(tick(1200), F['a'] + 0.3, -6)
-LA = G['extras']['later']
-for k in range(3): put(tick(2600 if k % 2 == 0 else 2000), LA['a'] + 0.04 + 0.22 * k, -9)
-final = [r for r in G['revs'] if r['style'] == 'rainbow'][0]
-put(riser(0.9), final['a'] - 0.9, -10)
-put(ding(1568), final['a'] + 0.05, -9)
-E = G['extras']['end']; put(stamp(), E['a'] + 0.35, -6)
+GEN = {"whoosh": lambda: whoosh(), "tick": lambda: tick(), "stamp": stamp, "stamp_soft": lambda: stamp() * 0.5,
+       "ding1": lambda: ding(784), "ding2": lambda: ding(988), "ding3": lambda: ding(1175) + 0.6 * ding(1568),
+       "angel": angel, "sparkle": sparkle, "boop": boop, "pop": pop, "tada": tada, "buzzer": buzzer, "boing": boing,
+       "ticktock": ticktock, "tapestop": tapestop, "riser": lambda: riser(0.9), "smash": smash}
+CACHE = {}
+for e in G['sfx']:
+    if e['k'] not in CACHE or e['k'] in ("whoosh", "riser"): CACHE[e['k']] = GEN[e['k']]()
+    put(CACHE[e['k']], e['t'], e['g'])
 
 # ---------- mix
 mix = mus * 1.0 + (dlg[:, None] + sfx[:, None] * 0.9)
