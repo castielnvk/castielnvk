@@ -1,0 +1,52 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,800;0,900;1,900&family=Noto+Color+Emoji&display=block" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{width:1080px;height:1920px;overflow:hidden;position:relative;font-family:Montserrat,sans-serif;
+    background:linear-gradient(200deg,#FF8A00 0%,#FF2E93 28%,#8A1EF0 55%,#4A12C9 78%,#1B0548 100%)}
+  .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.75}
+  .grain{position:absolute;inset:0;opacity:.10;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+  .ring{position:absolute;left:42%;top:260px;width:980px;height:980px;margin-left:-490px;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,242,0,.55) 0%,rgba(255,46,147,.25) 40%,transparent 68%)}
+  .hero{position:absolute;left:-220px;top:20px;width:1300px;filter:drop-shadow(0 0 0 #fff) drop-shadow(0 0 3px #fff) drop-shadow(0 0 3px #fff) drop-shadow(0 30px 50px rgba(30,0,80,.55))}
+  .fade{position:absolute;left:0;right:0;bottom:0;height:900px;background:linear-gradient(180deg,transparent 0%,rgba(40,6,110,.55) 35%,rgba(30,4,80,.92) 75%,#1B0548 100%)}
+  .topfade{position:absolute;left:0;right:0;top:0;height:360px;background:linear-gradient(180deg,rgba(20,4,60,.55),transparent)}
+  .logo100{position:absolute;left:71px;top:152px;width:158px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.35))}
+  .araz{position:absolute;left:838px;top:183px;width:166px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))}
+  .bubble{position:absolute;width:230px;height:230px;border-radius:50%;padding:9px;
+    background:conic-gradient(#FFF200,#FF8A00,#FF2E93,#8A1EF0,#FFF200);box-shadow:0 20px 40px rgba(20,0,60,.45)}
+  .bubble img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:7px solid #1B0548}
+  .bubble .e{position:absolute;right:-14px;bottom:-6px;font-family:'Noto Color Emoji';font-size:86px;line-height:1;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35))}
+  .b1{left:36px;top:470px;transform:rotate(-8deg)}
+  .b2{right:36px;top:430px;transform:rotate(7deg)}
+  .text{position:absolute;left:0;right:0;top:1300px;text-align:center}
+  .kicker{display:inline-block;font-weight:800;font-size:40px;letter-spacing:6px;color:#fff;padding:14px 34px;border-radius:999px;
+    background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.35);backdrop-filter:blur(12px)}
+  .l1{margin-top:26px;font-weight:900;font-size:84px;line-height:1;color:#fff;letter-spacing:-1px;text-shadow:0 8px 30px rgba(0,0,0,.45)}
+  .l2{font-weight:900;font-style:italic;font-size:112px;line-height:1.1;letter-spacing:-2px;white-space:nowrap;
+    background:linear-gradient(90deg,#FFF200 0%,#FFB800 45%,#FF5FA2 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 10px 24px rgba(255,46,147,.55))}
+  .l2 .em{font-family:'Noto Color Emoji';font-style:normal;-webkit-text-fill-color:initial;color:initial;font-size:96px}
+  .cta{position:absolute;left:50%;bottom:110px;transform:translateX(-50%);font-weight:800;font-size:38px;color:#1B0548;white-space:nowrap;
+    background:linear-gradient(90deg,#FFF200,#FFB800);padding:18px 40px;border-radius:999px;box-shadow:0 14px 40px rgba(255,184,0,.45)}
+</style></head>
+<body>
+  <div class="blob" style="width:700px;height:700px;left:-250px;top:-150px;background:#6A1BF2"></div>
+  <div class="blob" style="width:650px;height:650px;right:-260px;top:120px;background:#FF8A00;opacity:.55"></div>
+  <div class="blob" style="width:600px;height:600px;left:-200px;bottom:120px;background:#FF8A00;opacity:.45"></div>
+  <div class="ring"></div>
+  <img class="hero" src="reel2/frame-shock-cut.png">
+  <div class="fade"></div><div class="topfade"></div>
+  <div class="grain"></div>
+  <img class="logo100" src="logo100.png"><img class="araz" src="araz_white.png">
+  <div class="bubble b1"><img src="reel2/face-stare.jpg"><span class="e">😳</span></div>
+  <div class="bubble b2"><img src="reel2/face-laugh.jpg"><span class="e">🤣</span></div>
+  <div class="text">
+    <div class="kicker">ZARAFAT ZƏNGİ</div>
+    <div class="l1">BELƏ ZARAFAT</div>
+    <div class="l2">OLMAZ AXI! <span class="em">😳</span></div>
+  </div>
+  <div class="cta">SONUNA QƏDƏR İZLƏ 👀</div>
+</body></html>
