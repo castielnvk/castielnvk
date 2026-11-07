@@ -85,7 +85,7 @@ def render_crop(frame, cx, cy, ch, bounds, use_sr=False):
         return lan
     x0 = max(0, int(cx - cw / 2) - 6); x1 = min(SRC_W, int(cx + cw / 2) + 7)
     y0 = max(0, int(cy - ch / 2) - 6); y1 = min(SRC_H, int(cy + ch / 2) + 7)
-    pre = 0.60                                    # the stream itself is soft; SR from a 0.6x copy keeps the detail, ~1.4x faster
+    pre = 0.50                                    # the stream itself is soft; SR from a 0.5x copy still adds detail, ~2x faster
     small = cv2.resize(frame[y0:y1, x0:x1], None, fx=pre, fy=pre, interpolation=cv2.INTER_AREA)
     up = SR_MODEL(np.ascontiguousarray(small))    # 4x of the small copy -> 2.88x of the source crop
     k = 4 * pre                                   # SR px per source px
@@ -163,8 +163,10 @@ def compose(panel_rgb_f, t, k, fade=1.0):
 # ---------- readers ----------
 class SrcReader:
     def __init__(self, path, start=0.0):
-        # start on the 30 fps grid; frame j of this reader is source time start + j/FPS
-        self.p = subprocess.Popen(['ffmpeg', '-v', 'error', '-i', path, '-vf', f'fps={FPS},trim=start={start:.6f}', '-f', 'rawvideo',
+        # start on the 30 fps grid; frame j of this reader is source time start + j/FPS.
+        # Input seeking (-ss before -i) is frame-accurate here; a trim filter on this VFR file froze on one frame.
+        start = F(start) / FPS
+        self.p = subprocess.Popen(['ffmpeg', '-v', 'error', '-ss', f'{start:.6f}', '-i', path, '-vf', f'fps={FPS}', '-f', 'rawvideo',
                                    '-pix_fmt', 'rgb24', '-'], stdout=subprocess.PIPE)
         self.idx = F(start) - 1; self.cur = None
     def get(self, st):
@@ -194,7 +196,7 @@ def her_panel(fr, st):
 if os.environ.get('SR_ONNX'):
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from sr import SR
-    SR_MODEL = SR(os.environ['SR_ONNX'])
+    SR_MODEL = SR(os.environ['SR_ONNX'], threads=int(os.environ.get('SR_THREADS', '4')))
 
 if len(sys.argv) > 5:          # preview stills
     for t in [float(v) for v in sys.argv[6].split(',')]:
@@ -225,7 +227,8 @@ for k in range(max(0, k0 - 30), k1):        # 1 s of pre-roll so held frames for
     ot = k / FPS
     st = ot_to_src(ot)
     her = None
-    if st is not None:
+    hidden = (TITLE_IN <= ot < TITLE_OUT - XF)      # fully covered by the title flag: no need to render her frame
+    if st is not None and not hidden:
         her = her_panel(src.get(st), st); last_her = her
     if TITLE_IN <= ot < TITLE_OUT:
         img = title.get(ot - TITLE_IN)
