@@ -85,7 +85,7 @@ def render_crop(frame, cx, cy, ch, bounds, use_sr=False):
         return lan
     x0 = max(0, int(cx - cw / 2) - 6); x1 = min(SRC_W, int(cx + cw / 2) + 7)
     y0 = max(0, int(cy - ch / 2) - 6); y1 = min(SRC_H, int(cy + ch / 2) + 7)
-    pre = 0.72                                    # the stream itself is soft; SR from a 0.72x copy is as sharp, 2x faster
+    pre = 0.60                                    # the stream itself is soft; SR from a 0.6x copy keeps the detail, ~1.4x faster
     small = cv2.resize(frame[y0:y1, x0:x1], None, fx=pre, fy=pre, interpolation=cv2.INTER_AREA)
     up = SR_MODEL(np.ascontiguousarray(small))    # 4x of the small copy -> 2.88x of the source crop
     k = 4 * pre                                   # SR px per source px
