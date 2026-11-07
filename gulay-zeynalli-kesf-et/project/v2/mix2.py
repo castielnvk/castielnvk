@@ -26,7 +26,7 @@ for it in items:
     g = 10 ** (np.clip(ref - levels[li], -4, 4) / 20); li += 1
     for k, p in enumerate(it['parts']):
         seg = SRC[int(p['src_in'] * SR):int(p['src_out'] * SR)].copy() * g
-        fi = int((0.04 if k == 0 else 0.03) * SR); fo = int((0.08 if k == len(it['parts']) - 1 else 0.03) * SR)
+        fi = int(0.02 * SR); fo = int(0.012 * SR)  # short fades: cut points sit on word boundaries, never fade over a syllable
         seg[:fi] *= (np.sin(np.linspace(0, np.pi / 2, fi)) ** 2)[:, None]
         seg[-fo:] *= (np.cos(np.linspace(0, np.pi / 2, fo)) ** 2)[:, None]
         o = int(p['out_in'] * SR); voice[o:o + len(seg)] += seg
@@ -44,7 +44,8 @@ for it in items:
     elif kd == 'freeze': v = dict(bed=0.36, drums=0.0 if it.get('last') else 0.5, arp=1.0, chords=1.0)
     else: v = dict(bed=0.40, drums=0.0, arp=1.0, chords=1.0)
     if it.get('tag') == 'hook': v = dict(bed=0.08, drums=0.0, arp=0.6, chords=0.0)
-    for k in keys: keys[k] += [(s + 0.03, v[k]), (e - 0.03, v[k])]
+    d0 = 0.18 if kd in ('freeze', 'title') else 0.03  # let the last spoken syllable finish before the music lifts
+    for k in keys: keys[k] += [(s + d0, v[k]), (e - 0.03, v[k])]
 keys['bed'] += [(T - 1.4, 0.40), (T + 0.2, 0.0)]
 def curve(kv):
     kv = sorted(kv); return np.interp(t, [a for a, _ in kv], [b for _, b in kv])
@@ -87,7 +88,7 @@ for it in items:
     s = it['start']
     if it['kind'] == 'card': put(shutter(), s - 0.05, 0.10, 0.2); put(swish(0.35), s - 0.25, 0.05)
     if it['kind'] == 'follow': put(swish(0.3), s - 0.15, 0.05, -0.2)
-    if it['kind'] in ('title', 'freeze'): put(shutter(), s - 0.02, 0.12, -0.2); put(flash(), s, 0.08); put(thump(), s + (0.15 if it['kind'] == 'freeze' else 0.25), 0.18)
+    if it['kind'] in ('title', 'freeze'): put(shutter(), s + 0.04, 0.12, -0.2); put(flash(), s + 0.04, 0.08); put(thump(), s + 0.2, 0.18)
     if it['kind'] == 'end': put(swish(0.4), s - 0.2, 0.05)
 
 music_out = music * 0.55 * 0.075
