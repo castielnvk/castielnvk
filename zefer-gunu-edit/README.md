@@ -26,6 +26,13 @@ is how it appears in the edit. No camera angle was invented, and no speech or li
 | 1:46.0 – 2:00.4 | Source 1:46.5 – 2:00.87. The repeated phrase "vətənpərvərliyimizi nümayiş etdirərək" was trimmed |
 | 2:00.4 – 2:08.8 | End card while the music rises. The source recording itself stops mid-sentence ("…ki, biz artıq…"), so the edit ends on "…qəhrəmanlıq zəfərlə yekunlaşdı." |
 
+## Layout
+The video sits in a 1000×1250 (4:5) frame with rounded corners, a hairline gold border and a soft
+shadow. Behind it is a deep «Qəbul Vaxtı» teal background (#0B6E62, sampled from the programme
+graphics) with a quiet «QƏBUL VAXTI · ARAZ FM 103.3» header. Subtitles sit on the clean teal below
+the frame. Wide and split-screen shots get AI-assisted detail: Real-ESRGAN General x4v3 blended 60/40
+with a Lanczos resample to keep skin natural. No face restoration is applied.
+
 ## Pipeline (scripts in this folder)
 - `music.py`: an original score (piano, strings, cello, harp; D major, about 69 bpm). Bars are placed on the title break and the end-card arrival. It is rendered with FluidSynth and the FluidR3 GM soundfont.
 - `flag_scenes.py`: procedurally rendered, clearly illustrative flag scenes. They use the official flag construction (1:2 ratio; #00B5E2 / #EF3340 / #509E2F; crescent and eight-pointed star).

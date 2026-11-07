@@ -23,8 +23,8 @@ YCbCr Matrix: TV.709
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Sub,Inter,58,&H00FFFFFF,&H00FFFFFF,&H50000000,&H00000000,1,0,0,0,100,100,0.3,0,1,2.2,0,2,40,40,0,1
-Style: Halo,Inter,58,&HFF000000,&HFF000000,&H58000000,&H00000000,1,0,0,0,100,100,0.3,0,1,16,0,2,40,40,0,1
+Style: Sub,Inter,56,&H00FFFFFF,&H00FFFFFF,&H90000000,&H00000000,1,0,0,0,100,100,0.3,0,1,1.2,0,2,40,40,0,1
+Style: Halo,Inter,56,&HFF000000,&HFF000000,&HA0000000,&H00000000,1,0,0,0,100,100,0.3,0,1,16,0,2,40,40,0,1
 Style: Speaker,Inter SemiBold,32,&H0098D9F6,&H00FFFFFF,&H40000000,&H00000000,0,0,0,0,100,100,6,0,1,2.4,0,2,40,40,0,1
 Style: Name,Noto Serif Display,92,&H00FFFFFF,&H00FFFFFF,&H48000000,&H00000000,0,0,0,0,100,100,1.5,0,1,2.2,0,7,0,0,0,1
 Style: NameSub,Inter SemiBold,34,&H007FD2F4,&H00FFFFFF,&H40000000,&H00000000,0,0,0,0,100,100,5,0,1,2.2,0,7,0,0,0,1
@@ -54,12 +54,17 @@ def accent(text):
 def halo(st, en, style, text, layer):
     add(st, en, style, text, layer + 1)
     add(st, en, style, re.sub(r"\\blur[0-9.]+", "", text).replace("}", r"\blur16\1a&HFF&\3c&H000000&\3a&H90&\bord12}", 1), layer)
-SUB_Y = 1590                       # baseline of the subtitle block (mobile-safe, below faces)
+SUB_Y = 1772                       # baseline of the subtitle block (mobile-safe, below faces)
 def sub(st, en, text):
     a = r"{\an2\move(540,%d,540,%d,0,260)\fad(200,160)" % (SUB_Y + 14, SUB_Y)
     plain = re.sub(r"\{[^}]*\}", "", text)
     add(st, en, "Halo", a + r"\blur14}" + plain, 0)
     add(st, en, "Sub", a + r"\blur0.6}" + accent(text), 1)
+
+# ---- programme header above the frame (persistent, quiet) ----
+add(0.5, 120.6, "Speaker", r"{\an5\pos(540,146)\fad(900,600)\fs38\fsp14}«QƏBUL VAXTI»", 2)
+add(0.7, 120.6, "Rule", r"{\an7\pos(490,184)\fad(900,600)\p1}m 0 0 l 100 0 100 2 0 2{\p0}", 2)
+add(0.9, 120.6, "TitleSub", r"{\an5\pos(540,220)\fad(900,600)\fs27\fsp10\alpha&H30&}ARAZ FM 103.3", 2)
 
 # ---- President (audio over Elnarə listening) ----
 pres = [
@@ -77,9 +82,9 @@ pres = [
     (30.30, 33.40, "Qarabağ Azərbaycandır!"),
 ]
 for c in pres: sub(*c)
-spk = r"{\an2\pos(540,1372)\fad(400,400)\blur0.5}PREZİDENT  İLHAM  ƏLİYEV"
+spk = r"{\an2\pos(540,1592)\fad(400,400)\blur0.5}PREZİDENT  İLHAM  ƏLİYEV"
 halo(1.40, 8.25, "Speaker", spk, 2)
-add(1.40, 8.25, "Rule", r"{\an7\pos(470,1388)\fad(400,400)\t(0,600,\fscx100)\fscx0\p1}m 0 0 l 140 0 140 3 0 3{\p0}", 2)
+add(1.40, 8.25, "Rule", r"{\an7\pos(470,1606)\fad(400,400)\t(0,600,\fscx100)\fscx0\p1}m 0 0 l 140 0 140 3 0 3{\p0}", 2)
 
 # ---- Elnarə: introduction (protected opening) ----
 eln_open = [
@@ -93,14 +98,14 @@ eln_open = [
 ]
 for c in eln_open: sub(*c)
 # name super: lower-left, just above the subtitle zone, with a soft halo for legibility
-add(36.1, 42.0, "Rule", r"{\an7\pos(72,1196)\fad(300,400)\t(0,700,\fscx100)\fscx0\p1}m 0 0 l 110 0 110 4 0 4{\p0}", 4)
-halo(36.3, 42.0, "Name", r"{\an7\move(60,1214,72,1214,0,900)\fad(500,450)\blur0.6}Elnarə Sadıqova", 2)
-halo(36.6, 42.0, "NameSub", r"{\an7\pos(76,1328)\fad(600,450)\blur0.4}«QƏBUL VAXTI» APARICISI", 2)
+add(36.1, 42.0, "Rule", r"{\an7\pos(76,1262)\fad(300,400)\t(0,700,\fscx100)\fscx0\p1}m 0 0 l 110 0 110 4 0 4{\p0}", 4)
+halo(36.3, 42.0, "Name", r"{\an7\move(64,1280,76,1280,0,900)\fad(500,450)\blur0.6}Elnarə Sadıqova", 2)
+halo(36.6, 42.0, "NameSub", r"{\an7\pos(80,1394)\fad(600,450)\blur0.4}«QƏBUL VAXTI» APARICISI", 2)
 
 # ---- Title break (no speech) ----
-add(59.65, 61.80, "Title", r"{\an5\pos(540,1440)\fad(450,350)\blur0.8\fsp2\t(0,2100,\fsp14)}ZƏFƏR GÜNÜ", 2)
-add(59.65, 61.80, "Title", r"{\an5\pos(540,1440)\fad(450,350)\blur18\1a&HFF&\3c&H3FA6E8&\3a&H90&\bord10\fsp2\t(0,2100,\fsp14)}ZƏFƏR GÜNÜ", 1)
-add(59.90, 61.80, "Rule", r"{\an7\pos(400,1532)\fad(400,350)\t(0,800,\fscx100)\fscx0\p1}m 0 0 l 280 0 280 3 0 3{\p0}", 2)
+add(59.65, 61.80, "Title", r"{\an5\pos(540,1300)\fad(450,350)\blur0.8\fsp2\t(0,2100,\fsp14)}ZƏFƏR GÜNÜ", 2)
+add(59.65, 61.80, "Title", r"{\an5\pos(540,1300)\fad(450,350)\blur18\1a&HFF&\3c&H3FA6E8&\3a&H90&\bord10\fsp2\t(0,2100,\fsp14)}ZƏFƏR GÜNÜ", 1)
+add(59.90, 61.80, "Rule", r"{\an7\pos(400,1392)\fad(400,350)\t(0,800,\fscx100)\fscx0\p1}m 0 0 l 280 0 280 3 0 3{\p0}", 2)
 
 # ---- Body (OT = src + 2.4) ----
 o = 2.4
@@ -122,8 +127,8 @@ body = [
     (99.87, 103.63, "onu nümayiş etdirdik,\\Nhiss etdik və gördük."),
 ]
 for st, en, tx in body: sub(st + o, en + o, tx)
-halo(83.0 + o, 88.6 + o, "Accent", r"{\an8\pos(540,230)\fad(500,500)\blur0.5\fs64\fsp10}31 DEKABR", 2)
-halo(83.2 + o, 88.6 + o, "Accent", r"{\an8\pos(540,318)\fad(600,500)\blur0.5\c&H7FD2F4&\fs42}HƏMRƏYLİK GÜNÜ", 2)
+halo(83.0 + o, 88.6 + o, "Accent", r"{\an8\pos(540,312)\fad(500,500)\blur0.5\fs64\fsp10}31 DEKABR", 2)
+halo(83.2 + o, 88.6 + o, "Accent", r"{\an8\pos(540,400)\fad(600,500)\blur0.5\c&H7FD2F4&\fs42}HƏMRƏYLİK GÜNÜ", 2)
 
 # ---- Final passage (OT = src - 0.4667) ----
 o2 = -0.4667
@@ -133,20 +138,20 @@ fin = [
     (113.75, 117.95, "torpaqlarımızın azadlığı\\Nuğrunda davam edən"),
 ]
 for st, en, tx in fin: sub(st + o2, en + o2, tx)
-big = r"{\an8\pos(540,150)\fad(400,450)\blur0.6\t(0,3500,\fscx106\fscy106)}44 GÜN"
+big = r"{\an8\pos(540,290)\fad(400,450)\blur0.6\t(0,3500,\fscx106\fscy106)}44 GÜN"
 add(111.9 + o2, 115.4 + o2, "Big", big, 2)
 add(111.9 + o2, 115.4 + o2, "Big", big.replace(r"\blur0.6", r"\blur20\1a&HFF&\3c&H000000&\3a&HA0&\bord14"), 1)
 # closing line as a larger quote treatment (replaces the subtitle for this line)
-q = r"{\an8\pos(540,190)\fad(350,700)\blur0.5}«...qəhrəmanlıq" + GOLD + r" zəfərlə" + WHITE + r"\Nyekunlaşdı.»"
+q = r"{\an8\pos(540,320)\fad(350,700)\blur0.5}«...qəhrəmanlıq" + GOLD + r" zəfərlə" + WHITE + r"\Nyekunlaşdı.»"
 add(118.0 + o2, 123.0, "Quote", q, 2)
 add(118.0 + o2, 123.0, "Quote", re.sub(r"\{\\c[^}]*\}", "", q).replace(r"\blur0.5", r"\blur18\1a&HFF&\3c&H000000&\3a&HA0&\bord12"), 1)
 
 # ---- End card ----
-add(122.2, 127.6, "Title", r"{\an5\pos(540,1420)\fad(800,1100)\blur0.8\fsp4\t(0,5400,\fsp12)}ZƏFƏR GÜNÜ", 2)
-add(122.2, 127.6, "Title", r"{\an5\pos(540,1420)\fad(800,1100)\blur18\1a&HFF&\3c&H3FA6E8&\3a&H90&\bord10\fsp4\t(0,5400,\fsp12)}ZƏFƏR GÜNÜ", 1)
-add(122.6, 127.6, "Rule", r"{\an7\pos(400,1512)\fad(600,1100)\t(0,900,\fscx100)\fscx0\p1}m 0 0 l 280 0 280 3 0 3{\p0}", 2)
-add(122.9, 127.6, "TitleSub", r"{\an5\pos(540,1572)\fad(700,1100)}8 NOYABR", 2)
-add(123.6, 127.6, "TitleSub", r"{\an5\pos(540,1700)\fs30\fad(700,1100)\alpha&H20&}«QƏBUL VAXTI»  ·  ARAZ FM 103.3", 2)
+add(122.2, 127.6, "Title", r"{\an5\pos(540,1330)\fad(800,1100)\blur0.8\fsp4\t(0,5400,\fsp12)}ZƏFƏR GÜNÜ", 2)
+add(122.2, 127.6, "Title", r"{\an5\pos(540,1330)\fad(800,1100)\blur18\1a&HFF&\3c&H3FA6E8&\3a&H90&\bord10\fsp4\t(0,5400,\fsp12)}ZƏFƏR GÜNÜ", 1)
+add(122.6, 127.6, "Rule", r"{\an7\pos(400,1422)\fad(600,1100)\t(0,900,\fscx100)\fscx0\p1}m 0 0 l 280 0 280 3 0 3{\p0}", 2)
+add(122.9, 127.6, "TitleSub", r"{\an5\pos(540,1478)\fad(700,1100)}8 NOYABR", 2)
+add(123.6, 127.6, "TitleSub", r"{\an5\pos(540,1655)\fs30\fad(700,1100)\alpha&H20&}«QƏBUL VAXTI»  ·  ARAZ FM 103.3", 2)
 
 open(sys.argv[1], "w", encoding="utf-8").write(HEAD + "\n".join(ev) + "\n")
 print(len(ev), "events")
