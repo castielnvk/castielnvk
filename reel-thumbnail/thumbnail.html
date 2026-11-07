@@ -1,0 +1,38 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,900;1,900&family=Noto+Color+Emoji&display=block" rel="stylesheet">
+<style>
+  :root{--purple:#6A1BF2;--deep:#3E0AA8;--yellow:#FFF200;--pink:#FF3DA5}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{width:1080px;height:1920px;overflow:hidden;background:var(--purple);font-family:Rubik,sans-serif}
+  .rays{position:absolute;inset:-600px;background:repeating-conic-gradient(from 0deg at 50% 50%,#7A2CFF 0 9deg,var(--purple) 9deg 18deg)}
+  .vignette{position:absolute;inset:0;background:radial-gradient(circle at 50% 52%,transparent 35%,rgba(30,0,90,.65) 100%)}
+  .logo100{position:absolute;left:71px;top:152px;width:158px;filter:drop-shadow(0 6px 0 rgba(0,0,0,.25))}
+  .araz{position:absolute;left:838px;top:183px;width:166px}
+  .frame{position:absolute;left:150px;top:580px;width:780px;height:780px;border-radius:56px;background:#fff;padding:22px;transform:rotate(-3deg);box-shadow:0 30px 0 var(--deep),0 40px 80px rgba(0,0,0,.4)}
+  .frame .inner{width:100%;height:100%;border-radius:38px;overflow:hidden;background:radial-gradient(circle at 50% 40%,#FFF86B,var(--yellow) 45%,#FFC400);display:flex;align-items:center;justify-content:center}
+  .frame img{width:100%;height:100%;object-fit:cover}
+  .face{font-family:'Noto Color Emoji';font-size:420px;line-height:1;transform:rotate(8deg)}
+  .head{position:absolute;left:0;right:0;text-align:center;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:-2px;color:var(--yellow);-webkit-text-stroke:14px var(--deep);paint-order:stroke fill;text-shadow:0 14px 0 var(--deep)}
+  .h1{top:310px;font-size:112px;line-height:1;transform:rotate(-4deg)}
+  .h2{top:1370px;font-size:150px;line-height:1;transform:rotate(-3deg)}
+  .sticker{position:absolute;right:90px;top:1180px;background:var(--pink);color:#fff;font-weight:900;font-size:58px;padding:18px 34px;border-radius:999px;transform:rotate(-6deg);border:8px solid #fff;box-shadow:0 10px 0 var(--deep)}
+  .em{position:absolute;font-family:'Noto Color Emoji';font-size:130px}
+  .bar{position:absolute;left:50%;bottom:120px;transform:translateX(-50%) rotate(2deg);background:#fff;color:var(--deep);font-weight:900;font-size:56px;padding:20px 46px;border-radius:24px;white-space:nowrap;box-shadow:0 10px 0 var(--deep)}
+</style></head>
+<body>
+  <div class="rays"></div><div class="vignette"></div>
+  <img class="logo100" src="logo100.png"><img class="araz" src="araz_white.png">
+  <div class="head h1">BUNU GÖZLƏMİRDİK</div>
+  <div class="frame"><div class="inner" id="slot"><div class="face">🤣</div></div></div>
+  <div class="sticker">CANLI EFİRDƏ!</div>
+  <div class="em" style="left:50px;top:1200px;transform:rotate(-15deg)">😂</div>
+  <div class="em" style="right:40px;top:560px;transform:rotate(14deg)">💀</div>
+  <div class="head h2">GÜLMƏKDƏN<br>ÖLDÜK</div>
+  <div class="bar">SONUNA QƏDƏR İZLƏ 👀</div>
+  <script>
+    // ?frame=path/to/frame.jpg  → videodan kadr qoy
+    const f=new URLSearchParams(location.search).get('frame');
+    if(f){document.getElementById('slot').innerHTML='<img src="'+encodeURI(f)+'">';}
+  </script>
+</body></html>
