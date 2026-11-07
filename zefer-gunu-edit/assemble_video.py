@@ -162,10 +162,11 @@ def compose(panel_rgb_f, t, k, fade=1.0):
 
 # ---------- readers ----------
 class SrcReader:
-    def __init__(self, path):
-        self.p = subprocess.Popen(['ffmpeg', '-v', 'error', '-i', path, '-vf', f'fps={FPS}', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'],
-                                  stdout=subprocess.PIPE)
-        self.idx = -1; self.cur = None
+    def __init__(self, path, start=0.0):
+        # start on the 30 fps grid; frame j of this reader is source time start + j/FPS
+        self.p = subprocess.Popen(['ffmpeg', '-v', 'error', '-i', path, '-vf', f'fps={FPS},trim=start={start:.6f}', '-f', 'rawvideo',
+                                   '-pix_fmt', 'rgb24', '-'], stdout=subprocess.PIPE)
+        self.idx = F(start) - 1; self.cur = None
     def get(self, st):
         want = F(st)
         while self.idx < want:
@@ -205,18 +206,22 @@ if len(sys.argv) > 5:          # preview stills
         cv2.imwrite(f'{sys.argv[4]}/prev_{t:06.2f}.png', cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
     sys.exit(0)
 
-src = SrcReader(sys.argv[1])
 scenes = sys.argv[3]
-title = ClipReader(f'{scenes}/flag_title.mp4')     # OT 59.4 - 65.6
-dawn = ClipReader(f'{scenes}/flag_dawn.mp4')       # OT 71.6 - 76.2
-endc = ClipReader(f'{scenes}/flag_end.mp4')        # OT 120.4 - 128.8 (has its own fade-out)
-TITLE_IN, TITLE_OUT, DAWN_IN, DAWN_OUT, END_IN, XF = 59.4, 65.6, 71.6, 76.2, 120.4, 0.40
+SFX = os.environ.get('SCENE_SUFFIX', '2')            # '2' = photographic fabric versions
+title = ClipReader(f'{scenes}/flag_title{SFX}.mp4')  # OT 59.4 - 65.6
+endc = ClipReader(f'{scenes}/flag_end{SFX}.mp4')     # OT 120.4 - 128.8 (has its own fade-out)
+TITLE_IN, TITLE_OUT, END_IN, XF = 59.4, 65.6, 120.4, 0.40
+# the earlier illustrative flag-on-a-pole insert (OT 71.6-76.2) was removed at the client's request
+RANGE = [float(v) for v in os.environ.get('RANGE', f'0:{TOTAL}').split(':')]   # render only part of the timeline (patching)
+k0, k1 = F(RANGE[0]), F(RANGE[1])
+first_src = next((ot_to_src(k / FPS) for k in range(max(0, k0 - 30), k1) if ot_to_src(k / FPS) is not None), 0.0)
+src = SrcReader(sys.argv[1], max(0.0, first_src))
 
 out = subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', str(FPS),
                         '-i', '-', '-c:v', 'libx264', '-preset', 'medium', '-crf', '12', '-pix_fmt', 'yuv420p',
                         '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', sys.argv[4]], stdin=subprocess.PIPE)
 last_her = None
-for k in range(F(TOTAL)):
+for k in range(max(0, k0 - 30), k1):        # 1 s of pre-roll so held frames for dissolves exist
     ot = k / FPS
     st = ot_to_src(ot)
     her = None
@@ -226,15 +231,12 @@ for k in range(F(TOTAL)):
         img = title.get(ot - TITLE_IN)
         if ot < TITLE_IN + XF: img = lerp(last_her, img, smoothstep(TITLE_IN, TITLE_IN + XF, ot))
         if ot >= TITLE_OUT - XF and her is not None: img = lerp(img, her, smoothstep(TITLE_OUT - XF, TITLE_OUT, ot))
-    elif DAWN_IN <= ot < DAWN_OUT:
-        img = dawn.get(ot - DAWN_IN)
-        if ot < DAWN_IN + XF: img = lerp(her, img, smoothstep(DAWN_IN, DAWN_IN + XF, ot))
-        if ot >= DAWN_OUT - XF: img = lerp(img, her, smoothstep(DAWN_OUT - XF, DAWN_OUT, ot))
     elif ot >= END_IN:
         img = endc.get(ot - END_IN)
         if ot < END_IN + 0.7: img = lerp(last_her, img, smoothstep(END_IN, END_IN + 0.7, ot))
     else:
         img = her
+    if k < k0: continue
     fade = smoothstep(0, 0.7, ot) * (1 - smoothstep(TOTAL - 1.3, TOTAL - 0.05, ot))
     out.stdin.write(compose(img, ot, k, fade).tobytes())
     if k % 300 == 0: print(f'{ot:6.1f}s', flush=True)

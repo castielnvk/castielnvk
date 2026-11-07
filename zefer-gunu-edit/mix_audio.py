@@ -45,7 +45,6 @@ music = load(sys.argv[2])[:out_len]
 music = np.pad(music, ((0, out_len - len(music)), (0, 0)))
 pts = [(0.0, -2), (33.0, -2), (34.0, 1.5), (35.3, 1.5), (36.5, -3),        # breath between President and Elnarə
        (58.9, -3), (59.5, 4.5), (61.4, 4.5), (62.4, -4),                  # title break swell
-       (71.4, -4), (71.7, -2), (75.8, -2), (76.3, -4.5),                  # dawn scene lift
        (99.0, -6), (105.9, -7.5), (106.2, -7.5), (119.6, -8),
        (120.45, -1), (121.5, 1), (128.8, 1)]                              # music rises at the conclusion
 t = np.arange(out_len) / SR
@@ -68,7 +67,7 @@ def swell(at, dur, peak_db, lp_hz=3500, rise=0.75):
     y *= (shape * 10 ** (peak_db / 20) / (np.abs(y).max() + 1e-9))[:, None]
     o = int(at * SR); return o, y
 sd = np.zeros_like(music)
-for at, dur, pk, lp in [(58.95, 1.3, -30, 2800), (71.15, 1.0, -34, 2200), (120.35, 2.2, -29, 3200)]:
+for at, dur, pk, lp in [(58.95, 1.3, -30, 2800), (120.35, 2.2, -29, 3200)]:
     o, y = swell(at, dur, pk, lp); sd[o:o + len(y)] += y
 # shimmer on the title (high, quiet sine cluster)
 for at, dur, pk in [(59.45, 2.6, -36), (122.2, 4.0, -35)]:

@@ -67,6 +67,45 @@ def fullframe_flag(t, dur, cx, cy, flag_h_frac, rot_deg, push, amp, speed, sweep
     img = img * (1 - 0.42*np.clip(r-0.35, 0, 1)[..., None]**1.5) * (1 - darken)
     return img
 
+def fullframe_flag_real(t, dur, cx, cy, flag_h_frac, rot_deg, push, amp, speed, darken=0.0, focus_y=0.5):
+    """Photographic close-up of the flag: woven fabric, physically-motivated shading of folds
+    (diffuse + satin sheen + occlusion in the creases), shallow depth of field and natural light."""
+    z = 1.0 + push * (t/dur)
+    upp = 600.0 / (H * flag_h_frac) / z
+    a = np.deg2rad(rot_deg)
+    X = (xx - W/2) * upp; Y = (yy - H/2) * upp
+    u = cx + X*np.cos(a) - Y*np.sin(a); v = cy + X*np.sin(a) + Y*np.cos(a)
+    # height field of the cloth: broad billows + secondary folds + fine ripples (all travelling with the wind)
+    comps = [(1.00, 0.0085, -0.0030, 1.6, 0.0), (0.55, 0.0060, 0.0052, 1.1, 1.7), (0.35, 0.0150, 0.0016, 2.3, 0.6),
+             (0.12, 0.0420, -0.0110, 3.9, 2.2), (0.07, 0.0610, 0.0190, 5.1, 4.1)]
+    d = np.zeros_like(u); du = np.zeros_like(u); dv = np.zeros_like(u)
+    for A, ku, kv, w, ph in comps:
+        p = ku*u + kv*v - speed*w*t + ph
+        d += amp*A*np.sin(p); c = amp*A*np.cos(p); du += c*ku; dv += c*kv
+    col = sample(u + 0.25*d, v + 0.8*d)
+    # woven texture (warp/weft threads ~1.1 flag units apart), modulates albedo very slightly
+    weave = (np.sin(u*5.7)*np.sin(v*5.7)*0.5 + 0.5*np.sin(u*5.7 + 1.3)*np.cos(v*0.9))
+    col = col * (1 + 0.035*weave)[..., None]
+    # surface normal and lighting (key light from upper left, warm; soft cool fill)
+    nx, ny = -du*5.5, -dv*5.5
+    nz = np.ones_like(nx); inv = 1/np.sqrt(nx*nx + ny*ny + 1); nx *= inv; ny *= inv; nz *= inv
+    L = np.array([-0.45, -0.55, 0.70]); L /= np.linalg.norm(L)
+    ndl = np.clip(nx*L[0] + ny*L[1] + nz*L[2], 0, 1)
+    Hh = L + np.array([0, 0, 1.0]); Hh /= np.linalg.norm(Hh)
+    ndh = np.clip(nx*Hh[0] + ny*Hh[1] + nz*Hh[2], 0, 1)
+    spec = ndh**60 * 0.13 + ndh**8 * 0.035                 # satin sheen
+    ao = 1 - 0.38*np.clip(-(d/(amp*1.6)), 0, 1)**1.1        # creases fall into shadow
+    key = np.array([1.0, 0.96, 0.90], np.float32); fill = np.array([0.80, 0.88, 1.0], np.float32)
+    light = (0.26*fill + 1.05*key*ndl[..., None]**1.2) * ao[..., None]
+    img = col*light + spec[..., None]*key*0.9
+    # shallow depth of field around the emblem line
+    blur = cv2.GaussianBlur(img, (0, 0), 3.2)
+    m = np.clip((np.abs(yy/H - focus_y) - 0.24)/0.30, 0, 1)[..., None]**1.3
+    img = img*(1-m) + blur*m
+    r = np.sqrt(((xx-W/2)/(W*0.78))**2 + ((yy-H*focus_y)/(H*0.62))**2)
+    img = img * (1 - 0.38*np.clip(r-0.35, 0, 1)[..., None]**1.5) * (1 - darken)
+    return img
+
 def sky_scene(t, dur):
     """Illustrative dawn: graded sky, low hills, flag on a pole waving in the wind."""
     z = 1.0 + 0.04*(t/dur)
@@ -144,6 +183,12 @@ if __name__ == '__main__':
                push=0.07, amp=7.5, speed=1.0, darken=0.0))
     if 'dawn' in which:
         render(f'{od}/flag_dawn.mp4', 4.6, sky_scene)
+    if 'title2' in which:
+        render(f'{od}/flag_title2.mp4', 6.2, lambda t,d: fullframe_flag_real(t,d, cx=600, cy=318, flag_h_frac=1.10, rot_deg=-4,
+               push=0.06, amp=9.0, speed=1.0, focus_y=0.47))
+    if 'end2' in which:
+        render(f'{od}/flag_end2.mp4', 8.4, lambda t,d: fullframe_flag_real(t,d, cx=612, cy=300, flag_h_frac=1.02, rot_deg=3,
+               push=0.05, amp=8.0, speed=0.7, darken=0.08, focus_y=0.45), fade_out=1.4)
     if 'end' in which:     # end card (8.4 s)
         render(f'{od}/flag_end.mp4', 8.4, lambda t,d: fullframe_flag(t,d, cx=612, cy=290, flag_h_frac=1.05, rot_deg=3,
                push=0.05, amp=6.0, speed=0.7, sweep_dir=1, darken=0.12), fade_out=1.4)
