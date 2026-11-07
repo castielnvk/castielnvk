@@ -1,0 +1,9 @@
+[package]
+name = "dfcli"
+version = "0.1.0"
+edition = "2021"
+[dependencies]
+deep-filter-rt = "0.1.1"
+ndarray = "0.17"
+[profile.release]
+opt-level = 3
