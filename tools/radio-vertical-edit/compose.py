@@ -24,9 +24,9 @@ for c in E.CLIPS:
 TOTAL = t
 HOLDS = [c for c in clips if 'hold' in c]
 for c in HOLDS:
-    E.GAG_EXTRA.append(dict(kind='label', text='DİAQNOZ:\nBABASİL', t0=c['o0']+0.08, t1=c['o1']+0.05, xy=(540, 1180), size=54,
-                            bg=(255, 255, 255), fg=(200, 20, 60), rot=-5, emoji='1fa7a'))
-    E.GAG_EXTRA.append(dict(kind='emoji', code='1f6a8', t0=c['o0']+0.3, t1=c['o1']+0.05, xy=(880, 360), size=170, rot=8, wob=10, wob_f=12))
+    for g in c.get('fx', []):
+        g = dict(g); g['t0'] = c['o0']+g['t0']; g['t1'] = c['o0']+g['t1']; g['fixed'] = True
+        E.GAG_EXTRA.append(g)
 NF = int(round(TOTAL*FPS))
 print('total', round(TOTAL, 2), 's', NF, 'frames')
 
@@ -51,23 +51,23 @@ M = 30
 def layout(name):
     """return dict of view rects: k -> (x,y,w,h, zoom, headroom)"""
     if name == 'stack':
-        return {'L': (M, 170, W-2*M, 720, 1.0, .44), 'R': (M, 930, W-2*M, 720, 1.0, .44)}
+        return {'L': (M, 250, W-2*M, 690, 1.0, .44), 'R': (M, 965, W-2*M, 690, 1.0, .44)}
     if name == 'call':
-        return {'L': (M, 170, W-2*M, 610, 1.08, .44), 'R': (M, 1040, W-2*M, 610, 1.08, .44)}
+        return {'L': (M, 250, 495, 600, 1.0, .42), 'R': (W-M-495, 250, 495, 600, 1.0, .42)}
     if name in ('soloL', 'soloR'):
         k = name[-1]; o = 'R' if k == 'L' else 'L'
-        d = {k: (M, 170, W-2*M, 1240, 1.0, .40)}
+        d = {k: (M, 250, W-2*M, 1170, 1.0, .40)}
         # the other presenter parks as a small picture-in-picture bubble
         d[o] = (W-M-270, 1440, 270, 270, 1.55, .48) if k == 'L' else (W-M-270, 1440, 270, 270, 1.55, .48)
         return d
     if name in ('punchL', 'punchR'):
         k = name[-1]; o = 'R' if k == 'L' else 'L'
-        d = {k: (M, 170, W-2*M, 1240, 1.45, .45)}
+        d = {k: (M, 250, W-2*M, 1170, 1.45, .45)}
         d[o] = (W-M-270, 1440, 270, 270, 1.55, .48)
         return d
     if name in ('fullL', 'fullR'):
         k = name[-1]
-        return {k: (M, 170, W-2*M, 1240, 1.0, .40)}
+        return {k: (M, 250, W-2*M, 1170, 1.0, .40)}
     raise ValueError(name)
 
 def lerp(a, b, f): return tuple(x*(1-f)+y*f for x, y in zip(a, b))
@@ -101,9 +101,11 @@ WORDS = [(w[0], w[1], w[2].strip()) for s in TR for w in s['w']]
 def norm(s):
     return ''.join(ch for ch in s.lower() if ch.isalnum())
 
+TR3 = [(w[0], w[1], w[2].strip()) for s in json.load(open(os.path.join(WDIR, 'tr3.json'))) if not s['p'] for w in s['w']]
 def word_times(text, s0, s1):
     ws = text.split()
-    cand = [w for w in WORDS if w[0] >= s0-0.25 and w[0] < s1]
+    cand = [w for w in TR3 if w[0] >= s0-0.25 and w[0] < s1]
+    if len(cand) != len(ws): cand = [w for w in WORDS if w[0] >= s0-0.25 and w[0] < s1]
     if len(cand) == len(ws):
         st = [max(s0, c[0]) for c in cand]
     else:
@@ -120,8 +122,9 @@ for cap in E.CAPTIONS:
         print('caption outside edit:', text); continue
     words = [(w, s2o(t_, opts.get('clip')) or o0) for w, t_ in wt]
     big = opts.get('big', False)
-    chunks = [words] if big else []
-    if not big:
+    whole = big or spk == 'P'
+    chunks = [words] if whole else []
+    if not whole:
         cur = []
         for w in words:
             if cur and (len(cur) >= 4 or sum(len(x[0])+1 for x in cur)+len(w[0]) > 24):
@@ -162,16 +165,16 @@ def layout_caption(cap, maxw=960):
 def caption_y(ot):
     _, i, _ = views_at(ot)
     lay = clips[i]['lay']
-    if lay == 'stack': return 910
-    if lay == 'call': return None   # caller captions live inside the call card
-    return 1300
+    if lay == 'stack': return 952
+    if lay == 'call': return 770
+    return 1330
 
 def draw_captions(dst, ot):
     for cap in CAPS:
         if not (cap['o0']-0.02 <= ot <= cap['vis_end']): continue
         cy = cap['pos'] or caption_y(ot)
         if cap['spk'] == 'P' and clips[o2s(ot)[0]]['lay'] == 'call': continue
-        if cy is None: cy = 1300
+        if cy is None: cy = 1330
         imgs, lines, sp = layout_caption(cap)
         lh = imgs[0].size[1]-14
         tot_h = lh*len(lines)
@@ -205,41 +208,105 @@ def draw_captions(dst, ot):
 # ---------------- call card ----------------
 def draw_call_card(dst, ot, alpha):
     if alpha <= 0: return
-    x, y, w, h = M+10, 790, W-2*M-20, 240
-    s = 0.85+0.15*ease_out_back(alpha)
-    card = np.zeros((h, w, 4), np.uint8)
+    x, y, w, h = M, 880, W-2*M, 530
+    s_ = 0.85+0.15*ease_out_back(alpha)
     im = Image.new('RGBA', (w, h), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
-    d.rounded_rectangle([0, 0, w-1, h-1], 38, fill=(255, 255, 255, 250))
-    d.rounded_rectangle([0, 0, 230, h-1], 38, fill=MAG+(255,))
-    d.rectangle([190, 0, 230, h-1], fill=MAG+(255,))
-    ph = emoji('1f4de', 120, 0)
-    wob = math.sin(ot*14)*8 if (ot*2) % 2 < 1 else 0
-    ph = ph.rotate(wob, Image.BICUBIC)
-    im.paste(ph, (55, 60), ph)
-    f = font(FONT_DISP, 30)
-    d.text((260, 24), 'NİHAT · CANLI ZƏNG', font=f, fill=MAG)
-    # live waveform driven by caller loudness
-    lv = caller_level(ot)
-    for b in range(9):
-        hh = 8+lv*70*(0.4+0.6*abs(math.sin(b*1.7+ot*9)))
-        hh = min(hh, 40); d.rounded_rectangle([w-40-b*16, 42-hh/2, w-40-b*16+8, 42+hh/2], 4, fill=PURP+(255,))
-    # caller caption inside the card (karaoke reveal)
+    d.rounded_rectangle([0, 0, w-1, h-1], 44, fill=(255, 255, 255, 252))
+    d.rounded_rectangle([0, 0, w-1, 150], 44, fill=MAG+(255,))
+    d.rectangle([0, 110, w-1, 150], fill=MAG+(255,))
+    # avatar disc with headset (no invented face)
+    d.ellipse([28, 18, 142, 132], fill=(255, 255, 255, 255))
+    av = emoji('1f3a7', 84, 0); im.paste(av, (43, 33), av)
+    d.text((168, 20), 'NİHAT', font=font(FONT_CAP, 62), fill=WHITE)
+    d.text((170, 92), 'DİNLƏYİCİ · TELEFON XƏTTİ', font=font(FONT_CAP8, 28), fill=(255, 225, 240))
+    # pulsing live dot
+    pa = 0.5+0.5*math.sin(ot*6)
+    d.ellipse([w-170, 50, w-142, 78], fill=(255, int(60+80*pa), int(60+80*pa), 255))
+    d.text((w-130, 44), 'CANLI', font=font(FONT_CAP, 32), fill=WHITE)
+    ph = emoji('1f4de', 70, 0).rotate(math.sin(ot*14)*10 if caller_level(ot) > 0.25 else 0, Image.BICUBIC)
+    im.paste(ph, (w-250, 40), ph)
+    # waveform
+    lv = caller_level(ot) if E.speaker_at(o2s(ot)[1]) == 'P' else 0.05
+    nb = 46; bw = (w-80)/nb
+    for b in range(nb):
+        k = abs(math.sin(b*0.9+ot*11))*0.6+abs(math.sin(b*0.37-ot*7))*0.4
+        hh = 6+min(1, lv*1.3)*70*k*(1-abs(b-nb/2)/nb)
+        cx = 40+b*bw
+        d.rounded_rectangle([cx, 210-hh/2, cx+bw*0.55, 210+hh/2], 4, fill=PURP+(255,))
+    # caller caption (karaoke reveal), large
     cap = None
     for c in CAPS:
-        if c['spk'] == 'P' and c['o0']-0.02 <= ot <= c['o1']+0.4: cap = c
+        if c['spk'] == 'P' and c['o0']-0.02 <= ot <= c['vis_end']+0.3: cap = c
     if cap:
-        f2 = font(FONT_CAP, 44)
-        xx, yy = 260, 80
+        f2 = font(FONT_CAP, 54)
+        lines = [[]]; xx = 0
         for wd, wt in cap['words']:
-            if ot < wt-0.03: break
-            hi = norm(wd) in {norm(h) for h in cap['hi']}
-            bb = f2.getbbox(wd+' ')
-            if xx+bb[2] > w-24: xx = 260; yy += 52
-            d.text((xx, yy), wd, font=f2, fill=MAG if hi else INK)
-            xx += bb[2]
-    im = scale_rgba(im, s)
+            bw2 = f2.getbbox(wd+' ')[2]
+            if xx+bw2 > w-80 and lines[-1]: lines.append([]); xx = 0
+            lines[-1].append((wd, wt, bw2)); xx += bw2
+        yy = 268 if len(lines) > 2 else 300
+        for ln in lines[:3]:
+            tw = sum(b for _, _, b in ln); xx = (w-tw)/2
+            for wd, wt, bw2 in ln:
+                if ot >= wt-0.03:
+                    hi = norm(wd) in {norm(hh) for hh in cap['hi']}
+                    d.text((xx, yy), wd, font=f2, fill=MAG if hi else INK)
+                xx += bw2
+            yy += 70
+    sh, sp = shadow(w, h, 44)
+    blend(dst, np.zeros((sh.shape[0], sh.shape[1], 3), np.float32), sh*min(1, alpha*2), x-sp, y-sp)
+    im = scale_rgba(im, s_)
     paste_center(dst, im, x+w/2, y+h/2, min(1, alpha*2))
+
+# mini "on the line" chip shown outside the call layout
+@functools.lru_cache(None)
+def chip_base():
+    im = Image.new('RGBA', (360, 74), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.rounded_rectangle([0, 0, 359, 73], 37, fill=(255, 255, 255, 240))
+    e = emoji('1f4de', 46, 0); im.paste(e, (16, 14), e)
+    d.text((72, 18), 'NİHAT XƏTDƏ', font=font(FONT_CAP, 30), fill=MAG)
+    return im
+def draw_chip(dst, ot, lay):
+    if lay == 'call': return
+    im = chip_base().copy(); d = ImageDraw.Draw(im)
+    lv = caller_level(ot) if E.speaker_at(o2s(ot)[1]) == 'P' else 0.0
+    for b in range(5):
+        hh = 6+min(1, lv*1.4)*40*abs(math.sin(b*1.3+ot*12))
+        d.rounded_rectangle([300+b*10, 37-hh/2, 306+b*10, 37+hh/2], 3, fill=PURP+(255,))
+    paste_center(dst, im, W/2, 136, 1.0)
+
+# logos
+@functools.lru_cache(None)
+def logo_png(name, height, glow):
+    """transparent logo, smooth LANCZOS scaling, soft drop shadow (+ optional faint light glow for dark-on-dark)"""
+    lg = Image.open(os.path.join(ASSETS, f'logo_{name}.png')).convert('RGBA')
+    # supersample: up 4x, then down for smooth edges
+    s = height/lg.size[1]
+    big = lg.resize((round(lg.size[0]*s*4), height*4), Image.LANCZOS)
+    lg = big.resize((round(lg.size[0]*s), height), Image.LANCZOS)
+    m = 56
+    im = Image.new('RGBA', (lg.size[0]+2*m, lg.size[1]+2*m), (0, 0, 0, 0))
+    a = lg.split()[3]
+    sh = Image.new('RGBA', im.size, (0, 0, 0, 0)); blk = Image.new('RGBA', lg.size, (0, 0, 0, 170)); blk.putalpha(a.point(lambda v: v*170//255))
+    sh.paste(blk, (m+3, m+6), blk); sh = sh.filter(ImageFilter.GaussianBlur(7))
+    im = Image.alpha_composite(im, sh)
+    if glow:
+        # soft light halo: wide, blurred, keeps logo colours intact
+        gl = Image.new('RGBA', im.size, (0, 0, 0, 0))
+        mask = Image.new('L', im.size, 0); mask.paste(a, (m, m))
+        halo = mask.filter(ImageFilter.MaxFilter(17)).filter(ImageFilter.GaussianBlur(14))
+        halo = halo.point(lambda v: min(255, v*glow//110))
+        wt = Image.new('RGBA', im.size, (245, 248, 250, 255)); wt.putalpha(halo)
+        im = Image.alpha_composite(im, wt)
+    im.alpha_composite(lg, (m, m))
+    return np.asarray(im), m
+def draw_logos(dst):
+    a, m = logo_png('araz_white', 108, 0)
+    rgba_blend(dst, a, 46-m, 136-a.shape[0]/2)
+    b, m = logo_png('show', 150, 0)
+    rgba_blend(dst, b, W-46+m-b.shape[1], 136-b.shape[0]/2)
+
 
 # caller loudness envelope (for waveform)
 _aw = wave.open(os.path.join(WDIR, 'a.wav'))
@@ -260,6 +327,35 @@ def anim_scale(ot, t0, t1, pop=0.22, out=0.18):
     if ot < t0+pop: return ease_out_back((ot-t0)/pop)
     if ot > t1-out: return max(0, 1-ease((ot-(t1-out))/out))
     return 1
+
+@functools.lru_cache(None)
+def insert_img(path, size):
+    im = Image.open(path).convert('RGB').resize((size, size), Image.LANCZOS)
+    return im
+def draw_insert(dst, g, ot, s):
+    size = g.get('size', 860)
+    prog = (ot-g['t0'])/max(0.1, g['t1']-g['t0'])
+    z = 1.0+0.07*prog
+    base = insert_img(g['path'], size)
+    crop = base.resize((int(size*z), int(size*z)), Image.BICUBIC)
+    o = (crop.size[0]-size)//2
+    crop = crop.crop((o, o, o+size, o+size))
+    b = 18; fr = Image.new('RGBA', (size+2*b, size+2*b+70), (255, 255, 255, 255))
+    fr.paste(crop, (b, b))
+    d = ImageDraw.Draw(fr)
+    f = font(FONT_CAP, 40); t = g.get('cap', '')
+    tw = f.getbbox(t)[2]; d.text(((fr.size[0]-tw)/2, size+b+12), t, font=f, fill=INK)
+    m = Image.new('L', fr.size, 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, fr.size[0]-1, fr.size[1]-1], 28, fill=255)
+    fr.putalpha(m)
+    sh = Image.new('RGBA', (fr.size[0]+80, fr.size[1]+80), (0, 0, 0, 0))
+    ImageDraw.Draw(sh).rounded_rectangle([40, 52, 40+fr.size[0], 52+fr.size[1]], 28, fill=(0, 0, 0, 150))
+    sh = sh.filter(ImageFilter.GaussianBlur(16)); sh.alpha_composite(fr, (40, 40))
+    rot = g.get('rot', -3)+math.sin((ot-g['t0'])*3)*1.2
+    im = scale_rgba(sh, s*0.98, rot)
+    x, y = g['xy']
+    paste_center(dst, im, x, y)
+    tag = label_sticker('AI TƏSƏVVÜRÜ', 30, YEL, INK, emoji_code='1f3a8', rot=0)
+    paste_center(dst, scale_rgba(tag, s, 6), x-size/2+150, y-size/2-10)
 
 _GAGS = None
 def draw_gags(dst, ot):
@@ -284,6 +380,8 @@ def draw_gags(dst, ot):
             im = emoji(g['code'], g.get('size', 220))
         elif g['kind'] == 'label':
             im = label_sticker(g['text'], g.get('size', 46), g.get('bg', YEL), g.get('fg', INK), emoji_code=g.get('emoji'), rot=0)
+        elif g['kind'] == 'image':
+            draw_insert(dst, g, ot, s); continue
         elif g['kind'] == 'title':
             im = label_sticker(g['text'], g.get('size', 64), g.get('bg', MAG), g.get('fg', WHITE), emoji_code=g.get('emoji'), rot=0)
         im = scale_rgba(im, s*g.get('scale', 1.0), rot)
@@ -316,7 +414,7 @@ def counter_img(n):
     return label_sticker(f'GÜLMƏK QADAĞAN\nPOZUNTU: {n}', 26, (255, 255, 255), (200, 20, 60), path=FONT_DISP, pad=(18, 12), rot=0, emoji_code='1f6ab')
 
 # ---------------- frame ----------------
-FLASH_T = E.FLASHES(s2o) + [c['o0'] for c in HOLDS]
+FLASH_T = E.FLASHES(s2o) + [c['o0'] for c in HOLDS if c.get('flash', True)]
 SHAKE_T = E.SHAKES(s2o)
 def flash(dst, ot):
     for t0 in FLASH_T:
@@ -355,8 +453,11 @@ def render_frame(fi, panels):
     ca = 0
     if c['lay'] == 'call':
         ca = min(1, (ot-c['o0'])/0.3) if (ci == 0 or clips[ci-1]['lay'] != 'call') else 1
+    if 'hold' in c and c.get('dim'):
+        dst *= 0.55
     draw_call_card(dst, ot, ca)
-    draw_header(dst, ot)
+    draw_logos(dst)
+    draw_chip(dst, ot, c['lay'])
     draw_counter(dst, ot)
     draw_captions(dst, ot)
     draw_gags(dst, ot)
@@ -405,7 +506,7 @@ def build_audio():
     mus = load_wav(os.path.join(BASE, 'music.wav'))
     mus = np.tile(mus, (int(np.ceil(n/len(mus)))+1, 1))[:n]
     menv = np.full(n, E.MUSIC_LEVEL, np.float32)
-    for (t0, t1, lev) in E.MUSIC_AUTOMATION(s2o) + [(c['o0'], c['o1'], 0.0) for c in HOLDS]:
+    for (t0, t1, lev) in E.MUSIC_AUTOMATION(s2o) + [(c['o0'], c['o1'], c.get('music', 0.0)) for c in HOLDS]:
         if t0 is None or t1 is None: continue
         i0, i1 = int(t0*SR), int(t1*SR)
         menv[i0:i1] = lev
@@ -416,7 +517,7 @@ def build_audio():
     mix = dia+mus*(menv*duck)[:, None]
     # sfx
     sfx = np.zeros_like(mix)
-    for name, t0, lev in E.SFX(s2o) + [x for c in HOLDS for x in (('shutter', c['o0'], 0.3), ('scratch', c['o0'], 0.22), ('bonk', c['o0']+0.35, 0.25))]:
+    for name, t0, lev in E.SFX(s2o) + [(n, c['o0']+dt, lv) for c in HOLDS for (n, dt, lv) in c.get('sfx', [])]:
         if t0 is None: continue
         s = load_wav(os.path.join(BASE, f'sfx_{name}.wav'))*lev
         i = int(t0*SR); m = min(len(s), n-i)
