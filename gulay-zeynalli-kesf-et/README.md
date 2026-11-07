@@ -10,10 +10,10 @@ Vertical (9:16) entertainment-magazine edit of the Kəşf Et / Araz Radio 103.3 
 
 ## v2 — tight paparazzi cut (current)
 
-`export/Gulay_Zeynalli_Kesf_Et_v2.mp4`: 52.6 s, 1080×1920, H.264 High + AAC 256 kbps, −16 LUFS.
+`export/Gulay_Zeynalli_Kesf_Et_v2.mp4`: 53.5 s, 1080×1920, H.264 High + AAC 256 kbps, −16 LUFS.
 
 * **Audio**: the original camera audio with gain only (a per-answer level match within ±4 dB, then +21 dB overall). It has no denoising, EQ or compression. A fast peak limiter touches transients only: 0 dB of gain reduction on the median speech frame and ≤0.7 dB on 90% of frames. The export correlates 0.985 with the source audio.
-* **Tighter structure**: cold open “Haqlı olduğum halda mən niyə üzr istəyim ki?” → title press photo → 5 cards. The hook isn't repeated; question 3 continues with “Yox, haqsız olsam, səhvim olsa, üzr istəyirəm.” Cut from v1:
+* **Tighter structure**: cold open “Qəlbim artıq qırılmır. O, əvvəllər idi.” → title press photo → 5 cards. Question 3 plays uncut (“…üzr istəyirəm. Haqlı olduğum halda mən niyə üzr istəyim ki? Yox.”) because she runs “istəyirəm” straight into “Haqlı” with no gap, so no clean cut exists there. The opening line isn't replayed: question 4's follow-up resolves with a text-only headline callback. Cut from v1:
   * the repeated “Heç birindən”;
   * the musing pause in answer 3;
   * the “sənət insanları…” explanation in answer 4.

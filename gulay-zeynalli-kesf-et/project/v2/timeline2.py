@@ -4,7 +4,7 @@ def q(t): return round(t * FPS) / FPS
 
 # clip parts: (src_in, src_out, z0, z1[, zcut_src, zcut_z])  — zcut = hard punch-in at a src time inside the part (video only)
 SEGMENTS = [
-    dict(kind='clip', tag='hook', parts=[(46.5333, 48.95, 1.20, 1.27)]),
+    dict(kind='clip', tag='hook', parts=[(69.18, 71.6667, 1.22, 1.30)]),
     dict(kind='title', dur=2.3, flash=True),                                   # freeze of previous frame as press photo
     dict(kind='card', n=1, cat='SƏNƏTİ', text='Bu günə istedad gətirdi,\nyoxsa mübarizə?', src=(1.00, 3.20), dur=2.3),
     dict(kind='clip', n=1, parts=[(4.92, 8.95, 1.00, 1.08)]),
@@ -13,13 +13,12 @@ SEGMENTS = [
     dict(kind='follow', text='Hansından imtina\netmək çətindir?', src=(17.55, 19.05), dur=1.5),
     dict(kind='clip', n=2, parts=[(19.90, 20.62, 1.00, 1.02), (22.95, 28.9667, 1.06, 1.10, 26.20, 1.30)]),
     dict(kind='card', n=3, cat='XASİYYƏTİ', text='Haqlı olduğunuz halda\nüzr istəyirsiniz?', src=(31.10, 33.40), dur=2.3),
-    dict(kind='clip', n=3, parts=[(42.25, 42.95, 1.04, 1.06), (43.62, 46.5333, 1.14, 1.20)]),
-    dict(kind='freeze', dur=1.15, quote='HAQSIZ OLSAM,\nÜZR İSTƏYİRƏM.'),
+    dict(kind='clip', n=3, parts=[(42.25, 42.95, 1.04, 1.06), (43.62, 49.6333, 1.10, 1.20)]),
+    dict(kind='freeze', dur=1.3, quote='HAQLI OLDUĞUM HALDA\nMƏN NİYƏ ÜZR\nİSTƏYİM Kİ?'),
     dict(kind='card', n=4, cat='HƏMKARLARI', text='Kiminlə münasibətiniz\nəvvəlki kimi deyil?', src=(50.00, 52.40), dur=2.4),
     dict(kind='clip', n=4, parts=[(53.45, 55.62, 1.00, 1.05), (56.32, 57.3667, 1.12, 1.14)]),
     dict(kind='follow', text='Qəlbiniz qırılmır?', src=(67.30, 68.70), dur=1.4),
-    dict(kind='clip', n=4, parts=[(69.18, 71.66, 1.22, 1.30)]),
-    dict(kind='freeze', dur=1.25, quote='QƏLBİM ARTIQ\nQIRILMIR.'),
+    dict(kind='freeze', dur=1.3, quote='QƏLBİM ARTIQ\nQIRILMIR.'),  # answer already heard in the cold open: text callback only, no repeated audio
     dict(kind='card', n=5, cat='GÖZLƏNİLMƏZ ETİRAF', text='Səmimi olmayan tərifə\ninanmış kimi davranırsınız?', src=(72.70, 75.20), dur=2.5),
     dict(kind='clip', n=5, parts=[(78.24, 78.86, 1.04, 1.06), (79.50, 82.40, 1.12, 1.22)]),
     dict(kind='freeze', dur=1.3, quote='SƏMİMİYYƏT OLMAYAN\nORTAMDA MƏN HEÇ VAXT\nOLMURAM.', last=True),
@@ -38,6 +37,7 @@ CAPTIONS = [
     (26.20, 28.95, 'xoşbəxt olmağa\nlayiq Gülaydır.'),
     (42.25, 42.95, 'Yox.'),
     (43.62, 46.5333, 'Haqsız olsam, səhvim olsa,\nüzr istəyirəm.'),
+    (49.20, 49.6333, 'Yox.'),
     (53.45, 55.62, 'Hamısıyla münasibət\nçox gözəldir.'),
     (56.32, 57.3667, 'Hamısını çox sevirəm.'),
     (69.18, 70.55, 'Qəlbim artıq qırılmır.'),
