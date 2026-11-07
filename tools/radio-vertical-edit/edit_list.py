@@ -179,7 +179,7 @@ def GAGS(s2o):
 
 GAG_EXTRA = []   # filled by compose (freeze-frame label needs output time of the hold clip)
 
-MUSIC_LEVEL = 0.20
+MUSIC_LEVEL = 0.13
 def MUSIC_AUTOMATION(s2o):
     o = lambda t, c=None: _o(s2o, t, c)
     return [
@@ -188,7 +188,7 @@ def MUSIC_AUTOMATION(s2o):
         (o(18.48, 'allah'), o(18.48, 'allah')+1.25, 0.0),  # (freeze handled separately)
         (o(130.30, 'ask'), o(131.62, 'ask'), 0.08),
         (o(131.62, 'punch'), o(133.70, 'punch'), 0.0),    # silence for the punchline
-        (o(133.70, 'laughL'), o(136.45, 'laugh'), 0.30),  # music slams back with the laugh
+        (o(133.70, 'laughL'), o(136.45, 'laugh'), 0.20),  # music slams back with the laugh
         (o(131.62, 'replay'), o(133.70, 'replay'), 0.05),
     ]
 
@@ -196,14 +196,14 @@ def SFX(s2o):
     o = lambda t, c=None: _o(s2o, t, c)
     S = [
         ('pop', o(34.60, 'hook'), 0.35),
-        ('scratch', o(36.15, 'hook'), 0.45),
+        ('scratch', o(36.15, 'hook'), 0.25),
         ('whoosh', o(4.88, 'flu'), 0.35),
         ('pop2', o(5.50), 0.30), ('pop', o(6.14), 0.22),
         ('whoosh_up', o(7.40, 'call1'), 0.25), ('ding', o(7.98), 0.18), ('pop', o(9.64), 0.22),
         ('boing', o(13.40), 0.25),
         ('riser', o(17.40, 'diag')-0.9 if o(17.40, 'diag') else None, 0.18),
         ('pop2', o(18.05, 'diag'), 0.25),
-        ('ding', o(18.62), 0.16), ('honk', o(19.55), 0.20), ('pop', o(20.40), 0.2), ('pop2', o(21.40), 0.2),
+        ('ding', o(18.62), 0.16), ('honk', o(19.55), 0.12), ('pop', o(20.40), 0.2), ('pop2', o(21.40), 0.2),
         ('whoosh', o(33.92, 'hook2'), 0.25),
         ('bonk', o(36.80, 'hook2'), 0.22), ('pop', o(39.88), 0.22),
         ('slide_up', o(42.70), 0.20), ('bonk', o(42.85), 0.30),
@@ -211,14 +211,14 @@ def SFX(s2o):
         ('pop2', o(51.70), 0.2), ('sparkle', o(53.10), 0.22),
         ('sparkle', o(85.20), 0.18), ('tick', o(89.50), 0.3), ('tick', o(90.25), 0.3), ('tick', o(90.95), 0.3),
         ('slide_down', o(91.25), 0.30), ('boing', o(91.35), 0.22),
-        ('whoosh', o(110.23, 'lor'), 0.25), ('honk', o(111.75), 0.22), ('pop', o(111.95), 0.2), ('pop2', o(114.30), 0.2),
+        ('whoosh', o(110.23, 'lor'), 0.25), ('honk', o(111.75), 0.12), ('pop', o(111.95), 0.2), ('pop2', o(114.30), 0.2),
         ('sparkle', o(122.20), 0.18),
         ('tick', o(130.12, 'ask'), 0.3), ('riser', o(130.40, 'ask'), 0.22),
-        ('scratch', o(131.60, 'punch'), 0.30),
+        ('scratch', o(131.60, 'punch'), 0.18),
         ('pop', o(132.28, 'punch'), 0.25), ('pop2', o(133.04, 'punch'), 0.25),
-        ('badumtss', o(133.66, 'punch'), 0.45),
+        ('badumtss', o(133.66, 'punch'), 0.30),
         ('whoosh', o(134.68, 'laugh'), 0.2),
-        ('scratch', o(131.58, 'replay'), 0.30),
+        ('scratch', o(131.58, 'replay'), 0.18),
         ('pop', o(136.54, 'cell'), 0.2), ('sadtrombone', o(137.62, 'cell'), 0.16),
         ('sparkle', o(140.70, 'end'), 0.2),
     ]

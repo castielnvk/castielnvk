@@ -416,7 +416,7 @@ def build_audio():
     mix = dia+mus*(menv*duck)[:, None]
     # sfx
     sfx = np.zeros_like(mix)
-    for name, t0, lev in E.SFX(s2o) + [x for c in HOLDS for x in (('shutter', c['o0'], 0.5), ('scratch', c['o0'], 0.4), ('bonk', c['o0']+0.35, 0.25))]:
+    for name, t0, lev in E.SFX(s2o) + [x for c in HOLDS for x in (('shutter', c['o0'], 0.3), ('scratch', c['o0'], 0.22), ('bonk', c['o0']+0.35, 0.25))]:
         if t0 is None: continue
         s = load_wav(os.path.join(BASE, f'sfx_{name}.wav'))*lev
         i = int(t0*SR); m = min(len(s), n-i)
