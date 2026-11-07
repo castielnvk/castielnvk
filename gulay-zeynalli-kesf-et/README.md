@@ -8,7 +8,20 @@ Vertical (9:16) entertainment-magazine edit of the Kəşf Et / Araz Radio 103.3 
 | Azerbaijani subtitles (same text as burned-in captions) | `export/Gulay_Zeynalli_Kesf_Et_az.srt` |
 | Editable project (timeline, renderer, mix, original score) | `project/` |
 
-## Structure (output timecodes)
+## v2 — tight paparazzi cut (current)
+
+`export/Gulay_Zeynalli_Kesf_Et_v2.mp4`: 52.3 s, 1080×1920, H.264 High + AAC 256 kbps, −16 LUFS.
+
+* **Audio**: the original camera audio with gain only (a per-answer level match within ±4 dB, then +21 dB overall). It has no denoising, EQ or compression. A fast peak limiter touches transients only: 0 dB of gain reduction on the median speech frame and ≤0.7 dB on 90% of frames. The export correlates 0.985 with the source audio.
+* **Tighter structure**: cold open “Haqlı olduğum halda mən niyə üzr istəyim ki?” → title press photo → 5 cards. The hook isn't repeated; question 3 continues with “Yox, haqsız olsam, səhvim olsa, üzr istəyirəm.” Cut from v1:
+  * the repeated “Heç birindən”;
+  * the musing pause in answer 3;
+  * the “sənət insanları…” explanation in answer 4.
+* **Paparazzi treatment**: camera-flash and shutter transitions, freeze-frame press photos with slam-in headlines (her exact words), berry/green highlight bars from the brand palette, punch-in close-ups, and an original 120 BPM fashion-house score mixed about 18 dB under her voice.
+* **Logos**: the supplied transparent PNG overlay (`project/assets/kesfet_araz_overlay.png`) is composited 1:1: Kəşf Et upper left, Araz Radio upper right, plus a soft shadow only.
+* **Rebuild**: `cd project && python3 v2/music2.py 56 && python3 v2/mix2.py`. Then apply `volume=21dB,alimiter=limit=0.80:attack=1:release=40` to the mix and run `python3 v2/render2.py`, which needs `master.mp4` from the v1 steps.
+
+## v1 structure (output timecodes)
 
 | Time | Section | Source (IMG_7215.MOV) |
 |---|---|---|
