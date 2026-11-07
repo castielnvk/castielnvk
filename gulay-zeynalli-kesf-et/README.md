@@ -57,4 +57,4 @@ ffmpeg -i IMG_7215.MOV -map 0:v -vf "zscale=t=linear:npl=100,format=gbrpf32le,zs
 
 All editorial decisions (cuts, zoom/reframing per segment, question text, captions, pull quotes) live in `project/timeline.py`.
 
-Fonts: Archivo Expanded (the brand-guide typeface) and Playfair Display, both under the SIL Open Font License. Logos are the original artwork from the supplied brand PDF and were not redrawn.
+Fonts: Archivo Expanded (the brand-guide typeface) and Playfair Display, both under the SIL Open Font License. Logos are the original artwork from the supplied brand PDF and were not redrawn. The Araz Radio logo is shown in white as a transparent PNG (`export/Araz_Radio_logo_white.png`, made from the original vector logo's own shape) with a soft shadow, and on a deep-green badge on the ivory end card.

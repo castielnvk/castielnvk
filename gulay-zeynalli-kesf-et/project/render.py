@@ -74,13 +74,9 @@ def blit(frame, rgba, x, y, alpha=1.0, clip=None):
 
 # ---------------- logos ----------------
 def prep_logos():
-    araz = Image.open(A + 'araz_logo.png').convert('RGBA')
-    lw = 218; araz = araz.resize((lw, round(araz.height * lw / araz.width)), Image.LANCZOS)
-    px, py = 22, 17
-    pill = Image.new('RGBA', (lw + 2 * px, araz.height + 2 * py), (0, 0, 0, 0))
-    m = Image.new('L', pill.size, 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, pill.width - 1, pill.height - 1], radius=22, fill=255)
-    bg = Image.new('RGBA', pill.size, IVORY + (236,)); pill.paste(bg, (0, 0), m)
-    pill.alpha_composite(araz, (px, py))
+    araz = Image.open(A + 'araz_logo_white.png').convert('RGBA')
+    lw = 236; araz = araz.resize((lw, round(araz.height * lw / araz.width)), Image.LANCZOS)
+    pill = araz
     def with_shadow(im, r=14, a=0.38, off=6):
         P = r * 2 + off
         out = Image.new('RGBA', (im.width + 2 * P, im.height + 2 * P), (0, 0, 0, 0))
@@ -88,7 +84,7 @@ def prep_logos():
         al = Image.new('L', out.size, 0); al.paste(im.getchannel('A'), (P, P + off))
         al = al.filter(ImageFilter.GaussianBlur(r)).point(lambda v: int(v * a)); sh.putalpha(al)
         out.alpha_composite(sh); out.alpha_composite(im, (P, P)); return out, P
-    araz_s, pa = with_shadow(pill)
+    a1, p1 = with_shadow(pill, 3, 0.75, 2); araz_s, p2 = with_shadow(a1, 14, 0.45, 3); pa = p1 + p2
     k = Image.open(A + 'kesfet_logo.png').convert('RGBA')
     bb = k.getchannel('A').point(lambda v: 255 if v > 10 else 0).getbbox(); k = k.crop(bb)
     ks = 176; k = k.resize((ks, round(k.height * ks / k.width)), Image.LANCZOS)
@@ -98,9 +94,11 @@ def prep_logos():
     big = Image.open(A + 'kesfet_logo.png').convert('RGBA').crop(bb)
     big = big.resize((420, round(big.height * 420 / big.width)), Image.LANCZOS)
     big_s, pb = with_shadow(big, 22, 0.5, 10)
-    araz_big = Image.open(A + 'araz_logo.png').convert('RGBA')
-    aw = 300; araz_big = araz_big.resize((aw, round(araz_big.height * aw / araz_big.width)), Image.LANCZOS)
-    pill2 = araz_big
+    araz_big = Image.open(A + 'araz_logo_white.png').convert('RGBA')
+    aw = 280; araz_big = araz_big.resize((aw, round(araz_big.height * aw / araz_big.width)), Image.LANCZOS)
+    pill2 = Image.new('RGBA', (aw + 72, araz_big.height + 52), (0, 0, 0, 0))
+    m2 = Image.new('L', pill2.size, 0); ImageDraw.Draw(m2).rounded_rectangle([0, 0, pill2.width - 1, pill2.height - 1], radius=28, fill=255)
+    pill2.paste(Image.new('RGBA', pill2.size, (12, 74, 56, 255)), (0, 0), m2); pill2.alpha_composite(araz_big, (36, 26))
     f = lambda im: np.asarray(im).astype(np.float32) / 255
     return dict(araz=(f(araz_s), pa, pill.size), kesfet=(f(k_s), pk, k.size), big=(f(big_s), pb, big.size), araz_big=(f(pill2), 0, pill2.size))
 LOGO = prep_logos()
