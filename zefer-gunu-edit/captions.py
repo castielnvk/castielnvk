@@ -59,7 +59,7 @@ eln_open = [
 ]
 for st, en, tx in eln_open: add(st, en, "Sub", FADE + tx)
 # name super, kept above the subtitle zone and away from her face
-add(36.2, 41.6, "Name", r"{\fad(450,400)\blur0.6}Elnarə")
+add(36.2, 41.6, "Name", r"{\fad(450,400)\blur0.6}Elnarə Sadıqova")
 add(36.4, 41.6, "NameSub", r"{\fad(500,400)}«QƏBUL VAXTI» APARICISI")
 
 # ---- Title break (no speech) ----

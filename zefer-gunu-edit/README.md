@@ -1,7 +1,7 @@
 # Zəfər Günü — «Qəbul Vaxtı» vertical cinematic edit
 
 A 9:16 cut (1080×1920, H.264/AAC, 30 fps) of the «Qəbul Vaxtı» (Araz FM 103.3) Victory Day segment
-presented by Elnarə. The finished file is `Zefer_Gunu_Qebul_Vaxti_9x16.mp4`.
+presented by Elnarə Sadıqova. The finished file is `Zefer_Gunu_Qebul_Vaxti_9x16.mp4`.
 
 ## Source
 The supplied file is an iPhone screen recording of the 16:9 vMix programme. It is 2:02 long,
