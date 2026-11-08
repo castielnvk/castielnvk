@@ -8,7 +8,20 @@ Vertical (9:16) entertainment-magazine edit of the Kəşf Et / Araz Radio 103.3 
 | Azerbaijani subtitles (same text as burned-in captions) | `export/Gulay_Zeynalli_Kesf_Et_az.srt` |
 | Editable project (timeline, renderer, mix, original score) | `project/` |
 
-## v2 — tight paparazzi cut (current)
+## v3 — social-media paparazzi cut (current)
+
+`export/Gulay_Zeynalli_Kesf_Et_v3.mp4`: 39.8 s, 1080×1920, H.264 + AAC, about −16 LUFS.
+
+* Cold open “Qəlbim artıq qırılmır. O, əvvəllər idi.” inside a viewfinder (REC, timecode, focus brackets).
+* Paparazzi collage drop: 4 press prints slam in with flash + shutter, a red marker circle, and the title “GÜLAY ZEYNALLI / 5 TƏƏCCÜBLÜ SUAL, 5 CAVAB”.
+* Questions are pop-in white “question stickers” over real 120 fps slow-motion of her listening; she stays on screen throughout.
+* Word-by-word captions (Archivo Black 84 px, the active word in gold), a top “● GÜLAY ZEYNALLI” pill with a 5-step progress bar, punch-in cuts, a black-and-white flash burst, a callback print, and an end card over slow motion: “TAM SÖHBƏT · ARAZ 103.3 FM · KƏŞF ET”.
+* Original 124 BPM track; every answer starts on the beat grid.
+* Original camera audio (gain only). The supplied logo PNG overlay is used 1:1.
+* Answer 2's follow-up was dropped for length. Answer 3 plays uncut.
+* Rebuild: `BPM=124 OUT=stems3 python3 v3/music3.py 48 && python3 v3/mix3.py` (then `volume=21dB,alimiter=limit=0.80`) `&& python3 v3/render3.py`. It needs `master.mp4` and the slow-motion clips `sm/sm_<t>.mp4`, graded like the master but at fps=60 from the 120 fps source.
+
+## v2 — tight paparazzi cut
 
 `export/Gulay_Zeynalli_Kesf_Et_v2.mp4`: 53.5 s, 1080×1920, H.264 High + AAC 256 kbps, −16 LUFS.
 
