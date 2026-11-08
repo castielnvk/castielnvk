@@ -12,7 +12,8 @@ programmes, 4) everything else.
 - **What:** cinematic 9:16 Reels (1080×1920, about 60–72 s) for the Araz Radio 103.3 FM segment
   "Sözümün Canı". Each episode explains one Azerbaijani word. The user supplies the narrated MP3
   (a radio mix with a music bed). Make a matching 1080×1920 Reel cover JPG for each episode.
-- **Episodes delivered (none in the repo; they were in session scratchpads only):**
+- **Episodes delivered — all archived in `sozumun-cani/` (final MP4s, covers, source MP3s,
+  editable projects, separated voice/music/SFX tracks; see `sozumun-cani/README.md`):**
   1. Müjgan (eyelash = arrow, Persian origin) → `Sozumun_Cani_Mujgan_v2_9x16.mp4`
   2. Məlal (Arabic origin; sorrow and heart-weariness) → `Sozumun_Cani_Melal_9x16.mp4`
   3. Zənəxdan (chin dimple; opens with Molla Vəli Vidadi's lines) →
