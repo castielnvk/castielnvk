@@ -8,8 +8,46 @@ rejected, and the technical lessons. Each entry was written by the session that 
 Priority order (as the user stated): 1) Sözümün Canı, 2) radio show edits, 3) Kəşf Et and other
 programmes, 4) everything else.
 
-### 1. Sözümün Canı
-_(notes pending)_
+### 1. Sözümün Canı — word-of-the-day Reels (Nov 2026)
+- **What:** cinematic 9:16 Reels (1080×1920, about 60–72 s) for the Araz Radio 103.3 FM segment
+  "Sözümün Canı". Each episode explains one Azerbaijani word. The user supplies the narrated MP3
+  (a radio mix with a music bed). Make a matching 1080×1920 Reel cover JPG for each episode.
+- **Episodes delivered (none in the repo; they were in session scratchpads only):**
+  1. Müjgan (eyelash = arrow, Persian origin) → `Sozumun_Cani_Mujgan_v2_9x16.mp4`
+  2. Məlal (Arabic origin; sorrow and heart-weariness) → `Sozumun_Cani_Melal_9x16.mp4`
+  3. Zənəxdan (chin dimple; opens with Molla Vəli Vidadi's lines) →
+     `Sozumun_Cani_Zenexdan_9x16_v4.mp4`
+- **Intro rule:** only the first episode (Müjgan) keeps the series intro ("Sözümün canı", the proverb
+  "Qulaq gündə bir söz eşitməsə kar olar", "qulağınız bizdə olsun"). Later episodes start
+  directly on that day's word. "Quote ilə başlasın" means open on the quoted poem lines.
+- **Music:**
+  - Remove the original background song by separating out the voice, then add new music. Never
+    layer music over the old song.
+  - **Original music only.** The user doesn't want copyright issues, so no stock and no
+    public-domain tracks (a CC0 Chopin piece was rejected).
+  - Liked: calm felt piano with warm pads (Məlal); santur-like plucks in a Hijaz mode (Müjgan).
+  - Rejected: busy synth guitar strumming, glockenspiel stabs and constant beats — "Mahnı çox
+    pisdir, adamın başına düşür."
+- **SFX:** varied and timed to the visuals, but soft and low-passed. Harsh hissy high frequencies
+  were rejected ("saçlar tökülən səs çox harsh").
+- **Logo:**
+  - White Araz Radio PNG, small at top centre (y ≈ 150), large on the closing card.
+  - On light backgrounds, recolour the logo itself dark (keeping transparency) and fade it to white
+    as the background darkens. Never put a dark pill behind it.
+- **Style:**
+  - Procedural editorial motion graphics in an HTML canvas (animated type plus vector
+    illustration). No AI or photo imagery.
+  - Each episode gets its own palette and font:
+    - Müjgan: gold on indigo, Cormorant Garamond.
+    - Məlal: dusk slate, silver and amber; Playfair Display + Lora; rain and reflections.
+    - Zənəxdan: dawn cream paper, peach and rose-gold; Fraunces; a "smile line" motif.
+  - Captions: Inter 37 px, word-by-word highlight, dark gradient scrim, last line at y 1555.
+  - Mix: voice at about −14 LUFS, music about 16 dB under with gentle ducking, final −14 LUFS /
+    −1.5 dBTP.
+- **Open questions (not yet answered by the user):**
+  - Transcript readings: "dərman atırıq" vs "atıraq"; "gündəlik qayğılar".
+  - Spellings: "zənəxdan" (pronounced zənəqdan); "yumşaldan" (spoken yumuşaldan).
+  - Whether to remake Məlal's music.
 
 ### 2. Radio shows (100% Səhər Şousu, Qəbul Vaxtı, Biznes Mərkəzi, Reel covers)
 _(notes pending)_
@@ -89,6 +127,8 @@ _(notes pending)_
   syllables. Bring SFX and music swells in after the last word.
 - **Editing:** keep it as short and punchy as the story allows. Don't repeat the opening hook later.
 - **Logos:** use the user's supplied overlays exactly as provided.
+- **Music:** prefer original, self-composed music. The user wants no copyright issues and dislikes
+  busy or annoying tracks.
 
 ## Technical lessons (cloud environment)
 - YouTube downloads usually fail here: bot checks, 429 errors, and 403 on media requests even with
@@ -106,6 +146,13 @@ _(notes pending)_
 - Whisper word timestamps drift 0.3–0.6 s. Verify cut points with a 10–20 ms energy envelope.
   large-v3 is the best model for Azerbaijani.
 - Use opencv-python-headless 4.10; 5.x lacks CascadeClassifier.
+- Voice/music separation: Demucs `htdemucs_ft --two-stems=vocals --shifts 2` works well.
+- For long files, transcribe in windows, because whole-file runs drop tail segments. Don't use
+  initial_prompt on music-heavy parts.
+- HTML-canvas rendering: Playwright Chromium, 4 parallel pages, PNG frames piped to ffmpeg
+  libx264. It takes about 25 min per minute of video. Embed logos as base64 data URLs, because
+  file:// images taint the canvas.
+- Music downloads: Pixabay and chosic are blocked. archive.org, FMA and incompetech are reachable.
 - HDR iPhone footage: convert HLG→SDR with zscale + `tonemap=hable` (npl=100).
 - Review contact sheets of design frames and transitions before delivering. They catch empty
   frames, gaps and muddy dissolves.
