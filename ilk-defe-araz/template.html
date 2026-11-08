@@ -14,31 +14,38 @@ canvas{display:block}
 <script>
 "use strict";
 /* =====================================================================
-   «İLK DƏFƏ “ARAZ”DA DİNLƏ» — premiere template v4
-   The original promo's design language (white Montserrat Black, orange 60° slash panel at the
-   lower left, Araz logo bottom centre) rebuilt as layered motion design.
-   Texts: ONLY date, time, İLK DƏFƏ, “ARAZ”DA, DİNLƏ. Episode data lives in config.json.
+   «İLK DƏFƏ “ARAZ”DA DİNLƏ» — premiere template v5 (motion design)
+   Texts are ONLY: date, time, İLK DƏFƏ, “ARAZ”DA, DİNLƏ (+ the Araz logo).
+   Design language of the original promo: white Montserrat Black, orange 60° slash, logo bottom centre.
+   Motion: depth typography behind the people (segmentation masks), member split-screen,
+   kinetic words that fly into the lockup, rolling clock digits, slash wipes, marquee rows.
+   All timing is relative to the anchors in config.json, so the choreography stays stable.
    ===================================================================== */
 const W = 1080, H = 1920;
 const C = document.getElementById('c'); let ctx = C.getContext('2d');
-const MAIN = ctx; const BUF = document.createElement('canvas'); BUF.width = W; BUF.height = H; const BCTX = BUF.getContext('2d');
+const BUF = mk(), BCTX = BUF.getContext('2d');      // motion-blur accumulation
+const PBUF = mk(), PCTX = PBUF.getContext('2d');    // person (masked footage) layer
+function mk() { const c = document.createElement('canvas'); c.width = W; c.height = H; return c; }
 const OR = { main: '#E86A33', light: '#F38449', deep: '#B9481C', dark: '#7A2A0E' };
-const K = 0.58;                       // slash slope: x advances 0.58 px per px down (≈60°)
-let CFG = null, LOGO = null;
+const K = 0.58;                                     // slash slope (≈60°)
+let CFG = null, A = null, LOGO = null;
 const IMG = new Map();
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 const lerp = (a, b, p) => a + (b - a) * p;
 const prog = (t, a, d) => clamp((t - a) / d);
 const expoOut = p => (p = clamp(p)) >= 1 ? 1 : 1 - Math.pow(2, -10 * p);
+const expoIn = p => (p = clamp(p)) <= 0 ? 0 : Math.pow(2, 10 * p - 10);
 const quintIO = p => { p = clamp(p); return p < .5 ? 16 * p ** 5 : 1 - Math.pow(-2 * p + 2, 5) / 2; };
 const cubicIO = p => { p = clamp(p); return p < .5 ? 4 * p ** 3 : 1 - Math.pow(-2 * p + 2, 3) / 2; };
-const backOut = p => { p = clamp(p); const c1 = 1.2, c3 = c1 + 1; return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
+const expoIO = p => { p = clamp(p); return p === 0 ? 0 : p === 1 ? 1 : p < .5 ? Math.pow(2, 20 * p - 10) / 2 : (2 - Math.pow(2, -20 * p + 10)) / 2; };
 
 function loadImg(src) {
   if (IMG.has(src)) return IMG.get(src);
-  const p = new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
+  const p = new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
   IMG.set(src, p); return p;
 }
+const fno = (src, dt) => Math.max(1, Math.round((src + dt) * CFG.fps) + 1);
+const fpath = (clip, n, m) => `${CFG.frames}/${clip}${m ? '_m' : ''}/${String(Math.min(n, 361)).padStart(4, '0')}.${m ? 'png' : 'jpg'}`;
 
 /* ---------------- footage ---------------- */
 function shotAt(t) {
@@ -46,174 +53,57 @@ function shotAt(t) {
   for (let k = 0; k < S.length; k++) if (t >= S[k].start) i = k;
   return { s: S[i], end: i + 1 < S.length ? S[i + 1].start : CFG.duration };
 }
-async function drawFootage(t) {
-  const { s, end } = shotAt(t);
-  const n = Math.max(1, Math.round((s.src + (t - s.start)) * CFG.fps) + 1);
-  const im = await loadImg(`${CFG.frames}/${s.clip}/${String(n).padStart(4, '0')}.jpg`);
-  const z = lerp(s.z[0], s.z[1], cubicIO((t - s.start) / (end - s.start)));
+function placement(im, s, p) {
+  const z = lerp(s.z[0], s.z[1], cubicIO(p));
   const w = im.width * z, h = im.height * z;
   let x = W / 2 - (s.cx ?? .5) * w, y = H / 2 - (s.cy ?? .5) * h;
-  x = w >= W ? clamp(x, W - w, 0) : (W - w) / 2;
-  y = h >= H ? clamp(y, H - h, 0) : (H - h) / 2;
-  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  x = w >= W ? clamp(x, W - w, 0) : (W - w) / 2; y = h >= H ? clamp(y, H - h, 0) : (H - h) / 2;
+  return [x, y, w, h];
+}
+const GRADEF = 'contrast(1.05) saturate(1.03)';
+async function drawShot(s, t, p) {
+  const n = fno(s.src, t - s.start);
+  const im = await loadImg(fpath(s.clip, n));
+  const [x, y, w, h] = placement(im, s, p);
   ctx.imageSmoothingQuality = 'high';
-  ctx.filter = 'contrast(1.05) saturate(1.02)';
-  ctx.drawImage(im, x, y, w, h); ctx.filter = 'none';
+  ctx.filter = GRADEF; ctx.drawImage(im, x, y, w, h); ctx.filter = 'none';
   if (h < H) for (const [y0, up] of [[y, 1], [y + h, -1]]) {
     const g = ctx.createLinearGradient(0, y0, 0, y0 + up * 140); g.addColorStop(0, '#000'); g.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = g; ctx.fillRect(0, Math.min(y0, y0 + up * 140) - 2, W, 144);
   }
-}
-function grade() {
-  let g = ctx.createRadialGradient(W / 2, H * .42, H * .25, W / 2, H * .5, H * .8);
-  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.45)');
-  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-  g = ctx.createLinearGradient(0, 1000, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.55)');
-  ctx.fillStyle = g; ctx.fillRect(0, 1000, W, H - 1000);
+  if (!s.depth) return false;
+  const m = await loadImg(fpath(s.clip, n, true)); if (!m) return false;
+  PCTX.setTransform(1, 0, 0, 1, 0, 0); PCTX.globalCompositeOperation = 'source-over'; PCTX.clearRect(0, 0, W, H);
+  PCTX.imageSmoothingQuality = 'high';
+  PCTX.filter = GRADEF; PCTX.drawImage(im, x, y, w, h); PCTX.filter = 'none';
+  PCTX.globalCompositeOperation = 'destination-in'; PCTX.drawImage(m, x, y, w, h);
+  PCTX.globalCompositeOperation = 'source-over';
+  return true;
 }
 
-/* ---------------- slash geometry ----------------
-   A slash edge is the line x = p + K*(y - 960). Region "left of edge p". */
-function leftOf(p) {
-  ctx.beginPath();
-  ctx.moveTo(p + K * (-20 - 960), -20); ctx.lineTo(p + K * (H + 20 - 960), H + 20);
-  ctx.lineTo(-4000, H + 20); ctx.lineTo(-4000, -20); ctx.closePath();
-}
-function band(pA, pB) {                 // region between trailing edge pB and leading edge pA
-  ctx.beginPath();
-  ctx.moveTo(pB + K * (-980), -20); ctx.lineTo(pA + K * (-980), -20);
-  ctx.lineTo(pA + K * (H + 20 - 960), H + 20); ctx.lineTo(pB + K * (H + 20 - 960), H + 20); ctx.closePath();
-}
-/* motion-blurred draw: render fn(t') at a few sub-frame times, averaged */
+/* ---------------- helpers ---------------- */
 function blurred(t, fn, n = 6, span = 1 / 48) {
-  // additive accumulation of sub-frame samples in a buffer = true motion blur (solid stays solid)
   BCTX.setTransform(1, 0, 0, 1, 0, 0); BCTX.globalCompositeOperation = 'source-over'; BCTX.globalAlpha = 1;
   BCTX.clearRect(0, 0, W, H);
   const prev = ctx; ctx = BCTX;
-  for (let i = 0; i < n; i++) {
-    BCTX.save(); BCTX.globalCompositeOperation = 'lighter'; BCTX.globalAlpha = 1 / n;
-    fn(t - span * i / n); BCTX.restore();
-  }
+  for (let i = 0; i < n; i++) { BCTX.save(); BCTX.globalCompositeOperation = 'lighter'; BCTX.globalAlpha = 1 / n; fn(t - span * i / n); BCTX.restore(); }
   ctx = prev; ctx.drawImage(BUF, 0, 0);
 }
-function orangeFill(col, light) {
-  const g = ctx.createLinearGradient(0, 600, 300, H);
-  g.addColorStop(0, light || OR.light); g.addColorStop(1, col);
-  return g;
-}
-
-/* persistent lower-left panel (the original's orange triangle), entering as layered slashes */
-function panel(t) {
-  const P = CFG.panel; if (t < P.in) return;
-  const layers = [ // [delay, final edge offset, colour]
-    [0.00, P.edge + 70, 'rgba(255,255,255,0.9)', 'line'],
-    [0.05, P.edge + 34, OR.dark],
-    [0.10, P.edge, OR.main],
-  ];
-  for (const [d, fin, col, kind] of layers) {
-    const draw = tt => {
-      const p = expoOut(prog(tt, P.in + d, .85));
-      const drift = Math.sin((tt - P.in) * .6) * 6;            // slow living parallax
-      const e = lerp(-1500, fin, p) + drift * (kind === 'line' ? 1.6 : col === OR.dark ? 1.2 : 1);
-      if (kind === 'line') { band(e, e - 5); ctx.fillStyle = col; ctx.fill(); }
-      else { leftOf(e); ctx.fillStyle = col === OR.main ? orangeFill(OR.main, OR.light) : col; ctx.fill(); }
-    };
-    if (t < P.in + d + .85) blurred(t, draw); else draw(t);
-  }
-}
-
-/* full-screen slash wipe: three coloured shutters cross, the cut happens while fully covered */
-function wipes(t) {
-  for (const w of (CFG.wipes || [])) {
-    const d = w.dur ?? .42, c = w.at;
-    if (t < c - d - .12 || t > c + d + .12) continue;
-    const layers = [[-.08, OR.dark], [-.04, OR.deep], [0, OR.main]];
-    for (const [off, col] of layers) {
-      const draw = tt => {
-        const a = c + off * (w.dir ?? 1);
-        const pA = lerp(-700, 1760, quintIO((tt - (a - d)) / d));
-        const pB = lerp(-700, 1760, quintIO((tt - a + .02) / d));
-        if (pA <= pB) return;
-        band(pA, pB); ctx.fillStyle = col === OR.main ? orangeFill(OR.main, OR.light) : col; ctx.fill();
-      };
-      blurred(t, draw, 6, 1 / 40);
-    }
-    // thin white light line riding the trailing edge
-    const pB = lerp(-700, 1760, quintIO((t - c + .02) / d));
-    if (t > c - .02 && t < c + d) { band(pB + 6, pB); ctx.fillStyle = 'rgba(255,240,226,0.85)'; ctx.fill(); }
-  }
-}
-/* a single white light-slash passing across (subtle accent on a hard cut) */
-function glints(t) {
-  for (const g of (CFG.glints || [])) {
-    const p = (t - g.at) / (g.dur ?? .55); if (p < 0 || p > 1) continue;
-    const x = lerp(-800, 1900, cubicIO(p));
-    ctx.save(); ctx.globalCompositeOperation = 'screen';
-    for (const [wd, a] of [[140, .10], [36, .28], [6, .85]]) { band(x + wd / 2, x - wd / 2); ctx.fillStyle = `rgba(255,214,180,${a})`; ctx.fill(); }
-    ctx.restore();
-  }
-}
-
-/* ---------------- typography ---------------- */
+function leftOf(p) { ctx.beginPath(); ctx.moveTo(p + K * (-980), -20); ctx.lineTo(p + K * (H + 20 - 960), H + 20); ctx.lineTo(-4000, H + 20); ctx.lineTo(-4000, -20); ctx.closePath(); }
+function band(pA, pB) { ctx.beginPath(); ctx.moveTo(pB + K * (-980), -20); ctx.lineTo(pA + K * (-980), -20); ctx.lineTo(pA + K * (H + 20 - 960), H + 20); ctx.lineTo(pB + K * (H + 20 - 960), H + 20); ctx.closePath(); }
+function orangeFill() { const g = ctx.createLinearGradient(0, 600, 300, H); g.addColorStop(0, OR.light); g.addColorStop(1, OR.main); return g; }
 const F = (w, s) => `${w} ${s}px M`;
 function textW(str, f, tr = 0) { ctx.save(); ctx.font = f; ctx.letterSpacing = tr + 'px'; const w = ctx.measureText(str).width; ctx.restore(); return w; }
-function fitSize(str, w, s, maxW, tr = 0) { while (s > 20 && textW(str, F(w, s), tr) > maxW) s -= 2; return s; }
-/* one text line revealed from behind a mask: slides up (dir 'up') or in along the slash ('slash') */
-function revealLine(str, x, y, o, t) {
-  const p = prog(t, o.at, o.dur ?? .75); if (p <= 0) return;
-  const size = o.maxW ? fitSize(str, o.w, o.size, o.maxW, o.tr || 0) : o.size;
-  const f = F(o.w, size), tw = textW(str, f, o.tr || 0);
-  const draw = tt => {
-    const q = prog(tt, o.at, o.dur ?? .75), e = o.ease === 'back' ? backOut(q) : expoOut(q);
-    ctx.save();
-    ctx.beginPath(); ctx.rect(x - 30, y - size * 1.02, tw + 120, size * 1.3); ctx.clip();   // mask window
-    const dy = (1 - e) * size * 1.1, dx = o.mode === 'slash' ? -(1 - e) * size * 1.1 * K : 0;
-    ctx.font = f; ctx.letterSpacing = (o.tr || 0) + 'px';
-    ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 18; ctx.shadowOffsetY = 4;
-    ctx.fillStyle = o.color || '#fff';
-    ctx.fillText(str, x + dx, y + dy);
-    ctx.restore();
-  };
-  if (p < 1) blurred(t, draw, 5, 1 / 60); else draw(t);
-  // shine: a slash of light travelling across the letters
-  for (const s of (o.shine || [])) {
-    const sp = (t - s) / .7; if (sp < 0 || sp > 1) continue;
-    ctx.save(); ctx.font = f; ctx.letterSpacing = (o.tr || 0) + 'px';
-    const L = document.createElement('canvas'); L.width = Math.ceil(tw + 40); L.height = Math.ceil(size * 1.4);
-    const g = L.getContext('2d'); g.font = f; g.letterSpacing = (o.tr || 0) + 'px'; g.fillStyle = '#fff'; g.fillText(str, 10, size * 1.05);
-    g.globalCompositeOperation = 'source-in';
-    const cx = lerp(-200, tw + 200, cubicIO(sp));
-    const gr = g.createLinearGradient(cx - 90, 0, cx + 90, 0);
-    gr.addColorStop(0, 'rgba(255,190,140,0)'); gr.addColorStop(.5, 'rgba(255,170,110,0.95)'); gr.addColorStop(1, 'rgba(255,190,140,0)');
-    g.fillStyle = gr; g.fillRect(0, 0, L.width, L.height);
-    ctx.drawImage(L, x - 10, y - size * 1.05); ctx.restore();
-  }
-}
-function lockup(t) {
-  const L = CFG.lockup, X = L.x;
-  for (const k of ['date', 'time', 'l1', 'l2', 'l3']) {
-    const s = L.style[k];
-    revealLine(L[k], X + (s.dx || 0), s.y, { ...s, at: L.at[k] }, t);
-  }
-}
-function logo(t) {
-  const P = CFG.logoPos, lw = P.w, lh = lw * LOGO.height / LOGO.width;
-  ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 12;
-  ctx.drawImage(LOGO, W / 2 - lw / 2, P.y - lh / 2, lw, lh); ctx.restore();
-}
-/* opening: the frame starts orange and a layered slash reveals the footage */
-function opening(t) {
-  const o = CFG.opening; if (!o || t > o.dur + .2) return;
-  for (const [off, col] of [[0.10, OR.main], [0.05, OR.deep], [0, OR.dark]]) {
-    blurred(t, tt => {
-      const e = lerp(-700, 1760, quintIO((tt - off - (o.start || 0)) / o.dur));
-      if (e >= 1760) return;
-      ctx.beginPath(); ctx.moveTo(e + K * (-980), -20); ctx.lineTo(3000, -20); ctx.lineTo(3000, H + 20); ctx.lineTo(e + K * (H + 20 - 960), H + 20); ctx.closePath();
-      ctx.fillStyle = col === OR.main ? orangeFill(OR.main, OR.light) : col; ctx.fill();
-    }, 6, 1 / 40);
-  }
-}
+function fit(str, w, s, maxW) { while (s > 20 && textW(str, F(w, s)) > maxW) s -= 2; return s; }
 
+/* ---------------- atmosphere ---------------- */
+function grade() {
+  let g = ctx.createRadialGradient(W / 2, H * .42, H * .25, W / 2, H * .5, H * .8);
+  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.42)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  g = ctx.createLinearGradient(0, 1050, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.5)');
+  ctx.fillStyle = g; ctx.fillRect(0, 1050, W, H - 1050);
+}
 let GRAIN = [];
 function makeGrain() {
   for (let k = 0; k < 6; k++) {
@@ -223,21 +113,237 @@ function makeGrain() {
     g.putImageData(d, 0, 0); GRAIN.push(c);
   }
 }
+
+/* ---------------- BEHIND typography: marquee rows (people stand in front) ---------------- */
+function row(t, r) {
+  const a = Math.min(clamp((t - r.in) / .3), r.out !== undefined ? clamp((r.out - t) / .2) : 1);
+  if (a <= 0) return;
+  const size = r.size, f = F(900, size), tr = r.tr ?? 2;
+  const unit = textW(r.text, f, tr) + (r.gap ?? size * .6);
+  const enter = expoOut(prog(t, r.in, .9));
+  let off = (t - r.in) * r.speed * r.dir + (1 - enter) * 900 * -r.dir;
+  off = ((off % unit) + unit) % unit;
+  const sc = 1 + (r.push || 0) * (t - r.in);
+  ctx.save(); ctx.globalAlpha = a * (r.alpha ?? 1);
+  ctx.translate(W / 2, r.y); ctx.scale(sc, sc); ctx.translate(-W / 2, -r.y);
+  ctx.font = f; ctx.letterSpacing = tr + 'px'; ctx.textBaseline = 'middle';
+  for (let x = -unit * 2 + off; x < W + unit; x += unit) {
+    if (r.style === 'outline') { ctx.lineWidth = r.lw ?? 3; ctx.strokeStyle = r.color || '#fff'; ctx.strokeText(r.text, x, r.y); }
+    else { ctx.fillStyle = r.color === 'orange' ? OR.main : (r.color || '#fff'); ctx.fillText(r.text, x, r.y); }
+  }
+  ctx.restore();
+}
+function behind(t) { for (const r of (CFG.rows || [])) if (t >= r.in - .05 && (r.out === undefined || t <= r.out + .05)) row(t, r); }
+
+/* ---------------- member split-screen (3 diagonal slices) ---------------- */
+async function split(t) {
+  const S = CFG.split; if (!S || t < S.in || t > S.out + .7) return;
+  const P = [-4000, S.p[0], S.p[1], 4000];
+  for (let i = 0; i < 3; i++) {
+    const m = S.members[i];
+    const tin = S.in + i * S.stagger, sgn = i % 2 ? 1 : -1;
+    if (t < tin) continue;
+    const im = await loadImg(fpath(m.clip, fno(m.src, t - tin)));
+    const draw = tt => {
+      const pin = 1 - expoOut(prog(tt, tin, .55)), pout = expoIn(prog(tt, S.out + i * .05, .45));
+      const d = sgn * 2300 * pin - sgn * 2300 * pout;
+      ctx.save(); ctx.translate(.5 * d, .866 * d);
+      ctx.beginPath(); ctx.moveTo(P[i] + K * -980, -20); ctx.lineTo(P[i + 1] + K * -980, -20); ctx.lineTo(P[i + 1] + K * (H + 20 - 960), H + 20); ctx.lineTo(P[i] + K * (H + 20 - 960), H + 20); ctx.closePath();
+      ctx.save(); ctx.clip();
+      ctx.fillStyle = '#000'; ctx.fillRect(-3000, -3000, 8000, 8000);
+      const zz = m.z * (1 + .05 * prog(tt, tin, 1.6));
+      const w = im.width * zz, h = im.height * zz;
+      ctx.filter = GRADEF; ctx.drawImage(im, m.fx - m.cx * w, m.fy - m.cy * h, w, h); ctx.filter = 'none';
+      ctx.restore();
+      if (i > 0) { band(P[i] + 4, P[i] - 4); ctx.fillStyle = '#fff'; ctx.fill(); }
+      ctx.restore();
+    };
+    const moving = t < tin + .55 || t > S.out + i * .05;
+    if (moving) blurred(t, draw, 6, 1 / 40); else draw(t);
+  }
+}
+
+/* ---------------- FRONT: panel, wipes, glints ---------------- */
+function panel(t) {
+  const P = CFG.panel; if (t < P.in) return;
+  for (const [d, fin, kind] of [[0, P.edge + 70, 'line'], [.05, P.edge + 34, 'dark'], [.1, P.edge, 'main']]) {
+    const draw = tt => {
+      const e = lerp(-1500, fin, expoOut(prog(tt, P.in + d, .85))) + Math.sin((tt - P.in) * .6) * 6 * (kind === 'line' ? 1.6 : 1);
+      if (kind === 'line') { band(e, e - 5); ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.fill(); }
+      else { leftOf(e); ctx.fillStyle = kind === 'main' ? orangeFill() : OR.dark; ctx.fill(); }
+    };
+    if (t < P.in + d + .85) blurred(t, draw); else draw(t);
+  }
+}
+function wipes(t) {
+  for (const w of (CFG.wipes || [])) {
+    const d = w.dur ?? .42, c = w.at;
+    if (t < c - d - .12 || t > c + d + .12) continue;
+    for (const [off, col] of [[-.08, OR.dark], [-.04, OR.deep], [0, 'main']]) {
+      blurred(t, tt => {
+        const a = c + off;
+        const pA = lerp(-700, 1760, quintIO((tt - (a - d)) / d)), pB = lerp(-700, 1760, quintIO((tt - a + .02) / d));
+        if (pA <= pB) return;
+        band(pA, pB); ctx.fillStyle = col === 'main' ? orangeFill() : col; ctx.fill();
+      }, 6, 1 / 40);
+    }
+    const pB = lerp(-700, 1760, quintIO((t - c + .02) / d));
+    if (t > c - .02 && t < c + d) { band(pB + 6, pB); ctx.fillStyle = 'rgba(255,240,226,0.85)'; ctx.fill(); }
+  }
+}
+function opening(t) {
+  const o = CFG.opening; if (!o || t > o.dur + .3) return;
+  for (const [off, col] of [[0.10, 'main'], [0.05, OR.deep], [0, OR.dark]]) {
+    blurred(t, tt => {
+      const e = lerp(-700, 1760, quintIO((tt - off - (o.start || 0)) / o.dur)); if (e >= 1760) return;
+      ctx.beginPath(); ctx.moveTo(e + K * (-980), -20); ctx.lineTo(3000, -20); ctx.lineTo(3000, H + 20); ctx.lineTo(e + K * (H + 20 - 960), H + 20); ctx.closePath();
+      ctx.fillStyle = col === 'main' ? orangeFill() : col; ctx.fill();
+    }, 6, 1 / 40);
+  }
+}
+function glints(t) {
+  for (const g of (CFG.glints || [])) {
+    const p = (t - g) / .55; if (p < 0 || p > 1) continue;
+    const x = lerp(-800, 1900, cubicIO(p));
+    ctx.save(); ctx.globalCompositeOperation = 'screen';
+    for (const [wd, a] of [[140, .10], [36, .28], [6, .85]]) { band(x + wd / 2, x - wd / 2); ctx.fillStyle = `rgba(255,214,180,${a})`; ctx.fill(); }
+    ctx.restore();
+  }
+}
+
+/* ---------------- FRONT typography: kinetic words → lockup ---------------- */
+function drawText(str, x, y, size, o = {}) {
+  ctx.save(); ctx.font = F(o.w || 900, size); ctx.letterSpacing = (o.tr || 0) + 'px';
+  ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = o.shadow ?? 18; ctx.shadowOffsetY = 4;
+  ctx.globalAlpha = o.a ?? 1;
+  if (o.outline) { ctx.lineWidth = o.outline; ctx.strokeStyle = o.color || '#fff'; ctx.strokeText(str, x, y); }
+  else { ctx.fillStyle = o.color || '#fff'; ctx.fillText(str, x, y); }
+  ctx.restore();
+}
+function letters(str, x, y, size, t, t0, o = {}) {           // letters rise one by one from a mask
+  const f = F(o.w || 900, size); let cx = x;
+  for (const [i, ch] of [...str].entries()) {
+    const cw = textW(ch, f);
+    const p = prog(t, t0 + i * (o.stagger ?? .03), o.dur ?? .45);
+    if (p > 0) {
+      const e = expoOut(p);
+      ctx.save(); ctx.beginPath(); ctx.rect(cx - 30, y - size * 1.05, cw + 60, size * 1.32); ctx.clip();
+      drawText(ch, cx, y + (1 - e) * size * 1.1, size, o); ctx.restore();
+    }
+    cx += cw;
+  }
+}
+function echo(str, x, y, size, t, t0) {                       // outline copies collapsing into the word
+  const p = prog(t, t0, .55); if (p >= 1) return;
+  for (let k = 4; k >= 1; k--) {
+    const off = (1 - expoOut(p)) * k * size * .42, a = (1 - p) * .9 * (1 - k * .15);
+    drawText(str, x, y + off, size, { outline: 3, a, shadow: 0 });
+  }
+}
+function rolling(str, x, y, size, t, t0, o = {}) {            // slot-counter digits
+  const f = F(o.w || 600, size); let cx = x;
+  for (const [i, ch] of [...str].entries()) {
+    const cw = textW(ch, f);
+    const p = prog(t, t0 + i * .045, .8);
+    if (p > 0) {
+      ctx.save(); ctx.beginPath(); ctx.rect(cx - 6, y - size * 1.0, cw + 12, size * 1.25); ctx.clip();
+      if (/\d/.test(ch)) {
+        const pos = expoOut(p) * (10 + +ch);
+        for (let k = Math.floor(pos) - 1; k <= Math.floor(pos) + 1; k++) {
+          const dy = (k - pos) * size * 1.15;
+          if (Math.abs(dy) < size * 1.3) drawText(String(((k % 10) + 10) % 10), cx, y + dy, size, { ...o, shadow: 10 });
+        }
+      } else drawText(ch, cx, y + (1 - expoOut(p)) * size * 1.1, size, { ...o, shadow: 10 });
+      ctx.restore();
+    }
+    cx += cw;
+  }
+}
+function shine(t, str, x, y, size) {
+  for (const s of (CFG.shine || [])) {
+    const sp = (t - s) / .7; if (sp < 0 || sp > 1) continue;
+    const f = F(900, size), tw = textW(str, f);
+    const L = document.createElement('canvas'); L.width = Math.ceil(tw + 40); L.height = Math.ceil(size * 1.4);
+    const g = L.getContext('2d'); g.font = f; g.fillStyle = '#fff'; g.fillText(str, 10, size * 1.05);
+    g.globalCompositeOperation = 'source-in';
+    const c = lerp(-200, tw + 200, cubicIO(sp)), gr = g.createLinearGradient(c - 90, 0, c + 90, 0);
+    gr.addColorStop(0, 'rgba(255,190,140,0)'); gr.addColorStop(.5, 'rgba(255,160,100,0.95)'); gr.addColorStop(1, 'rgba(255,190,140,0)');
+    g.fillStyle = gr; g.fillRect(0, 0, L.width, L.height);
+    ctx.drawImage(L, x - 10, y - size * 1.05);
+  }
+}
+function kinetic(t) {
+  const L = CFG.lockup, k = A.words, s = A.settle, X = L.x, st = L.style;
+  if (t < k) return;
+  const cx = W / 2, cy = L.centerY ?? 1000;
+  const s1 = fit(L.l1, 900, 190, 920), s2 = fit(L.l2, 900, 230, 980), s3 = fit(L.l3, 900, 190, 900);
+  const T2 = A.words2, T3 = A.words3;
+  // state functions for the FLIP (centre → lockup)
+  const st2 = tt => { const up = expoOut(prog(tt, T3, .5)), f = expoIO(prog(tt, s, .7));
+    const size = lerp(lerp(s2, s2 * .84, up), st.l2.size, f), y = lerp(lerp(cy, cy - s3 * .95, up), st.l2.y, f);
+    return { size, y, x: lerp(cx - textW(L.l2, F(900, size)) / 2, X, f) }; };
+  const st3 = tt => { const f = expoIO(prog(tt, s, .7)), size = lerp(s3, st.l3.size, f);
+    return { size, y: lerp(cy + s3 * .3, st.l3.y, f), x: lerp(cx - textW(L.l3, F(900, size)) / 2, X, f), col: f < .55 ? OR.main : '#fff' }; };
+  // ---- İLK DƏFƏ in the centre: orange block + rising letters, pushed out upward at T2
+  if (t < T2 + .4) {
+    const w1 = textW(L.l1, F(900, s1)), ex = expoIn(prog(t, T2 - .05, .35));
+    ctx.save(); ctx.beginPath(); ctx.rect(0, cy - s1 * 1.05, W, s1 * 1.32); ctx.clip();
+    ctx.translate(0, -ex * s1 * 1.3);
+    const hb = expoOut(prog(t, k, .4));
+    ctx.fillStyle = OR.main; ctx.fillRect(cx - w1 / 2 - 34, cy - s1 * .88, (w1 + 68) * hb, s1 * 1.08);
+    letters(L.l1, cx - w1 / 2, cy, s1, t, k + .08);
+    ctx.restore();
+  }
+  // ---- “ARAZ”DA: rises in with echo at T2, lifts at T3, flies into the lockup at settle
+  if (t >= T2) {
+    const S = st2(t);
+    if (t < T3) echo(L.l2, S.x, S.y, S.size, t, T2);
+    const pin = expoOut(prog(t, T2, .4));
+    const flying = t > s && t < s + .7;
+    if (flying) blurred(t, tt => { const q = st2(tt); drawText(L.l2, q.x, q.y, q.size); }, 5, 1 / 45);
+    else { ctx.save(); ctx.beginPath(); ctx.rect(-50, S.y - S.size * 1.05, W + 100, S.size * 1.32); ctx.clip(); drawText(L.l2, S.x, S.y + (1 - pin) * S.size * 1.1, S.size); ctx.restore(); }
+    shine(t, L.l2, S.x, S.y, S.size);
+  }
+  // ---- DİNLƏ: orange letters under ARAZ at T3, flies into the lockup and turns white
+  if (t >= T3) {
+    const S = st3(t);
+    if (t < s) letters(L.l3, S.x, S.y, S.size, t, T3, { color: OR.main, stagger: .04 });
+    else if (t < s + .7) blurred(t, tt => { const q = st3(tt); drawText(L.l3, q.x, q.y, q.size, { color: q.col }); }, 5, 1 / 45);
+    else drawText(L.l3, S.x, S.y, S.size);
+  }
+  // ---- lines that join in the lockup: İLK DƏFƏ, date, rolling time
+  if (t >= s) {
+    letters(L.l1, X, st.l1.y, st.l1.size, t, s + .3, { stagger: .025 });
+    letters(L.date, X, st.date.y, st.date.size, t, s + .5, { w: 800, stagger: .02 });
+    rolling(L.time, X, st.time.y, st.time.size, t, s + .65, { w: 600, color: 'rgba(255,255,255,0.93)' });
+  }
+}
+function logo() {
+  const P = CFG.logoPos, lw = P.w, lh = lw * LOGO.height / LOGO.width;
+  ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 12;
+  ctx.drawImage(LOGO, W / 2 - lw / 2, P.y - lh / 2, lw, lh); ctx.restore();
+}
+
 async function renderAt(t) {
-  await drawFootage(t);
+  const { s, end } = shotAt(t);
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  const person = await drawShot(s, t, (t - s.start) / (end - s.start));
+  behind(t);
+  if (person) ctx.drawImage(PBUF, 0, 0);
+  await split(t);
   grade();
   glints(t);
   panel(t);
   wipes(t);
   opening(t);
-  lockup(t);
-  logo(t);
+  kinetic(t);
+  logo();
   ctx.save(); ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .05;
   ctx.drawImage(GRAIN[Math.floor(t * CFG.fps) % GRAIN.length], 0, 0, W, H); ctx.restore();
 }
 window.init = async function (cfg) {
-  CFG = cfg; LOGO = await loadImg(cfg.logo);
-  for (const w of [600, 800, 900]) await document.fonts.load(`${w} 40px M`, 'İƏəŞĞÖÜÇ“”–');
+  CFG = cfg; A = cfg.anchors; LOGO = await loadImg(cfg.logo);
+  for (const w of [600, 800, 900]) await document.fonts.load(`${w} 40px M`, 'İƏəŞĞÖÜÇ“”–0123456789');
   await document.fonts.ready; makeGrain(); return true;
 };
 window.frame = async function (i) { await renderAt(i / CFG.fps); return C.toDataURL('image/png'); };
