@@ -39,7 +39,7 @@
       ],
       "cx": 0.52,
       "cy": 0.4,
-      "depth": true
+      "depth": false
     },
     {
       "start": 5.9,
@@ -51,7 +51,7 @@
       ],
       "cx": 0.46,
       "cy": 0.36,
-      "depth": true
+      "depth": false
     },
     {
       "start": 7.83,
@@ -276,7 +276,7 @@
     "l1": "İLK DƏFƏ",
     "l2": "“ARAZ”DA",
     "l3": "DİNLƏ",
-    "x": 72,
+    "x": 96,
     "centerY": 1000,
     "style": {
       "date": {
@@ -304,5 +304,6 @@
   "logoPos": {
     "y": 1722,
     "w": 176
-  }
+  },
+  "lockupStyle": "frame"
 }
