@@ -97,10 +97,13 @@ _(notes pending)_
     TƏQDİM EDİR», «PREMYERA» etc. and was rejected ("Təqdim edir nədi?").
   - Length 18 s (first 18 s of the recording). Use different sections of each AI video.
   - The style may be new and cinematic, but the text content must not change.
-- **v2 rejected** (gold Cormorant serif, elegant, 29 s, invented texts). **v3 delivered**: black/amber
-  cinema look, diagonal orange light beams (a reinterpretation of the old orange diagonal wipes),
-  Big Shoulders Display 900 + Inter Tight, left-aligned poster lockup, light-edge reveal on
-  «“ARAZ”DA». Awaiting feedback.
+- **v2 rejected** (gold Cormorant serif, invented texts). **v3 rejected** ("çox pisdir, qarışıqdır",
+  Big Shoulders font "çox cringy", "looks so poor"). The user wants a STABLE template close to the
+  original, but "fully premium" motion design, and only the best (non-glitchy) parts of the AI videos.
+- **v4 delivered** (template now): Montserrat 900/800/600 white text, original layout and order,
+  orange 60° slash panel lower-left entering in three layers (white line, dark band, orange),
+  three-layer orange slash wipes with real motion blur at the opening, song drop and finale, white
+  light-slash glints on hard cuts. Awaiting feedback.
 - First episode: İradə İbrahimova & Döngə — «Son Qərar», date 2 Noyabr (taken from the old
   promo, same song) → `ilk-defe-araz/episodes/2026-11-02_donge_son-qerar/`.
 - Fonts lacking ə/Ə: Bodoni Moda, DM Serif, Gloock, Instrument Serif, Syne, Manrope, Outfit, Sora.

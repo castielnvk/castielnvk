@@ -1,38 +1,38 @@
 <!doctype html>
 <html><head><meta charset="utf-8"><title>Ilk Defe Araz</title>
 <style>
-/* Each family = latin + latin-ext files; the browser picks per glyph (Ə, İ, Ş, Ğ, “ ” ...). */
-@font-face{font-family:Display;font-weight:800;src:url(fonts/big-shoulders-display-latin-800-normal.woff2)}
-@font-face{font-family:Display;font-weight:800;src:url(fonts/big-shoulders-display-latin-ext-800-normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:Display;font-weight:900;src:url(fonts/big-shoulders-display-latin-900-normal.woff2)}
-@font-face{font-family:Display;font-weight:900;src:url(fonts/big-shoulders-display-latin-ext-900-normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:Sans;font-weight:500;src:url(fonts/inter-tight-latin-500-normal.woff2)}
-@font-face{font-family:Sans;font-weight:500;src:url(fonts/inter-tight-latin-ext-500-normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:Sans;font-weight:700;src:url(fonts/inter-tight-latin-700-normal.woff2)}
-@font-face{font-family:Sans;font-weight:700;src:url(fonts/inter-tight-latin-ext-700-normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:M;font-weight:600;src:url(fonts/montserrat-latin-600-normal.woff2)}
+@font-face{font-family:M;font-weight:600;src:url(fonts/montserrat-latin-ext-600-normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:M;font-weight:800;src:url(fonts/montserrat-latin-800-normal.woff2)}
+@font-face{font-family:M;font-weight:800;src:url(fonts/montserrat-latin-ext-800-normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:M;font-weight:900;src:url(fonts/montserrat-latin-900-normal.woff2)}
+@font-face{font-family:M;font-weight:900;src:url(fonts/montserrat-latin-ext-900-normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 html,body{margin:0;background:#000}
 canvas{display:block}
 </style></head>
 <body><canvas id="c" width="1080" height="1920"></canvas>
 <script>
 "use strict";
-/* ============================================================
-   "İLK DƏFƏ “ARAZ”DA DİNLƏ" — cinematic premiere template (v3)
-   Texts are ONLY the original promo texts: date, time, İLK DƏFƏ, “ARAZ”DA, DİNLƏ + Araz logo.
-   Everything episode-specific lives in config.json.
-   ============================================================ */
+/* =====================================================================
+   «İLK DƏFƏ “ARAZ”DA DİNLƏ» — premiere template v4
+   The original promo's design language (white Montserrat Black, orange 60° slash panel at the
+   lower left, Araz logo bottom centre) rebuilt as layered motion design.
+   Texts: ONLY date, time, İLK DƏFƏ, “ARAZ”DA, DİNLƏ. Episode data lives in config.json.
+   ===================================================================== */
 const W = 1080, H = 1920;
-const C = document.getElementById('c');
-const ctx = C.getContext('2d');
-const ORANGE = '#E86A33', WHITE = '#FFFFFF';
+const C = document.getElementById('c'); let ctx = C.getContext('2d');
+const MAIN = ctx; const BUF = document.createElement('canvas'); BUF.width = W; BUF.height = H; const BCTX = BUF.getContext('2d');
+const OR = { main: '#E86A33', light: '#F38449', deep: '#B9481C', dark: '#7A2A0E' };
+const K = 0.58;                       // slash slope: x advances 0.58 px per px down (≈60°)
 let CFG = null, LOGO = null;
 const IMG = new Map();
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 const lerp = (a, b, p) => a + (b - a) * p;
-const easeOut = p => 1 - Math.pow(1 - clamp(p), 3);
-const easeIO = p => { p = clamp(p); return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; };
-const expoOut = p => p >= 1 ? 1 : 1 - Math.pow(2, -10 * clamp(p));
 const prog = (t, a, d) => clamp((t - a) / d);
+const expoOut = p => (p = clamp(p)) >= 1 ? 1 : 1 - Math.pow(2, -10 * p);
+const quintIO = p => { p = clamp(p); return p < .5 ? 16 * p ** 5 : 1 - Math.pow(-2 * p + 2, 5) / 2; };
+const cubicIO = p => { p = clamp(p); return p < .5 ? 4 * p ** 3 : 1 - Math.pow(-2 * p + 2, 3) / 2; };
+const backOut = p => { p = clamp(p); const c1 = 1.2, c3 = c1 + 1; return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
 
 function loadImg(src) {
   if (IMG.has(src)) return IMG.get(src);
@@ -42,234 +42,203 @@ function loadImg(src) {
 
 /* ---------------- footage ---------------- */
 function shotAt(t) {
-  const S = CFG.shots; let s = S[0];
-  for (const x of S) if (t >= x.start) s = x;
-  const i = S.indexOf(s); const end = (i + 1 < S.length) ? S[i + 1].start : CFG.duration;
-  return { s, end };
+  const S = CFG.shots; let i = 0;
+  for (let k = 0; k < S.length; k++) if (t >= S[k].start) i = k;
+  return { s: S[i], end: i + 1 < S.length ? S[i + 1].start : CFG.duration };
 }
 async function drawFootage(t) {
   const { s, end } = shotAt(t);
-  const st = s.src + (t - s.start) * (s.speed || 1);
-  const n = Math.max(1, Math.round(st * CFG.fps) + 1);
+  const n = Math.max(1, Math.round((s.src + (t - s.start)) * CFG.fps) + 1);
   const im = await loadImg(`${CFG.frames}/${s.clip}/${String(n).padStart(4, '0')}.jpg`);
-  const p = easeIO((t - s.start) / (end - s.start));
-  const z = lerp(s.z[0], s.z[1], p);
+  const z = lerp(s.z[0], s.z[1], cubicIO((t - s.start) / (end - s.start)));
   const w = im.width * z, h = im.height * z;
   let x = W / 2 - (s.cx ?? .5) * w, y = H / 2 - (s.cy ?? .5) * h;
-  if (w >= W) x = clamp(x, W - w, 0); else x = (W - w) / 2;
-  if (h >= H) y = clamp(y, H - h, 0); else y = (H - h) / 2;
+  x = w >= W ? clamp(x, W - w, 0) : (W - w) / 2;
+  y = h >= H ? clamp(y, H - h, 0) : (H - h) / 2;
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
   ctx.imageSmoothingQuality = 'high';
-  ctx.filter = 'contrast(1.06) saturate(0.97)';
-  ctx.drawImage(im, x, y, w, h);
-  ctx.filter = 'none';
-  if (h < H) {          // feather exposed edges into black
-    const f = 140;
-    let g = ctx.createLinearGradient(0, y, 0, y + f); g.addColorStop(0, '#000'); g.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = g; ctx.fillRect(0, y - 2, W, f + 2);
-    g = ctx.createLinearGradient(0, y + h - f, 0, y + h); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, '#000');
-    ctx.fillStyle = g; ctx.fillRect(0, y + h - f, W, f + 2);
+  ctx.filter = 'contrast(1.05) saturate(1.02)';
+  ctx.drawImage(im, x, y, w, h); ctx.filter = 'none';
+  if (h < H) for (const [y0, up] of [[y, 1], [y + h, -1]]) {
+    const g = ctx.createLinearGradient(0, y0, 0, y0 + up * 140); g.addColorStop(0, '#000'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, Math.min(y0, y0 + up * 140) - 2, W, 144);
+  }
+}
+function grade() {
+  let g = ctx.createRadialGradient(W / 2, H * .42, H * .25, W / 2, H * .5, H * .8);
+  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.45)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  g = ctx.createLinearGradient(0, 1000, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.55)');
+  ctx.fillStyle = g; ctx.fillRect(0, 1000, W, H - 1000);
+}
+
+/* ---------------- slash geometry ----------------
+   A slash edge is the line x = p + K*(y - 960). Region "left of edge p". */
+function leftOf(p) {
+  ctx.beginPath();
+  ctx.moveTo(p + K * (-20 - 960), -20); ctx.lineTo(p + K * (H + 20 - 960), H + 20);
+  ctx.lineTo(-4000, H + 20); ctx.lineTo(-4000, -20); ctx.closePath();
+}
+function band(pA, pB) {                 // region between trailing edge pB and leading edge pA
+  ctx.beginPath();
+  ctx.moveTo(pB + K * (-980), -20); ctx.lineTo(pA + K * (-980), -20);
+  ctx.lineTo(pA + K * (H + 20 - 960), H + 20); ctx.lineTo(pB + K * (H + 20 - 960), H + 20); ctx.closePath();
+}
+/* motion-blurred draw: render fn(t') at a few sub-frame times, averaged */
+function blurred(t, fn, n = 6, span = 1 / 48) {
+  // additive accumulation of sub-frame samples in a buffer = true motion blur (solid stays solid)
+  BCTX.setTransform(1, 0, 0, 1, 0, 0); BCTX.globalCompositeOperation = 'source-over'; BCTX.globalAlpha = 1;
+  BCTX.clearRect(0, 0, W, H);
+  const prev = ctx; ctx = BCTX;
+  for (let i = 0; i < n; i++) {
+    BCTX.save(); BCTX.globalCompositeOperation = 'lighter'; BCTX.globalAlpha = 1 / n;
+    fn(t - span * i / n); BCTX.restore();
+  }
+  ctx = prev; ctx.drawImage(BUF, 0, 0);
+}
+function orangeFill(col, light) {
+  const g = ctx.createLinearGradient(0, 600, 300, H);
+  g.addColorStop(0, light || OR.light); g.addColorStop(1, col);
+  return g;
+}
+
+/* persistent lower-left panel (the original's orange triangle), entering as layered slashes */
+function panel(t) {
+  const P = CFG.panel; if (t < P.in) return;
+  const layers = [ // [delay, final edge offset, colour]
+    [0.00, P.edge + 70, 'rgba(255,255,255,0.9)', 'line'],
+    [0.05, P.edge + 34, OR.dark],
+    [0.10, P.edge, OR.main],
+  ];
+  for (const [d, fin, col, kind] of layers) {
+    const draw = tt => {
+      const p = expoOut(prog(tt, P.in + d, .85));
+      const drift = Math.sin((tt - P.in) * .6) * 6;            // slow living parallax
+      const e = lerp(-1500, fin, p) + drift * (kind === 'line' ? 1.6 : col === OR.dark ? 1.2 : 1);
+      if (kind === 'line') { band(e, e - 5); ctx.fillStyle = col; ctx.fill(); }
+      else { leftOf(e); ctx.fillStyle = col === OR.main ? orangeFill(OR.main, OR.light) : col; ctx.fill(); }
+    };
+    if (t < P.in + d + .85) blurred(t, draw); else draw(t);
   }
 }
 
-/* ---------------- atmosphere ---------------- */
+/* full-screen slash wipe: three coloured shutters cross, the cut happens while fully covered */
+function wipes(t) {
+  for (const w of (CFG.wipes || [])) {
+    const d = w.dur ?? .42, c = w.at;
+    if (t < c - d - .12 || t > c + d + .12) continue;
+    const layers = [[-.08, OR.dark], [-.04, OR.deep], [0, OR.main]];
+    for (const [off, col] of layers) {
+      const draw = tt => {
+        const a = c + off * (w.dir ?? 1);
+        const pA = lerp(-700, 1760, quintIO((tt - (a - d)) / d));
+        const pB = lerp(-700, 1760, quintIO((tt - a + .02) / d));
+        if (pA <= pB) return;
+        band(pA, pB); ctx.fillStyle = col === OR.main ? orangeFill(OR.main, OR.light) : col; ctx.fill();
+      };
+      blurred(t, draw, 6, 1 / 40);
+    }
+    // thin white light line riding the trailing edge
+    const pB = lerp(-700, 1760, quintIO((t - c + .02) / d));
+    if (t > c - .02 && t < c + d) { band(pB + 6, pB); ctx.fillStyle = 'rgba(255,240,226,0.85)'; ctx.fill(); }
+  }
+}
+/* a single white light-slash passing across (subtle accent on a hard cut) */
+function glints(t) {
+  for (const g of (CFG.glints || [])) {
+    const p = (t - g.at) / (g.dur ?? .55); if (p < 0 || p > 1) continue;
+    const x = lerp(-800, 1900, cubicIO(p));
+    ctx.save(); ctx.globalCompositeOperation = 'screen';
+    for (const [wd, a] of [[140, .10], [36, .28], [6, .85]]) { band(x + wd / 2, x - wd / 2); ctx.fillStyle = `rgba(255,214,180,${a})`; ctx.fill(); }
+    ctx.restore();
+  }
+}
+
+/* ---------------- typography ---------------- */
+const F = (w, s) => `${w} ${s}px M`;
+function textW(str, f, tr = 0) { ctx.save(); ctx.font = f; ctx.letterSpacing = tr + 'px'; const w = ctx.measureText(str).width; ctx.restore(); return w; }
+function fitSize(str, w, s, maxW, tr = 0) { while (s > 20 && textW(str, F(w, s), tr) > maxW) s -= 2; return s; }
+/* one text line revealed from behind a mask: slides up (dir 'up') or in along the slash ('slash') */
+function revealLine(str, x, y, o, t) {
+  const p = prog(t, o.at, o.dur ?? .75); if (p <= 0) return;
+  const size = o.maxW ? fitSize(str, o.w, o.size, o.maxW, o.tr || 0) : o.size;
+  const f = F(o.w, size), tw = textW(str, f, o.tr || 0);
+  const draw = tt => {
+    const q = prog(tt, o.at, o.dur ?? .75), e = o.ease === 'back' ? backOut(q) : expoOut(q);
+    ctx.save();
+    ctx.beginPath(); ctx.rect(x - 30, y - size * 1.02, tw + 120, size * 1.3); ctx.clip();   // mask window
+    const dy = (1 - e) * size * 1.1, dx = o.mode === 'slash' ? -(1 - e) * size * 1.1 * K : 0;
+    ctx.font = f; ctx.letterSpacing = (o.tr || 0) + 'px';
+    ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 18; ctx.shadowOffsetY = 4;
+    ctx.fillStyle = o.color || '#fff';
+    ctx.fillText(str, x + dx, y + dy);
+    ctx.restore();
+  };
+  if (p < 1) blurred(t, draw, 5, 1 / 60); else draw(t);
+  // shine: a slash of light travelling across the letters
+  for (const s of (o.shine || [])) {
+    const sp = (t - s) / .7; if (sp < 0 || sp > 1) continue;
+    ctx.save(); ctx.font = f; ctx.letterSpacing = (o.tr || 0) + 'px';
+    const L = document.createElement('canvas'); L.width = Math.ceil(tw + 40); L.height = Math.ceil(size * 1.4);
+    const g = L.getContext('2d'); g.font = f; g.letterSpacing = (o.tr || 0) + 'px'; g.fillStyle = '#fff'; g.fillText(str, 10, size * 1.05);
+    g.globalCompositeOperation = 'source-in';
+    const cx = lerp(-200, tw + 200, cubicIO(sp));
+    const gr = g.createLinearGradient(cx - 90, 0, cx + 90, 0);
+    gr.addColorStop(0, 'rgba(255,190,140,0)'); gr.addColorStop(.5, 'rgba(255,170,110,0.95)'); gr.addColorStop(1, 'rgba(255,190,140,0)');
+    g.fillStyle = gr; g.fillRect(0, 0, L.width, L.height);
+    ctx.drawImage(L, x - 10, y - size * 1.05); ctx.restore();
+  }
+}
+function lockup(t) {
+  const L = CFG.lockup, X = L.x;
+  for (const k of ['date', 'time', 'l1', 'l2', 'l3']) {
+    const s = L.style[k];
+    revealLine(L[k], X + (s.dx || 0), s.y, { ...s, at: L.at[k] }, t);
+  }
+}
+function logo(t) {
+  const P = CFG.logoPos, lw = P.w, lh = lw * LOGO.height / LOGO.width;
+  ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 12;
+  ctx.drawImage(LOGO, W / 2 - lw / 2, P.y - lh / 2, lw, lh); ctx.restore();
+}
+/* opening: the frame starts orange and a layered slash reveals the footage */
+function opening(t) {
+  const o = CFG.opening; if (!o || t > o.dur + .2) return;
+  for (const [off, col] of [[0.10, OR.main], [0.05, OR.deep], [0, OR.dark]]) {
+    blurred(t, tt => {
+      const e = lerp(-700, 1760, quintIO((tt - off - (o.start || 0)) / o.dur));
+      if (e >= 1760) return;
+      ctx.beginPath(); ctx.moveTo(e + K * (-980), -20); ctx.lineTo(3000, -20); ctx.lineTo(3000, H + 20); ctx.lineTo(e + K * (H + 20 - 960), H + 20); ctx.closePath();
+      ctx.fillStyle = col === OR.main ? orangeFill(OR.main, OR.light) : col; ctx.fill();
+    }, 6, 1 / 40);
+  }
+}
+
 let GRAIN = [];
 function makeGrain() {
   for (let k = 0; k < 6; k++) {
     const c = document.createElement('canvas'); c.width = 540; c.height = 960;
-    const g = c.getContext('2d'); const d = g.createImageData(540, 960);
-    for (let i = 0; i < d.data.length; i += 4) { const v = 128 + (Math.random() - .5) * 90; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255; }
+    const g = c.getContext('2d'), d = g.createImageData(540, 960);
+    for (let i = 0; i < d.data.length; i += 4) { const v = 128 + (Math.random() - .5) * 70; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255; }
     g.putImageData(d, 0, 0); GRAIN.push(c);
   }
 }
-function grade(t) {
-  let g = ctx.createRadialGradient(W / 2, H * .42, H * .2, W / 2, H * .5, H * .8);
-  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.55)');
-  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-  // lower scrim, rising in with the text lockup (deeper on the left where the text sits)
-  const a = easeIO(prog(t, CFG.lockup.t[0] - .6, 1.2));
-  g = ctx.createLinearGradient(0, 860, 0, H);
-  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(.35, `rgba(0,0,0,${.45 * a})`); g.addColorStop(1, `rgba(0,0,0,${.82 * a + .1})`);
-  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-  g = ctx.createLinearGradient(0, 0, W * .8, 0);
-  g.addColorStop(0, `rgba(0,0,0,${.35 * a})`); g.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = g; ctx.fillRect(0, 900, W, H - 900);
-}
-function grain(t) {
-  ctx.save(); ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .07;
-  ctx.drawImage(GRAIN[Math.floor(t * CFG.fps) % GRAIN.length], 0, 0, W, H); ctx.restore();
-}
-/* warm exposure bloom at a cut */
-function bloom(t) {
-  for (const f of (CFG.flashes || [])) {
-    const pk = f.peak ?? .6, pre = f.pre ?? 0;
-    let a = 0;
-    if (pre && t < f.at && t > f.at - pre) a = pk * Math.pow((t - (f.at - pre)) / pre, 2.2);
-    else if (t >= f.at) a = pk * Math.exp(-(t - f.at) / (f.decay ?? .22));
-    if (a < .004) continue;
-    ctx.save(); ctx.globalCompositeOperation = 'screen';
-    const g = ctx.createRadialGradient(W * .5, H * .4, 0, W * .5, H * .4, H * .75);
-    g.addColorStop(0, `rgba(255,224,182,${a})`); g.addColorStop(.5, `rgba(232,106,51,${a * .7})`); g.addColorStop(1, `rgba(90,30,10,${a * .4})`);
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore();
-  }
-}
-/* diagonal light beam — the old template's orange diagonal, reborn as light. Crosses the cut at `at`. */
-function beams(t) {
-  for (const b of (CFG.beams || [])) {
-    const dur = b.dur ?? .9, p = (t - (b.at - dur / 2)) / dur;
-    if (p < 0 || p > 1) continue;
-    const ang = (b.angle ?? -58) * Math.PI / 180;
-    const travel = 2600, pos = lerp(-travel / 2, travel / 2, easeIO(p));
-    const inten = (b.peak ?? .9) * Math.sin(Math.PI * p);
-    ctx.save(); ctx.globalCompositeOperation = 'screen';
-    ctx.translate(W / 2, H / 2); ctx.rotate(ang);
-    for (const [bw, al, col] of [[900, .35, '232,106,51'], [420, .55, '255,150,80'], [120, .9, '255,236,214']]) {
-      const g = ctx.createLinearGradient(pos - bw / 2, 0, pos + bw / 2, 0);
-      g.addColorStop(0, `rgba(${col},0)`); g.addColorStop(.5, `rgba(${col},${inten * al})`); g.addColorStop(1, `rgba(${col},0)`);
-      ctx.fillStyle = g; ctx.fillRect(pos - bw / 2, -2400, bw, 4800);
-    }
-    ctx.restore();
-  }
-}
-function streak(t, at, x0, x1, y, dur = 1.0) {
-  const p = (t - at) / dur; if (p < 0 || p > 1) return;
-  const a = Math.sin(Math.PI * Math.min(1, p * 1.5)) * (1 - p) * 1.5;
-  const cx = (x0 + x1) / 2, half = (x1 - x0) / 2 * (.3 + .9 * expoOut(p * 1.3));
-  ctx.save(); ctx.globalCompositeOperation = 'screen';
-  for (const [th, al] of [[50, .16], [12, .45], [3, 1]]) {
-    const g = ctx.createLinearGradient(cx - half, 0, cx + half, 0);
-    g.addColorStop(0, 'rgba(232,106,51,0)'); g.addColorStop(.5, `rgba(255,232,205,${a * al})`); g.addColorStop(1, 'rgba(232,106,51,0)');
-    ctx.fillStyle = g; ctx.fillRect(cx - half, y - th / 2, half * 2, th);
-  }
-  ctx.restore();
-}
-
-/* ---------------- typography ---------------- */
-const font = (kind, size, weight) => kind === 'display' ? `${weight || 900} ${size}px Display` : `${weight || 700} ${size}px Sans`;
-function measure(str, f, tr) { ctx.save(); ctx.font = f; ctx.letterSpacing = tr + 'px'; const w = ctx.measureText(str).width - tr; ctx.restore(); return w; }
-/* render a line into its own layer (fill, optional light sweep, optional overexposure) */
-function layer(str, o) {
-  const f = font(o.kind, o.size, o.weight), tr = o.tr || 0;
-  const w = measure(str, f, tr), pad = Math.ceil(o.size * .5);
-  const L = document.createElement('canvas'); L.width = Math.ceil(w + pad * 2 + Math.abs(tr)); L.height = Math.ceil(o.size * 1.6);
-  const g = L.getContext('2d'); g.font = f; g.letterSpacing = tr + 'px';
-  const by = Math.round(o.size * 1.2);
-  if (o.fill === 'metal') {
-    const gr = g.createLinearGradient(0, by - o.size * .78, 0, by);
-    gr.addColorStop(0, '#FFFFFF'); gr.addColorStop(.55, '#FFF1E2'); gr.addColorStop(.82, '#F7C79C'); gr.addColorStop(1, '#EE9A5E');
-    g.fillStyle = gr;
-  } else g.fillStyle = o.fill || WHITE;
-  g.fillText(str, pad, by);
-  g.globalCompositeOperation = 'source-atop';
-  if (o.hot > 0) { g.fillStyle = `rgba(255,248,238,${o.hot})`; g.fillRect(0, 0, L.width, L.height); }
-  if (o.sweep !== undefined && o.sweep > -.4 && o.sweep < 1.4) {
-    const sx = pad + o.sweep * w, bw = Math.max(90, o.size * .9);
-    const sg = g.createLinearGradient(sx - bw, 0, sx + bw, 0);
-    sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(.5, 'rgba(255,253,246,0.95)'); sg.addColorStop(1, 'rgba(255,255,255,0)');
-    g.fillStyle = sg; g.fillRect(0, 0, L.width, L.height);
-  }
-  return { L, w, pad, by };
-}
-function blit(Lr, x, y, a, glow, glowCol) {
-  ctx.save(); ctx.globalAlpha = a;
-  ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 26; ctx.shadowOffsetY = 3;
-  ctx.drawImage(Lr.L, x - Lr.pad, y - Lr.by);
-  if (glow) { ctx.globalCompositeOperation = 'screen'; ctx.shadowColor = glowCol || 'rgba(232,106,51,0.9)'; ctx.shadowBlur = glow; ctx.shadowOffsetY = 0; ctx.globalAlpha = a * .45; ctx.drawImage(Lr.L, x - Lr.pad, y - Lr.by); }
-  ctx.restore();
-}
-/* per-letter rise from a baseline mask, staggered, with a short vertical motion trail */
-function riseLetters(str, x, y, o, t, t0) {
-  const f = font(o.kind, o.size, o.weight), tr = o.tr || 0;
-  let cx = x;
-  const chars = [...str];
-  chars.forEach((ch, i) => {
-    const cw = measure(ch, f, 0);
-    const p = prog(t, t0 + i * (o.stagger ?? .045), o.dur ?? .5);
-    if (p > 0 && ch !== ' ') {
-      const e = easeOut(p), off = (1 - e) * o.size * 1.05;
-      const Lr = layer(ch, { ...o, tr: 0 });
-      ctx.save(); ctx.beginPath(); ctx.rect(cx - 20, y - o.size * 1.15, cw + 40, o.size * 1.35); ctx.clip();
-      if (p < 1) for (let k = 1; k <= 3; k++) blit(Lr, cx, y + off + k * o.size * .07 * (1 - e), .16 * (1 - e), 0);
-      blit(Lr, cx, y + off, clamp(p * 2.5), o.glow * e, o.glowCol);
-      ctx.restore();
-    }
-    cx += cw + tr;
-  });
-}
-function bar(x, y, w, h, a, col) { if (w <= 0 || a <= 0) return; ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = col || ORANGE; ctx.fillRect(x, y, w, h); ctx.restore(); }
-
-/* ---------------- the lockup: date / time / İLK DƏFƏ / “ARAZ”DA / DİNLƏ ---------------- */
-function lockup(t) {
-  const c = CFG.lockup, T = c.t, X = c.x ?? 84, Y = c.y;
-  // 1) İLK DƏFƏ — letters rise one by one
-  riseLetters(c.l1, X, Y.l1, { kind: 'display', size: 156, weight: 900, tr: 6, glow: 18, glowCol: 'rgba(255,255,255,0.5)' }, t, T[0]);
-  // 2) “ARAZ”DA — revealed by a travelling light edge, overexposed then settling to warm metal
-  if (t >= T[1]) {
-    let size = c.bigSize || 262;                        // auto-fit inside the Reels-safe width
-    while (size > 60 && measure(c.l2, font('display', size, 900), 4) > (c.maxW || 860)) size -= 2;
-    const p = prog(t, T[1], .7), e = expoOut(p);
-    let sweep;                                         // periodic light sweeps on the beat
-    for (const s of (c.sweeps || [])) if (t >= s && t < s + 1.1) sweep = (t - s) / 1.1 * 1.8 - .4;
-    const Lr = layer(c.l2, { kind: 'display', size, weight: 900, tr: 4, fill: 'metal', hot: 1 - easeOut(prog(t, T[1] + .25, .9)), sweep });
-    const revealW = Lr.w * e + 40;
-    ctx.save(); ctx.beginPath(); ctx.rect(X - 60, Y.l2 - size * 1.1, revealW + 60, size * 1.4); ctx.clip();
-    blit(Lr, X, Y.l2, 1, 50 * (1 - .6 * easeOut(prog(t, T[1] + .3, 1.2))));
-    ctx.restore();
-    if (p < 1) {                                        // the glowing reveal edge
-      const ex = X + Lr.w * e;
-      ctx.save(); ctx.globalCompositeOperation = 'screen';
-      const g = ctx.createLinearGradient(ex - 70, 0, ex + 30, 0);
-      g.addColorStop(0, 'rgba(232,106,51,0)'); g.addColorStop(.7, `rgba(255,236,214,${.9 * (1 - p)})`); g.addColorStop(1, 'rgba(232,106,51,0)');
-      ctx.fillStyle = g; ctx.fillRect(ex - 70, Y.l2 - size * .95, 100, size * 1.05); ctx.restore();
-    }
-    streak(t, T[1] + .05, X - 40, X + Lr.w + 120, Y.l2 + 22, 1.1);
-  }
-  // 3) DİNLƏ — orange, tracking opens up
-  if (t >= T[2]) {
-    const p = easeOut(prog(t, T[2], .9));
-    const Lr = layer(c.l3, { kind: 'sans', size: 62, weight: 700, tr: lerp(4, 30, p), fill: ORANGE });
-    blit(Lr, X + 4, Y.l3, clamp((t - T[2]) / .3), 22);
-  }
-  // 4) date — slides out from behind an orange bar
-  if (t >= T[3]) {
-    const p = easeOut(prog(t, T[3], .7));
-    bar(X, Y.bar, 120 * easeOut(prog(t, T[3], .5)), 5, 1);
-    const Lr = layer(c.date, { kind: 'sans', size: 64, weight: 700, tr: 5 });
-    ctx.save(); ctx.beginPath(); ctx.rect(X - 10, Y.date - 80, 1000, 100); ctx.clip();
-    blit(Lr, X + (1 - p) * -Lr.w * .6, Y.date, clamp(p * 2), 0); ctx.restore();
-  }
-  // 5) time
-  if (t >= T[4]) {
-    const p = easeOut(prog(t, T[4], .7));
-    const Lr = layer(c.time, { kind: 'sans', size: 48, weight: 500, tr: 4, fill: 'rgba(255,255,255,0.86)' });
-    ctx.save(); ctx.beginPath(); ctx.rect(X - 10, Y.time - 60, 1000, 80); ctx.clip();
-    blit(Lr, X + (1 - p) * -Lr.w * .6, Y.time, clamp(p * 2), 0); ctx.restore();
-  }
-}
-/* official Araz Radio logo (white PNG, unmodified) — bottom centre, as in the original promo */
-function logo(t) {
-  const L = CFG.logoPos; const a = clamp((t - (L.in ?? 0)) / .5);
-  const lw = L.w, lh = lw * LOGO.height / LOGO.width;
-  ctx.save(); ctx.globalAlpha = a; ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 16;
-  ctx.drawImage(LOGO, W / 2 - lw / 2, L.y - lh / 2, lw, lh); ctx.restore();
-}
-
 async function renderAt(t) {
   await drawFootage(t);
-  grade(t);
-  bloom(t);
-  beams(t);
+  grade();
+  glints(t);
+  panel(t);
+  wipes(t);
+  opening(t);
   lockup(t);
   logo(t);
-  grain(t);
+  ctx.save(); ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .05;
+  ctx.drawImage(GRAIN[Math.floor(t * CFG.fps) % GRAIN.length], 0, 0, W, H); ctx.restore();
 }
 window.init = async function (cfg) {
-  CFG = cfg;
-  LOGO = await loadImg(cfg.logo);
-  for (const f of ['900 40px Display', '800 40px Display', '700 40px Sans', '500 40px Sans']) await document.fonts.load(f, 'İƏəŞĞÖÜÇ“”–');
-  await document.fonts.ready;
-  makeGrain();
-  return true;
+  CFG = cfg; LOGO = await loadImg(cfg.logo);
+  for (const w of [600, 800, 900]) await document.fonts.load(`${w} 40px M`, 'İƏəŞĞÖÜÇ“”–');
+  await document.fonts.ready; makeGrain(); return true;
 };
 window.frame = async function (i) { await renderAt(i / CFG.fps); return C.toDataURL('image/png'); };
 </script></body></html>
