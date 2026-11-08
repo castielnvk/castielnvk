@@ -87,22 +87,24 @@ _(notes pending)_
   - Editing: the journalist's voice was removed by editing alone, and the questions appear only as
     text.
 
-### 3b. «İlk dəfə Araz'da» — song-premiere Reels (8 Nov 2026, template v2)
-- **What:** recurring promo for exclusive song premieres. Each time the user sends: the recording
-  MP3 (artist says name, band, song, "xüsusi olaraq Araz FM üçün", then the song plays), Grok AI
-  videos made from the artist's photo (816×1104, 15 s each), and the premiere date.
-- **The user was bored of the old template** (orange diagonal wipes, heavy rounded font,
-  «2 NOYABR 11:00–12:00 / İLK DƏFƏ "ARAZ"DA DİNLƏ», logo bottom centre) and asked for something
-  "daha premium, daha cinematic, gözəl". Old template video: Drive id 1uOkYpG1NWEM-gl-X0ezMJrrGKGol5SRE.
-- **New template:** `ilk-defe-araz/` (template.html + render.py + per-episode config.json; see its
-  README). Black/amber cinema look, gold Cormorant Garamond italic + tracked Inter Tight,
-  Araz orange #E86A33 only as accent, beat-synced cuts, three warm bloom transitions, anamorphic
-  streak on the title drop, end card with date + big white Araz logo. Original audio untouched.
-- **First episode:** İradə İbrahimova & Döngə — «Son Qərar» (yeni versiya), 28.9 s →
-  `ilk-defe-araz/episodes/2026-11-02_donge_son-qerar/Donge_Son_Qerar_Ilk_Defe_Araz_9x16.mp4`.
-  The user gave no date this time; "2 NOYABR, 11:00–12:00" was taken from the old template video
-  (same song). Awaiting feedback on the new style.
-- Bodoni Moda, DM Serif, Gloock, Instrument Serif, Syne lack ə/Ə — don't use them.
+### 3b. «İlk dəfə "Araz"da dinlə» — song-premiere Reels (8 Nov 2026, template v3)
+- **What:** recurring promo for exclusive song premieres. Each time the user sends ONLY: the
+  recording MP3 (artist introduces themself, then the song), Grok AI videos (816×1104, 15 s) and the
+  date. Template + rules: `ilk-defe-araz/README.md`.
+- **Hard rules from the user's corrections:**
+  - Texts are exactly the original promo's: date, «11:00 – 12:00», «İLK DƏFƏ», «“ARAZ”DA», «DİNLƏ»,
+    plus the Araz logo bottom centre. "Özündən mətn yazma" — v2 invented name cards, «ARAZ FM
+    TƏQDİM EDİR», «PREMYERA» etc. and was rejected ("Təqdim edir nədi?").
+  - Length 18 s (first 18 s of the recording). Use different sections of each AI video.
+  - The style may be new and cinematic, but the text content must not change.
+- **v2 rejected** (gold Cormorant serif, elegant, 29 s, invented texts). **v3 delivered**: black/amber
+  cinema look, diagonal orange light beams (a reinterpretation of the old orange diagonal wipes),
+  Big Shoulders Display 900 + Inter Tight, left-aligned poster lockup, light-edge reveal on
+  «“ARAZ”DA». Awaiting feedback.
+- First episode: İradə İbrahimova & Döngə — «Son Qərar», date 2 Noyabr (taken from the old
+  promo, same song) → `ilk-defe-araz/episodes/2026-11-02_donge_son-qerar/`.
+- Fonts lacking ə/Ə: Bodoni Moda, DM Serif, Gloock, Instrument Serif, Syne, Manrope, Outfit, Sora.
+  Anton lacks all Azerbaijani capitals.
 
 ### 4. Other: Victory Day vertical film — "Bir xəbər. Minlərlə xatirə." (7 Nov 2026)
 - **What:** a 35-second vertical documentary for Victory Day (8 November). It was not made for a

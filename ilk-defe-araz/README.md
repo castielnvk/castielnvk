@@ -1,60 +1,53 @@
-# «İlk dəfə Araz'da» — premyera Reels şablonu (v2, premium/cinematic)
+# «İlk dəfə "Araz"da dinlə» — premyera Reels şablonu (v3, cinematic)
 
 Araz Radio 103.3 FM-in eksklüziv mahnı premyeraları üçün 9:16 Reel şablonu.
-Köhnə şablonu (narıncı diaqonal zolaqlar, «İLK DƏFƏ "ARAZ"DA DİNLƏ») əvəz edir.
 
-## İstifadəçi hər dəfə nə göndərir
+## Qəti qaydalar (istifadəçinin sözləri ilə)
 
-1. **Səs yazısı** (MP3): müğənni adını, qrupunu, mahnının adını deyir, sonra mahnı başlayır.
-2. **AI videoları**: Grok ilə şəkildən çevrilmiş videolar (adətən 3 ədəd, 816×1104, 15 s).
-3. **Tarix** (və saat, əgər fərqlidirsə; standart 11:00 — 12:00).
+- **Mətnlər yalnız orijinal promodakı kimidir, heç nə əlavə edilmir və dəyişdirilmir:**
+  `TARİX` (məs. 2 NOYABR) · `11:00 – 12:00` · `İLK DƏFƏ` · `“ARAZ”DA` · `DİNLƏ` + Araz loqosu
+  aşağıda ortada. Müğənni adı, mahnı adı, «təqdim edir», «premyera» kimi öz mətnlərini YAZMA.
+- Saat və yazılar hər dəfə eynidir; yalnız tarix dəyişir.
+- Video **18 saniyə**dir (səs yazısının ilk 18 s-i, sonda 0.5 s fade).
+- Hər AI videodan **fərqli kəsitlər** istifadə olunur, kəsimlər mahnının ritminə düşür.
+- v2 (zərif qızılı serif, ad kartları, «təqdim edir») bəyənilmədi — qaytarma.
 
-## Dizayn sistemi
+## İstifadəçi hər dəfə göndərir
 
-- Kino işığı: qara + kəhrəba, AI kadrlarının öz isti tonu saxlanılır; incə vinyet və çox zəif dən (grain).
-- Şriftlər: **Cormorant Garamond Italic** (qızılı qradiyent, adlar və mahnı adı) +
-  **Inter Tight** (geniş aralıqlı böyük hərflər). Hər ikisi ə, Ə, İ, ı, ş, ğ, ö, ü, ç dəstəkləyir.
-- Rənglər: fil sümüyü `#F4EDE3`, qızılı `#FBE7C2 → #E9B872 → #C98A43`, Araz narıncısı `#E86A33`
-  yalnız aksent (● PREMYERA, «DİNLƏ»).
-- Keçidlər: ritmə (beat) düşən sərt kəsimlər + 3 imza «işıq partlayışı» (bloom): mahnının girişi,
-  başlıq anı, son kart. Başlıq anında anamorfik işıq xətti.
-- Loqo: `logos/individual/araz-radio_white.png`, dəyişdirilmədən — yuxarı sağda kiçik, son kartda böyük.
+1. Səs yazısı (MP3) — müğənni özünü təqdim edir, sonra mahnı başlayır.
+2. Grok AI videoları (adətən 3 ədəd, 816×1104, 15 s).
+3. Tarix.
 
-## Struktur (səsdəki sözlərə sinxron)
+## Dizayn (v3)
 
-| Səhnə | Nə vaxt | Mətn |
-|---|---|---|
-| `name` | müğənni adını deyəndə | «İradə» (qızılı kursiv) + «İBRAHİMOVA» |
-| `group` | qrup adı | «VƏ BİZ» / «DÖNGƏ» / «qrupu» |
-| `song` | mahnı adı | «YENİ MAHNIMIZ» / «Son Qərar» (söz-söz) |
-| `version` | «yeni versiya, xüsusi olaraq Araz FM üçün» | 3 sətir |
-| `presents` | mahnı başlayanda | «ARAZ FM TƏQDİM EDİR» |
-| `titledrop` | növbəti güclü bit | «DÖNGƏ» / böyük «Son Qərar» + işıq xətti |
-| `firsttime` | | «İLK DƏFƏ» / «"Araz"da» / «DİNLƏ» |
-| `end` | son ~6 s | PREMYERA · TARİX · saat · ifaçı — mahnı · böyük Araz loqosu |
-
-Hər səhnə istəyə bağlıdır: config-də olmayan səhnə çəkilmir (məs. solo müğənni üçün `group` silinir).
+- Qara + kəhrəba kino işığı; köhnə şablonun narıncı diaqonal zolaqları indi **diaqonal işıq şüası**
+  kimi keçid olur (mahnının girişi və ortada), finalda isti işıq partlayışı (bloom).
+- Yazılar solda, kino afişası kimi: `İLK DƏFƏ` və `“ARAZ”DA` — **Big Shoulders Display 900**
+  (hündür, sıx); tarix/saat/`DİNLƏ` — **Inter Tight**. Narıncı `#E86A33`: `DİNLƏ` və tarixin altındakı xətt.
+- Animasiya (orijinal sıra və vaxta yaxın, ~3.8 s-dən sona qədər ekranda qalır):
+  `İLK DƏFƏ` hərf-hərf yuxarı qalxır → `“ARAZ”DA` işıq kənarı ilə açılır, ağ-isti metal rəngə
+  oturur, altından anamorfik işıq xətti keçir → `DİNLƏ` aralığı açılır → tarix və saat narıncı
+  xəttin arxasından sürüşür. Sonra hər bitdə `“ARAZ”DA` üzərindən işıq keçir.
+- Loqo: `logos/individual/araz-radio_white.png`, dəyişdirilmədən, aşağıda ortada (orijinal yer).
 
 ## Yeni epizod — addımlar
 
 1. `episodes/<tarix>_<ifaçı>_<mahnı>/source/` qovluğuna MP3 və AI videolarını qoy.
-2. Səsi transkripsiya et (faster-whisper large-v3, `language="az"`, `word_timestamps=True`)
-   və bitləri ölç (librosa `beat_track`). Mətnlər heç vaxt deyilməzdən əvvəl görünmür.
-3. Əvvəlki `config.json`-u köçür, dəyiş: mətnlər, söz vaxtları, `shots` (kadr seçimi, bitlərə
-   düşən kəsimlər), `flashes`, `end.date` / `end.time`.
-4. Önizləmə: `python3 render.py episodes/.../config.json --preview 1.9,4.5,13.5,25`
-5. Tam render: `python3 render.py episodes/.../config.json` (≈2 dəqiqə, 4 paralel Chromium).
-6. Yoxla: kontakt vərəq, səs sinxronu, ə/İ hərfləri, loqo.
+2. Bitləri ölç (librosa `beat_track`); kəsimləri bitlərə qoy. Hər klipdən fərqli hissə seç
+   (morf/ghost keçid kadrlarından qaç — kontakt vərəqlə yoxla).
+3. Əvvəlki `config.json`-u köçür, dəyiş: `lockup.date`, `shots`, `flashes`, `beams`, `lockup.sweeps`.
+   `lockup.time`, `l1`, `l2`, `l3` dəyişmir.
+4. Önizləmə: `python3 render.py episodes/.../config.json --preview 4.1,6.5,12,17.5`
+5. Tam render: `python3 render.py episodes/.../config.json` (≈1–2 dəqiqə).
+6. Yoxla: kontakt vərəq, səs sinxronu, Ə/İ hərfləri, yazı ekrandan çıxmır, loqo.
 
-Tələblər: `pip install playwright librosa faster-whisper`; Chromium `/opt/pw-browsers/chromium`
-(və ya `CHROME=` mühit dəyişəni). Səs toxunulmur — yalnız sonda 0.4 s fade və −1 dBTP limiter.
+Tələblər: `pip install playwright librosa`; Chromium `/opt/pw-browsers/chromium` (və ya `CHROME=`).
 
-`shots` sahələri: `start` (çıxış saniyəsi), `clip`, `src` (klipdə başlanğıc saniyə),
-`z` [başlanğıc, son] miqyas (1.0 = 1920 hündürlüyə doldurur; <1 olanda kənarlar qaraya əriyir),
-`cx`/`cy` fokus nöqtəsi (0–1).
+`shots`: `start` (çıxış saniyəsi), `clip`, `src` (klipdə başlanğıc), `z` [başlanğıc, son] miqyas
+(1.0 = 1920 hündürlüyə doldurur; <1 olanda kənarlar qaraya əriyir), `cx`/`cy` fokus (0–1).
 
 ## Epizodlar
 
 | Qovluq | Mahnı | Tarix | Nəticə |
 |---|---|---|---|
-| `episodes/2026-11-02_donge_son-qerar` | İradə İbrahimova & Döngə — «Son Qərar» (yeni versiya) | 2 Noyabr, 11:00–12:00 | `Donge_Son_Qerar_Ilk_Defe_Araz_9x16.mp4` (28.9 s) |
+| `episodes/2026-11-02_donge_son-qerar` | İradə İbrahimova & Döngə — «Son Qərar» | 2 Noyabr | `Donge_Son_Qerar_Ilk_Defe_Araz_9x16.mp4` (18 s, v3) |

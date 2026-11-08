@@ -1,37 +1,42 @@
 {
-  "title": "Döngə — Son Qərar (yeni versiya), ilk dəfə Araz FM-də",
+  "title": "Döngə — Son Qərar, ilk dəfə Araz FM-də",
   "fps": 24,
-  "duration": 28.92,
+  "duration": 18.0,
   "audio": "source/IRADE_DONGE-SON_QERAR.mp3",
+  "audio_fade_out": 0.5,
   "output": "Donge_Son_Qerar_Ilk_Defe_Araz_9x16.mp4",
   "clips": { "ai1": "source/ai1.mp4", "ai2": "source/ai2.mp4", "ai3": "source/ai3.mp4" },
 
   "shots": [
     { "start": 0.00,  "clip": "ai2", "src": 0.40,  "z": [1.00, 1.06], "cx": 0.50, "cy": 0.40 },
-    { "start": 2.58,  "clip": "ai1", "src": 10.40, "z": [0.94, 0.97], "cx": 0.50, "cy": 0.50 },
-    { "start": 3.94,  "clip": "ai3", "src": 0.00,  "z": [1.00, 1.05], "cx": 0.50, "cy": 0.45 },
+    { "start": 2.58,  "clip": "ai1", "src": 10.40, "z": [0.94, 0.97], "cx": 0.50, "cy": 0.48 },
+    { "start": 3.85,  "clip": "ai3", "src": 0.30,  "z": [1.00, 1.05], "cx": 0.50, "cy": 0.42 },
     { "start": 5.90,  "clip": "ai2", "src": 4.00,  "z": [1.08, 1.13], "cx": 0.45, "cy": 0.36 },
-    { "start": 8.54,  "clip": "ai1", "src": 8.60,  "z": [1.00, 1.04], "cx": 0.55, "cy": 0.45 },
-    { "start": 10.43, "clip": "ai3", "src": 2.50,  "z": [1.18, 1.24], "cx": 0.52, "cy": 0.30 },
-    { "start": 12.93, "clip": "ai1", "src": 12.00, "z": [0.95, 0.99], "cx": 0.50, "cy": 0.50 },
-    { "start": 15.44, "clip": "ai3", "src": 7.50,  "z": [1.10, 1.15], "cx": 0.50, "cy": 0.34 },
-    { "start": 17.95, "clip": "ai3", "src": 10.00, "z": [1.00, 1.07], "cx": 0.55, "cy": 0.42 },
-    { "start": 22.94, "clip": "ai2", "src": 9.00,  "z": [0.94, 0.98], "cx": 0.50, "cy": 0.47 }
+    { "start": 7.83,  "clip": "ai1", "src": 8.50,  "z": [1.00, 1.05], "cx": 0.56, "cy": 0.42 },
+    { "start": 10.43, "clip": "ai3", "src": 2.50,  "z": [1.16, 1.22], "cx": 0.52, "cy": 0.30 },
+    { "start": 12.93, "clip": "ai3", "src": 10.40, "z": [1.00, 1.07], "cx": 0.56, "cy": 0.40 },
+    { "start": 15.44, "clip": "ai1", "src": 12.00, "z": [0.95, 0.99], "cx": 0.50, "cy": 0.46 }
   ],
   "flashes": [
-    { "at": 8.54,  "peak": 0.70, "pre": 0.25, "decay": 0.24 },
-    { "at": 12.93, "peak": 0.50, "decay": 0.20 },
-    { "at": 22.94, "peak": 0.75, "pre": 0.55, "decay": 0.38 }
+    { "at": 7.83,  "peak": 0.55, "pre": 0.20, "decay": 0.25 },
+    { "at": 15.44, "peak": 0.70, "pre": 0.45, "decay": 0.30 }
+  ],
+  "beams": [
+    { "at": 7.83,  "dur": 0.9, "peak": 0.9 },
+    { "at": 12.93, "dur": 0.9, "peak": 0.75, "angle": -62 }
   ],
 
-  "header": { "label": "PREMYERA", "in": 0.15, "out": 22.94 },
-
-  "name":      { "in": 0.30, "out": 2.58, "first": "İradə", "last": "İBRAHİMOVA", "t1": 1.44, "t2": 1.84 },
-  "group":     { "in": 2.58, "out": 3.94, "kicker": "VƏ BİZ", "t0": 2.62, "name": "DÖNGƏ", "t1": 3.20, "sub": "qrupu", "t2": 3.52 },
-  "song":      { "in": 3.94, "out": 5.90, "kicker": "YENİ MAHNIMIZ", "t0": 4.24, "title": "Son Qərar", "wt": [4.74, 5.04], "sweep": 5.15 },
-  "version":   { "in": 5.90, "out": 8.95, "l1": "YENİ VERSİYA", "l2": "xüsusi olaraq", "l3": "ARAZ FM ÜÇÜN", "t": [5.92, 6.72, 7.66] },
-  "presents":  { "in": 9.30, "out": 12.60, "text": "ARAZ FM TƏQDİM EDİR" },
-  "titledrop": { "at": 12.93, "out": 17.70, "artist": "DÖNGƏ", "title": "Son Qərar", "sub": "YENİ VERSİYA" },
-  "firsttime": { "in": 18.20, "out": 22.94, "l1": "İLK DƏFƏ", "l2": "“Araz”da", "l3": "DİNLƏ", "t": [18.20, 18.85, 19.90] },
-  "end":       { "at": 22.94, "kicker": "PREMYERA", "date": "2 NOYABR", "time": "11:00 — 12:00", "credit": "DÖNGƏ — SON QƏRAR" }
+  "lockup": {
+    "date": "2 NOYABR",
+    "time": "11:00 – 12:00",
+    "l1": "İLK DƏFƏ",
+    "l2": "“ARAZ”DA",
+    "l3": "DİNLƏ",
+    "x": 84,
+    "y": { "date": 1040, "time": 1110, "bar": 1150, "l1": 1320, "l2": 1568, "l3": 1652 },
+    "bigSize": 262,
+    "t": [3.85, 4.55, 5.29, 5.90, 6.30],
+    "sweeps": [10.43, 12.93, 15.60, 16.95]
+  },
+  "logoPos": { "y": 1768, "w": 176, "in": 0.0 }
 }
