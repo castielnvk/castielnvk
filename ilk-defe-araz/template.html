@@ -52,7 +52,7 @@ const fpath = (clip, n, m) => `${CFG.frames}/${clip}${m ? '_m' : ''}/${String(Ma
 function shotAt(t) {
   const S = CFG.shots; let i = 0;
   for (let k = 0; k < S.length; k++) if (t >= S[k].start) i = k;
-  return { s: S[i], end: i + 1 < S.length ? S[i + 1].start : CFG.duration };
+  return { i, s: S[i], end: i + 1 < S.length ? S[i + 1].start : CFG.duration };
 }
 function placement(im, s, p) {
   const z = lerp(s.z[0], s.z[1], cubicIO(p));
@@ -208,14 +208,14 @@ function decor(t, style, P) {
     ctx.fillStyle = OR.bright; ctx.fillRect(X, st.l2.y + 18, w2 * ul, 10);
   } else if (style === 'frame') {
     // cinematic inset frame in brand teal + vertical accent bar beside the text
-    const ins = 26, fe = expoOut(prog(t, P.in, 1.1));
-    ctx.save(); ctx.strokeStyle = OR.light; ctx.lineWidth = 5;
+    const ins = 26, fe = expoOut(prog(t, P.in, 1.1)), bp = pulse(t);
+    ctx.save(); ctx.strokeStyle = bp > .05 ? `rgba(${lerp(15, 120, bp) | 0},${lerp(125, 225, bp) | 0},${lerp(140, 235, bp) | 0},1)` : OR.light; ctx.lineWidth = 5 + 3 * bp;
     const per = 2 * (W - 2 * ins) + 2 * (H - 2 * ins);
     ctx.setLineDash([per * fe, per]); ctx.strokeRect(ins, ins, W - 2 * ins, H - 2 * ins); ctx.restore();
     const g = ctx.createLinearGradient(0, st.date.y - 140, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(.3, 'rgba(0,0,0,0.45)'); g.addColorStop(1, 'rgba(0,0,0,0.6)');
     ctx.fillStyle = g; ctx.fillRect(0, st.date.y - 140, W, H);
     const bh = (st.l3.y - st.date.y + 70) * expoOut(prog(t, P.in + .2, .8));
-    ctx.fillStyle = OR.bright; ctx.fillRect(X - 30, st.date.y - 52, 8, bh);
+    ctx.fillStyle = OR.bright; ctx.fillRect(X - 30, st.date.y - 52, 8 + 4 * bp, bh);
   }
 }
 function wipes(t) {
@@ -367,19 +367,69 @@ function logo() {
   ctx.drawImage(LOGO, W / 2 - lw / 2, P.y - lh / 2, lw, lh); ctx.restore();
 }
 
-async function renderAt(t) {
-  const { s, end } = shotAt(t);
+/* beat pulse: 1 on a strong beat, decaying quickly (used for subtle "breathing") */
+function pulse(t) { let v = 0; for (const b of (CFG.beats || [])) { if (b > t) break; v = Math.max(v, Math.exp(-(t - b) / .16)); } return v; }
+/* brand grade: a touch of Araz teal in the shadows, skin stays natural */
+function tealGrade() {
+  const G = CFG.grade || { amount: .5 }; if (!G.amount) return;
+  ctx.save(); ctx.globalCompositeOperation = 'soft-light'; ctx.fillStyle = `rgba(9,93,106,${G.amount})`; ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = `rgba(200,232,236,${G.amount * .25})`; ctx.fillRect(0, 0, W, H);
+  ctx.restore();
+}
+const TA = mk(), TB = mk();
+async function composeShot(idx, t, target) {      // footage + behind rows + person layer, into a canvas
+  const S = CFG.shots, s = S[idx], end = idx + 1 < S.length ? S[idx + 1].start : CFG.duration;
+  const prev = ctx; ctx = target.getContext('2d');
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
-  const person = await drawShot(s, t, (t - s.start) / (end - s.start));
+  const person = await drawShot(s, t, clamp((t - s.start) / (end - s.start)));
   behind(t);
   if (person) ctx.drawImage(PBUF, 0, 0);
+  ctx = prev; return person;
+}
+async function footageLayer(t) {
+  const { i, s } = shotAt(t), tr = s.trans;
+  if (!tr || i === 0 || t >= s.start + tr.dur) { await composeShot(i, t, TA); ctx.drawImage(TA, 0, 0); return; }
+  const q = (t - s.start) / tr.dur;
+  if (tr.type === 'person') {
+    // the incoming people appear first (cut out, over the old shot), then their background follows
+    await composeShot(i - 1, t, TA); ctx.drawImage(TA, 0, 0);
+    const person = await composeShot(i, t, TB);
+    const fullA = clamp((q - .55) / .45);
+    if (person) {
+      const sc = lerp(1.06, 1, expoOut(q)), a = clamp(q * 4);
+      ctx.save(); ctx.globalAlpha = a; ctx.translate(W / 2, H / 2); ctx.scale(sc, sc); ctx.translate(-W / 2, -H / 2);
+      ctx.shadowColor = 'rgba(63,193,207,0.75)'; ctx.shadowBlur = 40 * (1 - q); ctx.drawImage(PBUF, 0, 0); ctx.restore();
+    }
+    if (fullA > 0) { ctx.save(); ctx.globalAlpha = expoOut(fullA); ctx.drawImage(TB, 0, 0); ctx.restore(); }
+  } else if (tr.type === 'whip') {
+    // directional whip pan with real motion blur, matched to the movement direction
+    await composeShot(i - 1, t, TA); await composeShot(i, t, TB);
+    const dir = tr.dir || -1, n = 8;
+    BCTX.setTransform(1, 0, 0, 1, 0, 0); BCTX.globalCompositeOperation = 'source-over'; BCTX.globalAlpha = 1; BCTX.clearRect(0, 0, W, H);
+    for (let k = 0; k < n; k++) {
+      const qq = clamp(q - k * .045), off = expoIO(qq) * W * dir;
+      BCTX.save(); BCTX.globalCompositeOperation = 'lighter'; BCTX.globalAlpha = 1 / n;
+      BCTX.drawImage(TA, off, 0); BCTX.drawImage(TB, off - W * dir, 0); BCTX.restore();
+    }
+    ctx.drawImage(BUF, 0, 0);
+  }
+}
+async function renderAt(t) {
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  await footageLayer(t);
   await split(t);
+  tealGrade();
   grade();
   glints(t);
   panel(t);
   wipes(t);
   opening(t);
+  const bp = t > A.settle + .9 ? pulse(t) : 0, L = CFG.lockup;
+  ctx.save();
+  if (bp > 0) { const sc = 1 + .014 * bp, ax = L.x, ay = L.style.l3.y; ctx.translate(ax, ay); ctx.scale(sc, sc); ctx.translate(-ax, -ay); }
   kinetic(t);
+  ctx.restore();
   logo();
   ctx.save(); ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .05;
   ctx.drawImage(GRAIN[Math.floor(t * CFG.fps) % GRAIN.length], 0, 0, W, H); ctx.restore();

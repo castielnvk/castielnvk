@@ -100,10 +100,15 @@ _(notes pending)_
 - **v2 rejected** (gold Cormorant serif, invented texts). **v3 rejected** ("çox pisdir, qarışıqdır",
   Big Shoulders font "çox cringy", "looks so poor"). The user wants a STABLE template close to the
   original, but "fully premium" motion design, and only the best (non-glitchy) parts of the AI videos.
-- **v4 delivered** (template now): Montserrat 900/800/600 white text, original layout and order,
-  orange 60° slash panel lower-left entering in three layers (white line, dark band, orange),
-  three-layer orange slash wipes with real motion blur at the opening, song drop and finale, white
-  light-slash glints on hard cuts. Awaiting feedback.
+- v4 rejected: "premium vibe vermir, motion design 0"; then "orijinaldakı box-a oxşayır" (the
+  diagonal box copied the original). **Brand colour from the user: Araz teal #095d6a** ("narıncıda
+  qalmaq məcburiyyətində deyilsən").
+- **v5 (current):** Araz teal, Montserrat, "cinema frame" lockup (user picked option 3 of glass /
+  chips / frame), depth typography behind people (BiRefNet_lite masks), member split-screen,
+  kinetic words → FLIP into lockup, rolling clock digits, person-silhouette and whip transitions,
+  beat "breathing", teal shadow grade, self-synthesised soft SFX. User asked for these extras:
+  sound design, teal grade, beat-reactive design, smarter cuts, automation (prepare.py).
+  Previewing stills first is appreciated ("25 dəqiqə çoxdur, bəlkə bəyənmədim").
 - First episode: İradə İbrahimova & Döngə — «Son Qərar», date 2 Noyabr (taken from the old
   promo, same song) → `ilk-defe-araz/episodes/2026-11-02_donge_son-qerar/`.
 - Fonts lacking ə/Ə: Bodoni Moda, DM Serif, Gloock, Instrument Serif, Syne, Manrope, Outfit, Sora.

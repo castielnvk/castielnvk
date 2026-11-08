@@ -1,4 +1,4 @@
-# «İlk dəfə "Araz"da dinlə» — premyera Reels şablonu (v4 — orijinala yaxın, premium motion)
+# «İlk dəfə "Araz"da dinlə» — premyera Reels şablonu (v5 — motion design, Araz teal)
 
 Araz Radio 103.3 FM-in eksklüziv mahnı premyeraları üçün 9:16 Reel şablonu.
 
@@ -18,23 +18,37 @@ Araz Radio 103.3 FM-in eksklüziv mahnı premyeraları üçün 9:16 Reel şablon
 2. Grok AI videoları (adətən 3 ədəd, 816×1104, 15 s).
 3. Tarix.
 
-## Dizayn (v4) — orijinal şablonun dili, premium hərəkətlə
+## Diza## Dizayn (v5) — motion design, Araz rəngi
 
-- v2 (qızılı serif) və v3 (Big Shoulders, işıq effektləri) **rədd edildi**: «qarışıq», «şriftlər cringy».
-  İstifadəçi orijinala yaxın, **stabil** şablon istəyir.
-- Şrift: **Montserrat** (900 başlıqlar, 800 tarix, 600 saat) — orijinaldakı qalın həndəsi şriftə ən yaxın.
-  Yazılar ağ, sol tərəfdə (x=72), orijinaldakı sıra ilə: tarix / saat / İLK DƏFƏ / “ARAZ”DA / DİNLƏ.
-- Narıncı 60° «slash» paneli sol aşağıda (orijinaldakı üçbucaq), 3 qatla girir: ağ incə xətt,
-  tünd narıncı kölgə zolağı, əsas narıncı (qradiyentli). Çox yavaş parallax «nəfəs».
-- Keçidlər: açılışda və 2 dəfə (mahnının girişi, final) üç qatlı narıncı slash pərdə bütün ekranı
-  keçir; kəsim ekran tam örtülü olanda olur. Hard cut-larda incə ağ işıq slash-ı. Hamısı əsl motion blur ilə.
-- Yazılar maskanın arxasından çıxır (motion blur ilə); “ARAZ”DA slash bucağı ilə girir və bitlərdə
-  üzərindən narıncı parıltı keçir.
-- AI videolarının uğursuz yerləri (ghost/morf keçidlər, əyilmiş əl/obyekt) istifadə olunmur —
-  kontakt vərəqlə yoxla, yalnız təmiz kəsitləri götür.
-- Loqo: `logos/individual/araz-radio_white.png`, dəyişdirilmədən, aşağıda ortada (orijinal yer).
+- Rədd edilənlər: v2 (qızılı serif, uydurma mətnlər), v3 (Big Shoulders, «cringy»), v4 (orijinalın
+  diaqonal qutusunun kopyası, «motion design 0»).
+- **Rəng:** Araz Radio teal **#095d6a** (+ onun açıq/tünd çalarları; parlaq aksent #3FC1CF). Narıncı yoxdur.
+- **Şrift:** Montserrat 900/800/600, ağ.
+- **Lockup:** «kino çərçivəsi» (`lockupStyle: "frame"`) — videonun ətrafında öz-özünə çəkilən teal
+  çərçivə + yazıların solunda teal xətt. Orijinalın diaqonal qutusu istifadə olunmur.
+  Alternativlər şablonda var: `glass` (şüşə kart), `chips` (pill + xətt), `slash` (köhnə).
+- **Hərəkət xoreoqrafiyası** (anchors-a bağlı, hər epizodda eyni):
+  1. açılış: üç qatlı teal slash pərdə; böyük yazı zolaqları müğənninin **arxasında** axır (dərinlik maskası);
+  2. «və biz … qrupu» anında ekran 3 diaqonal hissəyə bölünür, hər birində bir üzv (split);
+  3. kinetik sözlər bitlərlə: İLK DƏFƏ (teal blok) → “ARAZ”DA (echo) → DİNLƏ (parlaq teal);
+  4. sözlər uçub lockup-a düzülür (FLIP), tarix hərf-hərf, saat rəqəmləri sayğac kimi fırlanır;
+  5. mahnının girişində teal pərdə + zərbə; insanların arxasında nəhəng yazı zolaqları;
+  6. keçidlər: **siluet keçidi** (yeni kadrın insanları əvvəl görünür), **whip** (istiqamətli, motion blur);
+  7. finalda yenə pərdə, qrup pozası, yazı zolağı başların üstündə; “ARAZ”DA üzərində parıltı.
+- **Ritm:** güclü bitlərdə çərçivə və yazılar 1–2% «nəfəs alır» (`beats`).
+- **Qreyd:** kölgələrdə yüngül teal (`grade.amount`), dəri təbii qalır.
+- **Səs dizaynı:** öz sintez etdiyim whoosh / sub-zərbə / riser (heç bir sample yox), low-pass,
+  musiqidən ~17 dB aşağı (`sfx`, `sfx_db`). Mahnının özü toxunulmur.
+- **Dərinlik maskaları:** BiRefNet_lite (MIT) — `segment.py`; yalnız arxasında yazı olan kadrlar üçün.
 
-## Yeni epizod — addımlar
+## Avtomatlaşdırma (`prepare.py`)
+
+`python3 prepare.py episodes/<qovluq> --date "9 NOYABR"` — bitlər və mahnı girişini tapır, bütün
+anchor-ları bitə bağlayır, AI kadrlarını skan edir (morf/ghost/bulanıq kadrları işarələyir), hər slot
+üçün təmiz və fərqli kəsit seçir, split üçün 3 sifəti tapır, `config.json` + `auto_shots.jpg`
+(kontakt vərəq) yazır və maskaları hesablayır. Kontakt vərəqə bax → `python3 render.py …`.
+
+ epizod — addımlar
 
 1. `episodes/<tarix>_<ifaçı>_<mahnı>/source/` qovluğuna MP3 və AI videolarını qoy.
 2. Bitləri ölç (librosa `beat_track`); kəsimləri bitlərə qoy. Hər klipdən fərqli hissə seç
