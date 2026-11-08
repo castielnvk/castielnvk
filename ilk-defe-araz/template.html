@@ -26,7 +26,8 @@ const C = document.getElementById('c'); let ctx = C.getContext('2d');
 const BUF = mk(), BCTX = BUF.getContext('2d');      // motion-blur accumulation
 const PBUF = mk(), PCTX = PBUF.getContext('2d');    // person (masked footage) layer
 function mk() { const c = document.createElement('canvas'); c.width = W; c.height = H; return c; }
-const OR = { main: '#E86A33', light: '#F38449', deep: '#B9481C', dark: '#7A2A0E' };
+// Araz Radio brand teal #095d6a (+ tints/shades of it)
+const OR = { main: '#095D6A', light: '#0F7D8C', deep: '#064852', dark: '#03292F', bright: '#3FC1CF' };
 const K = 0.58;                                     // slash slope (≈60°)
 let CFG = null, A = null, LOGO = null;
 const IMG = new Map();
@@ -129,7 +130,7 @@ function row(t, r) {
   ctx.font = f; ctx.letterSpacing = tr + 'px'; ctx.textBaseline = 'middle';
   for (let x = -unit * 2 + off; x < W + unit; x += unit) {
     if (r.style === 'outline') { ctx.lineWidth = r.lw ?? 3; ctx.strokeStyle = r.color || '#fff'; ctx.strokeText(r.text, x, r.y); }
-    else { ctx.fillStyle = r.color === 'orange' ? OR.main : (r.color || '#fff'); ctx.fillText(r.text, x, r.y); }
+    else { ctx.fillStyle = r.color === 'orange' ? OR.light : (r.color || '#fff'); ctx.fillText(r.text, x, r.y); }
   }
   ctx.restore();
 }
@@ -188,7 +189,7 @@ function wipes(t) {
       }, 6, 1 / 40);
     }
     const pB = lerp(-700, 1760, quintIO((t - c + .02) / d));
-    if (t > c - .02 && t < c + d) { band(pB + 6, pB); ctx.fillStyle = 'rgba(255,240,226,0.85)'; ctx.fill(); }
+    if (t > c - .02 && t < c + d) { band(pB + 6, pB); ctx.fillStyle = 'rgba(226,250,252,0.85)'; ctx.fill(); }
   }
 }
 function opening(t) {
@@ -206,7 +207,7 @@ function glints(t) {
     const p = (t - g) / .55; if (p < 0 || p > 1) continue;
     const x = lerp(-800, 1900, cubicIO(p));
     ctx.save(); ctx.globalCompositeOperation = 'screen';
-    for (const [wd, a] of [[140, .10], [36, .28], [6, .85]]) { band(x + wd / 2, x - wd / 2); ctx.fillStyle = `rgba(255,214,180,${a})`; ctx.fill(); }
+    for (const [wd, a] of [[140, .10], [36, .28], [6, .85]]) { band(x + wd / 2, x - wd / 2); ctx.fillStyle = `rgba(190,240,246,${a})`; ctx.fill(); }
     ctx.restore();
   }
 }
@@ -267,7 +268,7 @@ function shine(t, str, x, y, size) {
     const g = L.getContext('2d'); g.font = f; g.fillStyle = '#fff'; g.fillText(str, 10, size * 1.05);
     g.globalCompositeOperation = 'source-in';
     const c = lerp(-200, tw + 200, cubicIO(sp)), gr = g.createLinearGradient(c - 90, 0, c + 90, 0);
-    gr.addColorStop(0, 'rgba(255,190,140,0)'); gr.addColorStop(.5, 'rgba(255,160,100,0.95)'); gr.addColorStop(1, 'rgba(255,190,140,0)');
+    gr.addColorStop(0, 'rgba(120,220,232,0)'); gr.addColorStop(.5, 'rgba(110,215,228,0.95)'); gr.addColorStop(1, 'rgba(120,220,232,0)');
     g.fillStyle = gr; g.fillRect(0, 0, L.width, L.height);
     ctx.drawImage(L, x - 10, y - size * 1.05);
   }
@@ -283,10 +284,10 @@ function kinetic(t) {
     const size = lerp(lerp(s2, s2 * .84, up), st.l2.size, f), y = lerp(lerp(cy, cy - s3 * .95, up), st.l2.y, f);
     return { size, y, x: lerp(cx - textW(L.l2, F(900, size)) / 2, X, f) }; };
   const st3 = tt => { const f = expoIO(prog(tt, s, .7)), size = lerp(s3, st.l3.size, f);
-    return { size, y: lerp(cy + s3 * .3, st.l3.y, f), x: lerp(cx - textW(L.l3, F(900, size)) / 2, X, f), col: f < .55 ? OR.main : '#fff' }; };
+    return { size, y: lerp(cy + s3 * .3, st.l3.y, f), x: lerp(cx - textW(L.l3, F(900, size)) / 2, X, f), col: f < .55 ? OR.bright : '#fff' }; };
   // ---- İLK DƏFƏ in the centre: orange block + rising letters, pushed out upward at T2
-  if (t < T2 + .4) {
-    const w1 = textW(L.l1, F(900, s1)), ex = expoIn(prog(t, T2 - .05, .35));
+  if (t < T2 + .1) {
+    const w1 = textW(L.l1, F(900, s1)), ex = expoIn(prog(t, T2 - .22, .3));
     ctx.save(); ctx.beginPath(); ctx.rect(0, cy - s1 * 1.05, W, s1 * 1.32); ctx.clip();
     ctx.translate(0, -ex * s1 * 1.3);
     const hb = expoOut(prog(t, k, .4));
@@ -297,18 +298,18 @@ function kinetic(t) {
   // ---- “ARAZ”DA: rises in with echo at T2, lifts at T3, flies into the lockup at settle
   if (t >= T2) {
     const S = st2(t);
-    if (t < T3) echo(L.l2, S.x, S.y, S.size, t, T2);
-    const pin = expoOut(prog(t, T2, .4));
+    if (t < T3) echo(L.l2, S.x, S.y, S.size, t, T2 + .08);
+    const pin = expoOut(prog(t, T2 + .08, .4));
     const flying = t > s && t < s + .7;
-    if (flying) blurred(t, tt => { const q = st2(tt); drawText(L.l2, q.x, q.y, q.size); }, 5, 1 / 45);
+    if (flying) { const q = st2(t); drawText(L.l2, q.x, q.y, q.size); }
     else { ctx.save(); ctx.beginPath(); ctx.rect(-50, S.y - S.size * 1.05, W + 100, S.size * 1.32); ctx.clip(); drawText(L.l2, S.x, S.y + (1 - pin) * S.size * 1.1, S.size); ctx.restore(); }
     shine(t, L.l2, S.x, S.y, S.size);
   }
   // ---- DİNLƏ: orange letters under ARAZ at T3, flies into the lockup and turns white
   if (t >= T3) {
     const S = st3(t);
-    if (t < s) letters(L.l3, S.x, S.y, S.size, t, T3, { color: OR.main, stagger: .04 });
-    else if (t < s + .7) blurred(t, tt => { const q = st3(tt); drawText(L.l3, q.x, q.y, q.size, { color: q.col }); }, 5, 1 / 45);
+    if (t < s) letters(L.l3, S.x, S.y, S.size, t, T3, { color: OR.bright, stagger: .04 });
+    else if (t < s + .7) drawText(L.l3, S.x, S.y, S.size, { color: S.col });
     else drawText(L.l3, S.x, S.y, S.size);
   }
   // ---- lines that join in the lockup: İLK DƏFƏ, date, rolling time
