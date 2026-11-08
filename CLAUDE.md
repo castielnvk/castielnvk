@@ -25,8 +25,12 @@ Review the episode, identify the programme and adapt editorial choices to it.
   Make insights compelling and understandable.
 - **"Qəbul Vaxtı"**: social issues and conversations with guests. Prioritise human interest, clarity,
   emotional relevance and respectful presentation. Adapt the energy to the actual topic.
-- **"Kəşfet"**: a logo has been supplied (a green and gold badge), but no editorial brief yet.
-  Infer the tone from the episode.
+- **"Kəşf Et"** (green/gold badge logo): celebrity-magazine interviews such as
+  "5 təəccüblü sual, 5 cavab". Use paparazzi energy: flash and shutter transitions, press-photo
+  freezes, punchy headlines in the guest's exact words. See MEMORY.md.
+
+**Always read `MEMORY.md` first.** It holds earlier projects, the user's exact corrections, the
+approved styles and technical lessons.
 - For other programmes, infer the treatment from content and branding. Never apply the morning
   show's comedy treatment automatically to serious conversations.
 
