@@ -15,7 +15,10 @@ Araz Radio 103.3 FM-in eksklüziv mahnı premyeraları üçün 9:16 Reel şablon
 ## İstifadəçi hər dəfə göndərir
 
 1. Səs yazısı (MP3) — müğənni özünü təqdim edir, sonra mahnı başlayır.
-2. Grok AI videoları (adətən 3 ədəd, 816×1## Dizayn (v4) — orijinal şablonun dili, premium hərəkətlə
+2. Grok AI videoları (adətən 3 ədəd, 816×1104, 15 s).
+3. Tarix.
+
+## Dizayn (v4) — orijinal şablonun dili, premium hərəkətlə
 
 - v2 (qızılı serif) və v3 (Big Shoulders, işıq effektləri) **rədd edildi**: «qarışıq», «şriftlər cringy».
   İstifadəçi orijinala yaxın, **stabil** şablon istəyir.
@@ -29,15 +32,14 @@ Araz Radio 103.3 FM-in eksklüziv mahnı premyeraları üçün 9:16 Reel şablon
   üzərindən narıncı parıltı keçir.
 - AI videolarının uğursuz yerləri (ghost/morf keçidlər, əyilmiş əl/obyekt) istifadə olunmur —
   kontakt vərəqlə yoxla, yalnız təmiz kəsitləri götür.
-
-rtada (orijinal yer).
+- Loqo: `logos/individual/araz-radio_white.png`, dəyişdirilmədən, aşağıda ortada (orijinal yer).
 
 ## Yeni epizod — addımlar
 
 1. `episodes/<tarix>_<ifaçı>_<mahnı>/source/` qovluğuna MP3 və AI videolarını qoy.
 2. Bitləri ölç (librosa `beat_track`); kəsimləri bitlərə qoy. Hər klipdən fərqli hissə seç
    (morf/ghost keçid kadrlarından qaç — kontakt vərəqlə yoxla).
-3. Əvvəlki `config.json`-u köçür, dəyiş: `lockup.date`, `shots`, `flashes`, `beams`, `lockup.style.l2.shine`, `glints`.
+3. Əvvəlki `config.json`-u köçür, dəyiş: `lockup.date`, `shots`, `wipes`, `lockup.style.l2.shine`, `glints`.
    `lockup.time`, `l1`, `l2`, `l3` dəyişmir.
 4. Önizləmə: `python3 render.py episodes/.../config.json --preview 4.1,6.5,12,17.5`
 5. Tam render: `python3 render.py episodes/.../config.json` (≈1–2 dəqiqə).
