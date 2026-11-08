@@ -29,6 +29,9 @@ Review the episode, identify the programme and adapt editorial choices to it.
   "5 təəccüblü sual, 5 cavab". Use paparazzi energy: flash and shutter transitions, press-photo
   freezes, punchy headlines in the guest's exact words. See MEMORY.md.
 
+- **«İlk dəfə Araz'da» song premieres** (recording MP3 + Grok AI videos + a date): use the
+  template in `ilk-defe-araz/` (read its README). The user only sends the date and the files.
+
 **Always read `MEMORY.md` first.** It holds earlier projects, the user's exact corrections, the
 approved styles and technical lessons.
 - For other programmes, infer the treatment from content and branding. Never apply the morning

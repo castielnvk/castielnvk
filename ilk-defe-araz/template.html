@@ -1,0 +1,342 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Ilk Defe Araz</title>
+<style>
+/* Each family is split into latin + latin-ext files; the browser picks per glyph (ə, İ, ş, ğ ...). */
+@font-face{font-family:Serif;font-style:italic;font-weight:400;src:url(fonts/cormorant-garamond-latin-400-italic.woff2)}
+@font-face{font-family:Serif;font-style:italic;font-weight:400;src:url(fonts/cormorant-garamond-latin-ext-400-italic.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Serif;font-style:italic;font-weight:500;src:url(fonts/cormorant-garamond-latin-500-italic.woff2)}
+@font-face{font-family:Serif;font-style:italic;font-weight:500;src:url(fonts/cormorant-garamond-latin-ext-500-italic.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Serif;font-style:italic;font-weight:600;src:url(fonts/cormorant-garamond-latin-600-italic.woff2)}
+@font-face{font-family:Serif;font-style:italic;font-weight:600;src:url(fonts/cormorant-garamond-latin-ext-600-italic.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Sans;font-weight:300;src:url(fonts/inter-tight-latin-300-normal.woff2)}
+@font-face{font-family:Sans;font-weight:300;src:url(fonts/inter-tight-latin-ext-300-normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Sans;font-weight:400;src:url(fonts/inter-tight-latin-400-normal.woff2)}
+@font-face{font-family:Sans;font-weight:400;src:url(fonts/inter-tight-latin-ext-400-normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Sans;font-weight:500;src:url(fonts/inter-tight-latin-500-normal.woff2)}
+@font-face{font-family:Sans;font-weight:500;src:url(fonts/inter-tight-latin-ext-500-normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Sans;font-weight:600;src:url(fonts/inter-tight-latin-600-normal.woff2)}
+@font-face{font-family:Sans;font-weight:600;src:url(fonts/inter-tight-latin-ext-600-normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+html,body{margin:0;background:#000}
+canvas{display:block}
+</style></head>
+<body><canvas id="c" width="1080" height="1920"></canvas>
+<script>
+"use strict";
+/* ============================================================
+   "İLK DƏFƏ ARAZ'DA" — premium cinematic premiere template
+   All episode-specific content lives in config.json.
+   ============================================================ */
+const W = 1080, H = 1920;
+const C = document.getElementById('c');
+const ctx = C.getContext('2d');
+const COL = {
+  ivory: '#F4EDE3', ivoryDim: 'rgba(244,237,227,0.72)',
+  orange: '#E86A33',             // Araz promo accent (sampled from the earlier template)
+  gold: ['#FBE7C2', '#E9B872', '#C98A43', '#F2D3A0'],
+};
+let CFG = null, LOGO = null;
+const IMG = new Map();
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, p) => a + (b - a) * p;
+const easeOut = p => 1 - Math.pow(1 - clamp(p), 3);
+const easeIO = p => { p = clamp(p); return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; };
+const expoOut = p => p >= 1 ? 1 : 1 - Math.pow(2, -10 * clamp(p));
+const prog = (t, a, d) => clamp((t - a) / d);
+/* in/out envelope: fades in over fi after a, out over fo before b */
+const env = (t, a, b, fi = .35, fo = .3) => (b === undefined) ? clamp((t - a) / fi) : Math.min(clamp((t - a) / fi), clamp((b - t) / fo));
+
+function loadImg(src) {
+  if (IMG.has(src)) return IMG.get(src);
+  const p = new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
+  IMG.set(src, p); return p;
+}
+
+/* ---------------- footage ---------------- */
+function shotAt(t) {
+  const S = CFG.shots; let s = S[0];
+  for (const x of S) if (t >= x.start) s = x;
+  const i = S.indexOf(s); const end = (i + 1 < S.length) ? S[i + 1].start : CFG.duration;
+  return { s, end };
+}
+function frameSrc(s, t) {
+  const st = s.src + (t - s.start) * (s.speed || 1);
+  const n = Math.max(1, Math.round(st * CFG.fps) + 1);
+  return `${CFG.frames}/${s.clip}/${String(n).padStart(4, '0')}.jpg`;
+}
+async function drawFootage(t) {
+  const { s, end } = shotAt(t);
+  const im = await loadImg(frameSrc(s, t));
+  const p = easeIO((t - s.start) / (end - s.start));
+  const z = lerp(s.z[0], s.z[1], p);
+  const w = im.width * z, h = im.height * z;
+  const cx = s.cx ?? .5, cy = s.cy ?? .5;
+  let x = W / 2 - cx * w, y = H / 2 - cy * h;
+  if (w >= W) x = clamp(x, W - w, 0); else x = (W - w) / 2;
+  if (h >= H) y = clamp(y, H - h, 0); else y = (H - h) / 2;
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  ctx.imageSmoothingQuality = 'high';
+  ctx.filter = s.filter || 'contrast(1.05) saturate(0.96) brightness(0.98)';
+  ctx.drawImage(im, x, y, w, h);
+  ctx.filter = 'none';
+  // feather any exposed frame edge into black (for zoom < 1 framings)
+  if (h < H) {
+    const f = 140;
+    let g = ctx.createLinearGradient(0, y, 0, y + f); g.addColorStop(0, '#000'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, y - 2, W, f + 2);
+    g = ctx.createLinearGradient(0, y + h - f, 0, y + h); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, '#000');
+    ctx.fillStyle = g; ctx.fillRect(0, y + h - f, W, f + 2);
+  }
+}
+
+/* ---------------- atmosphere ---------------- */
+let GRAIN = [];
+function makeGrain() {
+  for (let k = 0; k < 6; k++) {
+    const c = document.createElement('canvas'); c.width = 540; c.height = 960;
+    const g = c.getContext('2d'); const d = g.createImageData(540, 960);
+    for (let i = 0; i < d.data.length; i += 4) { const v = 128 + (Math.random() - .5) * 90; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255; }
+    g.putImageData(d, 0, 0); GRAIN.push(c);
+  }
+}
+function grade(t) {
+  // cinematic vignette
+  let g = ctx.createRadialGradient(W / 2, H * .44, H * .22, W / 2, H * .5, H * .78);
+  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.55)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  // top scrim for the logo row
+  g = ctx.createLinearGradient(0, 0, 0, 330); g.addColorStop(0, 'rgba(0,0,0,0.55)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, 330);
+  // bottom scrim for typography (deeper on the end card)
+  const e = CFG.end ? easeIO(prog(t, CFG.end.at, 1.2)) : 0;
+  g = ctx.createLinearGradient(0, lerp(1080, 820, e), 0, H);
+  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(.45, `rgba(0,0,0,${lerp(.5, .72, e)})`); g.addColorStop(1, `rgba(0,0,0,${lerp(.88, .94, e)})`);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+}
+function grain(t) {
+  ctx.save(); ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .07;
+  ctx.drawImage(GRAIN[Math.floor(t * CFG.fps) % GRAIN.length], 0, 0, W, H); ctx.restore();
+}
+/* warm exposure bloom used as the signature transition */
+function bloom(t) {
+  for (const f of (CFG.flashes || [])) {
+    const at = f.at ?? f, pk = f.peak ?? .62, pre = f.pre ?? 0;
+    let a = 0;
+    if (pre && t < at && t > at - pre) a = pk * Math.pow((t - (at - pre)) / pre, 2.2);
+    else if (t >= at) a = pk * Math.exp(-(t - at) / (f.decay ?? .22));
+    if (a < .004) continue;
+    ctx.save(); ctx.globalCompositeOperation = 'screen';
+    const g = ctx.createRadialGradient(W * .5, H * .42, 0, W * .5, H * .42, H * .75);
+    g.addColorStop(0, `rgba(255,226,180,${a})`); g.addColorStop(.5, `rgba(240,160,90,${a * .75})`); g.addColorStop(1, `rgba(120,50,20,${a * .4})`);
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore();
+  }
+}
+/* anamorphic light streak */
+function streak(t, at, y, dur = 1.1) {
+  const p = (t - at) / dur; if (p < 0 || p > 1) return;
+  const a = Math.sin(Math.PI * Math.min(1, p * 1.6)) * (1 - p) * 1.4;
+  const half = W * (.15 + .85 * expoOut(p * 1.4));
+  ctx.save(); ctx.globalCompositeOperation = 'screen';
+  for (const [th, al] of [[60, .18], [14, .45], [3, 1]]) {
+    const g = ctx.createLinearGradient(W / 2 - half, 0, W / 2 + half, 0);
+    g.addColorStop(0, 'rgba(255,170,90,0)'); g.addColorStop(.5, `rgba(255,232,200,${a * al})`); g.addColorStop(1, 'rgba(255,170,90,0)');
+    ctx.fillStyle = g; ctx.fillRect(W / 2 - half, y - th / 2, half * 2, th);
+  }
+  ctx.restore();
+}
+
+/* ---------------- typography ---------------- */
+function font(kind, size, weight) {
+  return kind === 'serif' ? `italic ${weight || 500} ${size}px Serif` : `${weight || 500} ${size}px Sans`;
+}
+function measure(str, f, tr) { ctx.save(); ctx.font = f; ctx.letterSpacing = tr + 'px'; const w = ctx.measureText(str).width - tr; ctx.restore(); return w; }
+function fit(str, kind, size, weight, tr, maxW) {
+  let s = size; while (s > 10 && measure(str, font(kind, s, weight), tr * s / size) > maxW) s -= 2; return s;
+}
+function goldFill(y, size) {
+  const g = ctx.createLinearGradient(0, y - size * .8, 0, y + size * .15);
+  g.addColorStop(0, COL.gold[0]); g.addColorStop(.45, COL.gold[1]); g.addColorStop(.8, COL.gold[2]); g.addColorStop(1, COL.gold[3]);
+  return g;
+}
+/*
+ * Draw one line. o: {kind, size, weight, tr(tracking px), color:'ivory'|'gold'|'orange'|css,
+ *   a(alpha), rise(0..1 mask reveal), track(0..1 tracking-in), sweep(-1..2 light sweep pos), glow}
+ */
+function line(str, x, y, o) {
+  const a = o.a ?? 1; if (a <= .003) return;
+  const kind = o.kind || 'sans', weight = o.weight;
+  let size = o.size; if (o.maxW) size = fit(str, kind, size, weight, o.tr || 0, o.maxW);
+  const trk = o.tr ? o.tr * size / o.size : 0;
+  const tr = trk + (o.track !== undefined ? (1 - easeOut(o.track)) * Math.max(size * .5, 18) : 0);
+  const f = font(kind, size, weight);
+  const w = measure(str, f, tr);
+  // render into an offscreen layer so sweep/mask stay clean
+  const pad = Math.ceil(size * .6);
+  const lw = Math.ceil(w + pad * 2 + tr), lh = Math.ceil(size * 1.9);
+  const L = document.createElement('canvas'); L.width = lw; L.height = lh; const g = L.getContext('2d');
+  g.font = f; g.letterSpacing = tr + 'px'; g.textBaseline = 'alphabetic';
+  const by = Math.round(size * 1.25);
+  const col = o.color || 'ivory';
+  if (col === 'gold') { const gr = g.createLinearGradient(0, by - size * .8, 0, by + size * .15); gr.addColorStop(0, COL.gold[0]); gr.addColorStop(.45, COL.gold[1]); gr.addColorStop(.8, COL.gold[2]); gr.addColorStop(1, COL.gold[3]); g.fillStyle = gr; }
+  else g.fillStyle = col === 'ivory' ? COL.ivory : col === 'orange' ? COL.orange : col;
+  g.fillText(str, pad, by);
+  if (o.sweep !== undefined && o.sweep > -0.3 && o.sweep < 1.3) {
+    g.globalCompositeOperation = 'source-atop';
+    const sx = pad + o.sweep * w, bw = Math.max(80, size * 1.2);
+    const sg = g.createLinearGradient(sx - bw, 0, sx + bw, 0);
+    sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(.5, 'rgba(255,250,236,0.95)'); sg.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = sg; g.fillRect(0, 0, lw, lh);
+  }
+  let dx = o.align === 'left' ? x - pad : o.align === 'right' ? x - w - pad : x - w / 2 - pad;
+  let dy = y - by;
+  ctx.save(); ctx.globalAlpha = a;
+  if (o.rise !== undefined) {               // text rises from behind a baseline mask
+    const r = easeOut(o.rise);
+    ctx.beginPath(); ctx.rect(dx - 10, y - size * 1.25, lw + 20, size * 1.25 + size * .32); ctx.clip();
+    dy += (1 - r) * size * 1.05; ctx.globalAlpha = a * clamp(o.rise * 3);
+  }
+  ctx.shadowColor = 'rgba(0,0,0,0.55)'; ctx.shadowBlur = o.shadow ?? 24; ctx.shadowOffsetY = 2;
+  ctx.drawImage(L, dx, dy);
+  if (o.glow) { ctx.shadowColor = 'rgba(255,190,120,0.55)'; ctx.shadowBlur = o.glow; ctx.shadowOffsetY = 0; ctx.globalAlpha = a * .5; ctx.drawImage(L, dx, dy); }
+  ctx.restore();
+  return { w, size };
+}
+function hair(cx, y, w, a, color) {
+  if (a <= 0 || w <= 0) return;
+  ctx.save(); ctx.globalAlpha = a;
+  const g = ctx.createLinearGradient(cx - w / 2, 0, cx + w / 2, 0);
+  const c = color || '232,190,130';
+  g.addColorStop(0, `rgba(${c},0)`); g.addColorStop(.5, `rgba(${c},1)`); g.addColorStop(1, `rgba(${c},0)`);
+  ctx.fillStyle = g; ctx.fillRect(cx - w / 2, y - 1, w, 2); ctx.restore();
+}
+
+/* ---------------- persistent header ---------------- */
+function header(t) {
+  const h = CFG.header; if (!h) return;
+  const a = env(t, h.in ?? 0.15, h.out ?? CFG.duration, .6, .4);
+  if (a <= 0) return;
+  // left: ● PREMYERA (gently pulsing dot)
+  const pulse = .55 + .45 * (0.5 + 0.5 * Math.cos(t * Math.PI * 2 / 1.25));
+  ctx.save(); ctx.globalAlpha = a * pulse; ctx.fillStyle = COL.orange;
+  ctx.beginPath(); ctx.arc(84, 140, 7, 0, Math.PI * 2); ctx.fill();
+  ctx.shadowColor = COL.orange; ctx.shadowBlur = 16; ctx.fill(); ctx.restore();
+  line(h.label, 104, 149, { size: 26, weight: 600, tr: 7, align: 'left', a: a * .95, shadow: 10 });
+  // right: official Araz Radio logo (white PNG, unmodified, scaled proportionally)
+  const lw = 196, lh = lw * LOGO.height / LOGO.width;
+  ctx.save(); ctx.globalAlpha = a; ctx.shadowColor = 'rgba(0,0,0,0.45)'; ctx.shadowBlur = 14;
+  ctx.drawImage(LOGO, W - 72 - lw, 140 - lh / 2, lw, lh); ctx.restore();
+  // small pinned song title under the header
+  const p = h.pin;
+  if (p) {
+    const pa = env(t, p.in, p.out, .5, .4);
+    if (pa > 0) {
+      hair(W / 2, 262, 64 * pa, pa * .8);
+      line(p.text, W / 2, 330, { kind: 'serif', size: 64, weight: 500, color: 'gold', a: pa, shadow: 18 });
+    }
+  }
+}
+
+/* ---------------- scenes ---------------- */
+const SCENES = {
+  // singer name: "İradə" (serif) over "İBRAHİMOVA" (tracked caps)
+  name(t, c) {
+    const a = env(t, c.in, c.out, .2, .14); if (a <= 0) return;
+    hair(W / 2, 1300, 180 * easeOut(prog(t, c.in, .9)), a * .9);
+    line(c.first, W / 2, 1460, { kind: 'serif', size: 168, weight: 500, color: 'gold', rise: prog(t, c.t1, .55), a, glow: 26, maxW: 940 });
+    line(c.last, W / 2, 1550, { size: 46, weight: 500, tr: 16, track: prog(t, c.t2, .7), a: a * clamp((t - c.t2) / .25), maxW: 940 });
+  },
+  // band: "DÖNGƏ" big tracked caps + "qrupu"
+  group(t, c) {
+    const a = env(t, c.in, c.out, .12, .12); if (a <= 0) return;
+    line(c.kicker, W / 2, 1300, { size: 30, weight: 500, tr: 12, a: a * clamp((t - c.t0) / .3) * .85, color: COL.ivoryDim });
+    line(c.name, W / 2, 1490, { size: 178, weight: 300, tr: 34, track: prog(t, c.t1, .8), a: a * clamp((t - c.t1) / .3), maxW: 960, glow: 30 });
+    line(c.sub, W / 2, 1590, { kind: 'serif', size: 76, weight: 500, color: 'gold', rise: prog(t, c.t2, .5), a });
+  },
+  // song: "yeni mahnımız" + word-by-word title
+  song(t, c) {
+    const a = env(t, c.in, c.out, .12, .18); if (a <= 0) return;
+    line(c.kicker, W / 2, 1290, { size: 32, weight: 500, tr: 14, a: a * clamp((t - c.t0) / .3), color: COL.ivoryDim });
+    const words = c.title.split(' ');
+    const size = fit(c.title, 'serif', 214, 500, 0, 960);
+    const f = font('serif', size, 500), sp = measure(' ', f, 0);
+    const ws = words.map(w => measure(w, f, 0)); const tot = ws.reduce((s, v) => s + v, 0) + sp * (words.length - 1);
+    const x0 = W / 2 - tot / 2; let x = x0;
+    const sx = x0 - 150 + (tot + 300) * clamp((t - c.sweep) / 1.0, -1, 2);   // one light sweep across the whole title
+    words.forEach((w, i) => {
+      line(w, x + ws[i] / 2, 1500, { kind: 'serif', size, weight: 500, color: 'gold', rise: prog(t, c.wt[i], .5), a, glow: 34, sweep: (sx - x) / ws[i] });
+      x += ws[i] + sp;
+    });
+    hair(W / 2, 1572, 260 * easeOut(prog(t, c.wt[c.wt.length - 1], .8)), a * .9);
+  },
+  // "YENİ VERSİYA / xüsusi olaraq / ARAZ FM ÜÇÜN"
+  version(t, c) {
+    const a = env(t, c.in, c.out, .12, .3); if (a <= 0) return;
+    line(c.l1, W / 2, 1330, { size: 50, weight: 500, tr: 20, track: prog(t, c.t[0], .7), a: a * clamp((t - c.t[0]) / .25) });
+    hair(W / 2, 1378, 120 * easeOut(prog(t, c.t[0] + .2, .8)), a * .8);
+    line(c.l2, W / 2, 1478, { kind: 'serif', size: 96, weight: 500, color: 'gold', rise: prog(t, c.t[1], .5), a, glow: 22 });
+    line(c.l3, W / 2, 1586, { size: 74, weight: 600, tr: 10, track: prog(t, c.t[2], .6), a: a * clamp((t - c.t[2]) / .2), maxW: 960 });
+  },
+  // trailer credit: "ARAZ FM TƏQDİM EDİR"
+  presents(t, c) {
+    const a = env(t, c.in, c.out, .7, .6); if (a <= 0) return;
+    const r = line(c.text, W / 2, 1520, { size: 34, weight: 500, tr: 18, a, track: prog(t, c.in, 1.6) });
+    hair(W / 2, 1560, 90 * a, a * .7);
+  },
+  // title drop with anamorphic streak
+  titledrop(t, c) {
+    streak(t, c.at - .05, 1446, 1.3);
+    const a = env(t, c.at, c.out, .08, .35); if (a <= 0) return;
+    line(c.artist, W / 2, 1300, { size: 40, weight: 500, tr: 26, track: prog(t, c.at + .15, 1.1), a: a * clamp((t - c.at - .15) / .4) });
+    line(c.title, W / 2, 1500, { kind: 'serif', size: 230, weight: 500, color: 'gold', a: a * clamp((t - c.at) / .25), glow: 40, maxW: 960, sweep: (t - c.at - .5) / 1.3 * 1.6 - .3 });
+    hair(W / 2, 1566, 300 * easeOut(prog(t, c.at + .3, 1)), a * .8);
+    if (c.sub) line(c.sub, W / 2, 1626, { size: 28, weight: 500, tr: 16, a: a * clamp((t - c.at - .9) / .5) * .9, color: COL.ivoryDim });
+  },
+  // "İLK DƏFƏ / “Araz”da / DİNLƏ"
+  firsttime(t, c) {
+    const a = env(t, c.in, c.out, .12, .25); if (a <= 0) return;
+    line(c.l1, W / 2, 1330, { size: 50, weight: 500, tr: 22, track: prog(t, c.t[0], .9), a: a * clamp((t - c.t[0]) / .3) });
+    line(c.l2, W / 2, 1530, { kind: 'serif', size: 210, weight: 500, color: 'gold', rise: prog(t, c.t[1], .6), a, glow: 36, maxW: 960, sweep: (t - c.t[1] - .5) / 1.3 * 1.6 - .3 });
+    line(c.l3, W / 2, 1632, { size: 44, weight: 600, tr: 26, color: 'orange', track: prog(t, c.t[2], .8), a: a * clamp((t - c.t[2]) / .3) });
+  },
+  // end card: premiere date + big logo
+  end(t, c) {
+    const a = env(t, c.at, undefined, .3); if (a <= 0) return;
+    const T = k => c.at + k;
+    line(c.kicker, W / 2, 1010, { size: 30, weight: 600, tr: 18, color: 'orange', a: clamp((t - T(.2)) / .4), track: prog(t, T(.2), 1) });
+    line(c.date, W / 2, 1160, { size: 132, weight: 600, tr: 6, a: clamp((t - T(.35)) / .35), track: prog(t, T(.35), 1), maxW: 960, glow: 30 });
+    line(c.time, W / 2, 1250, { kind: 'serif', size: 76, weight: 500, color: 'gold', rise: prog(t, T(.8), .6), a: 1 });
+    hair(W / 2, 1302, 360 * easeOut(prog(t, T(1.1), 1)), .85);
+    line(c.credit, W / 2, 1372, { size: 30, weight: 500, tr: 12, a: clamp((t - T(1.3)) / .5) * .9, color: COL.ivoryDim, maxW: 940 });
+    // big official logo
+    const la = clamp((t - T(1.6)) / .7); if (la <= 0) return;
+    const lw = lerp(352, 340, easeOut(prog(t, T(1.6), 1.6))), lh = lw * LOGO.height / LOGO.width;
+    ctx.save(); ctx.globalAlpha = la; ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 24;
+    ctx.drawImage(LOGO, W / 2 - lw / 2, 1530 - lh / 2, lw, lh); ctx.restore();
+  },
+};
+
+async function renderAt(t) {
+  await drawFootage(t);
+  grade(t);
+  bloom(t);
+  header(t);
+  for (const [k, fn] of Object.entries(SCENES)) if (CFG[k]) fn(t, CFG[k]);
+  grain(t);
+  // optional fade at the very end (music tail)
+  if (CFG.fadeOut) { const a = clamp((t - (CFG.duration - CFG.fadeOut)) / CFG.fadeOut); if (a > 0) { ctx.fillStyle = `rgba(0,0,0,${a})`; ctx.fillRect(0, 0, W, H); } }
+}
+
+window.init = async function (cfg) {
+  CFG = cfg;
+  LOGO = await loadImg(cfg.logo);
+  await document.fonts.load('italic 500 40px Serif', 'Əəİış'); await document.fonts.load('500 40px Sans', 'ƏəİışŞ');
+  for (const w of [300, 400, 600]) await document.fonts.load(`${w} 40px Sans`, 'ƏəİışŞ');
+  await document.fonts.ready;
+  makeGrain();
+  return true;
+};
+window.frame = async function (i) {
+  const t = i / CFG.fps;
+  await renderAt(t);
+  return C.toDataURL('image/png');
+};
+</script></body></html>
