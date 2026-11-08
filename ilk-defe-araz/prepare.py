@@ -120,6 +120,9 @@ def main():
     ap.add_argument("--time", default="11:00 – 12:00")
     ap.add_argument("--base", default=str(HERE / "episodes/2026-11-02_donge_son-qerar/config.json"))
     ap.add_argument("--build"); ap.add_argument("--no-seg", action="store_true")
+    ap.add_argument("--words", type=float, help="time the artist says «ilk dəfə» (kinetic words start here)")
+    ap.add_argument("--drop", type=float, help="song entry, if auto-detection is wrong")
+    ap.add_argument("--duration", type=float, help="video length (default 18 s, capped by the recording)")
     a = ap.parse_args()
     ep = Path(a.episode).resolve(); src = ep / "source"
     audio = next(f for f in sorted(src.iterdir()) if f.suffix.lower() in (".mp3", ".wav", ".m4a"))
@@ -134,11 +137,17 @@ def main():
     sys.path.insert(0, str(HERE)); import render
     render.extract_frames(cfg, ep, build)
 
+    import librosa
+    alen = librosa.get_duration(path=str(audio))
+    cfg["duration"] = round(min(a.duration or 18.0, alen - 0.05), 2)
     au = analyse_audio(str(audio), cfg["duration"]); snap = au["snap"]
     B = au["beats"]; beat = float(np.median(np.diff(B)))
-    drop = au["drop"]; bar = beat * 4
-    words = snap(3.85); A = dict(words=words, words2=snap(words + beat), words3=snap(words + 2 * beat), settle=snap(words + 3 * beat))
+    bar = beat * 4
+    words = a.words if a.words else snap(3.85); A = dict(words=words, words2=snap(words + beat), words3=snap(words + 2 * beat), settle=snap(words + 3 * beat))
     split_in = snap(words - 2 * beat)
+    drop = a.drop if a.drop else au["drop"]
+    if drop < A["settle"] + beat * .9:                  # the song can't enter before the lockup settles
+        drop = min(b for b in B if b >= A["settle"] + beat * .9)
     finale = snap(drop + 3 * bar)
     cuts = [0, words, A["settle"], drop, snap(drop + .5 * bar), snap(drop + bar), snap(drop + 2 * bar), finale, cfg["duration"]]
     print(f"tempo {au['tempo']:.1f}  drop {drop:.2f}  anchors {A}")
