@@ -3,7 +3,7 @@
                 graded dark and desaturated for a documentary look
  p1..p3.jpg   - the real photos of the people in the reel, upscaled if small and graded the same way
                 (no face retouching, no generated content)
- bg_war.jpg   - optional real frame from the war footage in the reel, darkened and desaturated
+ bg_war.jpg   - optional real war photo/frame for the top band (1080x900), darkened and desaturated
 Usage: python make_assets.py OUTDIR [PHOTO1.jpg[@x,y,w,h] [PHOTO2.jpg[@x,y,w,h]]] [bg=FRAME.jpg]
        @x,y,w,h crops the photo (source pixels) before grading"""
 import sys, os, numpy as np, cv2
@@ -53,8 +53,9 @@ for i, photo in enumerate(photos[:3], 1):
 
 # war footage frame: cover 1080x1920, soft (phone video), dark, close to monochrome
 if bgs:
-    im = load(bgs[0]); s = max(1080/im.shape[1], 1920/im.shape[0])
+    # top band 1080x900, anchored near the top of the source (faces)
+    im = load(bgs[0]); s = max(1080/im.shape[1], 900/im.shape[0])
     im = cv2.resize(im, None, fx=s, fy=s, interpolation=cv2.INTER_LANCZOS4)
-    y0 = (im.shape[0]-1920)//2; x0 = (im.shape[1]-1080)//2; im = im[y0:y0+1920, x0:x0+1080]
-    im = cv2.GaussianBlur(im, (0, 0), 1.0)
+    y0 = 0; x0 = (im.shape[1]-1080)//2; im = im[y0:y0+900, x0:x0+1080]
+    im = cv2.GaussianBlur(im, (0, 0), 0.8)
     save(os.path.join(out, 'bg_war.jpg'), grade(im, sat=0.45, gain=0.74))

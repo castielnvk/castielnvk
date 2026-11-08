@@ -15,8 +15,8 @@
          font-family:"Inter","Inter Display",sans-serif;color:var(--ink)}
   .layer{position:absolute;inset:0}
   .flag{background:url(build/bg_flag.jpg) center/cover no-repeat;filter:brightness(1.05)}
-  /* real front-line frame from the reel (0:51), fading into the flag behind the title */
-  .war{bottom:auto;height:900px;background:url(build/bg_war.jpg) 0 -250px/1080px 1920px no-repeat;
+  /* real war photo: wounded veterans at the Victory Parade, 10.12.2020 (president.az, CC BY 4.0), fading into the flag behind the title */
+  .war{bottom:auto;height:900px;background:url(build/bg_war.jpg) center top/cover no-repeat;
        -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 55%,transparent 100%);
                mask-image:linear-gradient(to bottom,#000 0%,#000 55%,transparent 100%)}
   .shade{background:
@@ -47,6 +47,7 @@
      line-height:.98;letter-spacing:-.005em;text-transform:uppercase;text-shadow:0 4px 30px rgba(0,0,0,.55)}
   h1 span{display:block}
   .sub{margin-top:34px;font-size:42px;line-height:1.3;font-weight:500;opacity:.92;max-width:880px}
+  .credit{position:absolute;right:28px;top:404px;font-size:15px;letter-spacing:.06em;color:rgba(243,239,230,.55)}
   .foot{position:absolute;left:84px;right:84px;bottom:84px;display:flex;justify-content:space-between;
         font-size:24px;letter-spacing:.2em;font-weight:600;color:var(--muted);opacity:.75}
 </style>
@@ -56,6 +57,7 @@
   <div class="layer flag"></div>
   <div class="layer war"></div>
   <div class="layer shade"></div>
+  <div class="credit">Foto: Zəfər paradı, 10.12.2020 · president.az · CC BY 4.0</div>
   <div class="portraits">
     <div class="p"><img src="build/p1.jpg" alt=""><div class="ph">ELŞƏN AĞAYEVİN<br>REAL FOTOSU</div>
       <div class="name"><b>Elşən Ağayev</b><i>Anestezioloq-reanimatoloq</i></div></div>
