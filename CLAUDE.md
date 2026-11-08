@@ -25,6 +25,8 @@ Review the episode, identify the programme and adapt editorial choices to it.
   Make insights compelling and understandable.
 - **"Qəbul Vaxtı"**: social issues and conversations with guests. Prioritise human interest, clarity,
   emotional relevance and respectful presentation. Adapt the energy to the actual topic.
+- **"Kəşfet"**: a logo has been supplied (a green and gold badge), but no editorial brief yet.
+  Infer the tone from the episode.
 - For other programmes, infer the treatment from content and branding. Never apply the morning
   show's comedy treatment automatically to serious conversations.
 
@@ -90,8 +92,13 @@ Review the episode, identify the programme and adapt editorial choices to it.
 
 ## Logos
 
-- Use only the exact PNG logos supplied, stored in `logos/` once the user provides them. Preserve
+- Use only the exact PNG logos supplied, stored in `logos/` (see `logos/README.md`). Preserve
   transparency, proportions, colours and lettering.
+- Prefer the ready-made 1080×1920 overlays in `logos/overlays/` and composite them unscaled. Pick
+  the colour variant (teal/blue or white) that reads best on the background.
+- Logos available so far: 100% Səhər Şousu, Biznes Mərkəzi (blue and white), Kəşfet, and Araz
+  Radio (teal and white). The Qəbul Vaxtı logo is still missing, so ask for it when that show
+  comes up.
 - Put the programme logo at the upper left and the Araz Radio logo at the upper right, inside
   mobile-safe margins, with balanced apparent size.
 - Never redraw logos or replace them with typed text. If a logo is missing, don't fabricate one:
