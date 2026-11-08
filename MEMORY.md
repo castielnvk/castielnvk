@@ -111,6 +111,13 @@ _(notes pending)_
   Previewing stills first is appreciated ("25 dəqiqə çoxdur, bəlkə bəyənmədim").
 - First episode: İradə İbrahimova & Döngə — «Son Qərar», date 2 Noyabr (taken from the old
   promo, same song) → `ilk-defe-araz/episodes/2026-11-02_donge_son-qerar/`.
+- Episode 2: Benay — «İndi bax», 11 Noyabr, 16 s recording ("QISA"), 2 AI clips, solo, WHITE
+  background → teal rows (white outline invisible on white), kinetic centre moved down (centerY 1380)
+  so faces stay clear, lighter teal grade (0.35), words synced to her own «ilk dəfə» / «Araz».
+  prepare.py's song-entry detection was wrong here (fixed: drop can't precede the lockup; --words/--drop overrides).
+- Speed: person masks cost ~3.5 s/frame on this 4-core CPU (≈19 min/episode). User will send Mac and
+  Windows specs to pick a GPU machine (Remote Control); also asked about connecting the Grok
+  (xAI grok-imagine-video) API — needs an api.x.ai key via request_credential, user hasn't decided.
 - Fonts lacking ə/Ə: Bodoni Moda, DM Serif, Gloock, Instrument Serif, Syne, Manrope, Outfit, Sora.
   Anton lacks all Azerbaijani capitals.
 

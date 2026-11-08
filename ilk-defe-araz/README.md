@@ -69,3 +69,4 @@ Tələblər: `pip install playwright librosa`; Chromium `/opt/pw-browsers/chromi
 | Qovluq | Mahnı | Tarix | Nəticə |
 |---|---|---|---|
 | `episodes/2026-11-02_donge_son-qerar` | İradə İbrahimova & Döngə — «Son Qərar» | 2 Noyabr | `Donge_Son_Qerar_Ilk_Defe_Araz_9x16.mp4` (18 s, v4) |
+| `episodes/2026-11-11_benay_indi-bax` | Benay — «İndi bax» | 11 Noyabr | `Benay_Indi_Bax_Ilk_Defe_Araz_9x16.mp4` (16 s, v5; solo, ağ fon → teal yazı zolaqları) |
