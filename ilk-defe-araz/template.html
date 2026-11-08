@@ -356,7 +356,7 @@ function kinetic(t) {
   }
   // ---- lines that join in the lockup: İLK DƏFƏ, date, rolling time
   if (t >= s) {
-    letters(L.l1, X, st.l1.y, st.l1.size, t, s + .3, { stagger: .025 });
+    letters(L.l1, X, st.l1.y, st.l1.size, t, s + .62, { stagger: .025 });
     letters(L.date, X, st.date.y, st.date.size, t, s + .5, { w: 800, stagger: .02 });
     rolling(L.time, X, st.time.y, st.time.size, t, s + .65, { w: 600, color: 'rgba(255,255,255,0.93)' });
   }
@@ -402,6 +402,17 @@ async function footageLayer(t) {
       ctx.shadowColor = 'rgba(63,193,207,0.75)'; ctx.shadowBlur = 40 * (1 - q); ctx.drawImage(PBUF, 0, 0); ctx.restore();
     }
     if (fullA > 0) { ctx.save(); ctx.globalAlpha = expoOut(fullA); ctx.drawImage(TB, 0, 0); ctx.restore(); }
+  } else if (tr.type === 'push') {
+    // clean zoom-push: the new shot lands from slightly closer, with radial-feel motion blur
+    await composeShot(i, t, TB);
+    const n = 6;
+    BCTX.setTransform(1, 0, 0, 1, 0, 0); BCTX.globalCompositeOperation = 'source-over'; BCTX.globalAlpha = 1; BCTX.clearRect(0, 0, W, H);
+    for (let k = 0; k < n; k++) {
+      const sc = lerp(1.14, 1, expoOut(clamp(q - k * .03)));
+      BCTX.save(); BCTX.globalCompositeOperation = 'lighter'; BCTX.globalAlpha = 1 / n;
+      BCTX.translate(W / 2, H * .4); BCTX.scale(sc, sc); BCTX.translate(-W / 2, -H * .4); BCTX.drawImage(TB, 0, 0); BCTX.restore();
+    }
+    ctx.drawImage(BUF, 0, 0);
   } else if (tr.type === 'whip') {
     // directional whip pan with real motion blur, matched to the movement direction
     await composeShot(i - 1, t, TA); await composeShot(i, t, TB);

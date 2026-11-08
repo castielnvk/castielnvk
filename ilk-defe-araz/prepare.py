@@ -169,8 +169,8 @@ def main():
     cfg["beats"] = [b for b in au["strong"] if b > A["settle"] + .5]
     for s in shots:
         s.pop("trans", None)
-        if s["role"] in ("drop2", "depth2"): s["trans"] = {"type": "person", "dur": .32}
-        if s["role"] == "depth1": s["trans"] = {"type": "whip", "dur": .28, "dir": -1}
+        if s["role"] in ("drop2", "depth2"): s["trans"] = {"type": "push", "dur": .35}
+        if s["role"] == "depth1": s["trans"] = {"type": "whip", "dur": .2, "dir": -1}
     # rows follow the anchors
     R = base["rows"]; shift = {0: 0, 3: drop - 7.83, 5: (drop + bar) - 10.43, 6: (drop + 2 * bar) - 12.93, 7: finale - 15.44}
     rows = []

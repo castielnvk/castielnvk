@@ -77,8 +77,8 @@
       "cy": 0.46,
       "depth": true,
       "trans": {
-        "type": "person",
-        "dur": 0.32
+        "type": "push",
+        "dur": 0.35
       }
     },
     {
@@ -94,7 +94,7 @@
       "depth": true,
       "trans": {
         "type": "whip",
-        "dur": 0.28,
+        "dur": 0.2,
         "dir": -1
       }
     },
@@ -110,8 +110,8 @@
       "cy": 0.4,
       "depth": true,
       "trans": {
-        "type": "person",
-        "dur": 0.32
+        "type": "push",
+        "dur": 0.35
       }
     },
     {
