@@ -1,13 +1,14 @@
 # «Zəfərin görünməyən qəhrəmanları»: Reels üz qabığı (1080×1920)
 
 Reel: «Qəbul Vaxtı» (Araz FM 103.3), instagram.com/reel/DfeaCj5o5lQ.
-Üz qabığında verilişin qonaqları var: anestezioloq-reanimatoloq **Elşən Ağayev** və böyük tibb bacısı **Sevda Məmmədova**.
+Üz qabığında üç nəfər var: anestezioloq-reanimatoloq **Elşən Ağayev**, ortada aparıcı **Elnarə Sadıqova** və böyük tibb bacısı **Sevda Məmmədova**.
 
 Bütün görüntülər reel-in öz kadrlarıdır (`frames/`):
 
 | Fayl | Video vaxtı | Üz qabığında |
 |---|---|---|
 | `elshen_agayev_0m16s.jpg` | 0:16.4 | sol portret |
+| `elnare_sadiqova_0m02s.jpg` | 0:02 | orta portret (bir az hündür) |
 | `sevda_memmedova_1m25s.jpg` | 1:24.6 | sağ portret |
 | `cebhe_0m51s.jpg` | 0:51.8 | yuxarıdakı fon: cəbhədən real kadr |
 
@@ -17,7 +18,8 @@ Mətnlərin hamısı Instagram-ın 4:5 tor kəsiminin içindədir.
 
 Yenidən yaratmaq üçün:
 ```
-python3 make_assets.py build "frames/elshen_agayev_0m16s.jpg@90,190,500,700" \
-  "frames/sevda_memmedova_1m25s.jpg@70,220,500,700" bg=frames/cebhe_0m51s.jpg
+python3 make_assets.py build "frames/elshen_agayev_0m16s.jpg@130,190,330,760" \
+  "frames/sevda_memmedova_1m25s.jpg@170,250,330,760" \
+  "frames/elnare_sadiqova_0m02s.jpg@125,170,330,760" bg=frames/cebhe_0m51s.jpg   # p1 sol, p2 sağ, p3 orta
 node render.js            # -> cover_1080x1920.jpg
 ```

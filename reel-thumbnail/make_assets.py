@@ -1,7 +1,7 @@
 """Builds the two image layers for the reel cover:
  bg_flag.jpg  - photographic Azerbaijani flag (official construction, from ../zefer-gunu-edit/flag_scenes.py),
                 graded dark and desaturated for a documentary look
- p1.jpg, p2.jpg - the real photos of the two guests, upscaled if small and graded the same way
+ p1..p3.jpg   - the real photos of the people in the reel, upscaled if small and graded the same way
                 (no face retouching, no generated content)
  bg_war.jpg   - optional real frame from the war footage in the reel, darkened and desaturated
 Usage: python make_assets.py OUTDIR [PHOTO1.jpg[@x,y,w,h] [PHOTO2.jpg[@x,y,w,h]]] [bg=FRAME.jpg]
@@ -43,7 +43,7 @@ flag = fs.fullframe_flag_real(t=2.0, dur=6.0, cx=640, cy=300, flag_h_frac=0.62, 
 save(os.path.join(out, 'bg_flag.jpg'), grade(np.clip(flag, 0, 1), sat=0.62, gain=0.80))
 
 # photos: Lanczos upscale to >=1080 px tall + gentle unsharp mask, same grade
-for i, photo in enumerate(photos[:2], 1):
+for i, photo in enumerate(photos[:3], 1):
     im = load(photo)
     s = 1080 / min(im.shape[:2])
     if s > 1:
