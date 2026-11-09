@@ -25,6 +25,10 @@ the flag wipes. The original clip's audio (a commercial song) was removed.
 | 14.79–17.28 | 24.17–24.9 at 0.4×, freeze on 24.9 | Çünki bayrağa sevgi yaşla ölçülmür. |
 | 17.28–20.00 | end card | 9 NOYABR · Dövlət Bayrağı Günü · MÜBARƏK! + Araz logo |
 
+Style (user chose option A of three): cinematic letterbox, with black bars above and below and
+footage framed in a 1080×1160 window at y 280. Captions are Montserrat ExtraBold caps (50 px, tracking 4)
+in the lower bar, upper-cased with the Azerbaijani i→İ rule. The small Araz logo is centred in the top bar.
+
 Transitions: zoom-through blur (1.85, 7.33), diagonal blue–red–green flag wipes (3.72, 11.02,
 17.28) and a bloom flash into the slow motion (14.79). The Araz white logo sits top centre and
 returns large on the end card.

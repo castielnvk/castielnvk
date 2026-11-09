@@ -121,6 +121,10 @@ _(notes pending)_
   - Araz logo top centre;
   - "more motion, cinematic, premium".
 - Music: national-anthem finale, US Navy Band recording (public domain), with cuts on its accents.
+- The user rejected the Playfair italic captions as "görünmür". From three preview stills the user chose
+  option A: cinematic letterbox bars, captions in Montserrat ExtraBold caps in the bottom bar.
+  Offering style stills before rendering worked well.
+- Uppercase Azerbaijani: Python's upper() turns i into I, so replace i→İ first.
 
 ## User preferences (across all projects)
 - Use only real footage. Never fabricate archive material, reactions, voices or historical scenes,
