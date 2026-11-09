@@ -108,9 +108,24 @@ _(notes pending)_
   - mix: −14.8 LUFS, original speech untouched;
   - export: 1080×1920, 25 fps.
 
+### 5. Other: Bayraq Günü Reel from a viral TikTok clip (9 Nov 2026), in `bayraq-gunu-edit/`
+- A 20 s Reel of a child trying to reach a torn flag on a lamp post. Delivered as
+  `Bayraq_Gunu_9Noyabr_9x16.mp4`; no feedback yet.
+- **The user was angry that I started rendering without first agreeing the plan with them**
+  ("Hazırlamadan əvvəl mənimlə məsləhətləş"). For new creative requests, propose the plan (story,
+  texts, music, length) and wait for approval before rendering.
+- User's choices:
+  - no voice-over, on-screen texts only;
+  - national music for Flag Day;
+  - 20 s length (they believed shorter avoids copyright flags);
+  - Araz logo top centre;
+  - "more motion, cinematic, premium".
+- Music: national-anthem finale, US Navy Band recording (public domain), with cuts on its accents.
+
 ## User preferences (across all projects)
 - Use only real footage. Never fabricate archive material, reactions, voices or historical scenes,
   and never use cloned or generated voices.
+- Agree the creative plan with the user before rendering a new project.
 - Always deliver a real, verified MP4, never an HTML preview. Never claim success before checking
   the file.
 - Inspect sources before editing: contact sheets, transcription and real timecodes. If a source is

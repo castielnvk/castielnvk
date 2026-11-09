@@ -1,33 +1,38 @@
 # Bayraq Günü (9 Noyabr) — viral "uşaq və bayraq" Reel
 
-Source: a viral social-media clip (TikTok id 7706007423080779028, 720×1280, 29.5 s). A child
-climbs a lamp post in strong wind, trying to reach a flag that was torn loose and hangs from the
-post. Credit the original author in the Instagram caption.
+**Final:** `Bayraq_Gunu_9Noyabr_9x16.mp4`: 20.0 s, 1080×1920, 30 fps, H.264 + AAC, −14 LUFS.
 
-## Edit (31.5 s, 1080×1920, 30 fps)
+Source: a viral social-media clip (TikTok id 7706007423080779028, 720×1280, 29.5 s). A child
+climbs a lamp post in strong wind, trying to reach a flag that was torn loose and hangs from it.
+Credit the original author in the Instagram caption.
+
+## Music
+The finale of the national anthem "Azərbaycan marşı" (Üzeyir Hacıbəyli), performed by the US Navy
+Band: `anthem_US_Navy_Band_public_domain.mp3`, from Wikimedia Commons
+("Azərbaycan marşı instrumental.ogg"). The recording is public domain as a US federal government
+work, and state anthems are not objects of copyright under Azerbaijani law (No. 636-IVQD, Art. 7).
+The Reel uses 109.66–129.66 s, so the final chord lands on the end card. Soft whooshes accompany
+the flag wipes. The original clip's audio (a commercial song) was removed.
+
+## Edit (cuts on the anthem's accents)
 | Out | Source | Text |
 |---|---|---|
-| 0.0–2.8 | 18.0–20.8 (flags, push-in) | Külək bayrağı dirəkdən qopardı. |
-| 2.8–8.6 | 0.5–6.3 (child walks to the post) | Amma bir uşaq buna biganə qalmadı. |
-| 8.6–13.6 | 11.6–16.6 (first climb) | Külək güclü idi, dirək isə hündür. |
-| 13.6–19.5 | 18.4–24.3 (more attempts) | O, dəfələrlə cəhd etdi. |
-| 19.5–23.0 | 24.0–25.0 at 0.5×, freeze on 24.9 (looks up) | Geri çəkilmədi. |
-| 23.0–27.0 | 25.5–29.3 (climbs down, stands under the flag) | Çünki bayrağa sevgi yaşla ölçülmür. |
-| 27.0–31.5 | end card on blurred last frame | 9 NOYABR · Dövlət Bayrağı Günü · MÜBARƏK! + Araz logo |
+| 0.00–1.85 | 18.0 (flag close-up) | Külək bayrağı dirəkdən qopardı. |
+| 1.85–3.72 | 1.6 (child walks) | (same) |
+| 3.72–7.33 | 3.05–6.66 | Amma bir uşaq buna biganə qalmadı. |
+| 7.33–11.02 | 12.0–15.7 | Külək güclü idi, dirək isə hündür. |
+| 11.02–14.79 | 20.4–24.2 | O, dəfələrlə cəhd etdi. / Geri çəkilmədi. |
+| 14.79–17.28 | 24.17–24.9 at 0.4×, freeze on 24.9 | Çünki bayrağa sevgi yaşla ölçülmür. |
+| 17.28–20.00 | end card | 9 NOYABR · Dövlət Bayrağı Günü · MÜBARƏK! + Araz logo |
 
-Skipped: 6.7–11.6 (wider shots with adults whose role is unclear).
-The original audio is a music track, so it was dropped (copyright). Score and SFX are original
-(`music.py`): D minor pads + sparse piano, heartbeat under the slow-motion, D-major resolution on
-the end card, soft wind and flag flutter.
+Transitions: zoom-through blur (1.85, 7.33), diagonal blue–red–green flag wipes (3.72, 11.02,
+17.28) and a bloom flash into the slow motion (14.79). The Araz white logo sits top centre and
+returns large on the end card.
 
 ## Build
 ```
 ffmpeg -i source.mp4 -q:v 2 -vsync 0 fr/%04d.jpg
-python3 render.py fr out/video.mp4
-python3 music.py out
-./mix.sh out Bayraq_Gunu_9x16.mp4
+python3 render.py fr video20.mp4
+python3 audio.py anthem_US_Navy_Band_public_domain.mp3 pre.wav   # then 2-pass loudnorm −14 LUFS / −1.5 dBTP
+ffmpeg -i video20.mp4 -i mix.wav -map 0:v -map 1:a -c:v copy -c:a aac -b:a 256k out.mp4
 ```
-Fonts: Playfair Display italic (fonts/, latin+latin-ext merged) and Inter Display.
-
-Voice-over: not included, by the standing rule against generated voices. `VO_SCRIPT.md` holds
-the timed script for an Araz presenter to record; mix it in with music ducked ~14 dB.
