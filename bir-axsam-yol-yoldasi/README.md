@@ -21,3 +21,4 @@
   other pages: staggered fade-in over ~3 s) in the Canva app.
 - Logos resized to match the other posters (user: too big): Bir Axşam 190 px wide at (79,152); Araz 150×60 at (852,183). Toyota logo: user decided not to add one.
 - Page 5 (single): real photo of Eldəniz Cəfərov placed (background removed with Canva; source in photos/). Card now: name + «Rubrikanın aparıcı eksperti» only — user dropped the Toyota position line.
+- Schedule corrected (user voice note): the segment airs inside Bir Axşam, «HƏFTƏNİN 3-CÜ GÜNÜ ARAZ FM-də / 18:20 – 18:40» (20 min), not the whole show's 18:00–20:00.
