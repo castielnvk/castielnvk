@@ -157,3 +157,15 @@ _(notes pending)_
 - HDR iPhone footage: convert HLG→SDR with zscale + `tonemap=hable` (npl=100).
 - Review contact sheets of design frames and transitions before delivering. They catch empty
   frames, gaps and muddy dissolves.
+
+### Lyric Reel — "Fourth of July", Rahib Mirzoev (10 Nov 2026)
+- Archived in `firefly-lyric-video/` (final MP4, procedural renderer, SFX script; see its README).
+- User feedback on the first cold indigo version (10 Nov 2026): asked for it "daha warm" and to
+  add SFX. Approved direction after that: dusky violet-rose palette, cream type, quiet synthesised
+  ambience (wind, crickets, distant firework, water drop) about 18–20 dB under the music.
+  (My reading: for personal music pieces the user prefers warm, atmospheric looks over cold ones.)
+- The user gave full creative freedom after an initial detailed brief; fixed items were exact
+  lyrics, the recording, the credit "Rahib Mirzoev" and 9:16.
+- Tech: numpy/OpenCV procedural frames piped to ffmpeg render about 3 frames/s on 4 cores, much
+  faster than Playwright canvas. `pip install faster-whisper` can hang; install it with
+  `--no-deps` and add tokenizers, av and ctranslate2 separately.
