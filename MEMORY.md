@@ -51,7 +51,15 @@ programmes, 4) everything else.
   - Whether to remake Məlal's music.
 
 ### 2. Radio shows (100% Səhər Şousu, Qəbul Vaxtı, Biznes Mərkəzi, Reel covers)
-_(notes pending)_
+- **Guest announcement posters live in Canva** «BIZNES MERKEZI TEKLI» (DAHUOG9CBWs), 1080×1920 pages.
+  They are animated (video background) and about 15 s with music. Add new posters as new pages there.
+- **Bir Axşam** (weekdays 18:00–20:00): brand guide in the user's styling zip — Eggnog #F7D494,
+  Boho Orange #E7692E, Night Rider #220D0C; 3D "BİR AXŞAM" logo; sunset/sign-post/star motifs.
+- **«Yol yoldaşı»** (new Bir Axşam segment, sponsor Toyota Bakı Mərkəzi), 10 Nov 2026: page 5, see
+  `bir-axsam-yol-yoldasi/`. Expert Eldəniz Cəfərov alone (co-host Nübar xanım not shown). No sponsor
+  logo or sponsor line — Toyota is in his title. Still pending from the user: his photo, exact position.
+- Canva tooling: the agent upload URL rejects MP4; host the file at a public URL (this repo is
+  public → raw.githubusercontent.com) and use upload-asset-from-url, then update_fill with the video.
 
 ### 3. Kəşf Et — Gülay Zeynallı, "5 təəccüblü sual, 5 cavab" (7–8 Nov 2026)
 - **What:** a celebrity-magazine 9:16 edit of the Kəşf Et (Araz Radio 103.3 FM) segment with
