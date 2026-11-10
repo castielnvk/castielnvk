@@ -14,3 +14,7 @@
 - Music v2 (user: original cue "çox zəifdir", wanted funky): «Funkorama» by Kevin MacLeod
   (incompetech.com), CC BY 4.0, excerpt 28.52–43.52 s, −14 LUFS. Credit: "Music: Funkorama — Kevin
   MacLeod (incompetech.com), CC BY 4.0". Video: `motion/yol_yoldasi_fon_15s_funk.mp4`.
+- Page 6 «Bir Axşam — Yol yoldaşı (iki nəfər)»: expert Eldəniz Cəfərov (photo right, card left) +
+  host «Nübar Soyad» (photo left, card right; surname unknown). Same video background and title.
+- Text animation: the Canva tools can't set animations; the user applies Animate (same style as the
+  other pages: staggered fade-in over ~3 s) in the Canva app.
