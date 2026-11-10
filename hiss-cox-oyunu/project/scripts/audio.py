@@ -13,21 +13,32 @@ def load(path, ch=1, extra=""):
 # ---------- dialog: rumble cut, mild denoise (keeps laughter), leveling, gentle compression
 dlg = load('dialog_raw.wav', 1, '-af "highpass=f=85,lowpass=f=15000,afftdn=nr=8:nf=-42:tn=1,dynaudnorm=f=250:g=13:p=0.9:m=8:s=12,acompressor=threshold=-20dB:ratio=2.5:attack=8:release=120:makeup=2"')
 dlg = np.pad(dlg, (0, max(0, N - len(dlg))))[:N]
+# per-segment leveling: off-mic presenter questions are lifted to the same speech level as Hiss
+for s in TL.values():
+    i0 = int(s['ostart'] * SR); i1 = int((s['ostart'] + s['odur']) * SR); x = dlg[i0:i1]
+    if s.get('freeze') or len(x) < SR // 4: continue
+    f = x[:len(x) // 480 * 480].reshape(-1, 480); e = np.sqrt((f ** 2).mean(1)); act = e[e > e.max() * 0.15]
+    if len(act) == 0: continue
+    lvl = 20 * np.log10(np.sqrt((act ** 2).mean()) + 1e-9)
+    g = 10 ** (np.clip(-19.0 - lvl, -3, 11) / 20)
+    r = int(0.01 * SR); ramp = np.ones(len(x)); ramp[:r] = np.linspace(0, 1, r); ramp[-r:] = np.linspace(1, 0, r)
+    dlg[i0:i1] = x * (1 + (g - 1) * ramp)
 
 # ---------- speech mask -> music ducking envelope
 hop = SR // 100
 fr = dlg[:len(dlg) // hop * hop].reshape(-1, hop)
 db = 20 * np.log10(np.sqrt((fr ** 2).mean(1)) + 1e-9)
-speech = db > (np.percentile(db, 95) - 24)
+speech = db > (np.percentile(db, 95) - 30)
 k = 30  # dilate 300 ms each side
 sp = np.convolve(speech.astype(float), np.ones(2 * k + 1), 'same') > 0
-gdb = np.where(sp, -17.0, -9.0)
+gdb = np.where(sp, -20.5, -10.0)
 def seg_t(i): return TL[i]['ostart']
 def seg_e(i): return TL[i]['ostart'] + TL[i]['odur']
 t = np.arange(len(gdb)) / 100
 M = G['music']
 gdb[t < M['start']] = -80                              # cold open plays dry
-gdb[(t >= M['start']) & (t < M['start'] + 0.5)] = -6.0  # music hits on the title smash
+gdb[(t >= M['start']) & (t < M['start'] + 0.12)] = -9.0  # music hits at the very start
+gdb[(t >= M['restart']) & (t < M['restart'] + 0.85)] = -4.0  # ...and again on the title smash
 for a, b in M['stops']: gdb[(t >= a) & (t < b)] = -80  # joke stops
 gdb[t >= M['outro'] + 0.1] = -5.0                      # outro swell
 # smooth: fast attack (duck down), slower release
@@ -40,12 +51,14 @@ for i, g in enumerate(gdb):
 env = np.repeat(10 ** (sm / 20), hop)
 env = np.pad(env, (0, N - len(env)), 'edge')[:N]
 
-# ---------- music: Hep Cats (Kevin MacLeod, CC BY 4.0) — starts on the title smash
-mus = load('../music/Hep_Cats.mp3', 2, '-af "loudnorm=I=-16:TP=-2:LRA=11"')
-st = int(M['start'] * SR)
-mus = np.concatenate([np.zeros((st, 2), np.float32), mus])[:N]
-if len(mus) < N: mus = np.pad(mus, ((0, N - len(mus)), (0, 0)))
-fo = int(1.4 * SR); mus[-fo:] *= np.linspace(1, 0, fo)[:, None] ** 2
+# ---------- music: "Wallpaper" (Kevin MacLeod, CC BY 4.0). Cold open uses a later section; the track
+# restarts from its top exactly on the title smash.
+trk = load(M['file'], 2, '-af "loudnorm=I=-16:TP=-2:LRA=11"')
+rs = int(M['restart'] * SR); h0 = int(26.0 * SR)
+mus = np.zeros((N, 2), np.float32)
+mus[:rs] = trk[h0:h0 + rs]
+mus[rs:] = trk[:N - rs]
+fo = int(1.6 * SR); mus[-fo:] *= np.linspace(1, 0, fo)[:, None] ** 2
 mus *= env[:, None]
 
 # ---------- SFX synthesis
@@ -157,8 +170,8 @@ for name, arr in [('stem_dialog.wav', dlg), ('stem_sfx.wav', sfx * 0.9)]:
 with wave.open('stem_music.wav', 'wb') as w:
     w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
     w.writeframes((np.clip(mus / max(pk, 1e-9) * 0.89, -1, 1) * 32767).astype('<i2').tobytes())
-r=subprocess.run('ffmpeg -hide_banner -i mix_pre.wav -af loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json -f null -',shell=True,capture_output=True,text=True).stderr
+r=subprocess.run('ffmpeg -hide_banner -i mix_pre.wav -af loudnorm=I=-14:TP=-2.5:LRA=11:print_format=json -f null -',shell=True,capture_output=True,text=True).stderr
 j=json.loads(r[r.rfind('{'):r.rfind('}')+1])
-af=f"loudnorm=I=-14:TP=-1.5:LRA=11:measured_I={j['input_i']}:measured_TP={j['input_tp']}:measured_LRA={j['input_lra']}:measured_thresh={j['input_thresh']}:offset={j['target_offset']}:linear=true"
+af=f"loudnorm=I=-14:TP=-2.5:LRA=11:measured_I={j['input_i']}:measured_TP={j['input_tp']}:measured_LRA={j['input_lra']}:measured_thresh={j['input_thresh']}:offset={j['target_offset']}:linear=true"
 subprocess.run(f'ffmpeg -loglevel error -y -i mix_pre.wav -af {af} -ar 48000 mix.wav', shell=True, check=True)
 print("done", T)

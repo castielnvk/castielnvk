@@ -14,33 +14,45 @@ DELAY = 0.15
 FX, FY = 600, 690           # face centre in output frame (tracked framing keeps it here)
 
 ROUNDS = [  # round, card name, letter, card-in src, letter-spoken src
+  ("natavan", "NATAVAN HƏBİBİ", "L", 108.74, 110.06),
   ("nigar", "NİGAR CAMAL", "M", 68.98, 70.30), ("aygun", "AYGÜN KAZIMOVA", "P", 5.15, 6.55),
   ("ayaz", "AYAZ BABAYEV", "D", 10.42, 11.67), ("roya", "RÖYA AYXAN", "Q", 61.15, 63.45),
   ("roza", "ROZA ZƏRGƏRLİ", "G", 38.05, 39.32), ("samra", "SAMRA", "Ə", 80.05, 81.45),
-  ("promete", "PROMETE", "Z", 95.32, 96.38), ("natavan", "NATAVAN HƏBİBİ", "L", 108.62, 110.06),
+  ("promete", "PROMETE", "Z", 95.32, 96.38),
   ("zamiq", "ZAMİQ", "S", 115.10, 116.40), ("nuran", "NURAN", "İ", 165.50, 166.70),
   ("elza", "ELZA SEYİDCAHAN", "R", 132.15, 134.30)]
-TITLE_AT = o("N1"); TITLE_END = TITLE_AT + 1.6
+TITLE_AT = o("TT"); TITLE_END = TITLE_AT + 1.5
 cards = []
 PFX = {"nigar": "N", "aygun": "A", "ayaz": "Y", "roya": "R", "roza": "Z", "samra": "S", "promete": "P", "natavan": "T",
        "zamiq": "Q", "nuran": "U", "elza": "E"}
 for i, (r, name, letter, cin, lt) in enumerate(ROUNDS):
-    t_in = max(m(cin, PFX[r]), TITLE_END) if i == 0 else m(cin, PFX[r])
+    t_in = max(m(cin, PFX[r]), TITLE_END) if r == "nigar" else m(cin, PFX[r])
     cards.append(dict(i=i + 1, n=len(ROUNDS), name=name, letter=letter, t_in=t_in,
                       t_letter=max(m(lt, PFX[r]), t_in + 0.25), t_end=round_end(r) if r != "elza" else o("FE")))
 
 CAPS = [  # src a, src b, text, highlighted words, prefer-seg   (no caption contains an unspoken answer)
-  (150.85, 152.80, "Rus gəldi ilk ağlıma.", ["Rus"], "HK"), (152.82, 153.99, "Rus sözü.", ["Rus"], "HK"),
   (17.40, 18.95, "Ayaz Babayev çox…", [], None), (64.48, 66.20, "Röya Ayxan çox…", [], None),
   (39.90, 41.04, "Gü…", [], None), (43.80, 45.40, "Qeyrətdi də…", ["Qeyrətdi"], None),
-  (45.45, 46.85, "qeyrətdi də… yox", [], None), (46.90, 48.41, "Nə deyim… gü…", [], None),
+  (45.45, 46.85, "qeyrətdi də… yox", ["yox"], None), (46.90, 48.41, "Nə deyim… gü…", [], None),
   (51.60, 52.58, "Gü ola bilər də…", [], None), (83.88, 85.75, "Samra… Ə…", [], None),
-  (89.05, 90.97, "Doğrudan, Ə… başqa nə ola bilər?", [], None), (101.70, 103.33, "Niyə bilmirəm?", [], None),
+  (89.05, 90.97, "Doğrudan, Ə… başqa nə ola bilər?", [], None), (101.70, 103.33, "Niyə bilmirəm?", ["bilmirəm?"], None),
   (105.10, 107.99, "…çox zarafatcıldır!", ["zarafatcıldır!"], None), (128.73, 129.85, "Zamiq çox…", [], None),
-  (192.00, 193.42, "Nuran çox…", [], None), (136.30, 137.03, "R…", [], None),
-  (147.10, 149.25, "R deyəndə ağlıma heç gəlmir…", [], "E2"), (149.65, 150.55, "Qəribə.", [], "E2"),
-  (162.55, 164.71, "Elza Seyidcahan çox…", [], None)]
-caps = [dict(a=m(a, p), b=m(b, p), text=t, hl=h) for (a, b, t, h, p) in CAPS]
+  (192.00, 193.42, "Nuran çox…", [], None), (136.30, 137.03, "R…", [], "E1b"),
+  (147.58, 149.20, "R deyəndə ağlıma heç gəlmir…", ["heç"], "E2"), (150.08, 150.62, "Qəribə.", [], "E2"),
+  (151.25, 152.85, "Rus gəldi ilk ağlıma.", ["Rus"], "E2"), (152.95, 153.99, "Rus sözü.", ["Rus"], "E2"),
+  (162.55, 164.50, "Elza Seyidcahan çox…", [], None)]
+import wave, numpy as np
+_w = wave.open('../src/a16.wav'); _A = np.frombuffer(_w.readframes(_w.getnframes()), np.int16).astype(np.float32) / 32768
+def _rms(t): x = _A[int(t * 16000):int((t + 0.04) * 16000)]; return 20 * np.log10(np.sqrt((x ** 2).mean()) + 1e-9)
+def snap_on(t):   # first speech frame near t
+    for u in np.arange(t, t + 0.5, 0.02):
+        if _rms(u) > -43 and _rms(u + 0.04) > -43: return float(u)
+    return t
+caps = []
+for (a, b, t, h, p) in CAPS:
+    a2 = min(snap_on(a), b - 0.3); words = t.split(' ')
+    wts = np.cumsum([0] + [len(w) + 1.5 for w in words]); dur = (b - a2) * 0.82
+    caps.append(dict(a=m(a2, p), b=m(b, p), text=t, hl=h, wt=[round(m(a2, p) + float(x) / wts[-1] * dur, 3) for x in wts[:-1]]))
 
 # answers: word, src END of spoken word, round, style
 REV = [("MATANDIR", 76.30, "nigar", "main"), ("PEŞƏKARDIR", 9.62, "aygun", "pro"),
@@ -54,14 +66,13 @@ UNTIL = {"ƏLADIR!": 88.25, "ƏYLƏNCƏLİDİR!": 92.60, "ZARAFATCIL…": 105.05
 revs = []
 for (w, end, r, st) in REV:
     a = round(m(end) + DELAY, 3)
-    b = m(UNTIL[w]) if w in UNTIL else (o("FE") + 0.05 if r == "elza" else round_end(r) + 0.25)
+    b = m(UNTIL[w]) if w in UNTIL else (o("FE") + 0.05 if r == "elza" else round_end(r) + (0.0 if r == "natavan" else 0.25))
     revs.append(dict(word=w, a=a, b=round(b, 3), style=st, round=r))
 R = {x['word']: x for x in revs}
 def ra(w): return R[w]['a']
 
 # stickers: emoji, x, y (centre), size px, t_in, t_out, anim, rot   — placed beside the head, never on the chest
 STK = [
-  ("🤔", 870, 600, 170, m(151.10), oe("HK") - 0.05, "bob", 10),
   ("😌", 860, 640, 160, ra("MATANDIR") + 0.10, oe("HN"), "pop", 8),
   ("🎤", 200, 640, 170, ra("PEŞƏKARDIR") + 0.08, oe("HA") + 0.15, "pop", -14),
   ("😇", 870, 550, 170, ra("DÜRÜSTDÜR") + 0.12, oe("HY"), "pop", 10),
@@ -76,16 +87,17 @@ STK = [
   ("😐", 870, 620, 160, ra("LAQEYDDİR") + 0.45, oe("T2"), "none", 0),
   ("🙂", 860, 640, 120, ra("SADƏDİR.") + 0.35, oe("Q3"), "none", 0),
   ("👏", 200, 640, 170, ra("İSTEDADLIDIR") + 0.10, oe("U2") + 0.2, "clap", -10),
-  ("🤯", 870, 560, 170, m(147.6, "E2"), m(150.6, "E2"), "shake", 8),
-  ("⏳", 300, 550, 90, o("E4"), o("E4") + 1.4, "spin", 0),
+  ("🤯", 870, 560, 170, m(147.9, "E2"), m(150.7, "E2"), "shake", 8),
+  ("🤔", 870, 560, 170, m(151.3, "E2"), oe("E2"), "bob", 10),
+  ("⏳", 300, 550, 90, o("E2"), o("E2") + 1.3, "spin", 0),
   ("🌈", 860, 550, 180, ra("RƏNGARƏNGDİR!") + 0.10, o("FE") + 0.3, "pop", 8),
 ]
 stickers = [dict(e=e, x=x, y=y, s=s, a=round(a, 3), b=round(b, 3), anim=an, rot=rot) for (e, x, y, s, a, b, an, rot) in STK]
 
 fx = dict(
   title=dict(a=TITLE_AT, b=TITLE_END),
-  hook_label=dict(a=0.15, b=oe("HK") - 0.1),
-  smash=o("N1"),
+  hook=dict(a=0.05, b=m(110.30)),                               # opening banner over the first question
+  smash=o("TT"),
   loading=dict(a=m(18.95), b=ra("DÜRÜSTDÜR") - 0.02),           # "Hiss düşünür…" during the long pause
   halo=dict(a=ra("DÜRÜSTDÜR") + 0.05, b=oe("HY")),
   gloss=ra("QÜSURSUZDUR") + 0.05,
@@ -94,17 +106,24 @@ fx = dict(
   combo=dict(a=ra("ƏNTİQƏDİR!") + 0.08, b=oe("HS")),
   deadpan=dict(a=ra("LAQEYDDİR"), b=oe("T2")),
   stars=dict(a=ra("İSTEDADLIDIR") + 0.05),
-  later=dict(a=o("E4"), b=o("E4") + 1.4, text="+10 SANİYƏ"),
+  later=dict(a=o("E2"), b=o("E2") + 1.3, text="+10 SANİYƏ"),
   confetti=dict(a=ra("RƏNGARƏNGDİR!") + 0.05),
   final_pulse=m(164.48) + DELAY,
   end=dict(a=o("FE"), b=T),
+  # floating reactions (IG-live style) on the right edge: t, emoji, count
+  reacts=[[ra("LAQEYDDİR") + 0.7, "😂", 5], [o("FZ") + 0.45, "😂", 5], [ra("ƏNTİQƏDİR!") + 0.3, "🔥", 5],
+          [m(153.2, "E2"), "😂", 5], [ra("İSTEDADLIDIR") + 0.3, "👏", 4], [ra("RƏNGARƏNGDİR!") + 0.4, "🎉", 6]],
+  # story-style round progress + swipe on every new round
+  rounds=[[c['t_in'], c['t_end']] for c in cards],
+  swipes=[c['t_in'] - 0.1 for c in cards if c['i'] > 2],
 )
 # reframing on top of the tracked base framing (relative scale, origin = face)
 Z = [(0, 1.0, 0)]   # no zoom anywhere: full original frame keeps the ARAZ wall visible
 zooms = [dict(t=round(t, 3), s=s, d=d) for (t, s, d) in Z]
 
 # sound design events (t, kind, gain dB) and music automation
-SFX = [(0.0, "whoosh", -8), (o("N1") - 0.02, "smash", -2), (o("N1") + 0.05, "whoosh", -6)]
+SFX = [(0.0, "whoosh", -6), (0.08, "pop", -8), (o("TT") - 0.02, "smash", -2), (o("TT") + 0.05, "whoosh", -6)]
+for (rt, re_, rn) in fx["reacts"]: SFX += [(rt + 0.1 * k, "pop", -15) for k in range(0, rn, 2)]
 for c in cards:
     if c['i'] > 1: SFX.append((c['t_in'] - 0.08, "whoosh", -8))
     SFX.append((c['t_letter'] - 0.04, "tick", -7))
@@ -115,16 +134,17 @@ for rv in revs:
     SFX.append((rv['a'] + 0.02, k, -5))
 for st in stickers:
     if st['anim'] != 'none': SFX.append((st['a'], "pop", -12))
-SFX += [(fx['freeze']['a'], "tapestop", -3), (fx['freeze']['a'] + 0.28, "buzzer", -8), (o("FZ") + 0.32, "boing", -9),
+SFX += [(ra("LAQEYDDİR") - 0.06, "tapestop", -4),
+        (fx['freeze']['a'], "tapestop", -3), (fx['freeze']['a'] + 0.28, "buzzer", -8), (o("FZ") + 0.32, "boing", -9),
         (fx['loading']['a'], "ticktock", -10), (fx['later']['a'] + 0.02, "ticktock", -11),
         (ra("RƏNGARƏNGDİR!") - 0.9, "riser", -10), (fx['final_pulse'], "tick", -8), (fx['end']['a'] + 0.35, "stamp", -6),
         (m(102.40), "boing", -12)]
 sfx = [dict(t=round(t, 3), k=k, g=g) for (t, k, g) in SFX]
-music = dict(start=o("N1"),                                    # music enters on the title smash (hook plays dry)
-             stops=[[fx['loading']['a'] - 0.05, ra("DÜRÜSTDÜR")],  # silence during Ayaz's long pause
-                    [fx['freeze']['a'], fx['freeze']['b']],        # record-stop on Q ≠ G
-                    [ra("LAQEYDDİR") - 0.05, oe("T2")]],           # deadpan: music drops out for "laqeyddir"
-             outro=o("FE"))
+music = dict(file="../music/Wallpaper.mp3", start=0.0,
+             stops=[[ra("LAQEYDDİR") - 0.05, o("TT")],             # cold open: music dies on "laqeyddir", back on the title smash
+                    [fx['loading']['a'] - 0.05, ra("DÜRÜSTDÜR")],  # silence during Ayaz's long pause
+                    [fx['freeze']['a'], fx['freeze']['b']]],       # record-stop on Q ≠ G
+             restart=o("TT"), outro=o("FE"))
 
 DATA = dict(T=round(T, 3), FX=FX, FY=FY, cards=cards, caps=caps, revs=revs, stickers=stickers, fx=fx, zooms=zooms,
             sfx=sfx, music=music)

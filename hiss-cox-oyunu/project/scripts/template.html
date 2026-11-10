@@ -22,14 +22,23 @@ html,body{margin:0;background:#000}
 .emo{font-family:"Noto Color Emoji";line-height:1}
 
 /* title */
-#title{left:70px;top:330px;width:940px}
+#title{left:70px;top:350px;width:940px}
 #title .kick{display:inline-block;background:var(--ink);color:var(--lav);font:700 28px "Inter Display";letter-spacing:.2em;padding:12px 20px;border-radius:14px}
 #title .big{font:900 168px/1 "Unb";color:var(--coral);letter-spacing:-.02em;margin:14px 0 0 -6px;text-shadow:7px 7px 0 var(--ink)}
 #title .row{display:flex;gap:14px;align-items:center;margin-top:18px}
 #title .pill{background:var(--ink);color:var(--cream);font:800 46px "Unb";padding:12px 22px;border-radius:18px}
 #title .pill b{color:var(--lav);font-weight:800}
 #title .rule{background:var(--cream);color:var(--ink);font:800 30px "Inter Display";padding:14px 20px;border-radius:16px;box-shadow:5px 5px 0 var(--ink)}
-#hooklbl{left:262px;top:178px;background:var(--sun);color:var(--ink);font:900 34px/1 "Unb";padding:14px 20px;border-radius:16px;box-shadow:6px 6px 0 var(--ink);transform:rotate(-3deg)}
+#hook{left:0;width:1080px;top:1180px;display:flex;flex-direction:column;align-items:center;gap:10px}
+#hook div{font:900 62px/1 "Unb";padding:16px 26px;border-radius:20px;box-shadow:7px 7px 0 var(--ink);white-space:nowrap}
+#hook .l1{background:var(--cream);color:var(--ink);transform:rotate(-2deg)}
+#hook .l2{background:var(--coral);color:var(--cream);transform:rotate(1.5deg)}
+#prog{left:76px;top:306px;width:928px;height:10px;display:flex;gap:8px}
+#prog .sg{flex:1;height:100%;border-radius:5px;background:rgba(22,19,31,.28);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+#prog .sg i{display:block;width:100%;height:100%;background:var(--cream);transform-origin:0 50%;transform:scaleX(0)}
+.swipe{left:-700px;top:-200px;width:520px;height:2400px;transform:rotate(16deg);opacity:.92}
+.react{font-size:92px;left:930px;top:1240px}
+#cta{background:var(--sun);color:var(--ink);font:900 44px/1 "Unb";padding:16px 26px;border-radius:18px;box-shadow:6px 6px 0 var(--ink);transform:rotate(-2deg)}
 
 /* question card + letter motif */
 .card{left:250px;top:150px;transform-origin:0 0}
@@ -42,11 +51,11 @@ html,body{margin:0;background:#000}
 .tile span{font:900 112px/1 "Unb";color:var(--cream);transform:translateY(-4px)}
 .tile i{position:absolute;right:16px;bottom:10px;font:900 40px/1 "Unb";color:var(--ink);font-style:normal}
 
-/* captions */
-.cap{left:90px;width:900px;top:1425px;display:flex;justify-content:center}
-.cap .box{background:rgba(22,19,31,.86);color:var(--cream);font:800 60px/1.16 "Inter Display";padding:14px 28px 18px;border-radius:24px;text-align:center;max-width:900px;box-sizing:border-box}
-.cap .hl{background:var(--coral);color:var(--cream);border-radius:12px;padding:0 10px;display:inline-block}
-.cap .w{display:inline-block}
+/* captions: word-by-word pop, no plate */
+.cap{left:60px;width:960px;top:1410px;text-align:center;font:900 70px/1.14 "Inter Display";color:#fff;letter-spacing:-.01em;
+  -webkit-text-stroke:14px var(--ink);paint-order:stroke fill;text-shadow:0 8px 0 rgba(22,19,31,.35)}
+.cap .w{display:inline-block;margin:0 15px;visibility:hidden;transform-origin:50% 80%}
+.cap .w.hl{color:var(--sun)}
 
 /* answer stamps (one family, per-moment variants) */
 .rev{left:0;width:1080px;top:1190px;display:flex;justify-content:center;align-items:center}
@@ -124,9 +133,23 @@ tl.set('#cam',{transformOrigin:`${D.FX}px ${D.FY}px`},0);
 D.zooms.forEach(z => { if (z.d>0) tl.to('#cam',{scale:z.s,duration:z.d,ease:'sine.inOut'},z.t); else tl.set('#cam',{scale:z.s},z.t); });
 
 /* ---------- cold-open label + title smash ---------- */
-const hk = el(`<div id="hooklbl" class="abs hide">HISS, R HƏRFİ İLƏ…</div>`);
-show(hk,D.fx.hook_label.a); tl.fromTo(hk,{scale:0,rotation:-20},{scale:1,rotation:-3,duration:.28,ease:'back.out(2.5)'},D.fx.hook_label.a);
-tl.to(hk,{opacity:0,duration:.12},D.fx.hook_label.b-0.12); hide(hk,D.fx.hook_label.b);
+const hk = el(`<div id="hook" class="abs hide"><div class="l1">HISS MƏŞHURLARI</div><div class="l2">BİR SÖZLƏ TƏSVİR EDİR <span class="emo">👀</span></div></div>`);
+show(hk,D.fx.hook.a);
+tl.fromTo(hk.querySelector('.l1'),{scale:2.4,opacity:0},{scale:1,opacity:1,duration:.18,ease:'power4.in'},D.fx.hook.a);
+tl.fromTo(hk.querySelector('.l2'),{scale:2.4,opacity:0},{scale:1,opacity:1,duration:.18,ease:'power4.in'},D.fx.hook.a+0.16);
+tl.fromTo(hk,{y:0},{y:8,duration:.06,yoyo:true,repeat:1},D.fx.hook.a+0.34);
+tl.to(hk,{y:40,opacity:0,duration:.18,ease:'power2.in'},D.fx.hook.b-0.18); hide(hk,D.fx.hook.b);
+/* story-style round progress */
+const pg = el(`<div id="prog" class="abs">${D.fx.rounds.map(()=>'<div class="sg"><i></i></div>').join('')}</div>`);
+pg.querySelectorAll('.sg i').forEach((b,i)=>{ const [a,e]=D.fx.rounds[i]; tl.set(b,{scaleX:0},0); tl.to(b,{scaleX:1,duration:Math.max(.2,e-a),ease:'none'},a); });
+/* swipe on every new round */
+const SWC=['#FF4F2E','#C7B5FF','#FFC83D','#59D6B0'];
+D.fx.swipes.forEach((t0,i)=>{ const sw=el(`<div class="swipe abs hide" style="background:${SWC[i%4]}"></div>`);
+  show(sw,t0); tl.fromTo(sw,{x:0},{x:2300,duration:.3,ease:'power2.inOut'},t0); hide(sw,t0+0.31); });
+/* floating reactions */
+D.fx.reacts.forEach(([t0,e,n])=>{ for(let k=0;k<n;k++){ const r=el(`<div class="react abs hide emo">${e}</div>`); const st=t0+k*0.11, dx=((k*37)%90)-45;
+  show(r,st); tl.fromTo(r,{y:0,x:0,scale:.4,opacity:0},{y:-520-((k*53)%160),x:dx,scale:1,opacity:1,duration:1.15,ease:'power1.out'},st);
+  tl.to(r,{opacity:0,duration:.3},st+0.85); hide(r,st+1.2);} });
 flash(D.fx.smash,.9);
 tl.fromTo('#cam',{x:0},{x:14,duration:.04,yoyo:true,repeat:5,ease:'none'},D.fx.smash);
 const title = el(`<div id="title" class="abs hide"><div class="kick">SÖZ OYUNU</div><div class="big">HISS</div>
@@ -164,13 +187,14 @@ D.cards.forEach(c => {
 });
 const cardAt = t => D.cards.find(c => t>=c.t_in && t<c.t_end);
 
-/* ---------- captions ---------- */
+/* ---------- captions: each word pops as it is spoken ---------- */
 D.caps.forEach(c => {
-  const html = c.text.split(' ').map(w => `<span class="w${c.hl.includes(w)?' hl':''}">${esc(w)}</span>`).join(' ');
-  const n = el(`<div class="cap abs hide"><div class="box">${html}</div></div>`);
-  show(n,c.a); tl.fromTo(n.querySelector('.box'),{y:22,opacity:0,scale:.96},{y:0,opacity:1,scale:1,duration:.16,ease:'power2.out'},c.a);
-  n.querySelectorAll('.hl').forEach(s => tl.fromTo(s,{scale:.7},{scale:1,duration:.22,ease:'back.out(3)'},c.a+0.05));
-  tl.to(n,{opacity:0,duration:.08},c.b-0.08); hide(n,c.b);
+  const ws=c.text.split(' ');
+  const n = el(`<div class="cap abs">${ws.map(w=>`<span class="w${c.hl.includes(w)?' hl':''}">${esc(w)}</span>`).join('')}</div>`);
+  n.querySelectorAll('.w').forEach((s,i)=>{ const t0=c.wt[i];
+    tl.set(s,{visibility:'visible'},t0);
+    tl.fromTo(s,{scale:1.45,y:10},{scale:1,y:0,duration:.14,ease:'back.out(2.5)'},t0);
+    tl.set(s,{visibility:'hidden'},c.b); });
 });
 
 /* ---------- answer stamps (variants per moment) ---------- */
@@ -293,10 +317,12 @@ for (let i=0;i<10;i++){ const x=(i%2? 880+((i*53)%120) : 30+((i*61)%140)), col=R
 
 /* ---------- end card ---------- */
 const E=D.fx.end; show('#endshade',E.a); tl.to('#endshade',{opacity:1,duration:.4},E.a+0.1);
-const ec=el(`<div id="endcard" class="abs hide"><div class="big">HISS</div><div class="pill">«… <b>ÇOX</b> ?»</div></div>`);
+const ec=el(`<div id="endcard" class="abs hide"><div class="big">HISS</div><div class="pill">«… <b>ÇOX</b> ?»</div><div id="cta">SƏN NƏ DEYƏRDİN? <span class="emo">💬</span></div></div>`);
 show(ec,E.a+0.35);
 tl.fromTo(ec.querySelector('.big'),{scale:.6,opacity:0},{scale:1,opacity:1,duration:.35,ease:'back.out(2.2)'},E.a+0.35);
 tl.fromTo(ec.querySelector('.pill'),{y:30,opacity:0},{y:0,opacity:1,duration:.3,ease:'power3.out'},E.a+0.5);
+tl.fromTo('#cta',{scale:0,rotation:-14,opacity:0},{scale:1,rotation:-2,opacity:1,duration:.3,ease:'back.out(2.6)'},E.a+0.85);
+tl.to('#cta',{scale:1.07,duration:.3,yoyo:true,repeat:3,ease:'sine.inOut'},E.a+1.2);
 
 tl.set({}, {}, D.T);
 window.__timelines = {root: tl};

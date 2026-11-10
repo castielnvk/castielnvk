@@ -14,6 +14,7 @@ LUT = ("zscale=min=bt2020nc:rin=tv:tin=arib-std-b67:t=arib-std-b67:pin=bt2020:p=
        "lut3d=grade.cube:interp=tetrahedral,"
        "zscale=tin=bt709:t=bt709:pin=bt709:p=bt709:min=gbr:m=bt709:rin=full:r=full,format=rgb24")
 tl, T = timeline()
+V3 = json.load(open('v3_timeline.json')); CACHE = [c for c in V3 if not c['freeze']]
 os.makedirs('parts', exist_ok=True)
 casc = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
@@ -57,6 +58,12 @@ for i, s in enumerate(tl):
         subprocess.run(f'ffmpeg -loglevel error -y -loop 1 -framerate 30 -i parts/fr{i}.png -frames:v {n} -vf format=yuv420p {ENC} {v}', shell=True, check=True)
         subprocess.run(f'ffmpeg -loglevel error -y -f lavfi -i anullsrc=r=48000:cl=mono -t {s["odur"]:.4f} -c:a pcm_s16le {a}', shell=True, check=True)
         meta.append(dict(id=s['id']))
+    elif any(abs(c['src_in'] - s['src_in']) < 1e-3 and abs(c['src_out'] - s['src_out']) < 1e-3 for c in CACHE):
+        j = next(k for k, c in enumerate(V3) if not c['freeze'] and abs(c['src_in'] - s['src_in']) < 1e-3 and abs(c['src_out'] - s['src_out']) < 1e-3)
+        subprocess.run(f'cp ../v3/parts/{j:02d}.mp4 {v} && cp ../v3/parts/{j:02d}.wav {a}', shell=True, check=True)
+        raw = subprocess.run(f'ffmpeg -loglevel error -sseof -0.2 -i {v} -vf "scale=in_color_matrix=bt709:in_range=tv:out_range=pc,format=rgb24" -f rawvideo -', shell=True, capture_output=True).stdout
+        last = np.frombuffer(raw[-W * H * 3:], np.uint8).reshape(H, W, 3).copy()
+        meta.append(dict(id=s['id'])); print(s['id'], 'cached', flush=True)
     else:
         d = s['src_out'] - s['src_in']; n = round(d * FPS)
         fxs, fys = track(s['src_in'], s['src_out'])
