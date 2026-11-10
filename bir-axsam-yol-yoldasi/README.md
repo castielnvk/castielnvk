@@ -11,3 +11,6 @@
 - Style: Bir Axşam brand guide (Eggnog #F7D494, Boho Orange #E7692E, Night Rider #220D0C),
   sunset + road motif, 3D-extruded title echoing the logo.
 - `make_assets.py` regenerates `assets/` (needs the Bir Axşam styling zip's `main_logo.png`).
+- Music v2 (user: original cue "çox zəifdir", wanted funky): «Funkorama» by Kevin MacLeod
+  (incompetech.com), CC BY 4.0, excerpt 28.52–43.52 s, −14 LUFS. Credit: "Music: Funkorama — Kevin
+  MacLeod (incompetech.com), CC BY 4.0". Video: `motion/yol_yoldasi_fon_15s_funk.mp4`.
