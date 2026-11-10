@@ -19,3 +19,4 @@
   said "Nübar yox, sadəcə iki nəfər gələcək". Same video background and title.
 - Text animation: the Canva tools can't set animations; the user applies Animate (same style as the
   other pages: staggered fade-in over ~3 s) in the Canva app.
+- Logos resized to match the other posters (user: too big): Bir Axşam 190 px wide at (79,152); Araz 150×60 at (852,183). Toyota logo: user decided not to add one.
