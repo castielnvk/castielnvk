@@ -157,3 +157,13 @@ _(notes pending)_
 - HDR iPhone footage: convert HLG→SDR with zscale + `tonemap=hable` (npl=100).
 - Review contact sheets of design frames and transitions before delivering. They catch empty
   frames, gaps and muddy dissolves.
+
+### Song mixing / mastering (Nov 2026) — see `music-mix/`
+- The user also sends their own songs (R&B) for mix + master, as a Google Drive folder of stems
+  (`gdown --folder` works from the cloud container) or as a single file (then separate with demucs).
+- They want it done fully without questions: separate, fix off-pitch notes, mix, master
+  ("Apple Music / Spotify ready"). Delivered at −10 LUFS, −1 dBTP, WAV 24-bit + MP3 320.
+- Claude cannot listen to the result; every decision was made from measurements. Say so, and ask
+  the user to report timestamps of anything that sounds wrong.
+- The song delivered here: A minor, about 80.75 BPM; the verse lead (VoiceAudio.wav) arrives very
+  bright and sibilant, so it needs a high-shelf cut and strong de-essing.
