@@ -1,0 +1,47 @@
+<!doctype html><html lang="az"><head><meta charset="utf-8"><link rel="stylesheet" href="_base.css">
+<style>
+.c{background:var(--bg)}
+.wall{left:0;right:0;top:428px;display:flex;flex-direction:column;align-items:center;transform:rotate(-3deg)}
+.wall div{font-size:180px;font-weight:900;line-height:.86;letter-spacing:-.02em;white-space:nowrap;font-stretch:125%}
+.o{color:transparent;-webkit-text-stroke:3px var(--stroke)}
+.f{background:var(--word);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 10px 40px rgba(0,0,0,.4))}
+.subject{left:50%;transform:translateX(-50%);top:var(--sy);width:var(--sw);
+  -webkit-mask-image:linear-gradient(180deg,#000 72%,transparent 96%),linear-gradient(90deg,transparent 0%,#000 20%,#000 80%,transparent 100%);-webkit-mask-composite:source-in;
+  filter:drop-shadow(0 0 2px rgba(255,240,200,.9)) drop-shadow(0 0 30px var(--rim)) drop-shadow(0 40px 80px rgba(0,0,0,.7)) contrast(1.06)}
+.side{width:calc(var(--sw) * .6);
+  -webkit-mask-image:linear-gradient(180deg,#000 62%,transparent 92%);
+  filter:brightness(.78) saturate(.92) drop-shadow(0 0 2px rgba(255,240,200,.6)) drop-shadow(0 30px 60px rgba(0,0,0,.6))}
+.fade{left:0;right:0;bottom:0;height:620px;background:linear-gradient(180deg,rgba(var(--dark),0),rgba(var(--dark),.6) 30%,rgba(var(--dark),.88) 55%,rgb(var(--dark)) 85%)}
+.tag{top:316px;left:60px;font-size:26px;font-weight:800;letter-spacing:.2em;color:#fff;background:#E5383B;padding:12px 22px;border-radius:6px;transform:rotate(-4deg);box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.logo{top:300px;left:50%;transform:translateX(-50%);width:100px;filter:drop-shadow(0 8px 20px rgba(0,0,0,.5))}
+.txt{left:50px;right:50px;top:1420px;text-align:center}
+.lead{font-size:54px;text-shadow:0 4px 24px rgba(0,0,0,.7);font-weight:800;color:#FBF1DA;line-height:1.12}
+.lead b{color:var(--accent)}
+.name{margin-top:30px;display:inline-flex;gap:14px;align-items:center;white-space:nowrap;font-size:30px;font-weight:700;letter-spacing:.18em;color:#FFE7A3;text-transform:uppercase}
+.name:before,.name:after{content:"";width:60px;height:2px;background:#E2B85C}
+</style></head><body><div class="c" id="c">
+<div class="abs wall"><div class="o fit" data-max="960" id="w1"></div><div class="f fit" data-max="900" id="w2"></div><div class="f fit" data-max="900" id="w3"></div></div>
+<img class="abs side" id="subjL"><img class="abs side" id="subjR"><img class="abs subject" id="subj">
+<div class="abs fade"></div>
+<div class="abs tag" id="tag"></div>
+<img class="abs logo" src="medallion.png">
+<div class="abs txt"><div class="lead" id="lead"></div><div class="name" id="name"></div></div>
+</div>
+<script>
+const GOLD='linear-gradient(180deg,#FFF3C4 0%,#FFD978 38%,#D9A441 62%,#FFE7A3 80%,#B9862F 100%)';
+const P={
+ green:{bg:'radial-gradient(ellipse 80% 55% at 50% 38%,#1aa57a 0%,#0c5a47 45%,#04261f 80%,#021312 100%)',word:GOLD,stroke:'rgba(255,231,163,.55)',rim:'rgba(140,255,210,.5)',dark:'2,22,20',accent:'#5FE6AE'},
+ berry:{bg:'radial-gradient(ellipse 80% 55% at 50% 38%,#f551a0 0%,#c10b63 45%,#4a0526 80%,#22010f 100%)',word:GOLD,stroke:'rgba(255,231,163,.55)',rim:'rgba(255,150,200,.5)',dark:'34,1,15',accent:'#ffb3d6'},
+ peach:{bg:'radial-gradient(ellipse 80% 55% at 50% 38%,#f9ce94 0%,#cb986d 45%,#5a3a1c 80%,#2a1a0a 100%)',word:'linear-gradient(180deg,#ffffff 0%,#fff3dc 50%,#ffe0b0 100%)',stroke:'rgba(255,255,255,.6)',rim:'rgba(255,220,170,.55)',dark:'42,26,10',accent:'#fff2d0'},
+ aqua:{bg:'radial-gradient(ellipse 80% 55% at 50% 38%,#7ce3e3 0%,#127183 45%,#06303a 80%,#02161b 100%)',word:GOLD,stroke:'rgba(255,231,163,.55)',rim:'rgba(150,255,255,.5)',dark:'2,22,27',accent:'#7ce3e3'}
+};
+const C=window.CFG, c=document.getElementById('c'), pal=P[C.palette||'green'];
+for(const [k,v] of Object.entries(pal)) c.style.setProperty('--'+k,v);
+c.style.setProperty('--sy',C.sy||'690px'); c.style.setProperty('--sw',C.sw||'960px');
+document.getElementById('subj').src=C.subject;
+for(const id of ['subjL','subjR']){const e=document.getElementById(id); if(C[id]) e.src=C[id]; else e.remove();}
+['w1','w2','w3'].forEach(k=>{const e=document.getElementById(k); if(C[k]) e.textContent=C[k]; else e.remove();});
+
+document.getElementById('tag').textContent=C.tag; if(!C.tag) document.getElementById('tag').remove();
+document.getElementById('lead').innerHTML=C.lead; document.getElementById('name').textContent=C.name;
+</script></body></html>
