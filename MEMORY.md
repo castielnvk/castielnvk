@@ -109,6 +109,11 @@ _(notes pending)_
   17 dB under speech, stopped on the freeze frame →
   `Kesf_Et_Gitar_Giveaway_v2_funk_9x16.mp4`. So for Kəşf Et the user accepts free licensed
   tracks; the "original music only" rule was stated for Sözümün Canı.
+- **v3 (same day), on the user's request:** a cold open — "Bu gitarı sizə hədiyyə edəcəm"
+  (source 15.80–17.40 s) now plays in the first 1.6 s and again at its natural place; the user
+  asked for the repeat, as a hook. SFX were called "çox loud və harsh": the SFX bus is now
+  low-passed at 2.6 kHz and 8 dB quieter → `Kesf_Et_Gitar_Giveaway_v3_9x16.mp4` (23.5 s).
+  Lesson: start SFX soft and low-passed for every show, and put the giveaway hook first.
 - The first Drive link was private (401); the user opened it after being asked.
 
 ### 4. Other: Victory Day vertical film — "Bir xəbər. Minlərlə xatirə." (7 Nov 2026)
