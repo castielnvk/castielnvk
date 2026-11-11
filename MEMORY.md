@@ -119,11 +119,26 @@ _(notes pending)_
   Don't change a delivered video unless asked.
 - **Giveaway rules (from the user):** follow the page, tag 2 friends in a comment, and those
   friends must follow the page too.
-- **Cover:** `Kesf_Et_MIRO_Giveaway_cover_1080x1920.jpg` — press-photo on green with "GIVEAWAY /
-  MIRO / GİTARASINI HƏDİYYƏ EDİR", key content inside the central 1:1 area. The user said "you
-  know the Kəşf Et page's thumbnails", but no reference was available in this session; ask for a
-  screenshot of the page grid if the cover must match.
+- **Cover:** `Kesf_Et_Miro_Giveaway_cover_1080x1920.png`, made with the Kəşf Et cover template
+  (see "Kəşf Et Reel covers" below). My first attempt was an improvised press-photo cover; the
+  user was angry ("Kəşfet thumbnail-lərini bilirsən də!") because the template already existed.
 - The first Drive link was private (401); the user opened it after being asked.
+
+### 3c. Kəşf Et Reel covers — ALWAYS use the existing template
+- The template lives on branch **`claude/inspiring-cori-tbnu4f`** in `kesfet-covers/` (README with
+  the style rules, `cover/A_tpl.html`, `cover/makeAll.js`, `pipeline/jobs.json`, examples). It was
+  built in the "Instagram thumbnail improvement" session for the page @keshfetde. Fetch that
+  branch before making any Kəşf Et cover; never improvise a new style.
+- Layout: gold "#" medallion, outline word + big metallic words, cut-out guest (rembg
+  `birefnet-portrait`), cream lead text, name between gold rules. Everything inside the 3:4 grid
+  area (y 240–1680).
+- Palettes: green = quote/interview, berry = premiere, **peach = giveaway** (cream words, red
+  "GIVEAWAY" tag), aqua = games/rubrics.
+- Items in the guest's hands must stay visible. For the guitar prize I added a `keepBottom` job
+  flag (fade only the last 10 % of the cut-out); it is in `kesfet-gitar-giveaway/cover/job.json`
+  but not yet in the template branch's `makeAll.js`.
+- If a branch the user names is missing on GitHub, the work is probably unpushed in another
+  session: find it with `list_sessions` and ask that session to push.
 
 ### 4. Other: Victory Day vertical film — "Bir xəbər. Minlərlə xatirə." (7 Nov 2026)
 - **What:** a 35-second vertical documentary for Victory Day (8 November). It was not made for a
