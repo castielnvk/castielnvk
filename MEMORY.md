@@ -137,6 +137,9 @@ _(notes pending)_
 - Items in the guest's hands must stay visible. For the guitar prize I added a `keepBottom` job
   flag (fade only the last 10 % of the cut-out); it is in `kesfet-gitar-giveaway/cover/job.json`
   but not yet in the template branch's `makeAll.js`.
+- Cut-out box bug: the template's glow/drop-shadow is clipped at the PNG's own edges, so a tightly
+  cropped cut-out shows a faint rectangle (the user noticed). Pad the cut-out with ~220 px of
+  transparent margin on the left, right and top, then scale `sw` and `dy` to compensate.
 - If a branch the user names is missing on GitHub, the work is probably unpushed in another
   session: find it with `list_sessions` and ask that session to push.
 
