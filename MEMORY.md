@@ -87,6 +87,25 @@ _(notes pending)_
   - Editing: the journalist's voice was removed by editing alone, and the questions appear only as
     text.
 
+### 3b. Kəşf Et — guitar giveaway Reel (11 Nov 2026)
+- **What:** a 21.9 s giveaway Reel. Source: one vertical iPhone clip (20.85 s, HEVC HLG, 120 fps)
+  from Google Drive: a guest with an Ibanez guitar in front of the Araz Radio wall. He says he has
+  used the guitar for 3+ years, and whoever finds his most popular composition gets the guitar;
+  "ətraflı məlumat şərhlərdə". The guest's name was not supplied, so none is shown.
+- **Final:** `kesfet-gitar-giveaway/Kesf_Et_Gitar_Giveaway_9x16.mp4`, with the editable project
+  (`project/`: canvas renderer, audio script, voice/music/SFX stems). No user feedback yet.
+- **Edit:** continuous speech from source 0.90–20.10 s (no words cut), a 0.8 s press-photo freeze
+  with a "HƏDİYYƏ!" stamp after "edəcəm", and a 1.9 s end card ("Hansı bəstədir?").
+- **Style:** the approved Kəşf Et paparazzi look (shutter blades, flashes, skewed berry / lemon /
+  deep-green bars in Archivo Expanded, Playfair italic), plus punch-in cuts, a "3+" counter, a
+  hand-drawn ring around the guitar and a few emojis. A dark-green top gradient keeps the white
+  logos readable on the bright wall.
+- **Music:** an original synthesised house bed with no guitar-like sounds, on purpose: viewers must
+  not mistake the background music for the composition they have to guess.
+- **Uncertain:** the caption "şərhlərdə" (Whisper heard "şəhərlərdə"); "populyarı" (spoken
+  "popüləri").
+- The first Drive link was private (401); the user opened it after being asked.
+
 ### 4. Other: Victory Day vertical film — "Bir xəbər. Minlərlə xatirə." (7 Nov 2026)
 - **What:** a 35-second vertical documentary for Victory Day (8 November). It was not made for a
   radio programme. Delivered as `bir_xeber_minlerle_xatire_1080x1920.mp4` (v2, 43 MB); v1 was
