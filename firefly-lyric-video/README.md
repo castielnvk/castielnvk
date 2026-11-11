@@ -1,6 +1,6 @@
 # Fourth of July — lyric Reel (Rahib Mirzoev)
 
-- Final: `Rahib_Mirzoev_Fourth_of_July_9x16.mp4` (1080×1920, 30 fps, H.264 + AAC, 56.9 s).
+- Final: `Rahib_Mirzoev_Fourth_of_July_9x16.mp4` (1080×1920, 24 fps, H.264 + AAC, 56.9 s).
 - Fully procedural film (numpy + OpenCV + PIL → ffmpeg), no stock footage.
 - `project/render.py` — picture (`python3 render.py all video.mp4`, about 10 min on 4 cores;
   `python3 render.py still 10.9,38.3 outdir` for check frames). Lyric timings are in `LYR`.

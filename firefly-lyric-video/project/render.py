@@ -5,7 +5,7 @@ import sys, os, subprocess, math
 import numpy as np, cv2
 from PIL import Image, ImageDraw, ImageFont
 
-W, H, FPS, DUR = 1080, 1920, 30, 56.9
+W, H, FPS, DUR = 1080, 1920, 24, 56.9
 HERE = os.path.dirname(os.path.abspath(__file__))
 FONT = os.path.join(HERE, "fonts", "CormorantGaramond-SemiBold.ttf")
 FONT_I = os.path.join(HERE, "fonts", "CormorantGaramond-MediumItalic.ttf")
@@ -33,9 +33,9 @@ T_DIE = 15.5
 HY_BLADE, HY_SKY, HY_FOREST = 800, 1570, 1235
 PAN_A, PAN_B = 60.0, 170.0
 
-def dawn_at(t):
-    return keys(t, [(0, 0.0), (12.8, 0.07), (25, 0.17), (29, 0.22), (40.9, 0.36), (40.91, 0.44),
-                    (45.05, 0.47), (48.39, 0.5), (48.4, 0.80), (57.8, 0.92)])
+def dawn_at(t, mode='take'):
+    if mode == 'G': return keys(t, [(47.0, 0.78), (57.0, 0.92)])
+    return keys(t, [(0, 0.0), (12.8, 0.07), (25, 0.17), (29, 0.22), (41, 0.38), (45, 0.46), (49, 0.52)])
 
 # ------------------------------------------------------------------ palettes (RGB)
 ZEN = (C(24, 22, 52), C(74, 72, 104));  HOR = (C(66, 58, 98), C(176, 142, 138))
@@ -114,6 +114,7 @@ def build_blades():
 SKY_D, SKY_UL, SKY_ST = build_sky_tex()
 TREE_FAR, TREE_NEAR = build_trees()
 BL = build_blades()
+FOG = sstep_np(0.36, 0.78, fbm(700, 3000, [300, 150, 70, 35], 51, ax=2.6))
 GRAIN = [cv2.GaussianBlur(np.random.RandomState(100 + i).randn(H, W).astype(np.float32), (0, 0), 0.7) * 2.6 for i in range(7)]
 _yy, _xx = np.mgrid[0:H, 0:W].astype(np.float32)
 VIG = (1 - 0.30 * (((_xx - W / 2) / (W * 0.78)) ** 2 + ((_yy - H / 2) / (H * 0.72)) ** 2))[..., None].astype(np.float32)
@@ -121,7 +122,7 @@ SS = np.linspace(0, 1, 7, dtype=np.float32)
 
 
 _F = np.load(os.path.join(HERE, "feat.npz")); F_FULL, F_VOC = _F['full'], _F['voc']
-def feat(a, t): return float(a[min(len(a) - 1, max(0, int(t * FPS)))])
+def feat(a, t): return float(a[min(len(a) - 1, max(0, int(t * 30)))])
 def wind_gain(t): return 0.22 + 1.75 * feat(F_FULL, t) ** 1.4
 
 def wind(x, t, ph):
@@ -203,7 +204,13 @@ def background(t, d, hy, pan, fw=0.0, trees=True, fw_t=None, fly=None):
             if wk > 0.02: add_glow(img, tx[j], ty[j], sg, WARM, kk * wk * 0.8)
     mist = (np.exp(-((wy - 14) / 62) ** 2) * 0.55 + np.exp(-((wy - 60) / 190) ** 2) * 0.22)[:, None, None]
     mist = mist * (0.75 + 0.25 * np.sin(wx * 0.004 + 0.05 * t + 1.0))[None, :, None]
-    return img * (1 - mist) + lerp(C(52, 50, 70), C(140, 122, 116), d) * mist
+    img = img * (1 - mist) + lerp(C(52, 50, 70), C(140, 122, 116), d) * mist
+    r0 = max(0, hy - 250); r1 = min(H, hy + 450)
+    if r1 > r0:
+        c0 = int(300 + pan + 9 * t) % 1900
+        fg_ = FOG[r0 - (hy - 250):r1 - (hy - 250), c0:c0 + W] * (0.40 * np.exp(-((wy[r0:r1] - 40) / 190) ** 2))[:, None]
+        img[r0:r1] = img[r0:r1] * (1 - fg_[..., None]) + lerp(C(70, 62, 82), C(168, 142, 132), d) * fg_[..., None]
+    return img
 
 def draw_blades(img8, t, d, hy, pan):
     by = hy + BL['wy']; bx = BL['x'] - pan + 300
@@ -418,7 +425,7 @@ def build_forest():
 FOREST = build_forest()
 
 def forest_shot(t, d):
-    u = (t - T_F) / (T_CLOUD2 - T_F); hy = HY_FOREST
+    u = (t - 40.3) / 5.3; hy = HY_FOREST
     wy = np.arange(H, dtype=np.float32) - hy
     uu = np.clip(-wy / 1500, 0, 1) ** 0.8
     col = pal(HOR, d)[None] * 0.92 + (pal(ZEN, d) - pal(HOR, d) * 0.92)[None] * uu[:, None]
@@ -531,79 +538,93 @@ def typography(img, t, tilt_shift):
     return img
 
 # ------------------------------------------------------------------ frame
-def frame(i):
-    t = i / FPS; d = dawn_at(t); tilt = 0.0
-    if T_TEAR <= t < T_F:
-        img = tear_shot(t, d); tshift = 0
-    elif t < T_F or T_CLOUD2 <= t:
-        blade_shot = t < T_TILT1 or t >= T_G
-        if t < T_B:
-            pan = PAN_A * clamp((t - 11.3) / (T_B - 11.3)) ** 2; hy = HY_BLADE; bgs, hs = 16.0, 0.0
-        elif t < T_C:
-            pan = PAN_A + (PAN_B - PAN_A) * (1 - (1 - clamp((t - T_B) / (T_DIE + 0.4 - T_B))) ** 2); hy = HY_BLADE; bgs = 2.0
-        elif t < T_CLOUD2:
-            pan = PAN_B
-            tilt = sstep(T_TILT0, T_TILT1, t); tilt = tilt * tilt * (3 - 2 * tilt) * 0.5 + tilt * 0.5
-            hy = HY_BLADE + (HY_SKY - HY_BLADE) * tilt + (8 * sstep(T_TILT1, T_F, t) if t > T_TILT1 else 0)
-            bgs = keys(t, [(21.5, 16), (22.3, 5), (22.85, 9.5), (23.6, 2.2), (24.05, 4.2), (24.6, 2.0), (T_TILT0, 2.0), (T_TILT1, 1.5)])
-            hs = keys(t, [(21.5, 0), (22.3, 19), (22.85, 13), (23.6, 31), (24.05, 27), (24.6, 33)])
-        elif t < T_G:
-            pan = PAN_B; hy = HY_SKY + 8 + 4 * (t - T_CLOUD2) / 3.3; bgs = 1.5; tilt = 1.0; hs = 33.0
-        else:
-            pan = PAN_B; hy = HY_BLADE; bgs, hs = 9.0, 0.0
-        fw = 0.0; fwt = None
+def scene(t, mode):
+    d = dawn_at(t, mode)
+    if mode == 'tear': return tear_shot(t, d), 0
+    if mode == 'forest': return forest_shot(t, d), 0
+    f = 0.0; fw = 0.0; fwt = None; sc = 1.0
+    if mode == 'G':
+        pan = PAN_B; hy = HY_BLADE; bgs, hs = 9.0, 0.0; fdx = hdx = 0.0
+        sc = 1.012 + 0.035 * sstep(47.5, 57.0, t)
+    elif mode == 'sky2':
+        pan = PAN_B; hy = HY_SKY + 8 + 5 * (t - 44.5) / 4.5; bgs, hs = 1.8, 33.0; fdx = hdx = 0.0; f = 1.0
+        sc = 1.0 + 0.02 * sstep(44.5, 49.0, t)
+    else:
+        if t < T_B: pan = PAN_A * clamp((t - 11.3) / (T_B - 11.3)) ** 2
+        else: pan = PAN_A + (PAN_B - PAN_A) * (1 - (1 - clamp((t - T_B) / (T_DIE + 0.4 - T_B))) ** 2)
+        f = keys(t, [(11.5, 0), (13.3, 1), (20.4, 1), (21.5, 0), (22.2, 0), (22.95, 0.72), (23.35, 0.48), (24.0, 0.96), (24.4, 0.84), (24.95, 1)])
+        tilt = sstep(T_TILT0, T_TILT1, t); tilt = tilt * tilt * (3 - 2 * tilt) * 0.5 + tilt * 0.5
+        hy = HY_BLADE + (HY_SKY - HY_BLADE) * tilt + 8 * sstep(T_TILT1, 41.0, t)
+        bgs = (2.6 + 13.4 * (1 - f)) * (1 - 0.3 * tilt); hs = 32.0 * f
+        back = sstep(20.2, 21.8, t); fdx = -pan * 1.8 * (1 - back); hdx = -pan * 2.4 * (1 - back)
+        sc = 1.055 - 0.055 * sstep(0, 11.3, t) + 0.014 * (1 - f)
         if T_FW <= t < T_FW + 2.6:
             fwt = t - T_FW
             fw = min(1, fwt / 0.07) * math.exp(-fwt / 0.5) * (0.82 + 0.18 * math.sin(fwt * 47) * math.exp(-fwt * 2))
-        fly = None
-        if T_B <= t < T_DIE + 0.8:
-            fx, fy = fly_screen(t); fly = (fx, fy, fly_light(t))
-        img = background(t, d, hy, pan, fw, True, fwt, fly)
-        img = blur(img, bgs)
-        shift = hy - HY_BLADE
-        # firefly
-        if 8.0 < t < T_B:
-            fx, fy = fly_screen(t); bokeh(img, fx, fy, 50, 0.50 * fly_light(t))
-        elif T_B <= t < T_DIE + 0.8:
-            fx, fy = fly_screen(t); k = fly_light(t)
-            if k > 0:
-                add_glow(img, fx, fy, 210, WARM, 0.13 * k); add_glow(img, fx, fy, 34, WARM, 0.5 * k)
-                add_glow(img, fx, fy, 5.0, C(255, 240, 200), 1.25 * k)
-        # bird
-        if 34.7 < t < T_TEAR:
-            u = (t - 34.7) / 2.9
-            img = draw_bird(img, -70 + 1230 * u, 420 - 215 * u ** 1.6 + 16 * math.sin(t * 2.3) * wind_gain(t) * 0.6, t, d, 1.5)
-        # near, out-of-focus grass + the blade
-        if shift * 1.7 < 1500:
-            if t < T_B: fdx, hdx = -pan * 1.8, -pan * 2.4
-            elif t < T_C: fdx, hdx = -pan * 1.8 + 40, None
-            else: fdx, hdx = 0.0, 0.0
-            lay, al = fg_layer(t, d, fdx, shift * 1.7, 700 if T_B <= t < T_C else 9999)
-            fsig = 15.0 if t < T_B or t >= T_G else (11.0 if t < T_C else 15 + 0.5 * hs)
-            img, _ = comp(img, lay, al, fsig)
-            if hdx is not None and shift * 1.45 < 1500:
-                warm = 0.0
+    fly = None; flying = mode == 'take' and 8.0 < t < T_DIE + 0.8
+    if flying:
+        fx, fy = fly_screen(t); fk = fly_light(t); fly = (fx, fy, fk * f)
+    img = background(t, d, hy, pan, fw, True, fwt, fly)
+    img = blur(img, bgs)
+    shift = hy - HY_BLADE
+    if flying and fk > 0:           # one light: a soft disc while out of focus, a point once the lens finds it
+        if f < 0.98: bokeh(img, fx, fy, 8 + 42 * (1 - f), 0.50 * fk * (1 - f) ** 0.7)
+        if f > 0.02:
+            add_glow(img, fx, fy, 210, WARM, 0.13 * fk * f); add_glow(img, fx, fy, 34, WARM, 0.5 * fk * f)
+            add_glow(img, fx, fy, 5.0, C(255, 240, 200), 1.25 * fk * f)
+    if mode == 'take' and 34.4 < t < 37.4:
+        u = (t - 34.4) / 2.9
+        img = draw_bird(img, -70 + 1230 * u, 420 - 215 * u ** 1.6 + 16 * math.sin(t * 2.3) * wind_gain(t) * 0.6, t, d, 1.5)
+    if shift * 1.7 < 1500:
+        lay, al = fg_layer(t, d, fdx, shift * 1.7)
+        img, _ = comp(img, lay, al, 15 + 0.45 * hs)
+        if shift * 1.45 < 1500:
+            warm = 0.0
+            if flying and t < 13.6:
                 s_, P_ = hero_curve(t)
-                if 8.0 < t < T_B:
-                    dp = hero_point(s_, P_, DROPS[0][0], -(float(np.interp(DROPS[0][0], s_, hero_hw(s_))) + 8)) + [hdx, 0]
-                    fx, fy = fly_screen(t); dist = math.hypot(fx - dp[0], fy - dp[1])
-                    warm = math.exp(-(dist / 120) ** 2) * fly_light(t)
-                hl, ha, dpos = hero_layer(t, d, hdx, shift * 1.45, warm, main=('gone',) if t >= T_G else ('on', 7.0))
-                img, a = comp(img, hl, ha, hs)
-                if warm > 0.01:
-                    add_glow(img, dpos[0], dpos[1], 44, WARM, 0.30 * warm)
-                    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
-                    rim = np.exp(-(((xx - dpos[0]) ** 2 + (yy - dpos[1]) ** 2) / (2 * 190 ** 2))) * a
-                    img += rim[..., None] * WARM * 0.17 * warm
-        if t < 11.3:      # slow settle-in on the opening
-            sc = 1.055 - 0.055 * sstep(0, 11.3, t)
-            img = cv2.warpAffine(img, cv2.getRotationMatrix2D((540, 1000), 0, sc), (W, H), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
-        tshift = shift
-    else:
-        img = forest_shot(t, d); tshift = 0
+                dp = hero_point(s_, P_, DROPS[0][0], -(float(np.interp(DROPS[0][0], s_, hero_hw(s_))) + 8)) + [hdx, 0]
+                warm = math.exp(-(math.hypot(fx - dp[0], fy - dp[1]) / 120) ** 2) * fk * (1 - f)
+            hl, ha, dpos = hero_layer(t, d, hdx, shift * 1.45, warm, main=('gone',) if mode == 'G' else ('on', 7.0))
+            img, a = comp(img, hl, ha, hs)
+            if warm > 0.01:
+                add_glow(img, dpos[0], dpos[1], 44, WARM, 0.30 * warm)
+                yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+                rim = np.exp(-(((xx - dpos[0]) ** 2 + (yy - dpos[1]) ** 2) / (2 * 190 ** 2))) * a
+                img += rim[..., None] * WARM * 0.17 * warm
+    if sc > 1.0005:
+        img = cv2.warpAffine(img, cv2.getRotationMatrix2D((540, 1000), 0, sc), (W, H), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
+    return img, shift
+
+SEGS = [('take', 37.0), ('tear', 40.3), ('forest', 44.5), ('sky2', 47.6), ('G', 99.0)]   # (mode, last pure time)
+XD = [1.0, 1.3, 1.1, 1.5]                                                                # dissolve lengths
+_mr = np.random.RandomState(12)
+MOTES = [(_mr.rand() * (W + 300), _mr.rand() * H, _mr.rand() ** 2, _mr.rand() * 6.28) for _ in range(34)]
+
+def frame(i):
+    t = i / FPS; tshift = 0
+    for k, (mode, end) in enumerate(SEGS):
+        if t <= end:
+            img, sh = scene(t, mode); tshift = sh if mode == 'take' else 0; break
+        if t < end + XD[k]:
+            w = sstep(end, end + XD[k], t)
+            a, _ = scene(t, mode); b, _ = scene(t, SEGS[k + 1][0]); img = a * (1 - w) + b * w; break
+    # drifting motes close to the lens
+    wg = wind_gain(t)
+    for x0, y0, z, ph in MOTES:
+        x = (x0 + (14 + 40 * z) * t + 30 * math.sin(0.3 * t + ph)) % (W + 300) - 150
+        y = (y0 - (5 + 10 * z) * t + 45 * math.sin(0.21 * t + ph * 2)) % H
+        add_glow(img, x, y, 2.5 + 15 * z, C(230, 205, 190), (0.05 - 0.032 * z) * (0.5 + 0.5 * math.sin(0.5 * t + ph) ** 2) * (0.6 + 0.4 * wg))
+    # halation
+    hi = np.maximum(img - 150.0, 0)
+    img = img + blur(hi, 26) * 0.6 + blur(hi, 7) * 0.2
+    # a camera that is held, not locked
+    ang = 0.11 * math.sin(0.21 * t) + 0.06 * math.sin(0.37 * t + 1)
+    M = cv2.getRotationMatrix2D((540, 960), ang, 1.018)
+    M[0, 2] += 5 * math.sin(0.33 * t + 2) + 2.5 * math.sin(0.71 * t); M[1, 2] += 6 * math.sin(0.27 * t) + 3 * math.sin(0.63 * t + 1)
+    img = cv2.warpAffine(img, M, (W, H), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REFLECT)
     img = img * VIG * C(1.05, 1.0, 0.93) + C(5, 2.5, 0)
-    img = typography(img, t, tshift if t < T_F else 0)
-    g = sstep(0.15, 2.6, t) * (1 - sstep(54.9, 56.25, t))
+    img = typography(img, t, tshift)
+    g = sstep(0.15, 2.8, t) * (1 - sstep(54.7, 56.25, t))
     img = img * g + GRAIN[i % 7][..., None] * (0.55 + 0.45 * g)
     return np.clip(img + 0.5, 0, 255).astype(np.uint8)
 
@@ -619,7 +640,7 @@ if __name__ == "__main__":
         from multiprocessing import Pool
         n = int(round(DUR * FPS)); a = int(sys.argv[4]) if len(sys.argv) > 4 else 0; b = int(sys.argv[5]) if len(sys.argv) > 5 else n
         ff = subprocess.Popen(["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
-                               "-c:v", "libx264", "-preset", "slow", "-crf", "20", "-maxrate", "14M", "-bufsize", "28M", "-pix_fmt", "yuv420p", sys.argv[2]], stdin=subprocess.PIPE)
+                               "-c:v", "libx264", "-preset", "slow", "-crf", "17", "-maxrate", "16M", "-bufsize", "32M", "-pix_fmt", "yuv420p", sys.argv[2]], stdin=subprocess.PIPE)
         with Pool(4) as p:
             for k, f in enumerate(p.imap(frame, range(a, b), chunksize=4)):
                 ff.stdin.write(f.tobytes())

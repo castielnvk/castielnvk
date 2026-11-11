@@ -169,3 +169,8 @@ _(notes pending)_
 - Tech: numpy/OpenCV procedural frames piped to ffmpeg render about 3 frames/s on 4 cores, much
   faster than Playwright canvas. `pip install faster-whisper` can hang; install it with
   `--no-deps` and add tokenizers, av and ctranslate2 separately.
+- Second correction (11 Nov 2026): the user said "the transitions are not smooth and its not
+  cinematic". Fix that was delivered: no hard cuts (one continuous take with rack focus, pan and
+  tilt for the first 37 s, then 1.0–1.5 s cross-dissolves), 24 fps, drifting fog, halation, floating
+  motes, a gently floating camera and slow push-ins. (My reading: avoid hard cuts and flat,
+  vector-looking wide shots in atmospheric pieces.)

@@ -59,8 +59,8 @@ mix += fw
 
 # hawk: wing beats crossing the top of the frame
 wing = norm(bp(r.randn(N), 250, 1100)) * np.clip(np.sin(2 * np.pi * 1.25 * t), 0, 1) ** 2
-wing *= env_keys([(0, 0), (34.6, 0), (35.6, 1), (36.8, 0.8), (37.5, 0), (DUR, 0)])
-pp = env_keys([(0, 0.1), (34.7, 0.1), (37.6, 0.95), (DUR, 0.95)])
+wing *= env_keys([(0, 0), (34.3, 0), (35.3, 1), (36.5, 0.8), (37.2, 0), (DUR, 0)])
+pp = env_keys([(0, 0.1), (34.4, 0.1), (37.3, 0.95), (DUR, 0.95)])
 mix += np.stack([wing * np.cos(pp * np.pi / 2), wing * np.sin(pp * np.pi / 2)], 1) * db(-28)
 
 # the drop lets go on "cry", and lands
