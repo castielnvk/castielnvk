@@ -115,6 +115,9 @@ _(notes pending)_
   background → teal rows (white outline invisible on white), kinetic centre moved down (centerY 1380)
   so faces stay clear, lighter teal grade (0.35), words synced to her own «ilk dəfə» / «Araz».
   prepare.py's song-entry detection was wrong here (fixed: drop can't precede the lockup; --words/--drop overrides).
+- Episode 3: Ayan — «O tək», 13 Noyabr, 18 s; two short AI clips (5 s + 10 s, full-body, light grey
+  bg). Used speed ramps (0.62–0.92×) so no segment repeats; “ARAZ”DA/DİNLƏ synced to her «Araz FM» /
+  «dinləyin». A clip-end frame overrun once truncated a render — template now clamps, render.py checks.
 - Speed: person masks cost ~3.5 s/frame on this 4-core CPU (≈19 min/episode). User will send Mac and
   Windows specs to pick a GPU machine (Remote Control); also asked about connecting the Grok
   (xAI grok-imagine-video) API — needs an api.x.ai key via request_credential, user hasn't decided.

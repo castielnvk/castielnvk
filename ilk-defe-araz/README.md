@@ -41,6 +41,12 @@ Araz Radio 103.3 FM-in eksklüziv mahnı premyeraları üçün 9:16 Reel şablon
   musiqidən ~17 dB aşağı (`sfx`, `sfx_db`). Mahnının özü toxunulmur.
 - **Dərinlik maskaları:** BiRefNet_lite (MIT) — `segment.py`; yalnız arxasında yazı olan kadrlar üçün.
 
+## Sürət qeydləri
+
+- Fayllar gələn kimi maskaları arxa planda başlat: `SEG_RES=512x384 python3 -I segment.py …` (~2 s/kadr, 768x576-da ~3.5 s).
+- AI materialı videodan qısadırsa, `shots[].speed` (məs. 0.75) ilə slow-motion — kəsitlər təkrarlanmasın.
+- `render.py` hər hissənin kadr sayını yoxlayır; yarımçıq video yazmır.
+
 ## Avtomatlaşdırma (`prepare.py`)
 
 `python3 prepare.py episodes/<qovluq> --date "9 NOYABR"` — bitlər və mahnı girişini tapır, bütün
@@ -70,3 +76,4 @@ Tələblər: `pip install playwright librosa`; Chromium `/opt/pw-browsers/chromi
 |---|---|---|---|
 | `episodes/2026-11-02_donge_son-qerar` | İradə İbrahimova & Döngə — «Son Qərar» | 2 Noyabr | `Donge_Son_Qerar_Ilk_Defe_Araz_9x16.mp4` (18 s, v4) |
 | `episodes/2026-11-11_benay_indi-bax` | Benay — «İndi bax» | 11 Noyabr | `Benay_Indi_Bax_Ilk_Defe_Araz_9x16.mp4` (16 s, v5; solo, ağ fon → teal yazı zolaqları) |
+| `episodes/2026-11-13_ayan_o-tek` | Ayan — «O tək» | 13 Noyabr | `Ayan_O_Tek_Ilk_Defe_Araz_9x16.mp4` (18 s, v5; cəmi 15 s AI material → speed ramp 0.62–0.92×) |

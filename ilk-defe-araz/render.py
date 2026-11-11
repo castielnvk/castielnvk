@@ -194,6 +194,11 @@ def main():
     ths = [threading.Thread(target=render_range, args=(url, cfg, c, parts[k])) for k, c in enumerate(chunks)]
     for t in ths: t.start()
     for t in ths: t.join()
+    for k, (pp, c) in enumerate(zip(parts, chunks)):          # fail loudly instead of writing a truncated video
+        got = subprocess.run(["ffprobe", "-v", "error", "-count_frames", "-select_streams", "v", "-show_entries",
+                              "stream=nb_read_frames", "-of", "csv=p=0", str(pp)], capture_output=True, text=True).stdout.strip()
+        if got != str(len(c)):
+            raise SystemExit(f"render part {k} incomplete: {got} of {len(c)} frames")
     lst = build / "parts.txt"
     lst.write_text("".join(f"file '{p}'\n" for p in parts))
     silent = build / "video_silent.mp4"

@@ -63,8 +63,9 @@ function placement(im, s, p) {
 }
 const GRADEF = 'contrast(1.05) saturate(1.03)';
 async function drawShot(s, t, p) {
-  const n = fno(s.src, (t - s.start) * (s.speed || 1));
-  const im = await loadImg(fpath(s.clip, n));
+  let n = fno(s.src, (t - s.start) * (s.speed || 1));
+  let im = await loadImg(fpath(s.clip, n));
+  while (!im && n > 1) { n--; im = await loadImg(fpath(s.clip, n)); }   // never run past the clip's last frame
   const [x, y, w, h] = placement(im, s, p);
   ctx.imageSmoothingQuality = 'high';
   ctx.filter = GRADEF; ctx.drawImage(im, x, y, w, h); ctx.filter = 'none';
