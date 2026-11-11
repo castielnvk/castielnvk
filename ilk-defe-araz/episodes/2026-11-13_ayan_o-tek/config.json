@@ -1,0 +1,376 @@
+{
+  "title": "Ayan — O tək, ilk dəfə Araz FM-də",
+  "fps": 24,
+  "duration": 18.0,
+  "audio": "source/AYAN_O_TEK.mp3",
+  "audio_fade_out": 0.5,
+  "output": "Ayan_O_Tek_Ilk_Defe_Araz_9x16.mp4",
+  "clips": {
+    "ai1": "source/ai1.mp4",
+    "ai2": "source/ai2.mp4"
+  },
+  "anchors": {
+    "words": 3.74,
+    "words2": 4.86,
+    "words3": 6.1,
+    "settle": 7.38
+  },
+  "shots": [
+    {
+      "start": 0.0,
+      "clip": "ai2",
+      "src": 0.0,
+      "speed": 0.75,
+      "z": [
+        1.0,
+        1.05
+      ],
+      "cx": 0.5,
+      "cy": 0.4,
+      "depth": true
+    },
+    {
+      "start": 3.74,
+      "clip": "ai1",
+      "src": 0.0,
+      "z": [
+        1.12,
+        1.17
+      ],
+      "cx": 0.5,
+      "cy": 0.35,
+      "depth": false
+    },
+    {
+      "start": 5.85,
+      "clip": "ai1",
+      "src": 3.62,
+      "speed": 0.92,
+      "z": [
+        1.05,
+        1.1
+      ],
+      "cx": 0.5,
+      "cy": 0.38,
+      "depth": false
+    },
+    {
+      "start": 7.38,
+      "clip": "ai2",
+      "src": 2.85,
+      "z": [
+        1.3,
+        1.36
+      ],
+      "cx": 0.5,
+      "cy": 0.28,
+      "depth": false
+    },
+    {
+      "start": 8.82,
+      "clip": "ai2",
+      "src": 4.32,
+      "speed": 0.75,
+      "z": [
+        1.0,
+        1.05
+      ],
+      "cx": 0.5,
+      "cy": 0.4,
+      "depth": true
+    },
+    {
+      "start": 11.7,
+      "clip": "ai1",
+      "src": 2.13,
+      "z": [
+        1.35,
+        1.42
+      ],
+      "cx": 0.5,
+      "cy": 0.28,
+      "depth": true,
+      "trans": {
+        "type": "push",
+        "dur": 0.35
+      }
+    },
+    {
+      "start": 13.17,
+      "clip": "ai2",
+      "src": 6.5,
+      "z": [
+        1.05,
+        1.1
+      ],
+      "cx": 0.5,
+      "cy": 0.4,
+      "depth": true,
+      "trans": {
+        "type": "whip",
+        "dur": 0.2,
+        "dir": -1
+      }
+    },
+    {
+      "start": 14.61,
+      "clip": "ai2",
+      "src": 7.94,
+      "speed": 0.62,
+      "z": [
+        1.0,
+        1.04
+      ],
+      "cx": 0.5,
+      "cy": 0.42,
+      "depth": true
+    }
+  ],
+  "rows": [
+    {
+      "text": "İLK DƏFƏ",
+      "y": 560,
+      "size": 220,
+      "style": "outline",
+      "color": "#095D6A",
+      "lw": 4,
+      "speed": 70,
+      "dir": -1,
+      "alpha": 0.9,
+      "in": 0.35,
+      "out": 3.6
+    },
+    {
+      "text": "“ARAZ”DA",
+      "y": 800,
+      "size": 220,
+      "color": "orange",
+      "speed": 90,
+      "dir": 1,
+      "in": 0.5,
+      "out": 3.6
+    },
+    {
+      "text": "DİNLƏ",
+      "y": 1040,
+      "size": 220,
+      "style": "outline",
+      "color": "#095D6A",
+      "lw": 4,
+      "speed": 70,
+      "dir": -1,
+      "alpha": 0.9,
+      "in": 0.65,
+      "out": 3.6
+    },
+    {
+      "text": "“ARAZ”DA",
+      "y": 470,
+      "size": 300,
+      "color": "orange",
+      "speed": 160,
+      "dir": -1,
+      "in": 8.9,
+      "out": 11.7
+    },
+    {
+      "text": "İLK DƏFƏ",
+      "y": 770,
+      "size": 300,
+      "style": "outline",
+      "color": "#095D6A",
+      "lw": 5,
+      "speed": 160,
+      "dir": 1,
+      "alpha": 0.9,
+      "in": 9.0,
+      "out": 11.7
+    },
+    {
+      "text": "“ARAZ”DA",
+      "y": 300,
+      "size": 260,
+      "style": "outline",
+      "color": "#095D6A",
+      "lw": 5,
+      "speed": 60,
+      "dir": -1,
+      "alpha": 0.95,
+      "in": 11.7,
+      "out": 13.17,
+      "push": 0.02
+    },
+    {
+      "text": "DİNLƏ",
+      "y": 520,
+      "size": 420,
+      "color": "orange",
+      "speed": 50,
+      "dir": 1,
+      "in": 13.17,
+      "out": 14.61,
+      "push": 0.015
+    },
+    {
+      "text": "İLK DƏFƏ  “ARAZ”DA  DİNLƏ",
+      "y": 250,
+      "size": 130,
+      "style": "outline",
+      "color": "#095D6A",
+      "lw": 4,
+      "speed": 80,
+      "dir": -1,
+      "alpha": 0.95,
+      "in": 14.8
+    }
+  ],
+  "opening": {
+    "dur": 0.55,
+    "start": -0.22
+  },
+  "wipes": [
+    {
+      "at": 8.82,
+      "dur": 0.42
+    },
+    {
+      "at": 14.61,
+      "dur": 0.42
+    }
+  ],
+  "glints": [],
+  "shine": [
+    11.7,
+    13.17,
+    15.0
+  ],
+  "panel": {
+    "in": 7.38,
+    "edge": 143
+  },
+  "lockup": {
+    "date": "13 NOYABR",
+    "time": "11:00 – 12:00",
+    "l1": "İLK DƏFƏ",
+    "l2": "“ARAZ”DA",
+    "l3": "DİNLƏ",
+    "x": 96,
+    "centerY": 1050,
+    "style": {
+      "date": {
+        "y": 1080,
+        "size": 58
+      },
+      "time": {
+        "y": 1150,
+        "size": 50
+      },
+      "l1": {
+        "y": 1300,
+        "size": 112
+      },
+      "l2": {
+        "y": 1432,
+        "size": 128
+      },
+      "l3": {
+        "y": 1556,
+        "size": 112
+      }
+    }
+  },
+  "logoPos": {
+    "y": 1722,
+    "w": 176
+  },
+  "lockupStyle": "frame",
+  "beats": [
+    8.13,
+    8.82,
+    9.54,
+    10.24,
+    11.7,
+    15.33,
+    16.04
+  ],
+  "grade": {
+    "amount": 0.35
+  },
+  "sfx_db": -17,
+  "sfx": [
+    {
+      "type": "whoosh",
+      "at": 0.12,
+      "dur": 0.6,
+      "gain": 0.8
+    },
+    {
+      "type": "hit",
+      "at": 3.76,
+      "gain": 0.6
+    },
+    {
+      "type": "hit",
+      "at": 4.88,
+      "gain": 0.7
+    },
+    {
+      "type": "hit",
+      "at": 6.12,
+      "gain": 0.5
+    },
+    {
+      "type": "whoosh",
+      "at": 7.42,
+      "dur": 0.6,
+      "gain": 0.6
+    },
+    {
+      "type": "riser",
+      "at": 8.79,
+      "dur": 1.4,
+      "gain": 0.45
+    },
+    {
+      "type": "whoosh",
+      "at": 8.82,
+      "dur": 0.7,
+      "gain": 0.9
+    },
+    {
+      "type": "hit",
+      "at": 8.84,
+      "gain": 0.8
+    },
+    {
+      "type": "whoosh",
+      "at": 11.73,
+      "dur": 0.45,
+      "gain": 0.35
+    },
+    {
+      "type": "whoosh",
+      "at": 13.19,
+      "dur": 0.35,
+      "gain": 0.7,
+      "dir": -1
+    },
+    {
+      "type": "riser",
+      "at": 14.58,
+      "dur": 1.4,
+      "gain": 0.5
+    },
+    {
+      "type": "whoosh",
+      "at": 14.61,
+      "dur": 0.7,
+      "gain": 0.9
+    },
+    {
+      "type": "hit",
+      "at": 14.63,
+      "gain": 0.8
+    }
+  ]
+}

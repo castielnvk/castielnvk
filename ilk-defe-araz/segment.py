@@ -10,7 +10,7 @@ from torchvision import transforms
 B = sys.argv[1]; need = json.loads(sys.argv[2])
 m = AutoModelForImageSegmentation.from_pretrained("ZhengPeng7/BiRefNet_lite", trust_remote_code=True).eval()
 torch.set_num_threads(os.cpu_count() or 4)
-tf = transforms.Compose([transforms.Resize((768, 576)), transforms.ToTensor(),
+tf = transforms.Compose([transforms.Resize(tuple(int(v) for v in os.environ.get("SEG_RES", "768x576").split("x"))), transforms.ToTensor(),
                          transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
 t0 = time.time()
 for i, (c, n) in enumerate(need):
