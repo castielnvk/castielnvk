@@ -114,6 +114,15 @@ _(notes pending)_
   asked for the repeat, as a hook. SFX were called "çox loud və harsh": the SFX bus is now
   low-passed at 2.6 kHz and 8 dB quieter → `Kesf_Et_Gitar_Giveaway_v3_9x16.mp4` (23.5 s).
   Lesson: start SFX soft and low-passed for every show, and put the giveaway hook first.
+- **Guest:** the singer **MIRO** (the user's spelling). The user interrupted an attempt to add a
+  name label to the video while asking only for a caption, so the delivered v3 has no name on it.
+  Don't change a delivered video unless asked.
+- **Giveaway rules (from the user):** follow the page, tag 2 friends in a comment, and those
+  friends must follow the page too.
+- **Cover:** `Kesf_Et_MIRO_Giveaway_cover_1080x1920.jpg` — press-photo on green with "GIVEAWAY /
+  MIRO / GİTARASINI HƏDİYYƏ EDİR", key content inside the central 1:1 area. The user said "you
+  know the Kəşf Et page's thumbnails", but no reference was available in this session; ask for a
+  screenshot of the page grid if the cover must match.
 - The first Drive link was private (401); the user opened it after being asked.
 
 ### 4. Other: Victory Day vertical film — "Bir xəbər. Minlərlə xatirə." (7 Nov 2026)
