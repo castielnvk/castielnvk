@@ -104,6 +104,11 @@ _(notes pending)_
   not mistake the background music for the composition they have to guess.
 - **Uncertain:** the caption "şərhlərdə" (Whisper heard "şəhərlərdə"); "populyarı" (spoken
   "popüləri").
+- **v2 (same day):** the user asked for a "copyright free, funky vibe" song instead of the synth
+  bed. Used "Funky Chunk" by Kevin MacLeod (incompetech, CC BY 4.0 — credit required in the post),
+  17 dB under speech, stopped on the freeze frame →
+  `Kesf_Et_Gitar_Giveaway_v2_funk_9x16.mp4`. So for Kəşf Et the user accepts free licensed
+  tracks; the "original music only" rule was stated for Sözümün Canı.
 - The first Drive link was private (401); the user opened it after being asked.
 
 ### 4. Other: Victory Day vertical film — "Bir xəbər. Minlərlə xatirə." (7 Nov 2026)
