@@ -77,6 +77,14 @@ programmes, 4) everything else.
     `https://incompetech.com/music/royalty-free/mp3-royaltyfree/<Title>.mp3`. Animation and SFX
     hits are placed on the track's beat grid (`B` in `anons.html` and `sfx.py`); find it with
     librosa onset strength, since `beat_track` alone was jittery.
+  - **One-command build:** `seher-anons/build.py config.json` (see `example_config.json`) does
+    frames → beat grid → SFX → mix → render → MP4. Per episode only write the config: date, the
+    question split into `l1`, `l2` and the big last word `big`, a music file with `music_from`,
+    and 3 sticker words `[word, colour, time, x, y, sound]` (one per 5 s loop; sounds: bonk,
+    grump, ask). Needs `fr/`, `logo.png`, `l100.png`, `larazw.png`, `fonts/` next to it (see README).
+    Check test frames first with `build.py cfg.json 30,100,300` so titles/stickers don't cover faces.
+  - 17 Nov ("Ən yaxın dostunuzla nəyin üstündə küsmüsünüz?"): music "Fluffing a Duck" (Kevin
+    MacLeod, CC BY 4.0), stickers KÜSDÜM! / BARIŞAQ? / YOX!. Feedback pending.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 

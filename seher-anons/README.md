@@ -27,3 +27,10 @@ directions (`prev.html?p=1..4`) they asked for 1, 2 and 3 as videos on a clean A
 - `jingle_14s.m4a` is the standard announcement audio (identical in the 6, 11 and 12 Nov anonses).
 - Check that titles don't cover the characters' heads across the whole loop; text and date are
   plain strings in `anons.html`.
+
+## Current pipeline (approved style 1)
+
+`python3 build.py config.json` — see MEMORY.md. Extra assets to recreate next to the scripts:
+`l100.png` = `logos/individual/100-seher-sousu.png`, `larazw.png` = `logos/individual/araz-radio_white.png`,
+fonts via `npm i @fontsource/bangers @fontsource/anton @fontsource/barlow-condensed` into `fonts/`.
+Python: librosa, soundfile, scipy. Music from incompetech.com (CC BY 4.0, credit required).
