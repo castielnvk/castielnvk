@@ -51,7 +51,21 @@ programmes, 4) everything else.
   - Whether to remake Məlal's music.
 
 ### 2. Radio shows (100% Səhər Şousu, Qəbul Vaxtı, Biznes Mərkəzi, Reel covers)
-_(notes pending)_
+- **"Sabahın mövzusu" announcements (100% Səhər Şousu), 12 Nov 2026.** The user sends a clean AI
+  cartoon clip (720×1264, ~5 s, 24 fps, silent) plus "date) topic question"; deliver one 14 s
+  1080×1920 MP4. Everything lives in `seher-anons/` (see its README).
+  - **Approved style: "Qrafik roman"** (`anons.html?p=1`): full-bleed art, navy gradients, thin gold
+    frame, yellow Anton title with purple extrude, question in cream comic caption boxes with the
+    last word big in a purple box, date tag, time badge 08:00 — 10:30.
+  - Rejected: the first round with cream paper and small footage windows (A/B/C in `comic.html`).
+    Styles 2 (pop-art balloon) and 3 (slashed panels) were not chosen.
+  - After approving the look the user asked for full SFX, a different funky song and richer
+    motion. v2 has: original funk track at 119 BPM (`music.py`, MIDI → fluidsynth FluidR3_GM;
+    10 beats = one 5.04 s video loop), synthesized soft SFX (`sfx.py`), per-letter title drop,
+    stripe wipes over the loop cuts, impact stickers on the clip's gag, beat pulses, end badge.
+    Mix −14 LUFS. Feedback on v2 is still pending.
+  - The station's old announcement audio is music only (no voice-over), so it can be replaced.
+  - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 
 ### 3. Kəşf Et — Gülay Zeynallı, "5 təəccüblü sual, 5 cavab" (7–8 Nov 2026)
 - **What:** a celebrity-magazine 9:16 edit of the Kəşf Et (Araz Radio 103.3 FM) segment with
