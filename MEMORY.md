@@ -64,9 +64,14 @@ programmes, 4) everything else.
     10 beats = one 5.04 s video loop), synthesized soft SFX (`sfx.py`), per-letter title drop,
     stripe wipes over the loop cuts, impact stickers on the clip's gag, beat pulses, end badge.
     Mix −14 LUFS. Feedback on v2 is still pending.
-  - **Standing rule (user, 12 Nov 2026): "Həmişə çalış səhnəyə və mövzuya uyğun gəşəng mahnılar
-    qoy."** Compose a new original track for every announcement that fits that clip's scene and
-    topic (genre, mood, instruments), instead of reusing the same funk track each time.
+  - **Music rule (user, 12 Nov 2026, replaces "compose it yourself" for announcements):**
+    "Həmişə çalış səhnəyə və mövzuya uyğun gəşəng mahnılar qoy" and then "Orijinal musiqi yazma,
+    internetdən götür ... feel free." So pick a real, ready-made track from the internet that fits
+    each clip's scene and topic; do not synthesize music. The user believes 14–15 s is too short
+    for Instagram to flag. Claude's choice (told to the user): source from free-licence libraries
+    (Pixabay Music, Free Music Archive, incompetech, YouTube Audio Library) and say when a track
+    needs a credit, rather than ripping commercial songs. The older "original music only" rule
+    was given for Sözümün Canı; ask before applying this new rule to other projects.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 
