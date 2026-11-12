@@ -1,0 +1,86 @@
+<!doctype html><html lang="az"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts/node_modules/@fontsource/bangers/index.css">
+<link rel="stylesheet" href="fonts/node_modules/@fontsource/anton/index.css">
+<link rel="stylesheet" href="fonts/node_modules/@fontsource/barlow-condensed/800-italic.css">
+<link rel="stylesheet" href="fonts/node_modules/@fontsource/barlow-condensed/700.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#st{position:absolute;inset:0;overflow:hidden}
+.a{position:absolute}
+.an{font-family:Anton;line-height:1;white-space:nowrap}
+.bc{font-family:'Barlow Condensed';font-weight:800;font-style:italic;text-transform:uppercase;line-height:1;white-space:nowrap}
+.sm{font-family:'Barlow Condensed';font-weight:700;letter-spacing:6px;white-space:nowrap}
+.bg{font-family:Bangers;line-height:1;white-space:nowrap}
+.ink{position:relative;display:inline-block;z-index:0}
+.ink::before{content:attr(data-t);position:absolute;left:0;top:0;z-index:-1;-webkit-text-stroke:var(--sw) var(--sc);color:var(--sc);text-shadow:var(--ex)}
+.dots{background-image:radial-gradient(circle,var(--dc) 30%,transparent 32%);background-size:var(--ds,14px) var(--ds,14px)}
+.cap{display:inline-block;border:6px solid #111;box-shadow:9px 9px 0 #111;padding:10px 26px 12px}
+</style></head><body><div id="st"></div>
+<script>
+const Q=new URLSearchParams(location.search),P=Q.get('p')||'1';const st=document.getElementById('st');
+const C=Object.assign({date:'16 NOYABR',n:121},JSON.parse(Q.get('c')||'{}'));
+const anims=[],lives=[];
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const back=x=>{x=cl(x);const c=2.2;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const out=x=>1-Math.pow(1-cl(x),3);
+function el(html,css,cls,parent){const d=document.createElement('div');d.className='a '+(cls||'');d.style.cssText=css;d.innerHTML=html;(parent||st).appendChild(d);return d}
+const ext=(n,c)=>Array.from({length:n},(_,i)=>`${i+1}px ${i+1}px 0 ${c}`).join(',');
+const ink=(t,cls,size,col,sw,sc,ex,ls=2)=>`<span class="${cls} ink" data-t="${t}" style="font-size:${size}px;color:${col};--sw:${sw}px;--sc:${sc};--ex:${ex||'none'};letter-spacing:${ls}px">${t}</span>`;
+function pop(e,t0,base='',dur=.4){anims.push(t=>{const k=(t-t0)/dur;e.style.opacity=k<=0?0:1;e.style.transform=`${base} scale(${k<=0?0:back(k)})`})}
+function slam(e,t0,base='',dur=.3){anims.push(t=>{const k=cl((t-t0)/dur);e.style.opacity=k<=0?0:cl(k*3);const s=3-2*out(k);const sh=k>=1?Math.sin((t-t0-dur)*60)*Math.max(0,1-(t-t0-dur)/.18)*5:0;e.style.transform=`translate(${sh}px,0) ${base} scale(${s})`})}
+function slide(e,t0,dx,dy,base='',dur=.45){anims.push(t=>{const k=(t-t0)/dur;e.style.opacity=k<=0?0:1;const o=1-out(k);e.style.transform=`translate(${dx*o}px,${dy*o}px) ${base}`})}
+function fade(e,t0,dur=.4){anims.push(t=>e.style.opacity=cl((t-t0)/dur))}
+function wob(e,t0,base,amp=1.2,sp=2.2){anims.push(t=>{if(t>t0+.5)e.style.transform=`${base} rotate(${Math.sin((t-t0)*sp)*amp}deg) scale(${1+Math.sin((t-t0)*sp*1.3)*.012})`})}
+const live=(css,parent)=>{const d=el('<img style="display:block;'+(css||'')+'">','left:0;top:0','',parent);lives.push(d.firstChild);return d};
+const logosDark=()=>{el('<img src="l100.png">','left:71px;top:152px;z-index:50');el('<img src="larazw.png" style="width:166px">','left:838px;top:183px;z-index:50')};
+const logosLight=()=>el('<img src="logo.png">','left:0;top:0;z-index:50');
+const flash=()=>{const f=el('','inset:0;background:#fff;z-index:90');anims.push(t=>f.style.opacity=cl(1-t/.25))};
+if(P==='1'){
+  live();
+  el('','inset:0;--dc:rgba(0,0,0,.22);--ds:7px;mix-blend-mode:multiply;mask-image:linear-gradient(#000,transparent 30%,transparent 62%,#000)','dots');
+  el('','left:0;top:0;width:1080px;height:680px;background:linear-gradient(rgba(10,6,48,.9),rgba(10,6,48,.55) 45%,transparent)');
+  el('','left:0;top:1120px;width:1080px;height:800px;background:linear-gradient(transparent,rgba(10,6,48,.93) 55%)');
+  const f1=el('','inset:26px;border:3px solid rgba(255,229,0,.9)'),f2=el('','inset:36px;border:1px solid rgba(255,229,0,.5)');fade(f1,.1,.6);fade(f2,.3,.6);
+  logosDark();
+  const tg=el(`<span class="sm" style="font-size:30px;color:#111;background:#FFE500;padding:4px 14px 4px 18px">BURAXILIŞ • ${C.date}</span>`,'left:70px;top:300px');slide(tg,.75,-500,0,'rotate(-2deg)');
+  const a=el(ink('SABAHIN','an',150,'#FFE500',13,'#0b0820',ext(12,'#6A2BFF'),3),'left:66px;top:342px;transform-origin:30% 50%');slam(a,.15,'rotate(-2deg)');
+  const b=el(ink('MÖVZUSU','an',82,'#fff',11,'#0b0820',ext(8,'#6A2BFF'),9),'left:72px;top:500px;transform-origin:30% 50%');slam(b,.45,'rotate(-2deg)');
+  const c1=el('<div class="cap bc" style="background:#FFF6C9;color:#111;font-size:70px">İnsanlar niyə</div>','left:64px;top:1330px');slide(c1,2.4,-900,0,'rotate(-1.5deg)',.38);
+  const c2=el('<div class="cap bc" style="background:#FFF6C9;color:#111;font-size:70px">başqalarının həyatına</div>','left:120px;top:1432px');slide(c2,2.8,-1100,0,'rotate(-1.5deg)',.38);
+  const c3=el('<div class="cap bc" style="background:#6A2BFF;color:#FFE500;font-size:130px;padding:6px 36px 14px;box-shadow:11px 11px 0 #8CFF3C">qarışır?</div>','left:64px;top:1534px;transform-origin:20% 60%');pop(c3,3.3,'rotate(-1.5deg)',.35);wob(c3,3.3,'rotate(-1.5deg)',.8,2);
+  const ft=el('<span class="sm" style="font-size:30px;color:#fff">HƏFTƏİÇİ HƏR SƏHƏR <span style="color:#FFE500">08:00 — 10:30</span></span>','left:70px;top:1756px');fade(ft,4.0,.5);
+  flash();
+}
+if(P==='2'){
+  live();
+  el('','left:0;top:0;width:1080px;height:760px;--dc:rgba(106,43,255,.5);--ds:20px;mask-image:radial-gradient(ellipse 90% 80% at 12% 0%,#000 25%,transparent 75%)','dots');
+  el('','left:0;top:1200px;width:1080px;height:720px;--dc:rgba(255,61,46,.6);--ds:20px;mask-image:radial-gradient(ellipse 80% 80% at 100% 100%,#000 20%,transparent 70%)','dots');
+  el('','inset:0;border:22px solid #111');el('','inset:22px;border:6px solid #FFE500');
+  logosLight();
+  const a=el(ink('SABAHIN','bg',180,'#FFE500',18,'#111',ext(12,'#6A2BFF'),8),'left:230px;top:296px;transform-origin:40% 50%');slam(a,.15,'rotate(-5deg)');
+  const b=el('<div class="bg" style="background:#FF3D2E;color:#fff;font-size:62px;padding:6px 28px 0;border:7px solid #111;box-shadow:8px 8px 0 #111;letter-spacing:6px">MÖVZUSU</div>','left:80px;top:452px');slide(b,.55,-700,0,'rotate(-5deg)');
+  const bl=el(`<svg width="900" height="470" viewBox="0 0 900 470" style="overflow:visible;filter:drop-shadow(12px 12px 0 #6A2BFF)"><path d="M70 110 H520 L640 0 L610 110 H830 Q880 110 880 160 V400 Q880 450 830 450 H70 Q20 450 20 400 V160 Q20 110 70 110 Z" fill="#fff" stroke="#111" stroke-width="10" stroke-linejoin="round"/></svg>
+  <div class="bg" style="position:absolute;left:20px;top:110px;width:860px;height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:84px;color:#111;letter-spacing:3px;line-height:1.1;padding-top:10px"><div>İNSANLAR NİYƏ</div><div>BAŞQALARININ HƏYATINA</div><div style="color:#FF3D2E;font-size:104px">QARIŞIR?</div></div>`,'left:90px;top:1180px;transform-origin:68% 0%');pop(bl,2.4,'rotate(1.5deg)',.4);wob(bl,2.4,'rotate(1.5deg)',.9,2);
+  const tm=el('<div class="bg" style="background:#FFE500;color:#111;font-size:76px;padding:12px 60px 4px 48px;border:7px solid #111;box-shadow:10px 10px 0 #111;letter-spacing:4px">HƏR SƏHƏR 08:00 – 10:30</div>','left:44px;top:1690px');slide(tm,3.5,-1100,0,'rotate(-3deg)');
+  flash();
+}
+if(P==='3'){
+  st.style.background='#0c0a14';
+  const pn=(poly)=>el('',`inset:0;clip-path:${poly}`);
+  const p1=pn('polygon(0 0,100% 0,100% 660px,0 760px)');live('',p1);el('','inset:0;--dc:rgba(106,43,255,.45);--ds:18px;mask-image:linear-gradient(#000,transparent 40%)','dots',p1);
+  const p2=pn('polygon(0 778px,100% 678px,100% 1250px,0 1350px)');live('width:1242px;position:absolute;left:-60px;top:-205px',p2);
+  el('','inset:0;background:repeating-conic-gradient(from 0deg at 52% 53%,rgba(255,255,255,.7) 0 1.2deg,transparent 1.2deg 6deg);mask-image:radial-gradient(ellipse 62% 23% at 52% 53%,transparent 80%,#000 100%)','',p2);
+  const p3=pn('polygon(0 1368px,100% 1268px,100% 100%,0 100%)');el('','inset:0;background:linear-gradient(160deg,#6A2BFF,#2A0F7A)','',p3);el('','inset:0;--dc:rgba(255,229,0,.35);--ds:18px;mask-image:linear-gradient(120deg,transparent 55%,#000)','dots',p3);
+  slide(p1,.1,-1100,0,'',.4);slide(p2,.4,1100,0,'',.4);slide(p3,.7,0,700,'',.4);
+  logosLight();
+  const a=el(ink('SABAHIN MÖVZUSU','an',128,'#FFE500',12,'#111',ext(10,'#6A2BFF'),3),'left:0;width:1080px;text-align:center;top:300px');slam(a,1.0,'rotate(-3deg)');
+  const s=el(ink('NƏ VAR, NƏ YOX?','bg',80,'#fff',12,'#111',ext(5,'#FF3D2E'),4),'left:440px;top:1135px');pop(s,2.0,'rotate(-6deg)');wob(s,2.0,'rotate(-6deg)',2,7);
+  const q=el('','left:64px;top:1420px;transform:rotate(-5.3deg);transform-origin:0 0');
+  [['İnsanlar niyə','font-size:104px;color:#fff'],['başqalarının <span style="background:#FFE500;color:#111;padding:0 18px 4px 10px">həyatına</span>','font-size:96px;color:#fff;margin-top:6px'],['qarışır?','font-size:150px;color:#FFE500;margin-top:2px']].forEach((l,i)=>{const d=document.createElement('div');d.className='bc';d.style.cssText=l[1];d.innerHTML=l[0];q.appendChild(d);slide(d,2.6+i*.4,-1000,0,'',.35)});
+  const ft=el('<span class="sm" style="font-size:30px;color:#fff">HƏFTƏİÇİ HƏR SƏHƏR <span style="color:#FFE500">08:00 — 10:30</span></span>','left:70px;top:1800px');fade(ft,4.0,.5);
+  flash();
+}
+window.setT=async(t,i)=>{const s=`fr/N/${String(((i-1)%C.n)+1).padStart(4,'0')}.jpg`;
+  await Promise.all(lives.map(im=>{if(im.dataset.s===s)return;im.dataset.s=s;im.src=s;return im.decode()}));anims.forEach(f=>f(t))};
+</script></body></html>

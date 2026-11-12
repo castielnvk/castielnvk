@@ -1,0 +1,80 @@
+<!doctype html><html lang="az"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts/node_modules/@fontsource/bangers/index.css">
+<link rel="stylesheet" href="fonts/node_modules/@fontsource/anton/index.css">
+<link rel="stylesheet" href="fonts/node_modules/@fontsource/barlow-condensed/800-italic.css">
+<link rel="stylesheet" href="fonts/node_modules/@fontsource/barlow-condensed/700.css">
+<link rel="stylesheet" href="fonts/node_modules/@fontsource/montserrat/800.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#st{position:absolute;inset:0;overflow:hidden}
+.a{position:absolute}
+.an{font-family:Anton;line-height:1;white-space:nowrap}
+.bc{font-family:'Barlow Condensed';font-weight:800;font-style:italic;text-transform:uppercase;line-height:1;white-space:nowrap}
+.sm{font-family:'Barlow Condensed';font-weight:700;letter-spacing:6px;white-space:nowrap}
+.bg{font-family:Bangers;line-height:1;white-space:nowrap}
+.ink{position:relative;display:inline-block;z-index:0}
+.ink::before{content:attr(data-t);position:absolute;left:0;top:0;z-index:-1;-webkit-text-stroke:var(--sw) var(--sc);color:var(--sc);text-shadow:var(--ex)}
+.dots{background-image:radial-gradient(circle,var(--dc) 30%,transparent 32%);background-size:var(--ds,14px) var(--ds,14px)}
+.cap{display:inline-block;border:6px solid #111;box-shadow:9px 9px 0 #111;padding:10px 26px 12px}
+</style></head><body><div id="st"></div>
+<script>
+const P=new URLSearchParams(location.search).get('p')||'1';const st=document.getElementById('st');
+function el(html,css,cls){const d=document.createElement('div');d.className='a '+(cls||'');d.style.cssText=css;d.innerHTML=html;st.appendChild(d);return d}
+const ext=(n,c,dx=1,dy=1)=>Array.from({length:n},(_,i)=>`${(i+1)*dx}px ${(i+1)*dy}px 0 ${c}`).join(',');
+const ink=(t,cls,size,col,sw,sc,ex,ls=2)=>`<span class="${cls} ink" data-t="${t}" style="font-size:${size}px;color:${col};--sw:${sw}px;--sc:${sc};--ex:${ex||'none'};letter-spacing:${ls}px">${t}</span>`;
+const logosDark=()=>{el('<img src="l100.png">','left:71px;top:152px');el('<img src="larazw.png" style="width:166px">','left:838px;top:183px')};
+const logosLight=()=>el('<img src="logo.png">','left:0;top:0');
+if(P==='1'){ // QRAFİK ROMAN — dark cinematic cover (UFO)
+  el('<img src="still/C.jpg">','left:0;top:0');
+  el('','inset:0;--dc:rgba(0,0,0,.28);--ds:7px;mix-blend-mode:multiply;mask-image:linear-gradient(#000,transparent 35%,transparent 60%,#000)','dots');
+  el('','left:0;top:0;width:1080px;height:520px;background:linear-gradient(rgba(6,4,30,.85),transparent)');
+  el('','left:0;top:1180px;width:1080px;height:740px;background:linear-gradient(transparent,rgba(6,4,30,.92) 55%)');
+  el('','inset:26px;border:3px solid rgba(255,229,0,.9)');el('','inset:36px;border:1px solid rgba(255,229,0,.5)');
+  logosDark();
+  el('<span class="sm" style="font-size:30px;color:#111;background:#FFE500;padding:4px 14px 4px 18px">BURAXILIŞ • 06 NOYABR</span>','left:70px;top:318px;transform:rotate(-2deg)');
+  el(ink('SABAHIN','an',218,'#FFE500',14,'#0b0820',ext(16,'#6A2BFF'),3),'left:66px;top:372px;transform:rotate(-2deg)');
+  el(ink('MÖVZUSU','an',128,'#fff',12,'#0b0820',ext(11,'#6A2BFF'),10),'left:72px;top:598px;transform:rotate(-2deg)');
+  el('<div class="cap bc" style="background:#FFF6C9;color:#111;font-size:66px">Hansı hadisəni danışanda</div>','left:64px;top:1338px;transform:rotate(-1.5deg)');
+  el('<div class="cap bc" style="background:#FFF6C9;color:#111;font-size:66px">hələ də sizə</div>','left:150px;top:1438px;transform:rotate(-1.5deg)');
+  el('<div class="cap bc" style="background:#6A2BFF;color:#FFE500;font-size:124px;padding:6px 34px 14px;box-shadow:11px 11px 0 #8CFF3C">inanmırlar?</div>','left:64px;top:1534px;transform:rotate(-1.5deg)');
+  el('<span class="sm" style="font-size:30px;color:#fff">HƏFTƏİÇİ HƏR SƏHƏR <span style="color:#FFE500">08:00 — 10:30</span></span>','left:70px;top:1752px');
+}
+if(P==='2'){ // POP-ART — bright, big balloon (selfie)
+  el('<img src="still/A.jpg">','left:0;top:0');
+  el('','left:0;top:0;width:1080px;height:760px;--dc:rgba(106,43,255,.55);--ds:20px;mask-image:radial-gradient(ellipse 90% 80% at 15% 0%,#000 25%,transparent 75%)','dots');
+  el('','left:0;top:1300px;width:1080px;height:620px;--dc:rgba(255,61,46,.6);--ds:20px;mask-image:radial-gradient(ellipse 80% 80% at 100% 100%,#000 20%,transparent 70%)','dots');
+  el('','inset:0;border:22px solid #111');el('','inset:22px;border:6px solid #FFE500');
+  logosLight();
+  el(ink('SABAHIN','bg',230,'#FFE500',20,'#111',ext(14,'#6A2BFF'),8),'left:120px;top:300px;transform:rotate(-5deg)');
+  el('<div class="bg" style="background:#FF3D2E;color:#fff;font-size:86px;padding:8px 36px 0;border:7px solid #111;box-shadow:9px 9px 0 #111;letter-spacing:6px">MÖVZUSU</div>','left:560px;top:478px;transform:rotate(-5deg)');
+  // balloon
+  el(`<svg width="900" height="470" viewBox="0 0 900 470" style="overflow:visible;filter:drop-shadow(12px 12px 0 #6A2BFF)"><path d="M70 20 H830 Q880 20 880 70 V290 Q880 340 830 340 H430 L330 455 L345 340 H70 Q20 340 20 290 V70 Q20 20 70 20 Z" fill="#fff" stroke="#111" stroke-width="10" stroke-linejoin="round"/></svg>
+  <div class="bg" style="position:absolute;left:20px;top:20px;width:860px;height:320px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:92px;color:#111;letter-spacing:3px;line-height:1.08;padding-top:10px"><div>QOHUMLARLA <span style="color:#FF3D2E">DOST</span></div><div>OLMAQ MÜMKÜNDÜR?</div></div>`,'left:90px;top:640px;transform:rotate(2deg)');
+  el('<div class="bg" style="background:#FFE500;color:#111;font-size:76px;padding:12px 60px 4px 48px;border:7px solid #111;box-shadow:10px 10px 0 #111;letter-spacing:4px">HƏR SƏHƏR 08:00 – 10:30</div>','left:44px;top:1610px;transform:rotate(-3deg)');
+}
+if(P==='3'){ // PANEL SLASH — three diagonal panels (old man)
+  st.style.background='#0c0a14';
+  const pn=(poly,inner)=>{const d=el(inner,`inset:0;clip-path:${poly}`);return d};
+  pn('polygon(0 0,100% 0,100% 660px,0 760px)','<img src="still/B.jpg" style="position:absolute;left:0;top:-100px"><div class="dots" style="position:absolute;inset:0;--dc:rgba(106,43,255,.45);--ds:18px;mask-image:linear-gradient(#000,transparent 45%)"></div>');
+  pn('polygon(0 778px,100% 678px,100% 1250px,0 1350px)','<img src="still/B.jpg" style="position:absolute;width:1404px;left:-162px;top:-433px"><div style="position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 52% 53%,rgba(255,255,255,.75) 0 1.2deg,transparent 1.2deg 6deg);mask-image:radial-gradient(ellipse 60% 22% at 52% 53%,transparent 78%,#000 100%)"></div>');
+  pn('polygon(0 1368px,100% 1268px,100% 100%,0 100%)','<div style="position:absolute;inset:0;background:linear-gradient(160deg,#6A2BFF,#2A0F7A)"></div><div class="dots" style="position:absolute;inset:0;--dc:rgba(255,229,0,.35);--ds:18px;mask-image:linear-gradient(120deg,transparent 55%,#000)"></div>');
+  logosLight();
+  el(ink('SABAHIN MÖVZUSU','an',128,'#FFE500',12,'#111',ext(10,'#6A2BFF'),3),'left:0;width:1080px;text-align:center;top:300px;transform:rotate(-3deg)');
+  el(ink('NƏ VAXT?!','bg',120,'#fff',14,'#111',ext(8,'#FF3D2E'),4),'left:600px;top:1085px;transform:rotate(-6deg)');
+  el('<div class="bc" style="font-size:104px;color:#fff;line-height:1.02;transform:rotate(-5.3deg);transform-origin:0 0">Subaylara ən çox<br>hansı <span style="background:#FFE500;color:#111;padding:0 18px 4px 10px">məsləhəti</span><br><span style="color:#FFE500;font-size:150px">verirlər?</span></div>','left:64px;top:1420px');
+  el('<span class="sm" style="font-size:30px;color:#fff">HƏFTƏİÇİ HƏR SƏHƏR <span style="color:#FFE500">08:00 — 10:30</span></span>','left:70px;top:1800px');
+}
+if(P==='4'){ // NUAR / editorial — black page, one hero panel
+  st.style.background='#0b0b0f';
+  el('','left:0;top:0;width:1080px;height:900px;--dc:rgba(255,229,0,.22);--ds:16px;mask-image:linear-gradient(115deg,#000,transparent 55%)','dots');
+  el('<img src="still/A.jpg" style="position:absolute;left:0;top:-600px">','left:0;top:660px;width:1080px;height:810px;clip-path:polygon(0 60px,100% 0,100% 750px,0 810px);').style.cssText+='';
+  el('','left:0;top:660px;width:1080px;height:810px;clip-path:polygon(0 60px,100% 0,100% 6px,0 66px);background:#FFE500');
+  el('','left:0;top:660px;width:1080px;height:810px;clip-path:polygon(0 804px,100% 744px,100% 750px,0 810px);background:#FFE500');
+  logosDark();
+  el(`<span class="an" style="font-size:176px;color:transparent;-webkit-text-stroke:4px #FFE500;letter-spacing:6px">SABAHIN</span>`,'left:66px;top:300px');
+  el(`<span class="an" style="font-size:176px;color:#FFE500;letter-spacing:6px">MÖVZUSU</span>`,'left:66px;top:486px;transform:rotate(-3.2deg);transform-origin:0 50%');
+  el('<div class="bc" style="font-size:112px;color:#fff;line-height:1.0">Qohumlarla <span style="color:#FFE500">dost</span><br>olmaq mümkündür?</div>','left:64px;top:1490px;transform:rotate(-3.2deg);transform-origin:0 0');
+  el('<div style="display:flex;align-items:center;gap:24px"><div class="bg" style="background:#FFE500;color:#111;font-size:54px;padding:8px 26px 2px;letter-spacing:3px">08:00 – 10:30</div><span class="sm" style="font-size:28px;color:#fff">HƏFTƏİÇİ HƏR SƏHƏR</span></div>','left:66px;top:1760px');
+}
+</script></body></html>
