@@ -64,6 +64,9 @@ programmes, 4) everything else.
     10 beats = one 5.04 s video loop), synthesized soft SFX (`sfx.py`), per-letter title drop,
     stripe wipes over the loop cuts, impact stickers on the clip's gag, beat pulses, end badge.
     Mix −14 LUFS. Feedback on v2 is still pending.
+  - **Standing rule (user, 12 Nov 2026): "Həmişə çalış səhnəyə və mövzuya uyğun gəşəng mahnılar
+    qoy."** Compose a new original track for every announcement that fits that clip's scene and
+    topic (genre, mood, instruments), instead of reusing the same funk track each time.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 
