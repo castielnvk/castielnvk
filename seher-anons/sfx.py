@@ -31,7 +31,7 @@ def air(d=.9):
     n=int(d*SR); t=np.arange(n)/n; return bp(rng.standard_normal(n),2500,6500)*np.sin(np.pi*t)**2
 def boing(d=.5,f=150):
     n=int(d*SR); t=np.arange(n)/SR; fm=f*(1+.35*np.sin(2*np.pi*9*t)*np.exp(-t*4)); y=np.sin(2*np.pi*np.cumsum(fm)/SR)+.4*np.sin(4*np.pi*np.cumsum(fm)/SR); return lp(y*np.exp(-t*7)*np.minimum(1,t/.004),2200)
-B=60/119; L=121/24
+B=0.594; L=121/24
 # intro wipe + title
 put(whoosh(.38,400,2400,.7),0.0,.55,-.2); put(thump(120,45,.3),0.02,.5)
 for i in range(7): put(pop(240+i*38,520+i*60,.06),.08+i*.05,.16,-.5+i*.12)
@@ -43,19 +43,19 @@ put(whistle(),1.24,.20,.3); put(wood(),1.62,.5,.35); put(boing(),1.63,.33,.35); 
 put(wood(700),L+1.62,.42,.35); put(pop(300,700),L+1.62,.3,.35); put(boing(.4,170),L+1.63,.22,.35)
 put(whistle(1300,480,.33),2*L+1.26,.16,.3); put(wood(900),2*L+1.62,.42,.35); put(pop(),2*L+1.62,.3,.35)
 # captions
-put(whoosh(.3,700,3000,.6),5*B-.1,.40,-.4)
-for k in range(2): put(tick(1700+200*k),5*B+.12+k*.1,.22,-.3)
-put(whoosh(.3,600,2800,.6),6*B-.1,.40,-.2)
-for k in range(2): put(tick(1900-150*k),6*B+.12+k*.1,.22,0)
-put(thump(125,38,.42,.7),7*B,.95); put(pop(220,560,.11),7*B,.45); put(whoosh(.45,2600,500,.15),7*B+.02,.28)
-put(tick(1500),8*B,.25,-.5); put(pop(300,520,.06),8*B+.02,.14,-.5)
+put(whoosh(.3,700,3000,.6),4*B-.1,.40,-.4)
+for k in range(2): put(tick(1700+200*k),4*B+.12+k*.1,.22,-.3)
+put(whoosh(.3,600,2800,.6),5*B-.1,.40,-.2)
+for k in range(2): put(tick(1900-150*k),5*B+.12+k*.1,.22,0)
+put(thump(125,38,.42,.7),6*B,.95); put(pop(220,560,.11),6*B,.45); put(whoosh(.45,2600,500,.15),6*B+.02,.28)
+put(tick(1500),7*B,.25,-.5); put(pop(300,520,.06),7*B+.02,.14,-.5)
 # loop-cut wipes
 for tl in (L,2*L): put(whoosh(.42,450,2600,.5),tl-.2,.48,0)
 # title waves
-for tw in (6.05,11.09):
+for tw in (10*B,18*B):
     for i in range(7): put(pop(260+i*34,500+i*55,.05),tw+i*.045,.10,-.5+i*.12)
 # end badge + final
-put(whoosh(.28,800,2800,.7),25*B-.12,.34,-.3); put(pop(240,640,.1),25*B,.42,-.3); put(stamp(),25*B,.3,-.3)
-put(thump(120,40,.45,.6),27*B,.8)
+put(whoosh(.28,800,2800,.7),21*B-.12,.34,-.3); put(pop(240,640,.1),21*B,.42,-.3); put(stamp(),21*B,.3,-.3)
+put(thump(120,40,.45,.6),22*B,.8)
 out=sosfiltfilt(butter(2,30,'high',fs=SR,output='sos'),out,axis=0)
 out/=max(1,np.abs(out).max()/.9); sf.write('sfx.wav',out,SR); print('peak',np.abs(out).max())

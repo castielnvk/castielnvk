@@ -72,6 +72,11 @@ programmes, 4) everything else.
     (Pixabay Music, Free Music Archive, incompetech, YouTube Audio Library) and say when a track
     needs a credit, rather than ripping commercial songs. The older "original music only" rule
     was given for Sözümün Canı; ask before applying this new rule to other projects.
+  - 16 Nov v3 uses "Funkorama" by Kevin MacLeod (incompetech.com, CC BY 4.0 — credit needed in
+    the post), cut from 8.933 s, beat 0.594 s. incompetech MP3s download fine with curl:
+    `https://incompetech.com/music/royalty-free/mp3-royaltyfree/<Title>.mp3`. Animation and SFX
+    hits are placed on the track's beat grid (`B` in `anons.html` and `sfx.py`); find it with
+    librosa onset strength, since `beat_track` alone was jittery.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 
