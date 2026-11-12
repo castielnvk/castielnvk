@@ -41,6 +41,14 @@ Araz Radio 103.3 FM-in eksklüziv mahnı premyeraları üçün 9:16 Reel şablon
   musiqidən ~17 dB aşağı (`sfx`, `sfx_db`). Mahnının özü toxunulmur.
 - **Dərinlik maskaları:** BiRefNet_lite (MIT) — `segment.py`; yalnız arxasında yazı olan kadrlar üçün.
 
+## Grok image-to-video promptları (istifadəçi üçün)
+
+Hər posterdən 3 video (10 s, 9:16), hər biri fərqli promptla; poster yazısız olsun.
+
+1. **Yavaş push-in (hər posterə):** `Cinematic slow push-in toward the subject, smooth and steady camera, no cuts. The person stays exactly the same: same face, same outfit, same pose, same lighting. Subtle natural life: gentle breathing, a slow blink, a small head tilt, hair moving softly. Soft studio light, shallow depth of field, premium music-video look. Vertical 9:16, 10 seconds.`
+2. **Yan qövs + işıq:** `Slow cinematic camera arc from left to right around the subject, smooth parallax between subject and background, no cuts. The person keeps the exact same face, outfit and pose, only small natural movements: a slight turn of the head toward the camera, a confident look into the lens, fabric and hair moving gently. A warm light sweep slowly passes across the background. High-end fashion editorial feel. Vertical 9:16, 10 seconds.`
+3. **Qrup (2–3 nəfər):** `All people are already in the frame from the first second and stay in their positions the whole time. No one enters, leaves, appears or disappears; faces never blend or change. Slow steady push-in, subtle natural movements only: breathing, blinking, small head turns, a soft smile. Consistent studio lighting, sharp faces, premium album-cover look. Vertical 9:16, 10 seconds.`
+
 ## Sürət qeydləri
 
 - Fayllar gələn kimi maskaları arxa planda başlat: `SEG_RES=512x384 python3 -I segment.py …` (~2 s/kadr, 768x576-da ~3.5 s).
