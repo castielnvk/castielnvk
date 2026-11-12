@@ -101,12 +101,16 @@ WORDS = [(w[0], w[1], w[2].strip()) for s in TR for w in s['w']]
 def norm(s):
     return ''.join(ch for ch in s.lower() if ch.isalnum())
 
-TR3 = [(w[0], w[1], w[2].strip()) for s in json.load(open(os.path.join(WDIR, 'tr3.json'))) if not s['p'] for w in s['w']]
+TR3 = [(w[0], w[1], w[2].strip()) for f in ('tr4.json', 'tr3.json') for s in json.load(open(os.path.join(WDIR, f))) if not s['p'] for w in s['w']]
+TR4W = [(w[0], w[1], w[2].strip()) for s in json.load(open(os.path.join(WDIR, 'tr4.json'))) if not s['p'] for w in s['w']]
+TR3W = [(w[0], w[1], w[2].strip()) for s in json.load(open(os.path.join(WDIR, 'tr3.json'))) if not s['p'] for w in s['w']]
 def word_times(text, s0, s1):
     ws = text.split()
-    cand = [w for w in TR3 if w[0] >= s0-0.25 and w[0] < s1]
-    if len(cand) != len(ws): cand = [w for w in WORDS if w[0] >= s0-0.25 and w[0] < s1]
-    if len(cand) == len(ws):
+    cand = []
+    for src in (TR4W, TR3W, WORDS):
+        c = [w for w in src if w[0] >= s0-0.25 and w[0] < s1]
+        if len(c) == len(ws): cand = c; break
+    if cand:
         st = [max(s0, c[0]) for c in cand]
     else:
         L = np.cumsum([0]+[len(w)+1 for w in ws]); st = list(s0+(s1-s0)*L[:-1]/L[-1])
@@ -481,7 +485,7 @@ def load_wav(p):
     return a
 
 def build_audio():
-    src = load_wav(os.path.join(WDIR, 'a.wav'))
+    src = load_wav(os.path.join(WDIR, 'a_clean.wav'))
     n = int(TOTAL*SR)+SR
     dia = np.zeros((n, 2), np.float32)
     gain_env = np.ones(n, np.float32)
@@ -533,7 +537,7 @@ def build_audio():
 def main():
     build_audio()
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', os.path.join(BASE, 'mix_raw.wav'), '-af',
-                    'acompressor=threshold=-20dB:ratio=2.5:attack=8:release=200,loudnorm=I=-14:TP=-1.5:LRA=9',
+                    'acompressor=threshold=-22dB:ratio=3:attack=6:release=180:makeup=2,lowpass=f=15000,loudnorm=I=-14:TP=-1.5:LRA=8',
                     '-ar', '48000', os.path.join(BASE, 'mix.wav')], check=True)
     f0, f1 = 0, NF
     if PREVIEW:
