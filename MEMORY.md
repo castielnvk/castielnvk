@@ -85,6 +85,9 @@ programmes, 4) everything else.
     Check test frames first with `build.py cfg.json 30,100,300` so titles/stickers don't cover faces.
   - 17 Nov ("Ən yaxın dostunuzla nəyin üstündə küsmüsünüz?"): music "Fluffing a Duck" (Kevin
     MacLeod, CC BY 4.0), stickers KÜSDÜM! / BARIŞAQ? / YOX!. Feedback pending.
+  - 18 Nov ("Evdə nəyin üstündə ən çox dava düşür?"): the clip was 15 s (361 frames), so no
+    looping and no loop wipes; music "Run Amok" (Kevin MacLeod, CC BY 4.0); stickers BUZDUR! /
+    İSTİDİR! / APÇİ! / SÖNDÜR! with new sounds cold, hot, sneeze. Feedback pending.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 

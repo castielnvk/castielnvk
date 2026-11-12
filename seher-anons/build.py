@@ -65,12 +65,19 @@ for w,c,t,x,yy,snd in cfg['st']:
     if snd=='bonk': put(whistle(),t-.38,.2,pan); put(wood(),t,.5,pan); put(boing(),t+.01,.33,pan); put(pop(),t,.3,pan)
     elif snd=='grump': put(boing(.55,95),t,.5,pan); put(thump(140,60,.2,.3),t,.45,pan); put(pop(200,150,.1),t,.3,pan)
     elif snd=='ask': put(whistle(520,1250,.3),t-.3,.2,pan); put(pop(300,760,.09),t,.4,pan); put(wood(980),t,.3,pan)
+    elif snd=='cold':
+        put(air(.5),t-.1,.35,pan); put(pop(520,900,.07),t,.3,pan)
+        for k in range(6): put(tick(2600+150*(k%2),.02),t+.08+k*.055,.22,pan)
+    elif snd=='hot':
+        nn=int(.45*SR); tt_=np.arange(nn)/SR; put(bp(rng.standard_normal(nn),2500,6500)*np.exp(-tt_*7)*(1+.5*np.sin(2*np.pi*23*tt_)),t,.3,pan); put(pop(240,520,.1),t,.35,pan); put(thump(130,60,.2,.2),t,.4,pan)
+    elif snd=='sneeze':
+        put(whoosh(.22,3000,700,.2),t,.6,pan); put(thump(140,50,.25,.5),t+.02,.6,pan); put(boing(.45,180),t+.05,.3,pan)
     else: put(wood(700),t,.45,pan); put(pop(300,700),t,.3,pan)
 put(whoosh(.3,700,3000,.6),E['c1']-.1,.4,-.4); [put(tick(1700+200*k),E['c1']+.12+k*.1,.22,-.3) for k in range(2)]
 put(whoosh(.3,600,2800,.6),E['c2']-.1,.4,-.2); [put(tick(1900-150*k),E['c2']+.12+k*.1,.22,0) for k in range(2)]
 put(thump(125,38,.42,.7),E['c3'],.95); put(pop(220,560,.11),E['c3'],.45); put(whoosh(.45,2600,500,.15),E['c3']+.02,.28)
 put(tick(1500),E['ft'],.25,-.5); put(pop(300,520,.06),E['ft']+.02,.14,-.5)
-for tl in np.arange(L,D-.3,L): put(whoosh(.42,450,2600,.5),tl-.2,.48,0)
+for tl in np.arange(L,D-.3,L) if n<339 else []: put(whoosh(.42,450,2600,.5),tl-.2,.48,0)
 for tw in (E['w1'],E['w2']):
     for i in range(7): put(pop(260+i*34,500+i*55,.05),tw+i*.045,.10,-.5+i*.12)
 put(whoosh(.28,800,2800,.7),E['bd']-.12,.34,-.3); put(pop(240,640,.1),E['bd'],.42,-.3); put(stamp(),E['bd'],.3,-.3); put(thump(120,40,.45,.6),E['end'],.8)
