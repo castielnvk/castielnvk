@@ -3,13 +3,13 @@
 from engine import YEL, MAG, CYA, INK, WHITE, PURP
 HEADER = ''
 WHT = (255, 255, 255); OBA_Y = (255, 205, 0); OBA_R = (200, 20, 60)
-def caller_name(st): return 'BƏHRUZ' if st < 72.3 else 'ŞƏFƏQ XANIM'
+def caller_name(st): return 'BƏHRUZ BƏY' if st < 72.3 else 'ŞƏFƏQ XANIM'
 _C = [
     # --- Part 1: Bəhruz ---
-    ('greet',  dict(a=0.00,  b=3.50,  lay='call')),
+    ('greet',  dict(a=0.00,  b=3.50,  lay='call', hide='L')),
     ('topic',  dict(a=3.50,  b=10.60, lay='stack')),
-    ('heart',  dict(a=10.70, b=13.30, lay='call')),
-    ('pct',    dict(a=14.50, b=23.05, lay='call')),
+    ('heart',  dict(a=10.70, b=13.30, lay='call', hide='L')),
+    ('pct',    dict(a=14.50, b=23.05, lay='call', hide='L')),
     ('nb1',    dict(a=29.15, b=43.90, lay='call')),
     ('nb2',    dict(a=43.90, b=53.45, lay='stack')),
     ('oba',    dict(a=53.45, b=57.90, lay='punchR', trans='cut')),
@@ -20,10 +20,11 @@ _C = [
     ('s_intro',dict(a=72.30, b=81.15, lay='stack', trans='cut')),
     ('s_app',  dict(a=81.20, b=101.85, lay='stack', trans='cut')),
     ('s_luck', dict(a=101.95, b=110.40, lay='stack', trans='cut')),
-    ('s_umb',  dict(a=110.40, b=122.50, lay='call')),
-    ('s_trust',dict(a=122.50, b=125.40, lay='punchR', trans='cut')),
+    ('s_umb',  dict(a=110.40, b=122.50, lay='call', hide='L')),
+    ('s_trust',dict(a=122.50, b=125.40, lay='punchR', trans='cut', hide='L')),
     ('s_quiz', dict(a=125.45, b=137.85, lay='stack', trans='cut')),
-    ('s_ans',  dict(a=137.95, b=150.45, lay='stack', trans='cut')),
+    ('s_ans',  dict(a=137.95, b=149.25, lay='stack', trans='cut')),
+    ('s_ans2', dict(a=149.25, b=150.45, lay='stack', hide='L')),
     ('s_toy',  dict(a=150.55, b=157.85, lay='stack', trans='cut')),
     ('s_win',  dict(a=157.95, b=163.85, lay='stack', trans='cut')),
 ]
@@ -97,8 +98,8 @@ CAPTIONS = [
 
 LAUGHS = []
 def COUNTER_START(s2o): return 1e9
-def FLASHES(s2o): return [s2o(53.45, ci('oba')), s2o(72.30, ci('s_intro'))]
-def SHAKES(s2o): return [(s2o(55.0, ci('oba')), 8)]
+def FLASHES(s2o): return []
+def SHAKES(s2o): return []
 def _o(s2o, t, c=None): return s2o(t, ci(c) if c else None)
 
 def GAGS(s2o):
@@ -110,10 +111,10 @@ def GAGS(s2o):
     def lab(text, t0, t1, x, y, size=44, **k):
         if t0 is None or t1 is None: return
         G.append(dict(kind='label', text=text, t0=t0, t1=t1, xy=(x, y), size=size, **k))
-    oba = lambda t0, t1, x=300, y=1080: lab('OBA', t0, t1, x, y, 68, bg=OBA_Y, fg=OBA_R, rot=-5, emoji='1f6d2')
+    oba = lambda t0, t1, x=300, y=1080: lab('OBA', t0, t1, x, y, 64, accent=OBA_Y, emoji='1f6d2')
     # part titles
-    lab('1-Cİ SAAT · DİNLƏYİCİ BƏHRUZ', o(0.05, 'greet'), o(3.45, 'greet'), 540, 560, 34, bg=WHITE, fg=INK, rot=-2, emoji='1f4de')
-    lab('MÖVZU:\nQOHUMLARLA DOST\nOLMAQ MÜMKÜNDÜR?', o(4.40, 'topic'), o(10.60, 'topic'), 540, 560, 38, bg=YEL, fg=INK, rot=-3, emoji='1f914')
+    lab('BƏHRUZ BƏY', o(0.05, 'greet'), o(3.45, 'greet'), 540, 790, 54, bg=WHITE, fg=INK, rot=-2, emoji='1f4de')
+    lab('MÖVZU: QOHUMLARLA DOST\nOLMAQ MÜMKÜNDÜR?', o(4.40, 'topic'), o(10.60, 'topic'), 540, 1765, 54, bg=YEL, fg=INK, rot=-3, emoji='1f914')
     lab('UZAQ QOHUM < YAXIN QONŞU', o(31.50, 'nb1'), o(34.80, 'nb1'), 540, 760, 36, bg=YEL, fg=INK, rot=-3, emoji='1f3e1')
     em('1f6d2', o(54.00, 'oba'), o(57.90, 'oba'), 880, 420, 200, rot=8, wob=6)
     oba(o(54.60, 'oba'), o(57.90, 'oba'))
@@ -121,21 +122,21 @@ def GAGS(s2o):
     em('1f602', o(58.40, 'obalaf'), o(62.40, 'obalaf'), 170, 1200, 170, rot=10, wob=10, wob_f=8)
     em('1f6d2', o(70.00, 'grip'), o(72.20, 'grip'), 880, 420, 180, rot=10, wob=6)
     oba(o(70.20, 'grip'), o(72.20, 'grip'), 300, 1500)
-    lab('3-CÜ SAAT · ŞƏFƏQ XANIM', o(72.35, 's_intro'), o(76.50, 's_intro'), 540, 560, 34, bg=WHITE, fg=INK, rot=-2, emoji='1f4de')
+    lab('ŞƏFƏQ XANIM', o(72.35, 's_intro'), o(76.50, 's_intro'), 540, 1745, 54, bg=WHITE, fg=INK, rot=-2, emoji='1f4de')
     em('1f4f1', o(83.06, 's_app'), o(85.46, 's_app'), 170, 1200, 150, rot=-8)
     em('1f6d2', o(96.20, 's_app'), o(101.85, 's_app'), 880, 420, 190, rot=8, wob=6)
     oba(o(96.60, 's_app'), o(101.85, 's_app'), 300, 1500)
     em('1f6d2', o(105.30, 's_luck'), o(108.30, 's_luck'), 880, 420, 160, rot=8)
-    em('2602', o(114.00, 's_umb'), o(122.50, 's_umb'), 960, 330, 140, rot=8, wob=6)
+    em('2602', o(114.00, 's_umb'), o(122.50, 's_umb'), 950, 330, 140, keep=True)
     em('1f64f', o(120.00, 's_umb'), o(122.50, 's_umb'), 120, 330, 130, rot=-8, wob=6)
     oba(o(120.20, 's_umb'), o(122.50, 's_umb'), 540, 760)
     em('1f91d', o(124.20, 's_trust'), o(125.40, 's_trust'), 880, 420, 190, rot=8)
     em('1f6a2', o(126.80, 's_quiz'), o(137.85, 's_quiz'), 170, 1200, 150, rot=-6, wob=4)
     em('2753', o(134.20, 's_quiz'), o(137.85, 's_quiz'), 880, 420, 150, wob=8)
-    em('2705', o(143.50, 's_ans'), o(150.45, 's_ans'), 880, 420, 170, rot=8)
+    em('2705', o(143.50, 's_ans'), o(149.25, 's_ans'), 900, 360, 170, keep=True)
     em('1f389', o(148.00, 's_ans'), o(150.45, 's_ans'), 170, 1200, 160, rot=-8, wob=8)
     em('1f39f', o(158.80, 's_win'), o(163.85, 's_win'), 880, 420, 190, rot=8, wob=6)
-    lab('OBA-DAN 50 AZN KUPON', o(159.40, 's_win'), o(163.85, 's_win'), 540, 1700, 40, bg=OBA_Y, fg=OBA_R, rot=-3, emoji='1f39f')
+    lab('OBA-DAN 50 AZN KUPON', o(159.40, 's_win'), o(163.85, 's_win'), 540, 1700, 44, accent=OBA_Y, emoji='1f39f')
     G.extend(GAG_EXTRA)
     return G
 
@@ -157,12 +158,10 @@ def MUSIC_AUTOMATION(s2o):
 def SFX(s2o):
     o = lambda t, c=None: _o(s2o, t, c)
     return [
-        ('whoosh', o(0.05, 'greet'), 0.18), ('ding', o(4.40, 'topic'), 0.12), ('ding', o(31.50, 'nb1'), 0.12),
-        ('pop', o(54.00, 'oba'), 0.18), ('badumtss', o(55.60, 'oba'), 0.22), ('pop2', o(58.40, 'obalaf'), 0.12),
-        ('pop', o(70.20, 'grip'), 0.16),
-        ('whoosh', o(72.35, 's_intro'), 0.18), ('pop', o(83.06, 's_app'), 0.12), ('pop', o(96.20, 's_app'), 0.18),
-        ('boing', o(98.90, 's_app'), 0.14), ('pop2', o(105.30, 's_luck'), 0.12), ('pop', o(114.00, 's_umb'), 0.12),
-        ('sparkle', o(120.00, 's_umb'), 0.12), ('pop2', o(124.20, 's_trust'), 0.14),
-        ('tick', o(134.20, 's_quiz'), 0.16), ('riser', o(141.80, 's_ans'), 0.14), ('ding', o(143.50, 's_ans'), 0.18),
-        ('sparkle', o(148.00, 's_ans'), 0.14), ('sparkle', o(158.80, 's_win'), 0.14), ('pop', o(159.40, 's_win'), 0.14),
+        ('whoosh', o(0.05, 'greet'), 0.12), ('pop', o(4.40, 'topic'), 0.07), ('pop', o(31.50, 'nb1'), 0.07),
+        ('whoosh', o(54.40, 'oba'), 0.10), ('sparkle', o(54.70, 'oba'), 0.09),
+        ('pop', o(70.20, 'grip'), 0.08),
+        ('whoosh', o(72.35, 's_intro'), 0.12), ('sparkle', o(96.60, 's_app'), 0.09), ('pop', o(105.30, 's_luck'), 0.06),
+        ('sparkle', o(120.20, 's_umb'), 0.09), ('pop', o(124.20, 's_trust'), 0.06),
+        ('ding', o(143.50, 's_ans'), 0.12), ('sparkle', o(148.00, 's_ans'), 0.09), ('sparkle', o(159.40, 's_win'), 0.10),
     ]
