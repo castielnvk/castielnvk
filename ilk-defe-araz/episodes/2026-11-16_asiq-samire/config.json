@@ -1,0 +1,382 @@
+{
+  "title": "Aşıq Samirə — Azərbaycan övladıyam, ilk dəfə Araz FM-də",
+  "fps": 24,
+  "duration": 17.5,
+  "audio": "source/ASIQ_SAMIRE_EKSKLUZIV.mp3",
+  "audio_fade_out": 0.5,
+  "output": "Asiq_Samire_Ilk_Defe_Araz_9x16.mp4",
+  "clips": {
+    "ai1": "source/ai1.mp4",
+    "ai2": "source/ai2.mp4",
+    "ai3": "source/ai3.mp4"
+  },
+  "anchors": {
+    "words": 6.13,
+    "words2": 7.26,
+    "words3": 8.02,
+    "settle": 8.89
+  },
+  "shots": [
+    {
+      "start": 0.0,
+      "clip": "ai1",
+      "src": 0.0,
+      "z": [
+        1.0,
+        1.05
+      ],
+      "cx": 0.5,
+      "cy": 0.42,
+      "depth": true
+    },
+    {
+      "start": 2.9,
+      "clip": "ai2",
+      "src": 2.2,
+      "z": [
+        1.08,
+        1.14
+      ],
+      "cx": 0.5,
+      "cy": 0.36,
+      "depth": false,
+      "trans": {
+        "type": "push",
+        "dur": 0.35
+      }
+    },
+    {
+      "start": 6.13,
+      "clip": "ai3",
+      "src": 0.3,
+      "z": [
+        1.12,
+        1.18
+      ],
+      "cx": 0.5,
+      "cy": 0.36,
+      "depth": false
+    },
+    {
+      "start": 8.89,
+      "clip": "ai1",
+      "src": 5.0,
+      "z": [
+        1.0,
+        1.04
+      ],
+      "cx": 0.5,
+      "cy": 0.42,
+      "depth": false
+    },
+    {
+      "start": 10.31,
+      "clip": "ai2",
+      "src": 5.5,
+      "z": [
+        1.0,
+        1.05
+      ],
+      "cx": 0.5,
+      "cy": 0.42,
+      "depth": true
+    },
+    {
+      "start": 12.17,
+      "clip": "ai1",
+      "src": 7.5,
+      "z": [
+        1.06,
+        1.11
+      ],
+      "cx": 0.5,
+      "cy": 0.38,
+      "depth": true,
+      "trans": {
+        "type": "push",
+        "dur": 0.35
+      }
+    },
+    {
+      "start": 13.56,
+      "clip": "ai3",
+      "src": 3.2,
+      "z": [
+        1.06,
+        1.1
+      ],
+      "cx": 0.5,
+      "cy": 0.4,
+      "depth": true,
+      "trans": {
+        "type": "whip",
+        "dur": 0.2,
+        "dir": -1
+      }
+    },
+    {
+      "start": 14.93,
+      "clip": "ai2",
+      "src": 7.4,
+      "z": [
+        1.0,
+        1.04
+      ],
+      "cx": 0.5,
+      "cy": 0.42,
+      "depth": true
+    }
+  ],
+  "rows": [
+    {
+      "text": "İLK DƏFƏ",
+      "y": 560,
+      "size": 220,
+      "style": "outline",
+      "color": "#095D6A",
+      "lw": 4,
+      "speed": 70,
+      "dir": -1,
+      "alpha": 0.9,
+      "in": 0.35,
+      "out": 2.8
+    },
+    {
+      "text": "“ARAZ”DA",
+      "y": 800,
+      "size": 220,
+      "color": "orange",
+      "speed": 90,
+      "dir": 1,
+      "in": 0.5,
+      "out": 2.8
+    },
+    {
+      "text": "DİNLƏ",
+      "y": 1040,
+      "size": 220,
+      "style": "outline",
+      "color": "#095D6A",
+      "lw": 4,
+      "speed": 70,
+      "dir": -1,
+      "alpha": 0.9,
+      "in": 0.65,
+      "out": 2.8
+    },
+    {
+      "text": "“ARAZ”DA",
+      "y": 470,
+      "size": 300,
+      "color": "orange",
+      "speed": 160,
+      "dir": -1,
+      "in": 10.4,
+      "out": 12.17
+    },
+    {
+      "text": "İLK DƏFƏ",
+      "y": 770,
+      "size": 300,
+      "style": "outline",
+      "color": "#095D6A",
+      "lw": 5,
+      "speed": 160,
+      "dir": 1,
+      "alpha": 0.9,
+      "in": 10.5,
+      "out": 12.17
+    },
+    {
+      "text": "“ARAZ”DA",
+      "y": 300,
+      "size": 260,
+      "style": "outline",
+      "color": "#095D6A",
+      "lw": 5,
+      "speed": 60,
+      "dir": -1,
+      "alpha": 0.95,
+      "in": 12.17,
+      "out": 13.56,
+      "push": 0.02
+    },
+    {
+      "text": "DİNLƏ",
+      "y": 520,
+      "size": 420,
+      "color": "orange",
+      "speed": 50,
+      "dir": 1,
+      "in": 13.56,
+      "out": 14.93,
+      "push": 0.015
+    },
+    {
+      "text": "İLK DƏFƏ  “ARAZ”DA  DİNLƏ",
+      "y": 250,
+      "size": 130,
+      "style": "outline",
+      "color": "#095D6A",
+      "lw": 4,
+      "speed": 80,
+      "dir": -1,
+      "alpha": 0.95,
+      "in": 15.1
+    }
+  ],
+  "opening": {
+    "dur": 0.55,
+    "start": -0.22
+  },
+  "wipes": [
+    {
+      "at": 10.31,
+      "dur": 0.42
+    },
+    {
+      "at": 14.93,
+      "dur": 0.42
+    }
+  ],
+  "glints": [],
+  "shine": [
+    12.17,
+    13.56,
+    15.3
+  ],
+  "panel": {
+    "in": 8.89,
+    "edge": 143
+  },
+  "lockup": {
+    "date": "16 NOYABR",
+    "time": "11:00 – 12:00",
+    "l1": "İLK DƏFƏ",
+    "l2": "“ARAZ”DA",
+    "l3": "DİNLƏ",
+    "x": 96,
+    "centerY": 1080,
+    "style": {
+      "date": {
+        "y": 1080,
+        "size": 58
+      },
+      "time": {
+        "y": 1150,
+        "size": 50
+      },
+      "l1": {
+        "y": 1300,
+        "size": 112
+      },
+      "l2": {
+        "y": 1432,
+        "size": 128
+      },
+      "l3": {
+        "y": 1556,
+        "size": 112
+      }
+    }
+  },
+  "logoPos": {
+    "y": 1722,
+    "w": 176
+  },
+  "lockupStyle": "frame",
+  "beats": [
+    11.7,
+    12.63,
+    13.56,
+    14.93,
+    15.39,
+    15.86
+  ],
+  "grade": {
+    "amount": 0.35
+  },
+  "sfx_db": -17,
+  "sfx": [
+    {
+      "type": "whoosh",
+      "at": 0.12,
+      "dur": 0.6,
+      "gain": 0.8
+    },
+    {
+      "type": "whoosh",
+      "at": 2.93,
+      "dur": 0.45,
+      "gain": 0.35
+    },
+    {
+      "type": "hit",
+      "at": 6.15,
+      "gain": 0.6
+    },
+    {
+      "type": "hit",
+      "at": 7.28,
+      "gain": 0.7
+    },
+    {
+      "type": "hit",
+      "at": 8.04,
+      "gain": 0.5
+    },
+    {
+      "type": "whoosh",
+      "at": 8.93,
+      "dur": 0.6,
+      "gain": 0.6
+    },
+    {
+      "type": "riser",
+      "at": 10.28,
+      "dur": 1.3,
+      "gain": 0.45
+    },
+    {
+      "type": "whoosh",
+      "at": 10.31,
+      "dur": 0.7,
+      "gain": 0.9
+    },
+    {
+      "type": "hit",
+      "at": 10.33,
+      "gain": 0.8
+    },
+    {
+      "type": "whoosh",
+      "at": 12.2,
+      "dur": 0.45,
+      "gain": 0.35
+    },
+    {
+      "type": "whoosh",
+      "at": 13.58,
+      "dur": 0.35,
+      "gain": 0.7,
+      "dir": -1
+    },
+    {
+      "type": "riser",
+      "at": 14.9,
+      "dur": 1.3,
+      "gain": 0.5
+    },
+    {
+      "type": "whoosh",
+      "at": 14.93,
+      "dur": 0.7,
+      "gain": 0.9
+    },
+    {
+      "type": "hit",
+      "at": 14.95,
+      "gain": 0.8
+    }
+  ]
+}
