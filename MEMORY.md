@@ -88,6 +88,12 @@ programmes, 4) everything else.
   - 18 Nov ("Evdə nəyin üstündə ən çox dava düşür?"): the clip was 15 s (361 frames), so no
     looping and no loop wipes; music "Run Amok" (Kevin MacLeod, CC BY 4.0); stickers BUZDUR! /
     İSTİDİR! / APÇİ! / SÖNDÜR! with new sounds cold, hot, sneeze. Feedback pending.
+  - 19 Nov ("Evlilikdə gizli pul saxlamaq xəyanətdir?"): the clip's gag (money under the mattress,
+    then falling on the floor) sits in the caption zone, so config `"gap":[10.7,null]` slides the
+    question block out for the punchline and back with the end badge, and the bottom gradient only
+    fades in with the first caption. Always check where the clip's action is before placing text.
+    Music "Sneaky Snitch" (Kevin MacLeod, CC BY 4.0); stickers ŞŞŞT! / PUL?! / TUTULDU!; new
+    sounds shh, cash. Feedback pending.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 

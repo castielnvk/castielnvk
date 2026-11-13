@@ -53,7 +53,9 @@ if(P==='1'){
     anims.push(t=>{const k=(t-t0)/.35;ln.style.opacity=k<=0||k>=1?0:.9*(1-k);const r=28+k*22;ln.style.maskImage=`radial-gradient(circle,transparent ${r}%,#000 ${r+3}%,#000 ${r+16}%,transparent ${r+19}%)`});
   });
   el('','left:0;top:0;width:1080px;height:680px;background:linear-gradient(rgba(10,6,48,.9),rgba(10,6,48,.55) 45%,transparent)');
-  el('','left:0;top:1120px;width:1080px;height:800px;background:linear-gradient(transparent,rgba(10,6,48,.93) 55%)');
+  const gb=el('','left:0;top:1120px;width:1080px;height:800px;background:linear-gradient(transparent,rgba(10,6,48,.93) 55%)');
+  const gapK=t=>C.gap?out((t-C.gap[0])/.3)-out((t-C.gap[1])/.35):0;
+  anims.push(t=>gb.style.opacity=cl((t-(E.c1-.35))/.5)*(1-.8*gapK(t)));
   // loop-cut comic wipes (also the intro reveal)
   const cover=el('','inset:0;background:#0a0630');anims.push(t=>cover.style.transform=`translateX(${out(t/.38)*1500}px) skewX(-12deg) scaleX(1.5)`);
   [0,L,2*L].forEach((tl,j)=>{[['#FFE500',0],['#6A2BFF',.05],['#0a0630',.1]].forEach(([c,d],i)=>{const w=el('',`left:-260px;top:-60px;width:${j?520-i*150:260-i*60}px;height:2040px;background:${c}`);
@@ -76,7 +78,7 @@ if(P==='1'){
       for(const s of [bk[i],fn[i]]){s.style.opacity=op;s.style.transform=`translateY(${y}px) scale(${sx*b},${sy*b})`}}});
   const b2=el(ink('MÖVZUSU','an',82,'#fff',11,'#0b0820',ext(8,'#6A2BFF'),9),'left:72px;top:500px;transform-origin:30% 50%');slam(b2,E.m-.06,'rotate(-2deg)',.26);
   // captions: bar wipe reveal
-  const cap=(html,x,y,t0,bar)=>{const c=el(html,`left:${x}px;top:${y}px`);const br=el('',`left:${x-10}px;top:${y-6}px;width:40px;height:120px;background:${bar};border:6px solid #111`);
+  const cap=(html,x,y,t0,bar)=>{const c=el(html,`left:${x}px;top:${y}px`,'qx');const br=el('',`left:${x-10}px;top:${y-6}px;width:40px;height:120px;background:${bar};border:6px solid #111`);
     anims.push(t=>{const k=out((t-t0)/.34);const w=c.offsetWidth+20;c.style.opacity=t<t0?0:1;c.style.clipPath=`inset(-20px ${(1-k)*100}% -20px -20px)`;c.style.transform=`translateX(${-30*(1-k)}px) rotate(-1.5deg)`;
       br.style.opacity=t<t0||k>=.999?0:1;br.style.transform=`translateX(${k*w}px) rotate(-1.5deg)`});return c};
   cap('<div class="cap bc" style="background:#FFF6C9;color:#111;font-size:70px">'+C.l1+'</div>',64,1330,E.c1,'#6A2BFF');
@@ -84,17 +86,18 @@ if(P==='1'){
   // big word: burst + pop + beat pulse + wiggling question mark
   const bu=el('','left:-120px;top:1165px;width:900px;height:900px;border-radius:50%;background:repeating-conic-gradient(#FFE500 0 3deg,transparent 3deg 12deg)');
   anims.push(t=>{const k=(t-E.c3)/.5;bu.style.opacity=k<=0||k>=1?0:(1-k);const r=12+k*34;bu.style.maskImage=`radial-gradient(circle,transparent ${r}%,#000 ${r+2}%,#000 ${r+12}%,transparent ${r+15}%)`});
-  const c3=el('<div class="cap bc" style="background:#6A2BFF;color:#FFE500;font-size:130px;padding:6px 36px 14px;box-shadow:11px 11px 0 #8CFF3C">'+C.big+'<span id="qm" style="display:inline-block;transform-origin:50% 85%">?</span></div>','left:64px;top:1534px;transform-origin:20% 60%');
+  const c3=el('<div class="cap bc" style="background:#6A2BFF;color:#FFE500;font-size:130px;padding:6px 36px 14px;box-shadow:11px 11px 0 #8CFF3C">'+C.big+'<span id="qm" style="display:inline-block;transform-origin:50% 85%">?</span></div>','left:64px;top:1534px;transform-origin:20% 60%','qx');
   const qm=c3.querySelector('#qm');
   anims.push(t=>{const t0=E.c3,k=(t-t0)/.3;c3.style.opacity=k<=0?0:1;let s=k<=0?0:back(k);
     if(t>t0+.6){const ph=((t/B)%1+1)%1;s=1+.035*Math.exp(-ph*5)}
     s+=t>=END?.06*Math.exp(-(t-END)*7):0;c3.style.transform=`rotate(${-1.5+(k>0&&k<1?-6*(1-out(k)):0)}deg) scale(${s})`;
     qm.style.transform=`rotate(${t>t0+.3?Math.sin((t-t0)*5.2)*11:0}deg) scale(${t>t0+.3?1+.08*Math.sin((t-t0)*10.4):1})`});
   // footer line, then end badge
-  const ft=el('<span class="sm" style="font-size:30px;color:#fff">HƏFTƏİÇİ HƏR SƏHƏR <span style="color:#FFE500">08:00 — 10:30</span></span>','left:70px;top:1756px');
+  const ft=el('<span class="sm" style="font-size:30px;color:#fff">HƏFTƏİÇİ HƏR SƏHƏR <span style="color:#FFE500">08:00 — 10:30</span></span>','left:70px;top:1756px','qx');
   anims.push(t=>{const k=out((t-E.ft)/.4);ft.style.opacity=t>E.bd-.15?cl(1-(t-(E.bd-.15))/.12):k;ft.style.transform=`translateY(${(1-k)*24}px)`});
   const eb=el('<div style="display:flex;align-items:center;gap:22px"><div class="an" style="background:#FFE500;color:#111;font-size:62px;padding:6px 26px 10px;border:6px solid #111;box-shadow:8px 8px 0 #8CFF3C;letter-spacing:2px">08:00 — 10:30</div><span class="sm" style="font-size:30px;color:#fff;line-height:1.15">HƏFTƏİÇİ<br>HƏR SƏHƏR</span></div>','left:64px;top:1722px;transform-origin:15% 50%');
   anims.push(t=>{const k=(t-E.bd)/.3;eb.style.opacity=k<=0?0:1;eb.style.transform=`rotate(-1.5deg) scale(${(k<=0?0:back(k))+(t>=END?.07*Math.exp(-(t-END)*7):0)})`});
+  const cw=el('','inset:0');document.querySelectorAll('.qx').forEach(e=>cw.appendChild(e));anims.push(t=>cw.style.transform=`translateX(${-1150*gapK(t)}px)`);
   const fl=el('','inset:0;background:#fff;z-index:90');anims.push(t=>fl.style.opacity=(t>=END?.22*Math.exp(-(t-END)*10):0)+(t>=E.c3?.16*Math.exp(-(t-E.c3)*12):0));
 }
 if(P==='2'){
