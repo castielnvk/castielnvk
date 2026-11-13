@@ -118,6 +118,11 @@ _(notes pending)_
 - Episode 3: Ayan — «O tək», 13 Noyabr, 18 s; two short AI clips (5 s + 10 s, full-body, light grey
   bg). Used speed ramps (0.62–0.92×) so no segment repeats; “ARAZ”DA/DİNLƏ synced to her «Araz FM» /
   «dinləyin». A clip-end frame overrun once truncated a render — template now clamps, render.py checks.
+- Episode 4: Aşıq Samirə Əliyeva — «Azərbaycan övladıyam», 16 Noyabr, 17.5 s; three 10 s clips made
+  with the prompts I wrote for the user (README): push-in, saz-playing, arc. Saz-playing clip came
+  out clean (used for the song section + finale); clip 3's face drifts after ~5 s (skipped). She says
+  «xüsusi olaraq Araz FM-də» (no «ilk dəfə») → İLK DƏFƏ on «xüsusi», “ARAZ”DA on «Araz». The user
+  now asks me for Grok prompts per poster and wants 10 s clips.
 - Speed: person masks cost ~3.5 s/frame on this 4-core CPU (≈19 min/episode). User will send Mac and
   Windows specs to pick a GPU machine (Remote Control); also asked about connecting the Grok
   (xAI grok-imagine-video) API — needs an api.x.ai key via request_credential, user hasn't decided.
