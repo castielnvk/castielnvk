@@ -77,6 +77,10 @@ for w,c,t,x,yy,snd in cfg['st']:
     elif snd=='cash':
         put(pop(280,700,.09),t,.35,pan); put(wood(900),t,.3,pan)
         for k in range(9): put(tick(1400+rng.integers(0,900),.035),t+.15+k*.07,.2,pan+rng.uniform(-.3,.3))
+    elif snd=='crack':
+        put(whistle(1300,420,.34),t-.36,.2,pan)
+        for k in range(4): put(wood(1100+rng.integers(0,500),.07),t+k*.06,.45,pan)
+        put(thump(130,45,.3,.6),t+.02,.6,pan)
     else: put(wood(700),t,.45,pan); put(pop(300,700),t,.3,pan)
 put(whoosh(.3,700,3000,.6),E['c1']-.1,.4,-.4); [put(tick(1700+200*k),E['c1']+.12+k*.1,.22,-.3) for k in range(2)]
 put(whoosh(.3,600,2800,.6),E['c2']-.1,.4,-.2); [put(tick(1900-150*k),E['c2']+.12+k*.1,.22,0) for k in range(2)]
@@ -93,6 +97,10 @@ def lufs(f):
     r=sp.run(f"ffmpeg -hide_banner -i {f} -af ebur128 -f null -",shell=True,capture_output=True,text=True).stderr
     return float([l for l in r.splitlines() if l.strip().startswith('I:')][-1].split()[1])
 run(f"ffmpeg -v error -y -ss {t0:.3f} -t {D} -i '{cfg['music']}' -af 'afade=t=in:d=0.008,afade=t=out:st={D-.75}:d=0.75' -ar 48000 aud/mus.wav")
+if cfg.get('tapestop'):
+    m,_=sf.read('aud/mus.wav'); ts=cfg['tapestop']; d=.75; i0=int(ts*SR); nn=int(d*SR); tau=np.arange(nn)/SR
+    pos=i0+(tau-tau**2/(2*d))*SR; seg=np.stack([np.interp(pos,np.arange(len(m)),m[:,c]) for c in range(m.shape[1])],1)*(1-(tau/d)**3)[:,None]
+    m[i0:i0+nn]=seg; m[i0+nn:]=0; sf.write('aud/mus.wav',m,SR)
 mg=-17-lufs('aud/mus.wav')
 run(f"ffmpeg -v error -y -i aud/mus.wav -i aud/sfx.wav -filter_complex '[0:a]volume={mg:.2f}dB[m];[1:a]volume=1.25[s];[m][s]amix=inputs=2:normalize=0[a]' -map '[a]' aud/mix_pre.wav")
 run(f"ffmpeg -v error -y -i aud/mix_pre.wav -af 'volume={-14-lufs('aud/mix_pre.wav'):.2f}dB,alimiter=limit=0.84:level=false' aud/mix.wav"); print('final LUFS',lufs('aud/mix.wav'))

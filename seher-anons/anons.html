@@ -82,7 +82,7 @@ if(P==='1'){
     anims.push(t=>{const k=out((t-t0)/.34);const w=c.offsetWidth+20;c.style.opacity=t<t0?0:1;c.style.clipPath=`inset(-20px ${(1-k)*100}% -20px -20px)`;c.style.transform=`translateX(${-30*(1-k)}px) rotate(-1.5deg)`;
       br.style.opacity=t<t0||k>=.999?0:1;br.style.transform=`translateX(${k*w}px) rotate(-1.5deg)`});return c};
   cap('<div class="cap bc" style="background:#FFF6C9;color:#111;font-size:70px">'+C.l1+'</div>',64,1330,E.c1,'#6A2BFF');
-  cap('<div class="cap bc" style="background:#FFF6C9;color:#111;font-size:70px">'+C.l2+'</div>',120,1432,E.c2,'#FF3D2E');
+  cap('<div class="cap bc" style="background:#FFF6C9;color:#111;font-size:'+(C.fs2||70)+'px">'+C.l2+'</div>',120,1432,E.c2,'#FF3D2E');
   // big word: burst + pop + beat pulse + wiggling question mark
   const bu=el('','left:-120px;top:1165px;width:900px;height:900px;border-radius:50%;background:repeating-conic-gradient(#FFE500 0 3deg,transparent 3deg 12deg)');
   anims.push(t=>{const k=(t-E.c3)/.5;bu.style.opacity=k<=0||k>=1?0:(1-k);const r=12+k*34;bu.style.maskImage=`radial-gradient(circle,transparent ${r}%,#000 ${r+2}%,#000 ${r+12}%,transparent ${r+15}%)`});

@@ -94,6 +94,10 @@ programmes, 4) everything else.
     fades in with the first caption. Always check where the clip's action is before placing text.
     Music "Sneaky Snitch" (Kevin MacLeod, CC BY 4.0); stickers ŞŞŞT! / PUL?! / TUTULDU!; new
     sounds shh, cash. Feedback pending.
+  - 20 Nov ("Özünüzdə qocalmağın ilk əlamətlərini harada, necə hiss etdiniz?"): disco scene, music
+    "Disco con Tutti" (Kevin MacLeod, CC BY 4.0) with `"tapestop":11.2` — the music winds down like
+    a stopped record when the old man's back gives out, then only SFX to the end. Long second line
+    uses `"fs2":56`. Stickers OPPA! / YORULDUQ! / CAVANAM! / BELİM!; new sound crack. Feedback pending.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 
