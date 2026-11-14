@@ -108,6 +108,26 @@ _(notes pending)_
   - mix: −14.8 LUFS, original speech untouched;
   - export: 1080×1920, 25 fps.
 
+### 5. Kadr Xarici — BUM / Tağıyev pasajı documentary Reel (14 Nov 2026)
+- **What:** an 85 s 9:16 historical-mystery documentary for the user's own brand **Kadr Xarici**
+  (not Araz FM). The user supplied 10 AI-generated 24 fps clips, an ElevenLabs Azerbaijani
+  voice-over and the white `kadr.xarici` logo PNG. Archived in `kadr-xarici-bum/` (final MP4, SRT,
+  stems, scripts, `CREDITS.md` with the timeline and licences).
+- **Brief was in English and explicit:** for this brand the user asked for *existing licensed*
+  music found online (not self-composed) — used "Echoes of Time v2" by Kevin MacLeod (CC BY 4.0,
+  credit required) and CC0 sound effects from bigsoundbank.com (direct files at
+  `bigsoundbank.com/UPLOAD/flac|bwf-en/<id>.<ext>`; Wikimedia Commons rate-limits this container).
+- **Correction from the user:** do **not** put a "Sİ ilə canlandırma" (AI-generated) label on the
+  video ("SI ile canlandirma yazma").
+- **Style delivered (no feedback yet):** unified sepia/silver grade for historical clips, cool
+  modern grade, Playfair Display year titles, Inter SemiBold 56 px subtitles with gold key terms
+  and word-by-word brightening, small logo upper left, the final shot shrinks into a photograph and
+  slides out of frame before "kadr xaricində qaldı." and the logo reveal.
+- **Technical:** Python (OpenCV + PIL) frame renderer piped to ffmpeg, numpy audio mix. Whisper
+  sentence starts were about 0.4 s early; snapping word starts to the voice energy onset fixed it.
+  Film grain makes x264 files huge: CRF 22 with maxrate 8.5 Mb/s gave 87 MB (under GitHub's 100 MB).
+  Never let two processes write the same output file (a leftover background job corrupted one).
+
 ## User preferences (across all projects)
 - Use only real footage. Never fabricate archive material, reactions, voices or historical scenes,
   and never use cloned or generated voices.
