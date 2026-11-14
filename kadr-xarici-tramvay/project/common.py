@@ -1,7 +1,7 @@
 import subprocess, numpy as np
 FPS = 24; W, H = 1080, 1920
 OFF = 0.15
-DUR = 102.5
+DUR = 101.3
 def _c(s):
     out = []
     for tok in s.split():

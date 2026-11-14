@@ -145,7 +145,15 @@ _(notes pending)_
   photo prints for "köhnə fotolarda", tram-bell motif ending in a single last strike and near-silence.
 - **Audio:** "Colorless Aura" by Kevin MacLeod (CC BY 4.0, credit required); CC0 tram, bell and
   street sounds from bigsoundbank.com.
-- **No feedback yet** on this video or its thumbnail.
+- **User feedback (14 Nov 2026):** asked "How to make it better? More engaging", then said the core
+  of the video is the question **"Bakıda tramvaylar niyə yox oldu?"**. When I started changes right
+  after asking which options to apply, the user stopped me: "Bir dayan da. Mən başla dedim?" — if
+  I ask a question, wait for the answer before starting. They then said "Do all of them. Sənə
+  buraxıram."
+- **v2 (`Tramvay_Kadr_Xarici_v2_9x16.mp4`, 101.3 s):** hook question on frame 0 and on the
+  thumbnail, then/now split screen with a 117 → 0 km counter, punch-in cuts inside long shots,
+  half-second music drop plus teaser line mid-video, 70 px subtitles, shorter logo outro.
+  My reading: for Kadr Xarici, lead with the central *question* on screen from the first frame.
 
 ## User preferences (across all projects)
 - Use only real footage. Never fabricate archive material, reactions, voices or historical scenes,
@@ -167,6 +175,7 @@ _(notes pending)_
   syllables. Bring SFX and music swells in after the last word.
 - **Editing:** keep it as short and punchy as the story allows. Don't repeat the opening hook later.
 - **Logos:** use the user's supplied overlays exactly as provided.
+- **Don't start work on options I've just asked about** until the user answers (14 Nov 2026).
 - **Thumbnail with every video:** always deliver a matching 1080×1920 cover image after each video,
   without being asked (user's instruction, 14 Nov 2026).
 - **Music:** prefer original, self-composed music. The user wants no copyright issues and dislikes

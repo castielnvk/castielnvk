@@ -32,8 +32,8 @@ duck = sg.sosfiltfilt(sg.butter(1, 1.5, 'low', fs=SR, output='sos'), np.clip(ve 
 # ---- music: Colorless Aura ----
 mus = seg('dl/music/Colorless Aura.mp3', 0.0, DUR + 1)[:N].astype(np.float64)
 mus = mus / rms(mus[SR * 5:SR * 90])
-menv = np.interp(t, [0, .25, 4.7, 4.95, 9.4, 13.6, 43.3, 44.0, 64.9, 65.6, 71.8, 76.5, 77.3, 80.5, 94.9, 97.2, 98.9, 100.6, DUR - .1, DUR],
-                 db([-34, -30, -30, -37, -31, -30, -30, -28.5, -29.5, -34, -32, -38, -44, -31, -38, -43, -26, -27, -60, -60]))
+menv = np.interp(t, [0, .25, 4.7, 4.95, 9.4, 13.6, 42.9, 43.15, 43.55, 44.0, 64.9, 65.6, 71.8, 76.5, 77.3, 80.5, 94.9, 97.2, 98.9, 100.2, DUR - .1, DUR],
+                 db([-34, -30, -30, -37, -31, -30, -30, -44, -44, -28.5, -29.5, -34, -32, -38, -44, -31, -38, -43, -26, -27, -60, -60]))
 mus_bus = mus * (menv * db(-6.5 * np.clip(duck, 0, 1) + 4))[:, None]
 
 # ---- tram bell motif (struck gong bell, double strike) ----
@@ -50,7 +50,8 @@ place(fx, bell(2, .28, 2.5), 2.75, -12, fi=.001, fo=.3, norm=False)
 tr = lp(seg(X + '3374.flac', 1.6, 4.9 - .0), 6000)
 place(fx, tr, 0.0, -27, fi=.05, fo=.02)
 fx[int(4.9 * SR):] = 0                                   # sound of the past is cut off
-place(fx, lp(seg(X + '3030.flac', 20, 4.75), 7000), 4.88, -31, fi=.03, fo=.5)        # today: traffic
+place(fx, lp(seg(X + '3030.flac', 20, 4.75), 7000), 4.88, -31, fi=.03, fo=.5)
+place(fx, lp(seg(X + '3372.flac', 2.5, 3.4), 1600), 4.9, -38, fi=.2, fo=1.6)   # the past, muffled, fading out on top        # today: traffic
 place(fx, lp(seg(X + '1714.flac', 30, 4.5), 1500), 9.5, -36, fi=.6, fo=.6)           # depot: empty air
 place(fx, lp(seg(X + '3346.flac', 30, 4.6), 3000), 13.8, -39, fi=.5, fo=.6)          # 1924 crowd
 place(fx, bell(2, .3, 2.2), 18.35, -10, fi=.001, fo=.3, norm=False)                  # first tram sets off
@@ -60,7 +61,7 @@ place(fx, lp(seg(X + '3372.flac', 1.5, 5.2), 4500), 27.4, -30, fi=.6, fo=.8)    
 place(fx, lp(seg(X + '0526.wav', 20, 9.6), 4000), 27.4, -37, fi=.6, fo=.8)
 place(fx, bell(2, .3, 2.4), 32.45, -13, fi=.001, fo=.3, norm=False)
 place(fx, lp(seg(X + '0278.wav', 1.0, 4.6), 4500), 32.4, -31, fi=.5, fo=.9)
-place(fx, lp(seg(X + '0527.wav', 30, 6.6), 1800), 37.1, -40, fi=.6, fo=.6)
+place(fx, lp(seg(X + '0527.wav', 30, 5.9), 1800), 37.1, -40, fi=.6, fo=.5)
 place(fx, lp(seg(X + '3540.flac', 2.0, 5.8), 4500), 43.7, -32, fi=.8, fo=.8)         # soviet tram, change begins
 place(fx, lp(seg(X + '2762.flac', 20, 13.0), 4500), 43.7, -38, fi=.8, fo=.8)
 place(fx, lp(seg(X + '3030.flac', 60, 7.0), 3500), 49.5, -35, fi=.6, fo=.8)          # buses
@@ -87,6 +88,7 @@ def thump(d=2.6, f0=62, f1=34):
     return np.stack([a, a], 1)
 place(fx, thump(2.4), OFF + 1.24, -14, fi=.002, fo=.5, norm=False)     # 117
 place(fx, thump(2.0, 50, 32), 4.9, -18, fi=.002, fo=.5, norm=False)    # cut to today
+place(fx, thump(2.2, 48, 30), OFF + 8.25, -15, fi=.002, fo=.5, norm=False)   # 0 KM
 place(fx, thump(2.4), OFF + 14.16, -17, fi=.002, fo=.5, norm=False)    # 1924
 place(fx, thump(2.6, 52, 30), 43.6, -15, fi=.002, fo=.5, norm=False)   # change begins
 place(fx, thump(3.2), OFF + 65.82, -11, fi=.002, fo=.5, norm=False)    # 2004

@@ -1,7 +1,7 @@
 # Bakının yoxa çıxan tramvayları (Kadr Xarici, 14 Nov 2026)
 
-Final: `Tramvay_Kadr_Xarici_9x16.mp4` — 1080×1920, 24 fps (all source clips are 24 fps), H.264 + AAC stereo,
-102.5 s, −14.2 LUFS / −1.4 dBTP. Burned-in subtitles; separate `Tramvay_Kadr_Xarici.srt`;
+Final: `Tramvay_Kadr_Xarici_v2_9x16.mp4` — 1080×1920, 24 fps (all source clips are 24 fps), H.264 + AAC stereo,
+101.3 s, −14.2 LUFS / −1.3 dBTP. Burned-in subtitles; separate `Tramvay_Kadr_Xarici.srt`;
 cover `Tramvay_Kadr_Xarici_thumbnail.jpg`.
 
 ## Music
@@ -55,3 +55,12 @@ The tram recordings are modern trams, low-passed; the bell is a generic struck b
 | 89.3–96.2 | 5: opening tram again, becomes a photo and slides out of frame | Bir vaxtlar… hekayəsi isə… |
 | 95.6–98.8 | black, serif title | kadr xaricində qaldı. |
 | 98.85–102.5 | logo reveal | — |
+
+## v2 changes (more engaging cut, same narration)
+- Frame 0 carries the hook question "Bakıda tramvaylar NİYƏ YOX OLDU?", tighter crop on the moving tram.
+- 4.9–9.55: split screen — the past (clip 3, 0–2.8 s at 60 %) on top, Baku today below; counter falls 117 KM → 0 KM
+  on "əsər-əlamət qalmayıb" and the top half goes dark.
+- 9.55–13.9: "80 İL · NİYƏ YOX OLDU?" over the depot.
+- Punch-in cuts inside long shots at 16.05, 47.25, 53.0 and 70.15.
+- 43.65: music drops out for half a second, then the teaser line "Bir gün sonuncu xətt də bağlanacaq…".
+- Subtitles 70 px (was 56). Logo outro shortened by 1.2 s.

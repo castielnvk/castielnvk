@@ -25,10 +25,10 @@ fr *= 1 - .6 * np.exp(-((yy[:, None, None] - 495) / 95) ** 2 - ((xx - 540) / 330
 fr += GR[0] * .022; fr = np.clip(fr, 0, 1)
 def ctext(txt, font, size, col, y, track=0):
     ti = text_img(txt, font, size, col, track, shadow=.85, blur=14); blit(fr, ti, (W - ti['w']) / 2, y)
-ctext('UNUDULMUŞ TARİX', F_INTB, 34, GOLD, 706, track=16)
+ctext('BAKIDA', F_INTB, 40, GOLD, 700, track=22)
 fr[772:775, 440:640] = np.array(GOLD, np.float32) / 255.
-ctext('117 KM', F_PLAYB, 220, IVORY, 765, track=4)
-ctext('TRAMVAY', F_PLAYB, 168, GOLD, 990, track=6)
-ctext('Bakıdan necə yoxa çıxdı?', F_PLAYI, 62, IVORY, 1210)
+ctext('TRAMVAYLAR', F_PLAYB, 132, IVORY, 815, track=2)
+ctext('NİYƏ YOX OLDU?', F_PLAYB, 112, GOLD, 1000, track=1)
+ctext('Bakı · 117 km · 1924–2004', F_PLAYI, 58, IVORY, 1180)
 lg = logo_img(360); blit(fr, lg, (W - 360) / 2, 452, .97)
 Image.fromarray((fr * 255 + .5).astype(np.uint8)).save('Tramvay_Kadr_Xarici_thumbnail.jpg', quality=93)

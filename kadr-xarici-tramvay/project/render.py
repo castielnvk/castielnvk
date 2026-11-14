@@ -74,20 +74,24 @@ def grade(x, g, k=0.0):
 def S(t0, t1, clip, src, grade_, z=(1.0, 1.05), c=(.5, .5, .5, .5), speed=1.0, tr=('cut', 0), film=0.0, vig=.34, grain=.025, photo=None, dim=0.0):
     return dict(t0=t0, t1=t1, clip=clip, src=src, speed=speed, grade=grade_, z=z, c=c, tr=tr, film=film, vig=vig, grain=grain, photo=photo, dim=dim)
 SHOTS = [
- S(0.0, 4.9, 5, 3.1, 'sepia_soft', (1.0, 1.06), (.6, .5, .62, .5), film=.5),
+ S(0.0, 4.9, 5, 3.1, 'sepia_soft', (1.32, 1.16), (.45, .62, .72, .66), film=.5),
  S(4.9, 9.55, 2, 0.6, 'today', (1.0, 1.04), vig=.26, grain=.014),
  S(9.55, 13.9, 10, 0.0, 'silver', (1.02, 1.10), (.5, .5, .5, .52), vig=.5),
- S(13.9, 18.3, 4, 0.0, 'sepia_soft', (1.0, 1.04), tr=('diss', .45), film=.5),
+ S(13.9, 16.05, 4, 0.0, 'sepia_soft', (1.0, 1.02), tr=('diss', .45), film=.5),
+ S(16.05, 18.3, 4, 2.15, 'sepia_soft', (1.4, 1.46), (.5, .8, .5, .8), film=.5),
  S(18.3, 22.25, 5, 0.0, 'sepia_soft', (1.12, 1.2), (.45, .55, .5, .55), speed=.8, film=.5),
  S(22.25, 27.45, 6, 0.0, 'silver', (1.0, 1.06), (.5, .5, .5, .47), speed=.8, dim=.12),
  S(27.45, 32.35, 7, 0.0, 'silver', (1.0, 1.05), speed=.82),
  S(32.35, 37.1, 7, 4.0, 'silver', (1.3, 1.36), (.42, .62, .46, .62), speed=.85),
  S(37.1, 43.65, 6, 4.2, 'silver', (1.25, 1.36), (.5, .64, .5, .68), speed=.58, tr=('diss', .4), dim=.3),
- S(43.65, 49.45, 1, 0.0, 'soviet', (1.0, 1.05), tr=('diss', .6)),
- S(49.45, 56.6, 8, 0.6, 'ninety', (1.0, 1.08), (.5, .5, .5, .54)),
+ S(43.65, 47.25, 1, 0.0, 'soviet', (1.0, 1.03), tr=('diss', .6)),
+ S(47.25, 49.45, 1, 3.6, 'soviet', (1.28, 1.33), (.45, .56, .5, .56)),
+ S(49.45, 53.0, 8, 0.6, 'ninety', (1.0, 1.04)),
+ S(53.0, 56.6, 8, 4.15, 'ninety', (1.3, 1.36), (.45, .62, .45, .62)),
  S(56.6, 61.2, 9, 0.0, 'ninety', (1.0, 1.04)),
  S(61.2, 65.4, 10, 5.0, 'silver', (1.0, 1.06), vig=.45),
- S(65.4, 72.45, 11, 0.6, 'silver', (1.0, 1.05), tr=('dip', .5)),
+ S(65.4, 70.15, 11, 0.6, 'silver', (1.0, 1.04), tr=('dip', .5)),
+ S(70.15, 72.45, 11, 5.35, 'silver', (1.2, 1.25), (.5, .5, .5, .5)),
  S(72.45, 77.65, 3, 2.8, 'sepia_soft', (1.0, 1.10), (.5, .5, .58, .52), tr=('diss', .5), film=.4),
  S(77.65, 80.7, 2, 5.0, 'today', (1.04, 1.07), vig=.26, grain=.014),
  S(80.7, 83.95, 4, 4.4, 'sepia_soft', (1.0, 1.04), photo=-2.2),
@@ -95,6 +99,7 @@ SHOTS = [
  S(86.8, 89.3, 9, 4.6, 'ninety', (1.0, 1.03), photo=-1.2),
  S(89.3, 96.2, 5, 1.6, 'sepia_soft', (1.0, 1.05), (.6, .5, .62, .5), speed=.93, film=.4),
 ]
+SPLIT_OLD = S(4.9, 9.55, 3, 0.0, 'sepia_soft', (1.0, 1.04), speed=.6, film=.4)
 END_T0, END_SLIDE, FIN_OUT, LOGO_IN = 92.4, 95.05, 98.2, 98.85
 
 def shot_frame(s, t):
@@ -178,7 +183,7 @@ def blit(fr, ti, x, y, op=1.0):
     reg[:] = reg * (1 - a) + ti['col'] * a
 
 # subtitles
-SUB_SIZE = 56; SUB_Y = 1418; SUB_MAXW = 900; LINE_H = 76
+SUB_SIZE = 70; SUB_Y = 1390; SUB_MAXW = 950; LINE_H = 92
 SUBS = []
 for ci, ch in enumerate(CHUNKS[:-1]):
     words = []
@@ -218,10 +223,14 @@ def T(txt, path, size, col, cx, y, t_in, t_out, track=0, fi=.4, fo=.35, top=True
     return dict(ti=text_img(txt, path, size, col, track, shadow=.8, blur=12), cx=cx, y=y, t_in=t_in, t_out=t_out, fi=fi, fo=fo, top=top, align=align)
 V = lambda vo: vo + OFF
 TITLES = [
+ T('Bakıda tramvaylar', F_PLAYI, 78, IVORY, 540, 292, -1, 1.32, fi=.01, fo=.2),
+ T('NİYƏ YOX OLDU?', F_PLAYB, 102, GOLD, 540, 392, -1, 1.32, fi=.01, fo=.2),
  T('117', F_PLAYB, 250, IVORY, 440, 270, V(1.24), 4.75, fi=.22),
  T('KM', F_PLAYB, 110, GOLD, 800, 398, V(1.9), 4.75, fi=.25),
- T('BU GÜN', F_INTM, 26, GOLD, 540, 318, 5.1, 9.4, track=14),
- T('80 İL', F_PLAYB, 170, IVORY, 540, 300, V(10.06), 13.75, track=6, fi=.3),
+ T('BU GÜN', F_INTB, 30, GOLD, 540, 1010, 5.1, 9.4, track=14, top=False),
+ T('BİR VAXTLAR', F_INTB, 30, GOLD, 540, 300, 5.1, 9.4, track=14),
+ T('80 İL', F_INTB, 40, GOLD, 540, 292, V(10.06), 13.75, track=18),
+ T('NİYƏ YOX OLDU?', F_PLAYB, 102, IVORY, 540, 348, V(12.0), 13.75, fi=.3),
  T('1924', F_PLAYB, 190, IVORY, 540, 330, V(14.16), 18.15, fi=.3),
  T('8 FEVRAL', F_INTB, 40, GOLD, 540, 292, V(15.9), 18.15, track=18),
  T('İLK ELEKTRİK TRAMVAYI', F_INTM, 28, GOLD, 540, 318, V(19.58), 22.1, track=12),
@@ -229,6 +238,8 @@ TITLES = [
  T('Dəmiryol Vağzalı', F_PLAYI, 52, IVORY, 110, 352, V(23.64), 27.3, align='l'),
  T('Azneft meydanı', F_PLAYI, 52, IVORY, 970, 352, V(24.58), 27.3, align='r'),
  T('1939', F_PLAYB, 190, IVORY, 540, 280, V(36.96), 43.5, fi=.3),
+ T('Bir gün sonuncu xətt də', F_PLAYI, 68, IVORY, 540, 300, V(43.9), 46.85),
+ T('bağlanacaq…', F_PLAYB, 92, GOLD, 540, 388, V(44.7), 46.85),
  T('1960-cı illər', F_PLAYI, 84, IVORY, 540, 320, V(47.11), 52.0),
  T('1990-cı illər', F_PLAYI, 84, IVORY, 540, 320, V(56.48), 61.0),
  T('2004', F_PLAYB, 210, IVORY, 540, 280, V(65.82), 72.3, fi=.25),
@@ -249,6 +260,14 @@ def overlays(fr, t):
         cv2.circle(fr, (x0, y), 13, tuple(float(v) for v in GOLDF * a0 + fr[y, x0] * (1 - a0)), -1, cv2.LINE_AA)
         a1 = ease((t - V(24.75)) / .3) * op
         if a1 > 0: cv2.circle(fr, (x1, y), 13, tuple(float(v) for v in GOLDF * a1 + fr[y, x1] * (1 - a1)), -1, cv2.LINE_AA)
+    # today: 117 km -> 0
+    if 5.1 <= t < 9.4:
+        op = ease((t - 5.1) / .4) * (1 - ease((t - 9.05) / .35))
+        p = min(max((t - V(7.36)) / (V(8.25) - V(7.36)), 0), 1); p = p * p * (3 - 2 * p)
+        n = int(round(117 * (1 - p)))
+        k = ('d', n)
+        if k not in _cnt: _cnt[k] = text_img(f'{n} KM', F_PLAYB, 170, GOLD if n == 0 else IVORY, shadow=.85, blur=14)
+        ti = _cnt[k]; blit(fr, ti, (W - ti['w']) / 2, 690, op)
     # 1939: network length counter
     if V(39.1) <= t < 43.5:
         op = ease((t - V(39.1)) / .4) * (1 - ease((t - 43.15) / .35))
@@ -287,6 +306,12 @@ def render(t, gi):
                 k = ease(p); fr = shot_frame(prev, t) * (1 - k) + fr * k
             elif kind == 'dip':
                 fr *= ease(p)
+        if 4.9 <= t < 9.55:      # then / now: the past stays on top until it goes dark at "0 KM"
+            old = shot_frame(SPLIT_OLD, t)
+            k = 1 - .78 * ease((t - V(8.25)) / .7)
+            oldc = old[400:1360]; g = oldc.mean(2, keepdims=True)
+            fr = np.vstack([(oldc * k + g * (1 - k)) * (.35 + .65 * k), fr[480:1440]])
+            fr[957:963] = GOLDF * .9
         fr *= (1 - cur['vig'] * VIG)[..., None]
         fr += GR[gi % 12] * cur['grain'] * (.35 + .65 * (1 - np.abs(lum(fr) - .45)[..., None]))
         nxt = SHOTS[SHOTS.index(cur) + 1] if SHOTS.index(cur) + 1 < len(SHOTS) else None
