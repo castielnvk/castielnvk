@@ -123,6 +123,13 @@ _(notes pending)_
   modern grade, Playfair Display year titles, Inter SemiBold 56 px subtitles with gold key terms
   and word-by-word brightening, small logo upper left, the final shot shrinks into a photograph and
   slides out of frame before "kadr xaricində qaldı." and the logo reveal.
+- **Thumbnail (standing rule from the user, 14 Nov 2026):** "Həmişə hər videodan sonra bunu et.
+  Stilistika eyni olsun" — after **every** video, also deliver a 1080×1920 cover for Instagram,
+  TikTok and YouTube Shorts, eye-catching and in the same style as that video. BUM cover
+  (`BUM_Kadr_Xarici_thumbnail.jpg`, script `project/thumb.py`): past frame on top, present frame
+  below, dark band between; gold tracked label, huge Playfair Bold hook question (ivory + gold),
+  italic teaser line, logo above the title. Keep all text inside the centre 1080×1080 so the
+  Instagram grid crop keeps it.
 - **Technical:** Python (OpenCV + PIL) frame renderer piped to ffmpeg, numpy audio mix. Whisper
   sentence starts were about 0.4 s early; snapping word starts to the voice energy onset fixed it.
   Film grain makes x264 files huge: CRF 22 with maxrate 8.5 Mb/s gave 87 MB (under GitHub's 100 MB).
@@ -148,6 +155,8 @@ _(notes pending)_
   syllables. Bring SFX and music swells in after the last word.
 - **Editing:** keep it as short and punchy as the story allows. Don't repeat the opening hook later.
 - **Logos:** use the user's supplied overlays exactly as provided.
+- **Thumbnail with every video:** always deliver a matching 1080×1920 cover image after each video,
+  without being asked (user's instruction, 14 Nov 2026).
 - **Music:** prefer original, self-composed music. The user wants no copyright issues and dislikes
   busy or annoying tracks.
 
