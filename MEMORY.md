@@ -135,6 +135,18 @@ _(notes pending)_
   Film grain makes x264 files huge: CRF 22 with maxrate 8.5 Mb/s gave 87 MB (under GitHub's 100 MB).
   Never let two processes write the same output file (a leftover background job corrupted one).
 
+### 6. Kadr Xarici — "Bakının yoxa çıxan tramvayları" (14 Nov 2026)
+- **What:** second Kadr Xarici documentary Reel (102.5 s), 11 AI-animated clips + ElevenLabs
+  voice-over. Archived in `kadr-xarici-tramvay/` (MP4, SRT, thumbnail, stems, scripts, `CREDITS.md`).
+- **Same house style as BUM** (reuse `kadr-xarici-bum/project` pipeline): Playfair year titles,
+  Inter subtitles with gold key terms, small logo upper left, photo-slides-out-of-frame ending,
+  logo reveal, no AI label. New here: opens on the moving tram with a bell from frame 1 (no fade),
+  hard cut to modern Baku, schematic route line (not a map), km counter, shots shown as tilted
+  photo prints for "köhnə fotolarda", tram-bell motif ending in a single last strike and near-silence.
+- **Audio:** "Colorless Aura" by Kevin MacLeod (CC BY 4.0, credit required); CC0 tram, bell and
+  street sounds from bigsoundbank.com.
+- **No feedback yet** on this video or its thumbnail.
+
 ## User preferences (across all projects)
 - Use only real footage. Never fabricate archive material, reactions, voices or historical scenes,
   and never use cloned or generated voices.
