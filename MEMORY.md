@@ -108,6 +108,53 @@ _(notes pending)_
   - mix: −14.8 LUFS, original speech untouched;
   - export: 1080×1920, 25 fps.
 
+### 5. Kadr Xarici — BUM / Tağıyev pasajı documentary Reel (14 Nov 2026)
+- **What:** an 85 s 9:16 historical-mystery documentary for the user's own brand **Kadr Xarici**
+  (not Araz FM). The user supplied 10 AI-generated 24 fps clips, an ElevenLabs Azerbaijani
+  voice-over and the white `kadr.xarici` logo PNG. Archived in `kadr-xarici-bum/` (final MP4, SRT,
+  stems, scripts, `CREDITS.md` with the timeline and licences).
+- **Brief was in English and explicit:** for this brand the user asked for *existing licensed*
+  music found online (not self-composed) — used "Echoes of Time v2" by Kevin MacLeod (CC BY 4.0,
+  credit required) and CC0 sound effects from bigsoundbank.com (direct files at
+  `bigsoundbank.com/UPLOAD/flac|bwf-en/<id>.<ext>`; Wikimedia Commons rate-limits this container).
+- **Correction from the user:** do **not** put a "Sİ ilə canlandırma" (AI-generated) label on the
+  video ("SI ile canlandirma yazma").
+- **Style delivered (no feedback yet):** unified sepia/silver grade for historical clips, cool
+  modern grade, Playfair Display year titles, Inter SemiBold 56 px subtitles with gold key terms
+  and word-by-word brightening, small logo upper left, the final shot shrinks into a photograph and
+  slides out of frame before "kadr xaricində qaldı." and the logo reveal.
+- **Thumbnail (standing rule from the user, 14 Nov 2026):** "Həmişə hər videodan sonra bunu et.
+  Stilistika eyni olsun" — after **every** video, also deliver a 1080×1920 cover for Instagram,
+  TikTok and YouTube Shorts, eye-catching and in the same style as that video. BUM cover
+  (`BUM_Kadr_Xarici_thumbnail.jpg`, script `project/thumb.py`): past frame on top, present frame
+  below, dark band between; gold tracked label, huge Playfair Bold hook question (ivory + gold),
+  italic teaser line, logo above the title. Keep all text inside the centre 1080×1080 so the
+  Instagram grid crop keeps it.
+- **Technical:** Python (OpenCV + PIL) frame renderer piped to ffmpeg, numpy audio mix. Whisper
+  sentence starts were about 0.4 s early; snapping word starts to the voice energy onset fixed it.
+  Film grain makes x264 files huge: CRF 22 with maxrate 8.5 Mb/s gave 87 MB (under GitHub's 100 MB).
+  Never let two processes write the same output file (a leftover background job corrupted one).
+
+### 6. Kadr Xarici — "Bakının yoxa çıxan tramvayları" (14 Nov 2026)
+- **What:** second Kadr Xarici documentary Reel (102.5 s), 11 AI-animated clips + ElevenLabs
+  voice-over. Archived in `kadr-xarici-tramvay/` (MP4, SRT, thumbnail, stems, scripts, `CREDITS.md`).
+- **Same house style as BUM** (reuse `kadr-xarici-bum/project` pipeline): Playfair year titles,
+  Inter subtitles with gold key terms, small logo upper left, photo-slides-out-of-frame ending,
+  logo reveal, no AI label. New here: opens on the moving tram with a bell from frame 1 (no fade),
+  hard cut to modern Baku, schematic route line (not a map), km counter, shots shown as tilted
+  photo prints for "köhnə fotolarda", tram-bell motif ending in a single last strike and near-silence.
+- **Audio:** "Colorless Aura" by Kevin MacLeod (CC BY 4.0, credit required); CC0 tram, bell and
+  street sounds from bigsoundbank.com.
+- **User feedback (14 Nov 2026):** asked "How to make it better? More engaging", then said the core
+  of the video is the question **"Bakıda tramvaylar niyə yox oldu?"**. When I started changes right
+  after asking which options to apply, the user stopped me: "Bir dayan da. Mən başla dedim?" — if
+  I ask a question, wait for the answer before starting. They then said "Do all of them. Sənə
+  buraxıram."
+- **v2 (`Tramvay_Kadr_Xarici_v2_9x16.mp4`, 101.3 s):** hook question on frame 0 and on the
+  thumbnail, then/now split screen with a 117 → 0 km counter, punch-in cuts inside long shots,
+  half-second music drop plus teaser line mid-video, 70 px subtitles, shorter logo outro.
+  My reading: for Kadr Xarici, lead with the central *question* on screen from the first frame.
+
 ## User preferences (across all projects)
 - Use only real footage. Never fabricate archive material, reactions, voices or historical scenes,
   and never use cloned or generated voices.
@@ -128,6 +175,9 @@ _(notes pending)_
   syllables. Bring SFX and music swells in after the last word.
 - **Editing:** keep it as short and punchy as the story allows. Don't repeat the opening hook later.
 - **Logos:** use the user's supplied overlays exactly as provided.
+- **Don't start work on options I've just asked about** until the user answers (14 Nov 2026).
+- **Thumbnail with every video:** always deliver a matching 1080×1920 cover image after each video,
+  without being asked (user's instruction, 14 Nov 2026).
 - **Music:** prefer original, self-composed music. The user wants no copyright issues and dislikes
   busy or annoying tracks.
 
