@@ -146,3 +146,9 @@ approved styles and technical lessons.
   Download, shared as a Google Drive or Dropbox "anyone with the link" URL.
 - `zefer-gunu-edit/` holds an earlier finished «Qəbul Vaxtı» project. Reuse its pipeline ideas:
   face-tracked crops, an ASS caption track, an ffmpeg-based grade and audio mix.
+
+## Kadr Xarici (separate brand)
+
+- Kadr Xarici is the user's own historical-documentary brand, not an Araz FM programme. For any
+  Kadr Xarici video, follow `kadr-xarici/CLAUDE.md` (style, workflow and template) and its
+  `README.md` (episode index); the Araz FM rules above do not apply to it.
