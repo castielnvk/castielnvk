@@ -88,7 +88,7 @@ function vignette(c, k = .5) {
 
 // ═════════════════════════ SCENE 1 — the dial ═════════════════════════
 const PPM = 168; // pixels per MHz (macro)
-function dialFreq(u) { return u <= 0 ? 88 : 88 + 15.3 * eOut5(seg(u, 0, 1.3)) + (u > 1.3 ? .22 * Math.sin((u - 1.3) * 20) * Math.exp(-(u - 1.3) * 7) : 0); }
+function dialFreq(u) { return u <= 0 ? 88 : 88 + 15.3 * eIO(seg(u, 0, 1.35)) + (u > 1.3 ? .22 * Math.sin((u - 1.3) * 20) * Math.exp(-(u - 1.3) * 7) : 0); }
 function s1Layout(c) {
   c.font = `600 48px ${FONT}`; const wA = c.measureText(COPY.s1).width;
   c.font = `500 48px ${FONT}`; const wD = c.measureText(COPY.s1dash).width;
@@ -106,7 +106,7 @@ function sceneDial(c, u, t, A) {
   const ig = c.createLinearGradient(0, 12, 0, 30); ig.addColorStop(0, 'rgba(0,0,0,.55)'); ig.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = ig; c.fillRect(0, 12, 1920, 18);
   c.fillStyle = 'rgba(255,255,255,.14)'; c.fillRect(0, 84, 1920, 1.2); c.fillStyle = 'rgba(0,0,0,.45)'; c.fillRect(0, 11, 1920, 1.2);
   // warm backlight that travels along the scale, then rests behind the indicator
-  const lx = u < 1.3 ? -200 + (NX + 200) * eOut(seg(u, 0, 1.3)) : NX;
+  const lx = u < 1.35 ? -200 + (NX + 200) * eIO(seg(u, 0, 1.35)) : NX;
   const wl = c.createRadialGradient(lx, 48, 0, lx, 48, 420); wl.addColorStop(0, 'rgba(255,196,128,.50)'); wl.addColorStop(.4, 'rgba(255,170,96,.16)'); wl.addColorStop(1, 'rgba(255,170,96,0)');
   c.save(); c.beginPath(); c.rect(0, 12, 1920, 72); c.clip(); c.globalCompositeOperation = 'lighter'; c.fillStyle = wl; c.fillRect(lx - 420, 12, 840, 72); c.restore();
   // engraved scale, with motion blur while it travels
@@ -158,7 +158,7 @@ function scenePhone(c, u, t, A) {
   // the river first; the phone glides in over it and the reflection continues inside its glass
   water(c, A, t, 0, 0, 1920, BH, 46, 0, 1);
   const dim = seg(u, .9, 2.0); c.fillStyle = `rgba(2,22,27,${.72 * dim})`; c.fillRect(0, 0, 1920, BH);
-  const px = 70 + (1 - eOut5(seg(u, 0, 1.1))) * 2000, top = 14;
+  const px = 70 + (1 - eIO(seg(u, 0, 1.5))) * 2000, top = 14;
   // body + metal frame
   c.save();
   c.shadowColor = 'rgba(0,0,0,.6)'; c.shadowBlur = 30; c.shadowOffsetY = 10;
@@ -207,17 +207,20 @@ function scenePhone(c, u, t, A) {
 const STRINGS = [[34, 2.6], [43, 2.6], [LY, 5.6], [78, 3.4], [91, 3.0]];   // [y, thickness] — LY is the plucked, wound string
 function sceneSaz(c, u, t, A) {
   const drift = t * 9;
-  tileMirror(c, A.wood, drift, -40, 330);
-  // warm key light from upper left, cool falloff
-  const kl = c.createRadialGradient(520, -40, 20, 520, -40, 1100); kl.addColorStop(0, 'rgba(255,196,128,.42)'); kl.addColorStop(.5, 'rgba(255,170,96,.10)'); kl.addColorStop(1, 'rgba(0,0,0,0)');
-  c.save(); c.globalCompositeOperation = 'lighter'; c.fillStyle = kl; c.fillRect(0, 0, 1920, BH); c.restore();
-  const sh = c.createLinearGradient(0, 96, 0, BH); sh.addColorStop(0, 'rgba(3,22,26,0)'); sh.addColorStop(1, 'rgba(3,22,26,.72)'); c.fillStyle = sh; c.fillRect(0, 96, 1920, BH - 96);
-  // tied frets crossing the neck (three turns of fine gut), soft contact shadow
-  for (let k = -1; k < 5; k++) {
-    const fx = k * 640 - (drift % 640) + 260;
-    c.save(); c.filter = 'blur(3px)'; c.fillStyle = 'rgba(0,0,0,.5)'; c.fillRect(fx + 6, 0, 12, BH); c.restore();
-    for (const dx of [0, 4, 8]) { const g = c.createLinearGradient(fx + dx, 0, fx + dx + 3.2, 0); g.addColorStop(0, '#A39A80'); g.addColorStop(.45, '#F7EFD9'); g.addColorStop(1, '#6F684F'); c.fillStyle = g; c.fillRect(fx + dx, 0, 3.2, BH); }
+  // deep teal lacquer surface, shallow depth of field
+  tile(c, A.metal, drift, 0, BH);
+  c.fillStyle = 'rgba(2,30,36,.62)'; c.fillRect(0, 0, 1920, BH);
+  const kl = c.createRadialGradient(520, -40, 20, 520, -40, 1100); kl.addColorStop(0, 'rgba(255,206,150,.26)'); kl.addColorStop(.5, 'rgba(120,200,205,.08)'); kl.addColorStop(1, 'rgba(0,0,0,0)');
+  c.save(); c.globalCompositeOperation = 'lighter'; c.fillStyle = kl; c.fillRect(0, 0, 1920, BH);
+  for (let k = 0; k < 14; k++) { // out-of-focus points of light drifting behind the strings
+    const h1 = hash(k, 1), h2 = hash(k, 2), h3 = hash(k, 3), per = 2300;
+    const x = (((h1 * per - t * (10 + h3 * 16)) % per) + per) % per - 190, y = 20 + h2 * 190, r = 22 + h3 * 34;
+    const g = c.createRadialGradient(x, y, r * .55, x, y, r); const col = k % 3 === 0 ? '255,214,160' : '150,215,220';
+    g.addColorStop(0, `rgba(${col},${.10 + .05 * Math.sin(t * 1.3 + k)})`); g.addColorStop(.85, `rgba(${col},${.13 + .05 * Math.sin(t * 1.3 + k)})`); g.addColorStop(1, `rgba(${col},0)`);
+    c.fillStyle = g; c.fillRect(x - r, y - r, r * 2, r * 2);
   }
+  c.restore();
+  const sh = c.createLinearGradient(0, 96, 0, BH); sh.addColorStop(0, 'rgba(2,20,24,0)'); sh.addColorStop(1, 'rgba(2,20,24,.6)'); c.fillStyle = sh; c.fillRect(0, 96, 1920, BH - 96);
   // travelling light in the flag colours (the national transition)
   c.save(); c.globalCompositeOperation = 'lighter';
   FLAGC.forEach((col, k) => {
@@ -227,24 +230,24 @@ function sceneSaz(c, u, t, A) {
   });
   c.restore();
   // strings: shadow, steel body, specular; the matched string is plucked and rings out
-  const amp = u < .55 ? 0 : 11 * Math.exp(-(u - .55) * .95);
+  const amp = 11 * eOut(seg(u, .55, .8)) * Math.exp(-Math.max(0, u - .8) * .95);
   STRINGS.forEach(([y, w], i) => {
     const main = y === LY, a = main ? amp : amp * (.12 + .1 * hash(i));
-    const shape = (ph) => { c.beginPath(); for (let x = -10; x <= 1930; x += 12) { const env = Math.sin(Math.PI * clamp((x + 300) / 2500)); const yy = y + Math.sin(ph) * a * env + Math.sin(x / 90 - t * 30 + i) * a * .08; x < 0 ? c.moveTo(x, yy) : c.lineTo(x, yy); } };
-    c.save(); c.filter = 'blur(3px)'; c.globalAlpha = .5; c.translate(10, 14); shape(t * 52 + i); c.strokeStyle = '#000'; c.lineWidth = w * 1.7; c.stroke(); c.restore();
-    const n = a > .4 ? 7 : 1; // vibration fan = optical motion blur of a ringing string
+    const shape = (ph) => { c.beginPath(); for (let x = -10; x <= 1930; x += 12) { const env = Math.sin(Math.PI * clamp((x + 300) / 2500)); const yy = y + Math.sin(ph) * a * env * (.92 + .08 * Math.sin(t * 5 + i)) + Math.sin(x / 120 - t * 6 + i) * a * .05; x < 0 ? c.moveTo(x, yy) : c.lineTo(x, yy); } };
+    c.save(); c.filter = 'blur(3px)'; c.globalAlpha = .5; c.translate(10, 14); shape(0); c.strokeStyle = '#000'; c.lineWidth = w * 1.7; c.stroke(); c.restore();
+    const n = a > .25 ? 9 : 1; // vibration fan = optical motion blur of a ringing string
     for (let k = 0; k < n; k++) {
-      const ph = t * 52 + i + (n === 1 ? 0 : (k / (n - 1)) * Math.PI);
-      c.globalAlpha = n === 1 ? 1 : .34;
-      shape(ph); c.strokeStyle = main ? '#7A4E20' : '#4C5552'; c.lineWidth = w; c.stroke();
-      shape(ph); c.strokeStyle = main ? '#C48A45' : '#AEB7B2'; c.lineWidth = w * .62; c.stroke();
+      const ph = n === 1 ? Math.PI / 2 * 0 : (k / (n - 1)) * Math.PI - Math.PI / 2;   // fixed fan = the blurred spindle of a ringing string
+      c.globalAlpha = n === 1 ? 1 : .3;
+      shape(ph); c.strokeStyle = main ? '#5E7C80' : '#3D5F64'; c.lineWidth = w; c.stroke();
+      shape(ph); c.strokeStyle = main ? '#E6DCC4' : '#A9CDD0'; c.lineWidth = w * .62; c.stroke();
       c.save(); c.translate(0, -w * .22); shape(ph); c.strokeStyle = main ? '#FFE9C2' : '#FFFFFF'; c.lineWidth = Math.max(.8, w * .24); c.stroke(); c.restore();
     }
     c.globalAlpha = 1;
-    if (main && a < 1.2) { shape(t * 52 + i); c.setLineDash([1.8, 2.6]); c.lineDashOffset = -drift; c.strokeStyle = 'rgba(255,236,200,.55)'; c.lineWidth = w * .72; c.stroke(); c.setLineDash([]); }
+    if (main && a < 1.2) { shape(0); c.setLineDash([1.8, 2.6]); c.lineDashOffset = -drift; c.strokeStyle = 'rgba(255,236,200,.55)'; c.lineWidth = w * .72; c.stroke(); c.setLineDash([]); }
   });
   // one string very close to the lens, far out of focus
-  c.save(); c.filter = 'blur(7px)'; c.globalAlpha = .55; c.fillStyle = '#E9D9B8'; c.fillRect(-20, 8 + Math.sin(t * 40) * amp * .15, 1960, 9); c.restore();
+  c.save(); c.filter = 'blur(7px)'; c.globalAlpha = .55; c.fillStyle = '#CFE6E6'; c.fillRect(-20, 8, 1960, 9 + amp * .3); c.restore();
   // TEXT LAYER on a stable plate
   const pa = eOut(seg(u, .7, 1.3));
   plate(c, 330, 114, 1260, 86, 18, pa);
@@ -254,7 +257,7 @@ function sceneSaz(c, u, t, A) {
 
 // ═════════════════════════ SCENE 4 — the bridge, the two shores, the lockup ═════════════════════════
 function sceneBridge(c, u, t, A) {
-  const z = 1 + 1.15 * (1 - eOut5(seg(u, .15, 2.0)));    // pull back
+  const z = 1 + 1.15 * (1 - eIO(seg(u, -.4, 2.3)));    // pull back
   c.save(); c.translate(960, LY); c.scale(z, z); c.translate(-960, -LY);
   // land (both shores)
   c.save(); c.translate(0, -108); tile(c, A.land, 120, 0, 432); c.restore();
@@ -298,25 +301,25 @@ window.renderFilm = function (ctx, tAbs, A) {
   if (!SC) { SC = [0, 1, 2, 3].map(() => mk(1920, BH)); TMP = mk(1920, 432); TMP2 = mk(1920, BH); }
   const t = ((tAbs % DUR) + DUR) % DUR;
   const scenes = [sceneDial, scenePhone, sceneSaz, sceneBridge];
-  const draw = (i, u) => { const c = SC[i].getContext('2d'); c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1; c.globalCompositeOperation = 'source-over'; c.filter = 'none'; c.clearRect(0, 0, 1920, BH); c.save(); scenes[i](c, u, tAbs, A); c.restore(); };
+  const draw = (i, u, tt = tAbs) => { const c = SC[i].getContext('2d'); c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1; c.globalCompositeOperation = 'source-over'; c.filter = 'none'; c.clearRect(0, 0, 1920, BH); c.save(); scenes[i](c, u, tt, A); c.restore(); };
   let i = 0; for (let k = 0; k < 4; k++) if (t >= T[k]) i = k;
-  const u = t - T[i], FADE = [0, .55, .7, .7][i];
+  const u = t - T[i], FADE = [0, 0, .9, .9][i];
   ctx.save(); ctx.beginPath(); ctx.rect(0, BY, 1920, BH); ctx.clip();
   // outgoing scene underneath while the new one arrives
   const prev = (i + 3) % 4, a = FADE ? eIO(seg(u, 0, FADE)) : 1;
   if (a < 1) { draw(prev, t - T[prev] + (i === 0 ? DUR : 0)); ctx.drawImage(SC[prev], 0, BY); }
-  if (i === 0 && t < .6) { draw(3, DUR - T[3] + t); ctx.drawImage(SC[3], 0, BY); }
+  if (i === 0 && t < .9) { draw(3, DUR - T[3] + t, tAbs + DUR); ctx.drawImage(SC[3], 0, BY); }
   draw(i, u);
-  ctx.globalAlpha = i === 0 ? eIO(seg(t, 0, .6)) : a; ctx.drawImage(SC[i], 0, BY); ctx.globalAlpha = 1;
+  ctx.globalAlpha = i === 0 ? eIO(seg(t, 0, .9)) : a; ctx.drawImage(SC[i], 0, BY); ctx.globalAlpha = 1;
 
   // 1 → 2 : a glint in the dial glass opens into the river
-  const g12 = seg(t, T[1] - .75, T[1] + .2);
+  const g12 = seg(t, T[1] - 1.0, T[1]);
   if (g12 > 0 && g12 < 1) {
     const w = TMP2; // river grows out of the glint
-    const gx = 1180, r = 30 + 2200 * eIn(g12);
-    ctx.save(); ctx.beginPath(); ctx.ellipse(gx, BY + 40, r, r * .5, 0, 0, 7); ctx.clip(); ctx.translate(0, BY); water(ctx, A, tAbs, 0, 0, 1920, BH, 46, 0, 1); ctx.restore();
+    const gx = 1180, r = 20 + 2300 * eIO(g12);
+    ctx.save(); ctx.beginPath(); ctx.ellipse(gx, BY + 40, r, r * .5, 0, 0, 7); ctx.clip(); ctx.translate(0, BY); water(ctx, A, tAbs, 0, 0, 1920, BH, 46, 0, 1); vignette(ctx, .4); ctx.restore();
   }
-  const gl = Math.exp(-Math.pow((t - (T[1] - .7)) / .22, 2));
+  const gl = Math.exp(-Math.pow((t - (T[1] - .95)) / .28, 2));
   if (gl > .01) { const g = ctx.createRadialGradient(1180, BY + 40, 0, 1180, BY + 40, 260); g.addColorStop(0, `rgba(255,236,200,${.95 * gl})`); g.addColorStop(1, 'rgba(255,236,200,0)'); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = g; ctx.fillRect(900, BY, 560, BH); ctx.globalCompositeOperation = 'source-over'; }
 
   // 2 → 3 → 4 : one thin line of light — highlight on the phone glass → saz string → bridge

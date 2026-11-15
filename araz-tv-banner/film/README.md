@@ -1,7 +1,7 @@
 # Araz FM — cinematic lower-third film (v9)
 
 One continuous 20 s loop for the bottom 216 px of a 1920×1080 frame:
-radio dial → river glint → phone glass → saz string → bridge → logo lockup.
+radio dial → river glint → phone glass → saz string (no wood; deep teal) → bridge → logo lockup.
 
 ## Files
 - `film.js` — the whole animation. Edit the `COPY` block at the top to change any text line

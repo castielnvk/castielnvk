@@ -14,7 +14,7 @@ const html = `<style>
  @font-face{font-family:Montserrat;font-weight:800;src:url(${font('800ExtraBold')})}
  body{margin:0}</style><canvas id=c width=1920 height=1080></canvas>
  <script>${fs.readFileSync(path.join(__dirname, 'film.js'), 'utf8')}</script>`;
-const IMG = { metal: 'metal.jpg', waterBase: 'water_base.jpg', c0: 'caustic_0.jpg', c1: 'caustic_1.jpg', land: 'land.jpg', wood: 'wood.jpg', bg: 'studio_bg.jpg' };
+const IMG = { metal: 'metal.jpg', waterBase: 'water_base.jpg', c0: 'caustic_0.jpg', c1: 'caustic_1.jpg', land: 'land.jpg', bg: 'studio_bg.jpg' };
 const W = 4;
 (async () => {
   fs.mkdirSync(out, { recursive: true });
