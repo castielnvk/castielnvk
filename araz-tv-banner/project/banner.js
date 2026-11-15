@@ -182,7 +182,7 @@ const VARIANTS = {
     // badge
     const bx = x + h / 2, by = y + h / 2;
     ctx.beginPath(); ctx.arc(bx, by, h / 2 - 6, 0, 7); ctx.fillStyle = TEAL; ctx.fill();
-    star8(ctx, bx, by, 19, '#fff'); star8(ctx, bx, by, 9, TEAL);
+    star8(ctx, bx, by, 21, '#fff');
     // flag ticks at right end
     for (let k = 0; k < 3; k++) { ctx.fillStyle = FLAG[k]; rr(ctx, x + w - 64 + k * 14, by - 14, 8, 28, 4); ctx.fill(); }
     content(ctx, L, x + h, x + w - 70, by + 1, { col: '#fff', accent: TEAL_L, tagBg: TEAL, tagCol: '#fff', logoImg: A.white, logoH: 56, fs: 40, flagStars: false });
