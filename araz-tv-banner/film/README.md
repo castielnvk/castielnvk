@@ -16,5 +16,3 @@ radio dial → river glint → phone glass → saz string (no wood; deep teal) �
 
 The PNG sequence (≈290 MB) is not stored in git; regenerate it with the `alpha` command above.
 The logo is the supplied `logos/individual/araz-radio_white.png`, scaled down only.
-
-`flag_az.svg` / `flag_az.png` — the flag of Azerbaijan from Wikimedia Commons (public domain), used unaltered for the waving flag in scene 3.

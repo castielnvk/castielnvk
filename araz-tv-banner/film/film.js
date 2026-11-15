@@ -108,17 +108,6 @@ function kilim(c, x0, x1, y0, y1, alpha) { // stepped kilim lozenges
   }
   c.restore();
 }
-// waving flag from the accurate asset (crescent and eight-point star preserved)
-function wavingFlag(c, img, t, cx, cy, W, H, open) {
-  if (open <= 0) return; const w = W * open, x0 = cx - W / 2, sw = 2;
-  c.save(); c.filter = 'blur(10px)'; c.globalAlpha = .45; c.fillStyle = '#000'; c.fillRect(x0 + 10, cy - H / 2 + 16, w, H); c.restore();
-  for (let x = 0; x < w; x += sw) {
-    const u = x / W, ph1 = u * 8 - t * 5.2, ph2 = u * 14 - t * 7.3 + 1.3, amp = H * (.02 + .055 * u);
-    const off = Math.sin(ph1) * amp + Math.sin(ph2) * amp * .35, sl = Math.cos(ph1) * .8 + Math.cos(ph2) * .3, h = H * (1 - .03 * Math.abs(Math.sin(ph1)));
-    c.drawImage(img, u * img.width, 0, Math.max(1, sw / W * img.width), img.height, x0 + x, cy - h / 2 + off, sw + .6, h);
-    c.fillStyle = sl > 0 ? `rgba(255,255,255,${sl * .2})` : `rgba(0,10,20,${-sl * .28})`; c.fillRect(x0 + x, cy - h / 2 + off, sw + .6, h);
-  }
-}
 function tricolourRule(c, x, y, w, h, t) { // three stacked stripes in the flag colours
   FLAGC.forEach((col, k) => { c.fillStyle = col; c.fillRect(x, y + k * h, w, h + .3); });
   if (t !== undefined) { const gx = x + ((t * 260) % (w + 600)) - 300, g = c.createLinearGradient(gx - 150, 0, gx + 150, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.5, 'rgba(255,255,255,.75)'); g.addColorStop(1, 'rgba(255,255,255,0)');
@@ -304,10 +293,9 @@ function sceneSaz(c, u, t, A) {
   // one string very close to the lens, far out of focus
   c.save(); c.filter = 'blur(7px)'; c.globalAlpha = .55; c.fillStyle = '#CFE6E6'; c.fillRect(-20, 8, 1960, 9 + amp * .3); c.restore();
   // TEXT LAYER on a stable plate
-  wavingFlag(c, A.flag, t, 1640, 110, 356, 178, eOut(seg(u, .8, 1.7)));
   const pa = eOut(seg(u, .7, 1.3));
-  plate(c, 150, 114, 1240, 86, 18, pa);
-  wipeText(c, COPY.s3, 770, 158, `600 50px ${FONT}`, seg(u, .95, 1.8), 'center');
+  plate(c, 330, 114, 1260, 86, 18, pa);
+  wipeText(c, COPY.s3, 960, 158, `600 50px ${FONT}`, seg(u, .95, 1.8), 'center');
   vignette(c, .55);
 }
 
