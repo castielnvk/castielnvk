@@ -29,6 +29,9 @@ Review the episode, identify the programme and adapt editorial choices to it.
   "5 təəccüblü sual, 5 cavab". Use paparazzi energy: flash and shutter transitions, press-photo
   freezes, punchy headlines in the guest's exact words. See MEMORY.md.
 
+- **«Sözümün Canı»** (word-of-the-day narration Reels, audio-only source): follow
+  `sozumun-cani/CLAUDE.md`; those rules replace the livestream-clip rules below for that series.
+
 **Always read `MEMORY.md` first.** It holds earlier projects, the user's exact corrections, the
 approved styles and technical lessons.
 - For other programmes, infer the treatment from content and branding. Never apply the morning

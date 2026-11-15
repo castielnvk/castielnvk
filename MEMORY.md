@@ -45,6 +45,12 @@ programmes, 4) everything else.
   - Captions: Inter 37 px, word-by-word highlight, dark gradient scrim, last line at y 1555.
   - Mix: voice at about −14 LUFS, music about 16 dB under with gentle ducking, final −14 LUFS /
     −1.5 dBTP.
+- **Full permanent rules:** `sozumun-cani/CLAUDE.md` (workflow, layout numbers, audio gains,
+  render, verification, cover and Instagram caption format). Copy `sozumun-cani/03-zenexdan/project/`
+  as the template for new episodes.
+- **Instagram captions:** don't repeat the narration. Use a hook, "Bu günün sözü: …", a teaser ending
+  in "Cavab videoda.", "Qulağınız bizdə olsun." and hashtags. The series line says "mənasını və
+  mənşəyini", never "hekayəsini".
 - **Open questions (not yet answered by the user):**
   - Transcript readings: "dərman atırıq" vs "atıraq"; "gündəlik qayğılar".
   - Spellings: "zənəxdan" (pronounced zənəqdan); "yumşaldan" (spoken yumuşaldan).
