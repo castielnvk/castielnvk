@@ -155,6 +155,17 @@ _(notes pending)_
   half-second music drop plus teaser line mid-video, 70 px subtitles, shorter logo outro.
   My reading: for Kadr Xarici, lead with the central *question* on screen from the first frame.
 
+### 7. Kadr Xarici — «Fantaziya» hamamı (15 Nov 2026)
+- **What:** third Kadr Xarici documentary Reel (92.2 s), 15 AI-animated clips of the abandoned
+  bathhouse today (no reconstructed past scenes were supplied) + ElevenLabs voice-over. Archived in
+  `kadr-xarici-fantaziya/` (MP4, SRT, thumbnail, stems, scripts, `CREDITS.md`).
+- **Approach:** two worlds — present = cold, dusty, room tone/wind/footsteps; past = warm grade, light
+  bloom, water and unintelligible murmur, evoked from the same footage without inventing people.
+  Hook question on frame 0 ("Bura bir vaxtlar NƏ İDİ?"), "Mənbələrə görə" numbered list, quote card,
+  one warm flash per word on "işıq, su, səs, insanlar" then a hard cut to near silence, past/present
+  split screen, photo-slides-out ending. Music: "Lightless Dawn" by Kevin MacLeod (CC BY 4.0).
+- **No feedback yet.**
+
 ## User preferences (across all projects)
 - Use only real footage. Never fabricate archive material, reactions, voices or historical scenes,
   and never use cloned or generated voices.
