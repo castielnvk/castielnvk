@@ -86,6 +86,45 @@ function vignette(c, k = .5) {
   c.fillStyle = h; c.fillRect(0, 0, 1920, BH);
 }
 
+// ───────────── national elements ─────────────
+function star8Path(c, cx, cy, r, inner = .55) {
+  c.beginPath();
+  for (let i = 0; i < 16; i++) { const a = i * Math.PI / 8 - Math.PI / 2, rad = i % 2 ? r * inner : r; const x = cx + Math.cos(a) * rad, y = cy + Math.sin(a) * rad; i ? c.lineTo(x, y) : c.moveTo(x, y); }
+  c.closePath();
+}
+let LATTICE = null;
+function lattice(c, ox, y0, h, alpha) { // şəbəkə-style interlace of eight-point stars
+  if (!LATTICE) { LATTICE = mk(480, 240); const l = LATTICE.getContext('2d'); l.strokeStyle = 'rgba(245,238,220,1)'; l.lineWidth = 1.4; const q = 60;
+    for (let x = 0; x <= 480; x += q) for (let y = 0; y <= 240; y += q) { star8Path(l, x, y, q * .5, .74); l.stroke(); l.beginPath(); l.moveTo(x + q / 2, y + q / 2 - 9); l.lineTo(x + q / 2 + 9, y + q / 2); l.lineTo(x + q / 2, y + q / 2 + 9); l.lineTo(x + q / 2 - 9, y + q / 2); l.closePath(); l.stroke(); } }
+  c.save(); c.globalAlpha = alpha; c.beginPath(); c.rect(0, y0, 1920, h); c.clip();
+  ox = ((ox % 480) + 480) % 480; for (let x = -ox; x < 1920; x += 480) c.drawImage(LATTICE, x, y0 - 20);
+  c.restore();
+}
+function kilim(c, x0, x1, y0, y1, alpha) { // stepped kilim lozenges
+  c.save(); c.globalAlpha = alpha; c.strokeStyle = IVORY; c.lineWidth = 1.6;
+  for (let x = x0; x < x1; x += 96) for (let y = y0; y < y1; y += 64) {
+    const cx = x + ((Math.round((y - y0) / 64)) % 2 ? 48 : 0), cy = y;
+    for (const r of [26, 14]) { c.beginPath(); c.moveTo(cx, cy - r * .62); c.lineTo(cx + r, cy); c.lineTo(cx, cy + r * .62); c.lineTo(cx - r, cy); c.closePath(); c.stroke(); }
+  }
+  c.restore();
+}
+// waving flag from the accurate asset (crescent and eight-point star preserved)
+function wavingFlag(c, img, t, cx, cy, W, H, open) {
+  if (open <= 0) return; const w = W * open, x0 = cx - W / 2, sw = 2;
+  c.save(); c.filter = 'blur(10px)'; c.globalAlpha = .45; c.fillStyle = '#000'; c.fillRect(x0 + 10, cy - H / 2 + 16, w, H); c.restore();
+  for (let x = 0; x < w; x += sw) {
+    const u = x / W, ph1 = u * 8 - t * 5.2, ph2 = u * 14 - t * 7.3 + 1.3, amp = H * (.02 + .055 * u);
+    const off = Math.sin(ph1) * amp + Math.sin(ph2) * amp * .35, sl = Math.cos(ph1) * .8 + Math.cos(ph2) * .3, h = H * (1 - .03 * Math.abs(Math.sin(ph1)));
+    c.drawImage(img, u * img.width, 0, Math.max(1, sw / W * img.width), img.height, x0 + x, cy - h / 2 + off, sw + .6, h);
+    c.fillStyle = sl > 0 ? `rgba(255,255,255,${sl * .2})` : `rgba(0,10,20,${-sl * .28})`; c.fillRect(x0 + x, cy - h / 2 + off, sw + .6, h);
+  }
+}
+function tricolourRule(c, x, y, w, h, t) { // three stacked stripes in the flag colours
+  FLAGC.forEach((col, k) => { c.fillStyle = col; c.fillRect(x, y + k * h, w, h + .3); });
+  if (t !== undefined) { const gx = x + ((t * 260) % (w + 600)) - 300, g = c.createLinearGradient(gx - 150, 0, gx + 150, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.5, 'rgba(255,255,255,.75)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+    c.save(); c.beginPath(); c.rect(x, y, w, h * 3); c.clip(); c.fillStyle = g; c.fillRect(gx - 150, y, 300, h * 3); c.restore(); }
+}
+
 // ═════════════════════════ SCENE 1 — the dial ═════════════════════════
 const PPM = 168; // pixels per MHz (macro)
 function dialFreq(u) { return u <= 0 ? 88 : 88 + 15.3 * eIO(seg(u, 0, 1.35)) + (u > 1.3 ? .22 * Math.sin((u - 1.3) * 20) * Math.exp(-(u - 1.3) * 7) : 0); }
@@ -94,13 +133,14 @@ function s1Layout(c) {
   c.font = `500 48px ${FONT}`; const wD = c.measureText(COPY.s1dash).width;
   c.font = `800 112px ${FONT}`; const wF = c.measureText(COPY.s1freq).width;
   c.font = `700 40px ${FONT}`; const wM = c.measureText(COPY.s1fm).width;
-  const total = wA + 34 + wD + 34 + wF + 14 + wM, x0 = (1920 - total) / 2;
+  const total = wA + 34 + wD + 34 + wF + 14 + wM, x0 = (1920 - total) / 2 + 60;
   return { xA: x0, xD: x0 + wA + 34, xF: x0 + wA + 34 + wD + 34, wF, xM: x0 + wA + 34 + wD + 34 + wF + 14 };
 }
 function sceneDial(c, u, t, A) {
   const L = s1Layout(c), NX = L.xF + L.wF / 2, f = dialFreq(u);
   tile(c, A.metal, 0, 0, BH);
   const dg = c.createLinearGradient(0, 70, 0, BH); dg.addColorStop(0, 'rgba(2,26,31,0)'); dg.addColorStop(1, 'rgba(2,26,31,.62)'); c.fillStyle = dg; c.fillRect(0, 70, 1920, BH - 70);
+  lattice(c, t * 4, 90, 126, .07);
   // recessed scale window
   c.fillStyle = 'rgba(2,28,34,.62)'; c.fillRect(0, 12, 1920, 72);
   const ig = c.createLinearGradient(0, 12, 0, 30); ig.addColorStop(0, 'rgba(0,0,0,.55)'); ig.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = ig; c.fillRect(0, 12, 1920, 18);
@@ -130,7 +170,12 @@ function sceneDial(c, u, t, A) {
   const lock = seg(u, 1.25, 1.5);
   c.save(); c.shadowColor = 'rgba(255,170,90,.95)'; c.shadowBlur = 16 + 16 * Math.exp(-Math.pow((u - 1.35) / .15, 2));
   c.fillStyle = '#FFE2B4'; c.fillRect(NX - 1.6, 8, 3.2, 80); c.restore();
-  c.beginPath(); c.moveTo(NX - 9, 6); c.lineTo(NX + 9, 6); c.lineTo(NX, 18); c.closePath(); c.fillStyle = '#FFE2B4'; c.fill();
+  c.save(); c.shadowColor = 'rgba(255,170,90,.9)'; c.shadowBlur = 12; star8Path(c, NX, 12, 11); c.fillStyle = '#FFE9C4'; c.fill(); c.restore();
+  // three jewel lamps in the flag colours light up as the station locks
+  FLAGC.forEach((col, k) => { const on = eOut(seg(u, 1.3 + k * .14, 1.6 + k * .14)), x = L.xA - 150 + k * 34, y = 152;
+    c.save(); c.beginPath(); c.arc(x, y, 9, 0, 7); c.fillStyle = '#04262C'; c.fill(); c.strokeStyle = 'rgba(245,238,220,.45)'; c.lineWidth = 1.5; c.stroke();
+    c.globalAlpha = on; c.shadowColor = col; c.shadowBlur = 16; c.beginPath(); c.arc(x, y, 6.5, 0, 7); c.fillStyle = col; c.fill(); c.shadowBlur = 0;
+    c.beginPath(); c.arc(x - 2, y - 2, 2, 0, 7); c.fillStyle = 'rgba(255,255,255,.75)'; c.fill(); c.restore(); });
   // TEXT LAYERS — the frequency is the largest element
   const fa = seg(u, .75, 1.2), fsz = .82 + .18 * eBack(seg(u, .75, 1.45));
   if (fa > 0) {
@@ -175,6 +220,15 @@ function scenePhone(c, u, t, A) {
   const refl = 1 - .85 * seg(u, 1.0, 2.1);
   c.globalAlpha = refl; water(c, A, t, sx, sy, 1920, BH, 46, 0, 1); c.globalAlpha = 1;
   c.fillStyle = `rgba(4,40,47,${.55 * seg(u, 1.0, 2.1)})`; c.fillRect(sx, sy, 2560, 380);
+  lattice(c, t * 5, sy, 240, .075 * seg(u, 1.0, 2.1));
+  // a tricolour ribbon of light flows across the screen behind the UI
+  c.save(); c.globalCompositeOperation = 'lighter';
+  FLAGC.forEach((col, k) => { const rp = seg(u, .9 + k * .1, 2.9 + k * .1); if (rp <= 0 || rp >= 1) return;
+    const head = -300 + 2600 * eIO(rp); c.beginPath();
+    for (let x = head - 900; x <= head; x += 12) { const y = 108 + (k - 1) * 13 + Math.sin(x / 150 + t * 2.4 + k * .5) * 26; x === head - 900 ? c.moveTo(x, y) : c.lineTo(x, y); }
+    const g = c.createLinearGradient(head - 900, 0, head, 0); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, col);
+    c.shadowColor = col; c.shadowBlur = 14; c.strokeStyle = g; c.lineWidth = 6; c.lineCap = 'round'; c.globalAlpha = .9; c.stroke(); });
+  c.restore();
   // front camera
   c.beginPath(); c.arc(sx + 46, 108, 10, 0, 7); c.fillStyle = '#020809'; c.fill(); c.beginPath(); c.arc(sx + 46, 108, 10, 0, 7); c.strokeStyle = 'rgba(160,200,205,.35)'; c.lineWidth = 1.5; c.stroke();
   c.beginPath(); c.arc(sx + 43, 105, 2.5, 0, 7); c.fillStyle = 'rgba(190,230,235,.6)'; c.fill();
@@ -197,7 +251,7 @@ function scenePhone(c, u, t, A) {
   if (fp > 0) { c.save(); c.filter = `blur(${(1 - eOut(fp)) * 18}px)`; c.globalAlpha = clamp(fp * 1.6);
     c.font = `800 86px ${FONT}`; c.textBaseline = 'middle'; c.shadowColor = 'rgba(0,0,0,.5)'; c.shadowBlur = 10; c.fillStyle = IVORY; c.fillText(COPY.s2url, TX - 3, 148); c.restore();
     c.font = `800 86px ${FONT}`; const uw = c.measureText(COPY.s2url).width;
-    c.fillStyle = WARM; c.globalAlpha = .9; c.fillRect(TX, 194, uw * eOut(seg(u, 2.5, 3.1)), 3); c.globalAlpha = 1; }
+    const ul = uw * eOut(seg(u, 2.5, 3.1)); c.save(); c.beginPath(); c.rect(TX, 192, ul, 6); c.clip(); FLAGC.forEach((col, k) => { c.fillStyle = col; c.fillRect(TX + k * uw / 3, 192, uw / 3 + 1, 5); }); c.restore(); }
   glassSheen(c, t, 1.3);
   c.restore();
   vignette(c, .4);
@@ -220,6 +274,7 @@ function sceneSaz(c, u, t, A) {
     c.fillStyle = g; c.fillRect(x - r, y - r, r * 2, r * 2);
   }
   c.restore();
+  lattice(c, drift, 0, BH, .05);
   const sh = c.createLinearGradient(0, 96, 0, BH); sh.addColorStop(0, 'rgba(2,20,24,0)'); sh.addColorStop(1, 'rgba(2,20,24,.6)'); c.fillStyle = sh; c.fillRect(0, 96, 1920, BH - 96);
   // travelling light in the flag colours (the national transition)
   c.save(); c.globalCompositeOperation = 'lighter';
@@ -249,9 +304,10 @@ function sceneSaz(c, u, t, A) {
   // one string very close to the lens, far out of focus
   c.save(); c.filter = 'blur(7px)'; c.globalAlpha = .55; c.fillStyle = '#CFE6E6'; c.fillRect(-20, 8, 1960, 9 + amp * .3); c.restore();
   // TEXT LAYER on a stable plate
+  wavingFlag(c, A.flag, t, 1640, 110, 356, 178, eOut(seg(u, .8, 1.7)));
   const pa = eOut(seg(u, .7, 1.3));
-  plate(c, 330, 114, 1260, 86, 18, pa);
-  wipeText(c, COPY.s3, 960, 158, `600 50px ${FONT}`, seg(u, .95, 1.8), 'center');
+  plate(c, 150, 114, 1240, 86, 18, pa);
+  wipeText(c, COPY.s3, 770, 158, `600 50px ${FONT}`, seg(u, .95, 1.8), 'center');
   vignette(c, .55);
 }
 
@@ -262,6 +318,7 @@ function sceneBridge(c, u, t, A) {
   // land (both shores)
   c.save(); c.translate(0, -108); tile(c, A.land, 120, 0, 432); c.restore();
   c.fillStyle = 'rgba(2,24,29,.42)'; c.fillRect(-400, -200, 2800, 700);
+  kilim(c, -200, 660, -120, 360, .16); kilim(c, 1270, 2200, -120, 360, .16);
   // river running between the shores
   const bankL = y => 700 + Math.sin(y / 70 + 1) * 26 + Math.sin(y / 23) * 6, bankR = y => 1220 + Math.sin(y / 60 + 2.4) * 30 + Math.sin(y / 19 + 1) * 6;
   const riverPath = (pad = 0) => { c.beginPath(); for (let y = -140; y <= 360; y += 10) { const x = bankL(y) - pad; y === -140 ? c.moveTo(x, y) : c.lineTo(x, y); } for (let y = 360; y >= -140; y -= 10) c.lineTo(bankR(y) + pad, y); c.closePath(); };
@@ -281,6 +338,11 @@ function sceneBridge(c, u, t, A) {
   c.fillStyle = 'rgba(9,93,106,.9)'; for (let x = 690; x < 1240; x += 22) c.fillRect(x, LY - .8, 11, 1.6);   // lane marks
   for (let x = 760; x <= 1160; x += 100) { c.fillStyle = 'rgba(0,0,0,.35)'; c.fillRect(x - 4 + 7, LY - 12 + 10, 10, 24); c.fillStyle = '#D9D2BE'; c.fillRect(x - 5, LY - 12, 10, 24); } // piers
   c.fillStyle = IVORY; c.fillRect(676, LY - 5, 568, 10);
+  // lights in the flag colours run along the bridge
+  c.save(); c.globalCompositeOperation = 'lighter';
+  FLAGC.forEach((col, k) => { for (let n = 0; n < 5; n++) { const p = ((t * .22 + n / 5 + k * .067) % 1), x = 676 + 568 * p, g = c.createRadialGradient(x, LY, 0, x, LY, 30);
+    g.addColorStop(0, col); g.addColorStop(1, 'rgba(0,0,0,0)'); c.globalAlpha = .85 * Math.sin(Math.PI * p) * seg(u, .6, 1.6); c.fillStyle = g; c.fillRect(x - 30, LY - 30, 60, 60); } });
+  c.restore();
   c.restore();
   const sh = c.createLinearGradient(0, 96, 0, BH); sh.addColorStop(0, 'rgba(2,22,27,0)'); sh.addColorStop(1, 'rgba(2,22,27,.5)'); c.fillStyle = sh; c.fillRect(0, 96, 1920, BH - 96);
   // LOCKUP: official logo | fine divider | closing line
@@ -292,6 +354,7 @@ function sceneBridge(c, u, t, A) {
     c.save(); c.globalAlpha = la; c.drawImage(img, x0 - (1 - la) * 20, cy - lh / 2, lw, lh);
     const dh = 56 * eOut(seg(u, 2.0, 2.5)); c.fillStyle = 'rgba(245,238,220,.8)'; c.fillRect(x0 + lw + gap - .75, cy - dh / 2, 1.5, dh); c.restore();
     wipeText(c, COPY.s4, x0 + lw + gap * 2, cy + 1, `600 44px ${FONT}`, seg(u, 2.15, 2.9));
+    const tw3 = (W + 88 - 36) * eOut(seg(u, 2.3, 3.0)); c.save(); c.beginPath(); c.rect(960 - tw3 / 2, 197, tw3, 5); c.clip(); FLAGC.forEach((col, k) => { c.fillStyle = col; c.fillRect(x0 - 26 + k * (W + 52) / 3, 197, (W + 52) / 3 + 1, 4); }); c.restore();
   }
   vignette(c, .5);
 }
@@ -338,5 +401,6 @@ window.renderFilm = function (ctx, tAbs, A) {
   // band edge: fine ivory hairline, soft contact shadow onto the picture above
   ctx.restore();
   const es = ctx.createLinearGradient(0, BY - 22, 0, BY); es.addColorStop(0, 'rgba(0,0,0,0)'); es.addColorStop(1, 'rgba(0,0,0,.30)'); ctx.fillStyle = es; ctx.fillRect(0, BY - 22, 1920, 22);
-  ctx.fillStyle = 'rgba(245,238,220,.85)'; ctx.fillRect(0, BY, 1920, 1.5);
+  tricolourRule(ctx, 0, BY - 6, 1920, 2, tAbs);
+  ctx.fillStyle = 'rgba(245,238,220,.9)'; ctx.fillRect(0, BY, 1920, 1.5);
 };

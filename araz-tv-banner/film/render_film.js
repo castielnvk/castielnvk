@@ -21,6 +21,7 @@ const W = 4;
   const br = await chromium.launch();
   const srcs = Object.fromEntries(Object.entries(IMG).map(([k, f]) => [k, data(path.join(__dirname, f), 'image/jpeg')]));
   srcs.logoWhite = data(path.join(root, 'logos/individual/araz-radio_white.png'), 'image/png');
+  srcs.flag = data(path.join(__dirname, 'flag_az.png'), 'image/png');
   await Promise.all([...Array(W).keys()].map(async w => {
     const pg = await br.newPage({ viewport: { width: 1920, height: 1080 } });
     pg.on('pageerror', e => { console.error('PAGE ERROR', e.message); process.exit(1); });
