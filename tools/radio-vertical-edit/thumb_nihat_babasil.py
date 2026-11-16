@@ -13,11 +13,11 @@ def panel(t, k):
 def crop(p, x0, y0, w, h, ow, oh):
     c = p[y0:y0+h, x0:x0+w]
     return cv2.resize(c, (ow, oh), interpolation=cv2.INTER_LANCZOS4)
-Lp = premium(panel('121.0', 'L'), 'L'); Rp = premium(panel('117.0', 'R'), 'R')
+Lp = premium(panel('27.2', 'L'), 'L'); Rp = premium(panel('117.0', 'R'), 'R')
 dst = G.bg_frame(0)
 PW_, PH_ = 1020, 600
 LOGO_Y = 322   # inside the 3:4 profile-grid crop (y 240..1680)
-tiles = [(crop(Lp, 104, 186, 700, 412, PW_, PH_), 30, 420, (253, 224, 140)),
+tiles = [(crop(Lp, 92, 140, 700, 412, PW_, PH_), 30, 420, (253, 224, 140)),
          (crop(Rp, 104, 40, 700, 412, PW_, PH_), 30, 1080, (125, 211, 252))]
 for img, x, y, col in tiles:
     sh, sp = shadow(PW_, PH_, 44, 30, 170)
