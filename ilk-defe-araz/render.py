@@ -212,7 +212,8 @@ def main():
         au_src = mixed
     # audio: the original recording untouched, only a short tail fade and a true-peak safety limiter
     au = cfg["audio"]; fo = cfg.get("audio_fade_out", 0.4)
-    af = f"afade=t=out:st={cfg['duration'] - fo:.3f}:d={fo},alimiter=limit=0.891:level=false,aresample=48000"
+    # hot masters overshoot after AAC encoding: −2 dB + fast limiter keeps the export ≈ −2 dBTP
+    af = f"afade=t=out:st={cfg['duration'] - fo:.3f}:d={fo},volume=-2dB,alimiter=limit=0.8:level=false:attack=0.5:release=60,aresample=48000"
     out = ep / cfg["output"]
     sh("ffmpeg", "-v", "error", "-y", "-i", str(silent), "-i", str(au_src),
        "-t", f"{cfg['duration']:.3f}", "-map", "0:v", "-map", "1:a", "-af", af,

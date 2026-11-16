@@ -123,6 +123,9 @@ _(notes pending)_
   out clean (used for the song section + finale); clip 3's face drifts after ~5 s (skipped). She says
   «xüsusi olaraq Araz FM-də» (no «ilk dəfə») → İLK DƏFƏ on «xüsusi», “ARAZ”DA on «Araz». The user
   now asks me for Grok prompts per poster and wants 10 s clips.
+- Episode 5: Yapon — «Sən Bakısan», 18 Noyabr, 17 s; four clips (red velvet stage, white suit, rose).
+  White suit made white text hard to read → configurable lower `scrim` (0.82). True peak was +0.3/+1.9
+  dBTP after AAC on this hot master → render.py now does −2 dB + fast limiter (export ≈ −2 dBTP).
 - Speed: person masks cost ~3.5 s/frame on this 4-core CPU (≈19 min/episode). User will send Mac and
   Windows specs to pick a GPU machine (Remote Control); also asked about connecting the Grok
   (xAI grok-imagine-video) API — needs an api.x.ai key via request_credential, user hasn't decided.

@@ -54,6 +54,8 @@ Hər posterdən 3 video (10 s, 9:16), hər biri fərqli promptla; poster yazıs�
 - Fayllar gələn kimi maskaları arxa planda başlat: `SEG_RES=512x384 python3 -I segment.py …` (~2 s/kadr, 768x576-da ~3.5 s).
 - AI materialı videodan qısadırsa, `shots[].speed` (məs. 0.75) ilə slow-motion — kəsitlər təkrarlanmasın.
 - `render.py` hər hissənin kadr sayını yoxlayır; yarımçıq video yazmır.
+- Səs: −2 dB + sürətli limiter (≈ −2 dBTP AAC-dən sonra). İsti master-lər AAC-də ~3 dB «aşır».
+- Açıq/ağ geyim üzərində yazılar üçün `scrim` (aşağı tündləşdirmə, default 0.5).
 
 ## Avtomatlaşdırma (`prepare.py`)
 
@@ -86,3 +88,4 @@ Tələblər: `pip install playwright librosa`; Chromium `/opt/pw-browsers/chromi
 | `episodes/2026-11-11_benay_indi-bax` | Benay — «İndi bax» | 11 Noyabr | `Benay_Indi_Bax_Ilk_Defe_Araz_9x16.mp4` (16 s, v5; solo, ağ fon → teal yazı zolaqları) |
 | `episodes/2026-11-13_ayan_o-tek` | Ayan — «O tək» | 13 Noyabr | `Ayan_O_Tek_Ilk_Defe_Araz_9x16.mp4` (18 s, v5; cəmi 15 s AI material → speed ramp 0.62–0.92×) |
 | `episodes/2026-11-16_asiq-samire` | Aşıq Samirə Əliyeva — «Azərbaycan övladıyam» | 16 Noyabr | `Asiq_Samire_Ilk_Defe_Araz_9x16.mp4` (17.5 s, v5; saz çalan AI kadrı mahnı hissəsində və finalda) |
+| `episodes/2026-11-18_yapon-sen-bakisan` | Yapon — «Sən Bakısan» | 18 Noyabr | `Yapon_Sen_Bakisan_Ilk_Defe_Araz_9x16.mp4` (17 s, v5; qırmızı fon, ağ kostyum → `scrim: 0.82`, qızılgül anı) |
