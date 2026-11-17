@@ -10,8 +10,8 @@ yy,xx=np.mgrid[0:H,0:W].astype(np.float32)
 def background(t):
     ph=TAU*t/T
     anchors=[((0,0),(20,3,112)),((0,1080),(45,3,150)),((560,0),(80,4,178)),((1380,0),(125,4,165)),
-             ((960+60*math.cos(ph),540+35*math.sin(ph)),(160,6,236)),((560+40*math.sin(ph),470),(108,5,222)),
-             ((1840+50*math.sin(ph),690+60*math.cos(ph)),(228,6,172)),((1900,1080),(190,4,158)),((1260,1080),(118,4,170))]
+             ((960+140*math.cos(ph),540+80*math.sin(ph)),(160,6,236)),((560+40*math.sin(ph),470),(108,5,222)),
+             ((1840+120*math.sin(ph),690+140*math.cos(ph)),(228,6,172)),((1900,1080),(190,4,158)),((1260,1080),(118,4,170))]
     num=np.zeros((H,W,3),np.float32); den=np.zeros((H,W),np.float32)
     for (ax,ay),c in anchors:
         w=np.exp(-((xx-ax)**2+(yy-ay)**2)/(2*430**2))+1e-6
@@ -46,7 +46,7 @@ def deco_layer(t):
     glow=glow.filter(ImageFilter.GaussianBlur(60*s))
     im.alpha_composite(glow)
     d.ellipse([sc[0]-sr,sc[1]-sr,sc[0]+sr,sc[1]+sr],fill=(255,110,235,int(58+14*pulse)))
-    nr=12; spin=TAU/nr*(t/T)
+    nr=12; spin=TAU/nr*2*(t/T)
     for i in range(nr):
         a=spin+TAU*i/nr
         breathe=6*s*math.sin(TAU*t/T*2+i)
@@ -57,7 +57,7 @@ def deco_layer(t):
         d.polygon([tip,b1,b2],fill=(255,120,235,62))
     # ---- alarm clock (bottom left) ----
     sh=alarm_shake(t)
-    cc=(250*s,800*s); ang=math.radians(5)*sh
+    cc=(250*s,800*s); ang=math.radians(7)*sh
     jump=-10*s*abs(sh)
     C=(cc[0],cc[1]+jump)
     R_out=280*s; R_in=200*s
@@ -87,7 +87,7 @@ def deco_layer(t):
         a=TAU*k/4; p=P(160*math.sin(a),-160*math.cos(a)); r=13*s
         d.ellipse([p[0]-r,p[1]-r,p[0]+r,p[1]+r],fill=(170,135,255,140))
     # hands: minute = one full turn per loop, hour = gentle back-and-forth around 8
-    am=TAU*(t/T)
+    am=TAU*2*(t/T)
     ah=math.radians(240)+math.radians(4)*math.sin(TAU*t/T)
     def hand(a,length,wid,col):
         tip=P(length*math.sin(a),-length*math.cos(a)); base=P(0,0)
@@ -98,10 +98,10 @@ def deco_layer(t):
     r=14*s; d.ellipse([p[0]-r,p[1]-r,p[0]+r,p[1]+r],fill=(40,0,130,220))
     # ring "brrr" lines during alarm
     if sh!=0:
-        u=(t-ALARM[0])/ALARM[1]; env=math.sin(math.pi*u)
+        a0,u=alarm_env(t); env=math.sin(math.pi*u)
         for sx in (-1,1):
             for j,off in enumerate((0,1,2)):
-                a=math.radians(sx*(22+off*18)); r0=(360+((t*400+j*30)%40))
+                a=math.radians(sx*(22+off*18)); r0=(360+((t*500+j*30)%50))
                 q0=P(r0*math.sin(a),-r0*math.cos(a)); q1=P((r0+45)*math.sin(a),-(r0+45)*math.cos(a))
                 d.line([q0,q1],fill=(255,245,90,int(255*env)),width=int(12*s))
     return im.resize((W,H),Image.LANCZOS)
@@ -179,6 +179,104 @@ def frame(i):
     place(fr,LAY['web'],POS['web'],dy=f2*0.6)
     return fr.convert('RGB')
 
+# ================= v2: more dynamic =================
+ALARMS=[1.0,6.0]; AD=1.3
+def alarm_shake(t):
+    for a0 in ALARMS:
+        u=(t-a0)/AD
+        if 0<=u<=1: return math.sin(math.pi*u)**0.5*math.sin(TAU*16*(t-a0))*1.7
+    return 0.0
+_old_deco=deco_layer
+def alarm_env(t):
+    for a0 in ALARMS:
+        u=(t-a0)/AD
+        if 0<=u<=1: return a0,u
+    return None
+ALARM=(ALARMS[0],AD)
+
+BEAT=0.5  # 120 BPM
+def beat(t,decay=7.0):
+    return math.exp(-decay*((t%BEAT)))
+
+def logo_transform(t):
+    b=beat(t)
+    base=1+0.02*b
+    pop=0.0
+    for a0 in ALARMS:
+        u=t-(a0+0.1)
+        if 0<=u<2.2: pop+=0.11*math.exp(-2.6*u)*math.sin(TAU*1.7*u)
+    sy=base+pop; sx=base+pop*0.55
+    dy=-16*math.sin(TAU*t/T*2)-pop*160
+    tilt=2.5*math.sin(TAU*t/T*2+0.6)+pop*25
+    return sx,sy,dy,tilt
+
+rng2=np.random.default_rng(11)
+PART=[dict(x=rng2.uniform(0,W),y=rng2.uniform(0,H),r=rng2.uniform(3,10),k=int(rng2.integers(1,4)),
+           amp=rng2.uniform(15,60),ph=rng2.uniform(0,TAU),kind=rng2.choice(['dot','dot','star','star','star','note']),tw=rng2.uniform(0,TAU),
+           rot=rng2.uniform(-0.4,0.4)) for _ in range(64)]
+def particles(t):
+    im=Image.new('RGBA',(W,H),(0,0,0,0)); d=ImageDraw.Draw(im)
+    for p in PART:
+        y=(p['y']-p['k']*(H+120)*t/T)%(H+120)-60
+        x=p['x']+p['amp']*math.sin(TAU*t/T*p['k']+p['ph'])
+        tw=0.55+0.45*math.sin(TAU*t/T*4+p['tw'])
+        if p['kind']=='star':
+            r=p['r']*1.7*tw*(1+0.3*beat(t)); a=int(225*tw)
+            d.polygon([(x,y-r*2),(x+r*0.35,y-r*0.35),(x+r*2,y),(x+r*0.35,y+r*0.35),(x,y+r*2),(x-r*0.35,y+r*0.35),(x-r*2,y),(x-r*0.35,y-r*0.35)],fill=(255,240,140,a))
+        elif p['kind']=='note':
+            r=p['r']*1.6+6; a=int(150+80*tw); c=(255,235,120,a)
+            sw=math.sin(TAU*t/T*2+p['ph'])*0.35
+            hx,hy=x,y
+            d.ellipse([hx-r*1.2,hy-r*0.85,hx+r*1.2,hy+r*0.85],fill=c)
+            sx_=hx+r*1.05; d.line([(sx_,hy),(sx_+sw*r,hy-r*3.6)],fill=c,width=max(2,int(r*0.35)))
+            d.line([(sx_+sw*r,hy-r*3.6),(sx_+sw*r+r*1.3,hy-r*2.7)],fill=c,width=max(2,int(r*0.45)))
+        else:
+            r=p['r']; d.ellipse([x-r,y-r,x+r,y+r],fill=(255,200,255,int(80*tw)))
+    return im.filter(ImageFilter.GaussianBlur(0.7))
+
+LW,LH=LAY['logo'].size; LC=(POS['logo'][0]+LW/2,POS['logo'][1]+LH/2)
+_rr=np.sqrt((xx-LC[0])**2+(yy-LC[1])**2); _aa=np.arctan2(yy-LC[1],xx-LC[0])
+_fade=np.clip(1-_rr/900,0,1)**1.6*np.clip(_rr/120,0,1)
+def sunburst(t):
+    n=14; rotA=TAU/n*2*(t/T)
+    v=0.5+0.5*np.cos(n*(_aa-rotA))
+    v=np.clip((v-0.55)/0.45,0,1)
+    a=v*_fade*(0.16+0.10*beat(t,5))
+    ring=np.zeros_like(a)
+    ae=alarm_env(t)
+    if ae:
+        a0,u=ae; R=80+1100*u
+        ring=np.exp(-((_rr-R)/26)**2)*(1-u)*0.55
+    tot=np.clip(a+ring,0,1)
+    rgba=np.zeros((H,W,4),np.uint8); rgba[...,0]=255; rgba[...,1]=235; rgba[...,2]=150
+    rgba[...,3]=(tot*255).astype(np.uint8)
+    return Image.fromarray(rgba,'RGBA')
+
+def deco_layer(t):
+    global _spin_mult
+    return _old_deco(t)
+
+def frame(i):
+    t=i/FPS
+    bg=background(t)+grain[i%6]
+    fr=Image.fromarray(np.clip(bg,0,255).astype(np.uint8)).convert('RGBA')
+    fr.alpha_composite(sunburst(t))
+    fr.alpha_composite(particles(t))
+    fr.alpha_composite(deco_layer(t))
+    fr.alpha_composite(LAY['araz'],POS['araz'])
+    sx,sy,dy,tilt=logo_transform(t)
+    place(fr,LOGO_SH,(POS['logo'][0]-LP,POS['logo'][1]-LP+14),sx,sy,dy,tilt)
+    lg=LAY['logo']
+    for t0 in (0.3,5.3): lg=shine(lg,t,t0,0.9,width=70,strength=0.4)
+    place(fr,lg,POS['logo'],sx,sy,dy,tilt)
+    f2=5*math.sin(TAU*t/T*2+1.2)
+    def wave(t0): return 0.07*ease_bump(t,t0,0.35)+0.07*ease_bump(t,t0+5,0.35)
+    s1=1+wave(2.7)+0.012*beat(t); s2=1+wave(2.85)+0.012*beat(t-0.12); s3=1+wave(3.0)
+    place(fr,LAY['hafta'],POS['hafta'],s1,s1,dy=f2,tilt=1.5*math.sin(TAU*t/T*2))
+    place(fr,LAY['badge'],POS['badge'],s2,s2,dy=f2,tilt=-1.5*math.sin(TAU*t/T*2+0.5))
+    place(fr,LAY['web'],POS['web'],s3,s3,dy=f2*0.6)
+    return fr.convert('RGB')
+
 if __name__=='__main__':
-    a,b=int(sys.argv[1]),int(sys.argv[2]); os.makedirs('frames',exist_ok=True)
-    for i in range(a,b): frame(i).save(f'frames/{i:04d}.png',compress_level=1)
+    a,b=int(sys.argv[1]),int(sys.argv[2]); os.makedirs('frames2',exist_ok=True)
+    for i in range(a,b): frame(i).save(f'frames2/{i:04d}.png',compress_level=1)

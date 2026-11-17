@@ -63,7 +63,11 @@ programmes, 4) everything else.
   `seher-sousu-loop/`. The logo and texts were cut from the supplied card with alpha (not redrawn);
   the clock, sun, gradient and sparkles were rebuilt. Motion: drifting gradient, rising sparkles,
   sun rays rotating, minute hand one turn per loop, alarm rings at 5.8 s and the logo bounces.
-  Source card is only 1672×941, so the cut-outs are slightly upscaled. Awaiting the user's feedback.
+  Source card is only 1672×941, so the cut-outs are slightly upscaled.
+  - User asked "biraz daha dinamik" → v2 (`..._v2_dinamik_1080p25.mp4`): 120 BPM beat pulse on the
+    logo and texts, rotating sunburst behind the logo, alarm rings twice (1.0 s and 6.0 s) with a
+    shockwave ring and a big logo bounce, floating music notes and stars, faster sun and clock hands,
+    staggered text pops. Awaiting feedback.
 
 ### 3. Kəşf Et — Gülay Zeynallı, "5 təəccüblü sual, 5 cavab" (7–8 Nov 2026)
 - **What:** a celebrity-magazine 9:16 edit of the Kəşf Et (Araz Radio 103.3 FM) segment with
