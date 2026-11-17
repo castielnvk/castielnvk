@@ -89,3 +89,4 @@ Tələblər: `pip install playwright librosa`; Chromium `/opt/pw-browsers/chromi
 | `episodes/2026-11-13_ayan_o-tek` | Ayan — «O tək» | 13 Noyabr | `Ayan_O_Tek_Ilk_Defe_Araz_9x16.mp4` (18 s, v5; cəmi 15 s AI material → speed ramp 0.62–0.92×) |
 | `episodes/2026-11-16_asiq-samire` | Aşıq Samirə Əliyeva — «Azərbaycan övladıyam» | 16 Noyabr | `Asiq_Samire_Ilk_Defe_Araz_9x16.mp4` (17.5 s, v5; saz çalan AI kadrı mahnı hissəsində və finalda) |
 | `episodes/2026-11-18_yapon-sen-bakisan` | Yapon — «Sən Bakısan» | 18 Noyabr | `Yapon_Sen_Bakisan_Ilk_Defe_Araz_9x16.mp4` (17 s, v5; qırmızı fon, ağ kostyum → `scrim: 0.82`, qızılgül anı) |
+| `episodes/2026-11-19_sivva-serab` | Sivva — «Sərab» | 19 Noyabr | `Sivva_Serab_Ilk_Defe_Araz_9x16.mp4` (18 s, v5; teal neon fon → ağ arxa zolaqlar, qreyd 0.1) |

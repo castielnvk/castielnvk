@@ -126,6 +126,9 @@ _(notes pending)_
 - Episode 5: Yapon — «Sən Bakısan», 18 Noyabr, 17 s; four clips (red velvet stage, white suit, rose).
   White suit made white text hard to read → configurable lower `scrim` (0.82). True peak was +0.3/+1.9
   dBTP after AAC on this hot master → render.py now does −2 dB + fast limiter (export ≈ −2 dBTP).
+- Episode 6: Sivva — «Sərab», 19 Noyabr, 18 s; three clean 10 s clips, red jacket on a teal/cyan
+  neon background → rows switched to WHITE (teal rows vanish on teal), grade 0.1. Rule of thumb:
+  rows teal on light/neutral bg, white on dark or teal bg.
 - Speed: person masks cost ~3.5 s/frame on this 4-core CPU (≈19 min/episode). User will send Mac and
   Windows specs to pick a GPU machine (Remote Control); also asked about connecting the Grok
   (xAI grok-imagine-video) API — needs an api.x.ai key via request_credential, user hasn't decided.
