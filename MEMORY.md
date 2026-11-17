@@ -57,7 +57,13 @@ programmes, 4) everything else.
   - Whether to remake Məlal's music.
 
 ### 2. Radio shows (100% Səhər Şousu, Qəbul Vaxtı, Biznes Mərkəzi, Reel covers)
-_(notes pending)_
+- **100% Səhər Şousu ad-break loop (17 Nov 2026):** the user sent the static 16:9 vMix ad-break card
+  (purple→magenta gradient, alarm clock lower left, sun upper right, logo centre, "HƏFTƏİÇİ 5 GÜN",
+  "08:00-10:30", www.arazfm.az). Made a 10 s seamless loop, 1920×1080, 25 fps, H.264, no audio:
+  `seher-sousu-loop/`. The logo and texts were cut from the supplied card with alpha (not redrawn);
+  the clock, sun, gradient and sparkles were rebuilt. Motion: drifting gradient, rising sparkles,
+  sun rays rotating, minute hand one turn per loop, alarm rings at 5.8 s and the logo bounces.
+  Source card is only 1672×941, so the cut-outs are slightly upscaled. Awaiting the user's feedback.
 
 ### 3. Kəşf Et — Gülay Zeynallı, "5 təəccüblü sual, 5 cavab" (7–8 Nov 2026)
 - **What:** a celebrity-magazine 9:16 edit of the Kəşf Et (Araz Radio 103.3 FM) segment with
