@@ -1,0 +1,365 @@
+{
+  "title": "Sivva — Sərab, ilk dəfə Araz FM-də",
+  "fps": 24,
+  "duration": 17.95,
+  "audio": "source/SIVVA_SERAB_TEQDIMAT.mp3",
+  "audio_fade_out": 0.5,
+  "output": "Sivva_Serab_Ilk_Defe_Araz_9x16.mp4",
+  "clips": {
+    "ai1": "source/ai1.mp4",
+    "ai2": "source/ai2.mp4",
+    "ai3": "source/ai3.mp4"
+  },
+  "anchors": {
+    "words": 3.32,
+    "words2": 4.72,
+    "words3": 5.6,
+    "settle": 6.12
+  },
+  "shots": [
+    {
+      "start": 0.0,
+      "clip": "ai2",
+      "src": 0.0,
+      "z": [
+        1.0,
+        1.05
+      ],
+      "cx": 0.5,
+      "cy": 0.4,
+      "depth": true
+    },
+    {
+      "start": 3.32,
+      "clip": "ai3",
+      "src": 0.0,
+      "z": [
+        1.02,
+        1.07
+      ],
+      "cx": 0.5,
+      "cy": 0.38,
+      "depth": false
+    },
+    {
+      "start": 6.12,
+      "clip": "ai1",
+      "src": 4.5,
+      "z": [
+        1.04,
+        1.06
+      ],
+      "cx": 0.5,
+      "cy": 0.38,
+      "depth": false
+    },
+    {
+      "start": 6.69,
+      "clip": "ai1",
+      "src": 0.0,
+      "z": [
+        1.0,
+        1.05
+      ],
+      "cx": 0.5,
+      "cy": 0.4,
+      "depth": true
+    },
+    {
+      "start": 9.72,
+      "clip": "ai2",
+      "src": 4.5,
+      "z": [
+        1.04,
+        1.09
+      ],
+      "cx": 0.5,
+      "cy": 0.38,
+      "depth": true,
+      "trans": {
+        "type": "push",
+        "dur": 0.35
+      }
+    },
+    {
+      "start": 12.79,
+      "clip": "ai3",
+      "src": 4.0,
+      "z": [
+        1.0,
+        1.05
+      ],
+      "cx": 0.5,
+      "cy": 0.4,
+      "depth": true,
+      "trans": {
+        "type": "whip",
+        "dur": 0.2,
+        "dir": -1
+      }
+    },
+    {
+      "start": 15.84,
+      "clip": "ai1",
+      "src": 6.5,
+      "z": [
+        1.0,
+        1.04
+      ],
+      "cx": 0.5,
+      "cy": 0.4,
+      "depth": true
+    }
+  ],
+  "rows": [
+    {
+      "text": "İLK DƏFƏ",
+      "y": 560,
+      "size": 220,
+      "style": "outline",
+      "color": "#FFFFFF",
+      "lw": 4,
+      "speed": 70,
+      "dir": -1,
+      "alpha": 0.85,
+      "in": 0.35,
+      "out": 3.25
+    },
+    {
+      "text": "“ARAZ”DA",
+      "y": 800,
+      "size": 220,
+      "color": "#FFFFFF",
+      "speed": 90,
+      "dir": 1,
+      "alpha": 0.92,
+      "in": 0.5,
+      "out": 3.25
+    },
+    {
+      "text": "DİNLƏ",
+      "y": 1040,
+      "size": 220,
+      "style": "outline",
+      "color": "#FFFFFF",
+      "lw": 4,
+      "speed": 70,
+      "dir": -1,
+      "alpha": 0.85,
+      "in": 0.65,
+      "out": 3.25
+    },
+    {
+      "text": "“ARAZ”DA",
+      "y": 470,
+      "size": 300,
+      "color": "#FFFFFF",
+      "speed": 160,
+      "dir": -1,
+      "alpha": 0.92,
+      "in": 6.8,
+      "out": 9.72
+    },
+    {
+      "text": "İLK DƏFƏ",
+      "y": 770,
+      "size": 300,
+      "style": "outline",
+      "color": "#FFFFFF",
+      "lw": 5,
+      "speed": 160,
+      "dir": 1,
+      "alpha": 0.85,
+      "in": 6.9,
+      "out": 9.72
+    },
+    {
+      "text": "“ARAZ”DA",
+      "y": 300,
+      "size": 260,
+      "style": "outline",
+      "color": "#FFFFFF",
+      "lw": 5,
+      "speed": 60,
+      "dir": -1,
+      "alpha": 0.9,
+      "in": 9.72,
+      "out": 12.79,
+      "push": 0.02
+    },
+    {
+      "text": "DİNLƏ",
+      "y": 520,
+      "size": 420,
+      "color": "#FFFFFF",
+      "speed": 50,
+      "dir": 1,
+      "alpha": 0.92,
+      "in": 12.79,
+      "out": 15.84,
+      "push": 0.015
+    },
+    {
+      "text": "İLK DƏFƏ  “ARAZ”DA  DİNLƏ",
+      "y": 250,
+      "size": 130,
+      "style": "outline",
+      "color": "#FFFFFF",
+      "lw": 3,
+      "speed": 80,
+      "dir": -1,
+      "alpha": 0.9,
+      "in": 16.0
+    }
+  ],
+  "opening": {
+    "dur": 0.55,
+    "start": -0.22
+  },
+  "wipes": [
+    {
+      "at": 6.69,
+      "dur": 0.42
+    },
+    {
+      "at": 15.84,
+      "dur": 0.42
+    }
+  ],
+  "glints": [],
+  "shine": [
+    9.72,
+    12.79,
+    16.2
+  ],
+  "panel": {
+    "in": 6.12,
+    "edge": 143
+  },
+  "lockup": {
+    "date": "19 NOYABR",
+    "time": "11:00 – 12:00",
+    "l1": "İLK DƏFƏ",
+    "l2": "“ARAZ”DA",
+    "l3": "DİNLƏ",
+    "x": 96,
+    "centerY": 1200,
+    "style": {
+      "date": {
+        "y": 1080,
+        "size": 58
+      },
+      "time": {
+        "y": 1150,
+        "size": 50
+      },
+      "l1": {
+        "y": 1300,
+        "size": 112
+      },
+      "l2": {
+        "y": 1432,
+        "size": 128
+      },
+      "l3": {
+        "y": 1556,
+        "size": 112
+      }
+    }
+  },
+  "logoPos": {
+    "y": 1722,
+    "w": 176
+  },
+  "lockupStyle": "frame",
+  "beats": [
+    7.48,
+    8.22,
+    10.52,
+    12.05,
+    13.56,
+    14.3,
+    16.6
+  ],
+  "grade": {
+    "amount": 0.1
+  },
+  "sfx_db": -17,
+  "sfx": [
+    {
+      "type": "whoosh",
+      "at": 0.12,
+      "dur": 0.6,
+      "gain": 0.8
+    },
+    {
+      "type": "hit",
+      "at": 3.34,
+      "gain": 0.6
+    },
+    {
+      "type": "hit",
+      "at": 4.74,
+      "gain": 0.7
+    },
+    {
+      "type": "hit",
+      "at": 5.62,
+      "gain": 0.5
+    },
+    {
+      "type": "whoosh",
+      "at": 6.16,
+      "dur": 0.5,
+      "gain": 0.6
+    },
+    {
+      "type": "riser",
+      "at": 6.66,
+      "dur": 0.9,
+      "gain": 0.4
+    },
+    {
+      "type": "whoosh",
+      "at": 6.69,
+      "dur": 0.7,
+      "gain": 0.9
+    },
+    {
+      "type": "hit",
+      "at": 6.71,
+      "gain": 0.8
+    },
+    {
+      "type": "whoosh",
+      "at": 9.75,
+      "dur": 0.45,
+      "gain": 0.35
+    },
+    {
+      "type": "whoosh",
+      "at": 12.81,
+      "dur": 0.35,
+      "gain": 0.7,
+      "dir": -1
+    },
+    {
+      "type": "riser",
+      "at": 15.81,
+      "dur": 1.3,
+      "gain": 0.5
+    },
+    {
+      "type": "whoosh",
+      "at": 15.84,
+      "dur": 0.7,
+      "gain": 0.9
+    },
+    {
+      "type": "hit",
+      "at": 15.86,
+      "gain": 0.8
+    }
+  ],
+  "scrim": 0.62
+}
