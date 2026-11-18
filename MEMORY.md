@@ -74,6 +74,9 @@ programmes, 4) everything else.
   liquid warp of the supplied gradient, drifting diagonal light streaks, an orbiting glow, faint
   bokeh and a few sparkles. Kept deliberately subtle because it runs for the whole show behind the
   cameras.
+  - Then asked for the ad-break card background with the same v2 animation but WITHOUT logos and
+    texts: `seher-sousu-loop/100_Seher_Sousu_reklam_fon_yazisiz_loop_1080p25.mp4`
+    (`project/render_bg_only.py`). The user will add logos and texts in vMix themselves.
 
 ### 3. Kəşf Et — Gülay Zeynallı, "5 təəccüblü sual, 5 cavab" (7–8 Nov 2026)
 - **What:** a celebrity-magazine 9:16 edit of the Kəşf Et (Araz Radio 103.3 FM) segment with
