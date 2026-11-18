@@ -68,6 +68,12 @@ programmes, 4) everything else.
     logo and texts, rotating sunburst behind the logo, alarm rings twice (1.0 s and 6.0 s) with a
     shockwave ring and a big logo bounce, floating music notes and stars, faster sun and clock hands,
     staggered text pops. Awaiting feedback.
+- **100% Səhər Şousu studio background loop (18 Nov 2026):** the user sent the plain purple→magenta
+  gradient that sits behind the two presenter camera frames and the lower third in vMix. Made a calm
+  20 s seamless loop, 1920×1080, 25 fps, about 12 MB: `seher-sousu-loop/fon/`. Motion: slow pan and
+  liquid warp of the supplied gradient, drifting diagonal light streaks, an orbiting glow, faint
+  bokeh and a few sparkles. Kept deliberately subtle because it runs for the whole show behind the
+  cameras.
 
 ### 3. Kəşf Et — Gülay Zeynallı, "5 təəccüblü sual, 5 cavab" (7–8 Nov 2026)
 - **What:** a celebrity-magazine 9:16 edit of the Kəşf Et (Araz Radio 103.3 FM) segment with
