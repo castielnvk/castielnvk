@@ -41,7 +41,7 @@ if(P==='1'){
   const hits=[0,E.m,E.c3,END];
   const bump=(t,amt)=>hits.reduce((a,h)=>a+(t>=h?amt*Math.exp(-(t-h)*9):0),0);
   // art with slow push + gentle beat bumps
-  const art=live();art.style.transformOrigin='50% 45%';anims.push(t=>art.style.transform=`scale(${1.0+.045*cl(t/14.1)+bump(t,.012)})`);
+  const art=live();art.style.transformOrigin='50% 45%';if(C.shift){art.style.top=C.shift+'px';st.style.background='#0a0630'}anims.push(t=>art.style.transform=`scale(${1.0+.045*cl(t/14.1)+bump(t,.012)})`);
   const dt=el('','inset:0;--dc:rgba(0,0,0,.22);--ds:7px;mix-blend-mode:multiply;mask-image:linear-gradient(#000,transparent 30%,transparent 62%,#000)','dots');anims.push(t=>dt.style.backgroundPosition=`${t*5}px ${t*3}px`);
   // impact stickers synced to the telescope gag in every loop
   C.st.forEach(([w,c,t0,sx,sy])=>{

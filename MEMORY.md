@@ -107,6 +107,10 @@ programmes, 4) everything else.
     HMM... / CORAB?! / QƏBUL! at x 760, y 360 (heads start ~y 680 here). Feedback pending.
   - 25 Nov ("Nəyə görə sizi qısqanıblar?"): red-carpet clip, music "Cool Vibes" (Kevin MacLeod,
     CC BY 4.0), stickers ULDUZAM! / HMF! / FLAŞ! / MƏN DƏ! at x 760, y 360. Feedback pending.
+  - 26 Nov ("Gözəllik vacibdir, yoxsa ağıl?"): characters stood high and a head hit "MÖVZUSU", so
+    config `"shift":170` moves the footage down (top filled navy under the gradient). Music
+    "Monkeys Spinning Monkeys" (Kevin MacLeod, CC BY 4.0); stickers AĞIL? / GÖZƏLLİK? / HMM... /
+    İKİSİ DƏ!. Feedback pending.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 
