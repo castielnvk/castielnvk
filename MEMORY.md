@@ -101,6 +101,10 @@ programmes, 4) everything else.
   - 23 Nov ("Kimə səhvən mesaj göndərmisiniz?"): 5 s loop clip, music "Quirky Dog" (Kevin MacLeod,
     CC BY 4.0), stickers OYY! / ÜRƏK?! / SİL, SİL! / GETDİ!, all on the right (x 760, y 470): on
     the left they cover "MÖVZUSU" or a face. Feedback pending.
+  - 24 Nov ("İlk görüşdə ən çox nəyə fikir verirsiniz?"): the gag (magnifier on colourful socks)
+    is at the bottom in the first ~2.5 s of each 5 s loop, so `"gap":[5.15,7.9]` clears the
+    captions during loop 2 for it. Music "Bossa Antigua" (Kevin MacLeod, CC BY 4.0); stickers
+    HMM... / CORAB?! / QƏBUL! at x 760, y 360 (heads start ~y 680 here). Feedback pending.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 
