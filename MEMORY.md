@@ -129,6 +129,9 @@ _(notes pending)_
 - Episode 6: Sivva — «Sərab», 19 Noyabr, 18 s; three clean 10 s clips, red jacket on a teal/cyan
   neon background → rows switched to WHITE (teal rows vanish on teal), grade 0.1. Rule of thumb:
   rows teal on light/neutral bg, white on dark or teal bg.
+- Episode 7: Aytən Məhərrəmova — «Gecikmiş məhəbbət», 23 Noyabr, 15.8 s; a single clean 15 s clip
+  (wooden veranda, red kəlağayı, slow push to close-up). Used it in order, cutting on beats with
+  different framings (wide / medium / close) for a multi-camera feel; slow-mo 0.66× only at the end.
 - Speed: person masks cost ~3.5 s/frame on this 4-core CPU (≈19 min/episode). User will send Mac and
   Windows specs to pick a GPU machine (Remote Control); also asked about connecting the Grok
   (xAI grok-imagine-video) API — needs an api.x.ai key via request_credential, user hasn't decided.
