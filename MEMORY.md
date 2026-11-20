@@ -105,6 +105,8 @@ programmes, 4) everything else.
     is at the bottom in the first ~2.5 s of each 5 s loop, so `"gap":[5.15,7.9]` clears the
     captions during loop 2 for it. Music "Bossa Antigua" (Kevin MacLeod, CC BY 4.0); stickers
     HMM... / CORAB?! / QƏBUL! at x 760, y 360 (heads start ~y 680 here). Feedback pending.
+  - 25 Nov ("Nəyə görə sizi qısqanıblar?"): red-carpet clip, music "Cool Vibes" (Kevin MacLeod,
+    CC BY 4.0), stickers ULDUZAM! / HMF! / FLAŞ! / MƏN DƏ! at x 760, y 360. Feedback pending.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 
