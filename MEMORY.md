@@ -98,6 +98,9 @@ programmes, 4) everything else.
     "Disco con Tutti" (Kevin MacLeod, CC BY 4.0) with `"tapestop":11.2` — the music winds down like
     a stopped record when the old man's back gives out, then only SFX to the end. Long second line
     uses `"fs2":56`. Stickers OPPA! / YORULDUQ! / CAVANAM! / BELİM!; new sound crack. Feedback pending.
+  - 23 Nov ("Kimə səhvən mesaj göndərmisiniz?"): 5 s loop clip, music "Quirky Dog" (Kevin MacLeod,
+    CC BY 4.0), stickers OYY! / ÜRƏK?! / SİL, SİL! / GETDİ!, all on the right (x 760, y 470): on
+    the left they cover "MÖVZUSU" or a face. Feedback pending.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 
