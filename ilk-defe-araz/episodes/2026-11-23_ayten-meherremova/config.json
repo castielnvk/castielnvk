@@ -1,0 +1,346 @@
+{
+  "title": "Aytən Məhərrəmova — Gecikmiş məhəbbət, ilk dəfə Araz FM-də",
+  "fps": 24,
+  "duration": 15.8,
+  "audio": "source/AYTEN_MEHERREMOVA-GECIKMIS_MEHEBBET.mp3",
+  "audio_fade_out": 0.5,
+  "output": "Ayten_Meherremova_Gecikmis_Mehebbet_Ilk_Defe_Araz_9x16.mp4",
+  "clips": {
+    "ai1": "source/ai1.mp4"
+  },
+  "anchors": {
+    "words": 3.83,
+    "words2": 6.26,
+    "words3": 6.9,
+    "settle": 7.27
+  },
+  "shots": [
+    {
+      "start": 0.0,
+      "clip": "ai1",
+      "src": 0.0,
+      "z": [
+        1.0,
+        1.05
+      ],
+      "cx": 0.5,
+      "cy": 0.4,
+      "depth": true
+    },
+    {
+      "start": 3.83,
+      "clip": "ai1",
+      "src": 3.83,
+      "z": [
+        1.12,
+        1.18
+      ],
+      "cx": 0.5,
+      "cy": 0.36,
+      "depth": false
+    },
+    {
+      "start": 7.66,
+      "clip": "ai1",
+      "src": 7.66,
+      "z": [
+        1.0,
+        1.04
+      ],
+      "cx": 0.5,
+      "cy": 0.4,
+      "depth": true
+    },
+    {
+      "start": 9.82,
+      "clip": "ai1",
+      "src": 9.82,
+      "z": [
+        1.22,
+        1.28
+      ],
+      "cx": 0.5,
+      "cy": 0.3,
+      "depth": true,
+      "trans": {
+        "type": "push",
+        "dur": 0.35
+      }
+    },
+    {
+      "start": 11.94,
+      "clip": "ai1",
+      "src": 11.94,
+      "z": [
+        1.0,
+        1.04
+      ],
+      "cx": 0.5,
+      "cy": 0.4,
+      "depth": true,
+      "trans": {
+        "type": "whip",
+        "dur": 0.2,
+        "dir": -1
+      }
+    },
+    {
+      "start": 13.56,
+      "clip": "ai1",
+      "src": 13.56,
+      "speed": 0.66,
+      "z": [
+        1.06,
+        1.1
+      ],
+      "cx": 0.5,
+      "cy": 0.36,
+      "depth": true
+    }
+  ],
+  "rows": [
+    {
+      "text": "İLK DƏFƏ",
+      "y": 560,
+      "size": 220,
+      "style": "outline",
+      "color": "#095D6A",
+      "lw": 4,
+      "speed": 70,
+      "dir": -1,
+      "alpha": 0.9,
+      "in": 0.35,
+      "out": 3.75
+    },
+    {
+      "text": "“ARAZ”DA",
+      "y": 800,
+      "size": 220,
+      "color": "orange",
+      "speed": 90,
+      "dir": 1,
+      "in": 0.5,
+      "out": 3.75
+    },
+    {
+      "text": "DİNLƏ",
+      "y": 1040,
+      "size": 220,
+      "style": "outline",
+      "color": "#095D6A",
+      "lw": 4,
+      "speed": 70,
+      "dir": -1,
+      "alpha": 0.9,
+      "in": 0.65,
+      "out": 3.75
+    },
+    {
+      "text": "“ARAZ”DA",
+      "y": 470,
+      "size": 300,
+      "color": "orange",
+      "speed": 160,
+      "dir": -1,
+      "in": 7.75,
+      "out": 9.82
+    },
+    {
+      "text": "İLK DƏFƏ",
+      "y": 770,
+      "size": 300,
+      "style": "outline",
+      "color": "#095D6A",
+      "lw": 5,
+      "speed": 160,
+      "dir": 1,
+      "alpha": 0.9,
+      "in": 7.85,
+      "out": 9.82
+    },
+    {
+      "text": "“ARAZ”DA",
+      "y": 300,
+      "size": 260,
+      "style": "outline",
+      "color": "#095D6A",
+      "lw": 5,
+      "speed": 60,
+      "dir": -1,
+      "alpha": 0.95,
+      "in": 9.82,
+      "out": 11.94,
+      "push": 0.02
+    },
+    {
+      "text": "DİNLƏ",
+      "y": 520,
+      "size": 420,
+      "color": "orange",
+      "speed": 50,
+      "dir": 1,
+      "in": 11.94,
+      "out": 13.56,
+      "push": 0.015
+    },
+    {
+      "text": "İLK DƏFƏ  “ARAZ”DA  DİNLƏ",
+      "y": 250,
+      "size": 130,
+      "style": "outline",
+      "color": "#095D6A",
+      "lw": 4,
+      "speed": 80,
+      "dir": -1,
+      "alpha": 0.95,
+      "in": 13.7
+    }
+  ],
+  "opening": {
+    "dur": 0.55,
+    "start": -0.22
+  },
+  "wipes": [
+    {
+      "at": 7.66,
+      "dur": 0.42
+    },
+    {
+      "at": 13.56,
+      "dur": 0.42
+    }
+  ],
+  "glints": [],
+  "shine": [
+    9.82,
+    11.94,
+    14.0
+  ],
+  "panel": {
+    "in": 7.27,
+    "edge": 143
+  },
+  "lockup": {
+    "date": "23 NOYABR",
+    "time": "11:00 – 12:00",
+    "l1": "İLK DƏFƏ",
+    "l2": "“ARAZ”DA",
+    "l3": "DİNLƏ",
+    "x": 96,
+    "centerY": 1150,
+    "style": {
+      "date": {
+        "y": 1080,
+        "size": 58
+      },
+      "time": {
+        "y": 1150,
+        "size": 50
+      },
+      "l1": {
+        "y": 1300,
+        "size": 112
+      },
+      "l2": {
+        "y": 1432,
+        "size": 128
+      },
+      "l3": {
+        "y": 1556,
+        "size": 112
+      }
+    }
+  },
+  "logoPos": {
+    "y": 1722,
+    "w": 176
+  },
+  "lockupStyle": "frame",
+  "beats": [
+    8.5,
+    10.26,
+    12.35,
+    13.14
+  ],
+  "grade": {
+    "amount": 0.3
+  },
+  "sfx_db": -17,
+  "sfx": [
+    {
+      "type": "whoosh",
+      "at": 0.12,
+      "dur": 0.6,
+      "gain": 0.8
+    },
+    {
+      "type": "hit",
+      "at": 3.85,
+      "gain": 0.6
+    },
+    {
+      "type": "hit",
+      "at": 6.28,
+      "gain": 0.7
+    },
+    {
+      "type": "hit",
+      "at": 6.92,
+      "gain": 0.5
+    },
+    {
+      "type": "whoosh",
+      "at": 7.3,
+      "dur": 0.45,
+      "gain": 0.5
+    },
+    {
+      "type": "riser",
+      "at": 7.63,
+      "dur": 0.9,
+      "gain": 0.4
+    },
+    {
+      "type": "whoosh",
+      "at": 7.66,
+      "dur": 0.7,
+      "gain": 0.9
+    },
+    {
+      "type": "hit",
+      "at": 7.68,
+      "gain": 0.8
+    },
+    {
+      "type": "whoosh",
+      "at": 9.85,
+      "dur": 0.45,
+      "gain": 0.35
+    },
+    {
+      "type": "whoosh",
+      "at": 11.96,
+      "dur": 0.35,
+      "gain": 0.7,
+      "dir": -1
+    },
+    {
+      "type": "riser",
+      "at": 13.53,
+      "dur": 1.2,
+      "gain": 0.5
+    },
+    {
+      "type": "whoosh",
+      "at": 13.56,
+      "dur": 0.7,
+      "gain": 0.9
+    },
+    {
+      "type": "hit",
+      "at": 13.58,
+      "gain": 0.8
+    }
+  ],
+  "scrim": 0.62
+}
