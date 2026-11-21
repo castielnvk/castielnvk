@@ -11,5 +11,5 @@
   audio gets a 2 s reverb tail instead of the source's hard cut.
 - Lyrics (user-corrected): Yeter ki sen iste, yaparım her şeyi / Bilirsin işte, tek tek tek zaafım sendin /
   Kanadı kırık biri, tamiri yok gibi / Kullandın, değil mi? / Esirin oldum, esirin /
-  Umursamazdın, sorgulamazdım / Tahminimden çok
+  Umursamazdın, sorgulamazdın / Tahminimden çok
 - Render: `python project/render.py <out.mp4>` (paths inside point to the session scratchpad; adjust).
