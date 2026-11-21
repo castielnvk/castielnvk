@@ -228,3 +228,14 @@ _(notes pending)_
 - Song ends with a hard stop at 179.4 s; the outro's key change lands on it.
 - Lesson: after `pkill` of a node renderer, its ffmpeg child may keep writing the same file —
   re-render to a new filename.
+- **User feedback on v1 (21 Nov 2026):** artist is **Melay**. "Çox sadə etmisən… söz yığınından
+  ibarət olmasın" — wanted far more detail and illustration; "sözlər çox tez gəlir… spoiler olmasın".
+  Whisper word starts were 0.3–1.5 s early on sung vocals, and ghost previews of upcoming words read as
+  spoilers. Fix: CTC forced alignment (`mpoyraz/wav2vec2-xls-r-300m-cv8-turkish`, own Viterbi, windows
+  chained from the previous line's end, first-word start snapped to the onset after an energy dip),
+  checked on spectrograms; words reveal letter by letter over their sung duration, nothing earlier.
+- **v2:** per-section illustrated backdrops (halftone, feathers, puppet strings, mirror shards, night
+  city, rain, drifting polaroids, sunburst with birds and flowers), per-line illustrations (hearts,
+  tape, marionette bar, caged bird, eye, speech bubble, arrows, vines, flames, dying bulb, broken
+  heart, rose losing petals, healed wings in the final chorus), extruded type, HUD (artist/title,
+  section label, timecode). Lesson for lyric videos: rich scene per line, never text-only.
