@@ -111,6 +111,10 @@ programmes, 4) everything else.
     config `"shift":170` moves the footage down (top filled navy under the gradient). Music
     "Monkeys Spinning Monkeys" (Kevin MacLeod, CC BY 4.0); stickers AĞIL? / GÖZƏLLİK? / HMM... /
     İKİSİ DƏ!. Feedback pending.
+  - 27 Nov ("Hansı hadisədə bəxtiniz gətirməyib?"): the user sent a still image (941×1672), not a
+    video. Made a 345-frame clip with an ffmpeg zoompan push-in toward the cake (no looping) and fed
+    it to build.py as `video`. Music "Scheming Weasel (faster)" (Kevin MacLeod, CC BY 4.0); stickers
+    OPS! / TORT! / ÇƏKİRƏM! / BƏXTSİZLİK!. Words over 9 letters now use 44 px. Feedback pending.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 
