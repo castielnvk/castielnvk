@@ -81,6 +81,7 @@ for w,c,t,x,yy,snd in cfg['st']:
         put(whistle(1300,420,.34),t-.36,.2,pan)
         for k in range(4): put(wood(1100+rng.integers(0,500),.07),t+k*.06,.45,pan)
         put(thump(130,45,.3,.6),t+.02,.6,pan)
+    elif snd=='none': pass
     else: put(wood(700),t,.45,pan); put(pop(300,700),t,.3,pan)
 put(whoosh(.3,700,3000,.6),E['c1']-.1,.4,-.4); [put(tick(1700+200*k),E['c1']+.12+k*.1,.22,-.3) for k in range(2)]
 put(whoosh(.3,600,2800,.6),E['c2']-.1,.4,-.2); [put(tick(1900-150*k),E['c2']+.12+k*.1,.22,0) for k in range(2)]
@@ -91,6 +92,8 @@ for tw in (E['w1'],E['w2']):
     for i in range(7): put(pop(260+i*34,500+i*55,.05),tw+i*.045,.10,-.5+i*.12)
 if cfg.get('gap'): put(whoosh(.35,2600,600,.3),cfg['gap'][0]-.05,.45,-.4); put(whoosh(.35,600,2600,.6),cfg['gap'][1]-.1,.45,-.4)
 put(whoosh(.28,800,2800,.7),E['bd']-.12,.34,-.3); put(pop(240,640,.1),E['bd'],.42,-.3); put(stamp(),E['bd'],.3,-.3); put(thump(120,40,.45,.6),E['end'],.8)
+if cfg.get('extra_sfx'):
+    ex,_=sf.read(cfg['extra_sfx']); ex=ex if ex.ndim==2 else np.stack([ex,ex],1); m=min(len(ex),N); out[:m]+=ex[:m]*cfg.get('extra_gain',1.0)
 out=sosfiltfilt(butter(2,30,'high',fs=SR,output='sos'),out,axis=0); out/=max(1,np.abs(out).max()/.9); os.makedirs('aud',exist_ok=True); sf.write('aud/sfx.wav',out,SR)
 # 4. music cut + mix to -14 LUFS
 def lufs(f): 

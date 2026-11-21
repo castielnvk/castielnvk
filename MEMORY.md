@@ -117,6 +117,14 @@ programmes, 4) everything else.
     OPS! / TORT! / ÇƏKİRƏM! / BƏXTSİZLİK!. Words over 9 letters now use 44 px. Feedback pending.
     The user then sent the AI video of the same scene; v2 uses it with stickers on each loop's
     cake splat (~1.4 s): ŞAPP! / TORT! / BƏXTSİZLİK!.
+  - **SFX rule (user, 21 Nov 2026): "Videoya uyğun SFX-lər yüklə"** — use real downloaded sound
+    effects matched to the clip's on-screen events (throw, splat, crash, gasp...), not only the
+    synthesized stingers. Source: freesound.org CC0 (search page scrapes fine, previews at
+    cdn.freesound.org; `seher-anons/freesound_search.py`). Mixkit (mixkit.co) is reachable too;
+    pixabay/kenney/zapsplat are blocked here. Map the clip's events frame by frame first, balance
+    each sound by measured loudness (splats prominent, whistles low), and feed the mix to build.py
+    via `"extra_sfx"`; set a sticker's sound to `"none"` when a real effect covers that moment.
+    Worked example with credits: `seher-anons/sfx_27_noyabr/`. Feedback pending on 27 Nov v3.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 
