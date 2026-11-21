@@ -115,6 +115,8 @@ programmes, 4) everything else.
     video. Made a 345-frame clip with an ffmpeg zoompan push-in toward the cake (no looping) and fed
     it to build.py as `video`. Music "Scheming Weasel (faster)" (Kevin MacLeod, CC BY 4.0); stickers
     OPS! / TORT! / ÇƏKİRƏM! / BƏXTSİZLİK!. Words over 9 letters now use 44 px. Feedback pending.
+    The user then sent the AI video of the same scene; v2 uses it with stickers on each loop's
+    cake splat (~1.4 s): ŞAPP! / TORT! / BƏXTSİZLİK!.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 
