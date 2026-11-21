@@ -12,7 +12,8 @@ const path = require('path');
 const { lines: ALL_LINES, backing, DURATION } = require('./timeline');
 const AUDIO = require('./audio.json');
 
-const W = 1920, H = 1080, FPS = 30;
+const REEL = process.env.REEL === '1';
+const W = REEL ? 1080 : 1920, H = REEL ? 1920 : 1080, FPS = 30;
 const ARTIST = 'Melay', SONG = 'Bambaşka biri';
 const F = (n) => path.join(__dirname, 'fonts', n);
 GlobalFonts.registerFromPath(F('Anton_400Regular.ttf'), 'Anton');
@@ -1138,11 +1139,11 @@ function drawBacking(ctx, t, S) {
   for (const bk of backing) {
     if (t < bk.t0 || t > bk.t1 + 0.4) continue;
     const txt = bk.text;
-    const size = 68;
+    const size = REEL ? 54 : 68;
     ctx.save();
     ctx.font = `${size}px PFS`;
     const tw = ctx.measureText(txt).width;
-    const x0 = W / 2 - tw / 2, y = H - 74;
+    const x0 = W / 2 - tw / 2, y = REEL ? H * 0.685 : H - 74;
     const out = clamp((t - bk.t1) / 0.4);
     const light = S.bg === C.amber;
     ctx.shadowColor = light ? 'rgba(255,240,210,0.6)' : 'rgba(0,0,0,0.7)'; ctx.shadowBlur = 18;
@@ -1209,6 +1210,11 @@ function drawHUD(ctx, t, S, label, alpha) {
   const col = light ? C.ink : C.cream;
   ctx.save(); ctx.globalAlpha = alpha * 0.85; ctx.fillStyle = col; ctx.strokeStyle = col;
   ctx.font = '34px Anton'; ctx.textBaseline = 'alphabetic';
+  if (REEL) {
+    ctx.textAlign = 'center'; ctx.font = '40px Anton'; ctx.fillText(up(ARTIST).split('').join(' '), W / 2, 250);
+    ctx.font = '34px PFS'; ctx.fillText(SONG, W / 2, 300); ctx.fillRect(W / 2 - 40, 268, 80, 2);
+    ctx.restore(); return;
+  }
   ctx.fillText(up(ARTIST), 72, 84);
   const aw = ctx.measureText(up(ARTIST)).width;
   ctx.fillRect(72 + aw + 18, 70, 46, 2);
@@ -1354,6 +1360,93 @@ function renderFrame(t) {
   if (fin < 1) { mc.fillStyle = `rgba(0,0,0,${1 - fin})`; mc.fillRect(0, 0, W, H); }
 }
 
+// ------------------------------------------------------------------ Instagram reel (9:16 teaser -> YouTube)
+const R_T0 = 46.70, R_CUT = 64.90, R_END = 69.47; // source seconds
+const R_DUR = R_END - R_T0;
+function playIcon(ctx, x, y, r, col, fg) {
+  ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill();
+  ctx.fillStyle = fg; ctx.beginPath(); ctx.moveTo(x - r * 0.3, y - r * 0.42); ctx.lineTo(x + r * 0.48, y); ctx.lineTo(x - r * 0.3, y + r * 0.42); ctx.closePath(); ctx.fill();
+}
+function drawCTAPill(ctx, t, tr) {
+  const p = eOutBack((tr - 1.6) / 0.5, 1.8); if (p <= 0) return;
+  const y = H - 470, txt = 'Tam versiya YouTube-da';
+  ctx.save(); ctx.font = '44px Anton';
+  const tw = ctx.measureText(up(txt)).width, w = tw + 140, h = 92;
+  ctx.translate(W / 2, y); ctx.scale(p * (1 + 0.03 * beatPulse(t)), p);
+  ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.roundRect(-w / 2 + 8, -h / 2 + 8, w, h, h / 2); ctx.fill();
+  ctx.fillStyle = C.cream; ctx.beginPath(); ctx.roundRect(-w / 2, -h / 2, w, h, h / 2); ctx.fill();
+  playIcon(ctx, -w / 2 + 52, 0, 30, C.red, C.cream);
+  ctx.fillStyle = C.ink; ctx.textAlign = 'left'; ctx.fillText(up(txt), -w / 2 + 100, 16);
+  ctx.restore();
+}
+function drawReelEnd(ctx, t, lt) {
+  const S = SEC.outro;
+  drawBG(ctx, t, S);
+  ctx.save(); ctx.translate(W / 2, H * 0.45); ctx.rotate(t * 0.06); ctx.fillStyle = 'rgba(242,181,68,0.07)';
+  for (let k = 0; k < 16; k++) { ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, 1800, (k * TAU) / 16, ((k + 0.5) * TAU) / 16); ctx.closePath(); ctx.fill(); }
+  ctx.restore();
+  ctx.fillStyle = C.cream;
+  SKY.forEach(([x, y, r, ph]) => { if (x > W) return; ctx.globalAlpha = 0.15 + 0.35 * (0.5 + 0.5 * Math.sin(t * 2 + ph)); ctx.beginPath(); ctx.arc(x, y * 1.8, r * 0.8, 0, TAU); ctx.fill(); });
+  ctx.globalAlpha = 1;
+  const inP = eOutCubic(lt / 0.7);
+  drawHead(ctx, lerp(-200, 105, inP), 800, 0.34, false, C.cream);
+  drawHead(ctx, lerp(W + 200, W - 105, inP), 800, 0.34, true, C.berry);
+  const pa = eOutCubic((lt - 0.1) / 0.5);
+  ctx.save(); ctx.globalAlpha = pa; ctx.font = '50px Anton'; ctx.fillStyle = C.amber; ctx.textAlign = 'center';
+  ctx.fillText(up(ARTIST).split('').join(' '), W / 2, 520); ctx.fillRect(W / 2 - 130 * pa, 545, 260 * pa, 2); ctx.restore();
+  const word = up('bambaşka');
+  ctx.save(); ctx.font = '128px Anton';
+  const tw = ctx.measureText(word).width; let acc = '';
+  [...word].forEach((ch, j) => {
+    const cx = W / 2 - tw / 2 + ctx.measureText(acc).width; acc += ch;
+    const p = clamp((lt - 0.25 - j * 0.07) / 0.3); if (p <= 0) return;
+    const dy = (1 - eOutBack(p, 2.2)) * -200;
+    ctx.globalAlpha = clamp(p * 3);
+    ctx.fillStyle = '#07060f'; for (let k = 7; k >= 1; k -= 2) ctx.fillText(ch, cx + k, 800 + dy + k);
+    ctx.fillStyle = j % 2 ? C.amber : C.cream; ctx.fillText(ch, cx, 800 + dy);
+  });
+  const pb = eOutCubic((lt - 0.9) / 0.5);
+  if (pb > 0) { ctx.font = '110px PFB'; ctx.textAlign = 'center'; ctx.globalAlpha = pb; ctx.save(); ctx.translate(W / 2 + 160, 905); ctx.rotate(-0.06);
+    ctx.lineWidth = 12; ctx.strokeStyle = C.ink; ctx.strokeText(up('biri'), 0, 0); ctx.fillStyle = C.berry; ctx.fillText(up('biri'), 0, 0); ctx.restore(); }
+  ctx.restore();
+  // call to action
+  const pc = eOutBack((lt - 1.2) / 0.5, 1.7);
+  if (pc > 0) {
+    ctx.save(); ctx.translate(W / 2, 1150); ctx.scale(pc, pc);
+    ctx.font = '46px PFS'; ctx.fillStyle = hexA(C.cream, 0.85); ctx.textAlign = 'center'; ctx.fillText('yeni lyric video', 0, -95);
+    ctx.font = '104px Anton'; const tx = up('İndi YouTube-da'); const w2 = ctx.measureText(tx).width;
+    const pr = 62 * (1 + 0.08 * beatPulse(t));
+    playIcon(ctx, -w2 / 2 - 30, 40 - 36, pr, C.red, C.cream);
+    ctx.textAlign = 'left'; ctx.fillStyle = '#07060f'; ctx.fillText(tx, -w2 / 2 + 60 + 6, 40 + 6); ctx.fillStyle = C.cream; ctx.fillText(tx, -w2 / 2 + 60, 40);
+    ctx.restore();
+  }
+  const pl = eOutCubic((lt - 1.7) / 0.5);
+  if (pl > 0) {
+    ctx.save(); ctx.globalAlpha = pl; ctx.font = '56px PFS'; ctx.fillStyle = C.amber; ctx.textAlign = 'center';
+    const bob = Math.sin(t * 5) * 6;
+    ctx.fillText('Link bio-da', W / 2, 1320);
+    ctx.strokeStyle = C.amber; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath(); ctx.moveTo(W / 2, 1400 + bob); ctx.lineTo(W / 2, 1350 + bob); ctx.moveTo(W / 2 - 18, 1368 + bob); ctx.lineTo(W / 2, 1350 + bob); ctx.lineTo(W / 2 + 18, 1368 + bob); ctx.stroke();
+    ctx.restore();
+  }
+}
+function renderReel(tr) {
+  const t = R_T0 + tr;
+  if (t < R_CUT) {
+    renderFrame(t);
+    drawCTAPill(mc, t, tr);
+    if (t > R_CUT - 0.35) drawWipe(mc, t, { wipe0: R_CUT - 0.35, wipe1: R_CUT + 0.05 }, SEC.outro);
+  } else {
+    mc.globalAlpha = 1;
+    drawReelEnd(mc, t, t - R_CUT);
+    drawWipe(mc, t, { wipe0: R_CUT - 0.35, wipe1: R_CUT + 0.05 }, SEC.outro);
+    mc.save(); mc.globalCompositeOperation = 'overlay'; mc.globalAlpha = 0.2; mc.drawImage(GRAIN[Math.floor(t * FPS) % GRAIN.length], 0, 0, W, H); mc.restore();
+    mc.drawImage(VIG, 0, 0);
+  }
+  const fo = clamp((tr - (R_DUR - 0.5)) / 0.5);
+  if (fo > 0) { mc.fillStyle = `rgba(0,0,0,${fo})`; mc.fillRect(0, 0, W, H); }
+}
+
 // ------------------------------------------------------------------ main
 const [, , mode, ...args] = process.argv;
 if (mode === 'still') {
@@ -1379,6 +1472,18 @@ if (mode === 'still') {
     ff.stdin.end();
   }
   next();
+} else if (mode === 'reelstill') {
+  const out = args[0]; fs.mkdirSync(out, { recursive: true });
+  for (const ts of args.slice(1)) { const t = parseFloat(ts); renderReel(t); fs.writeFileSync(path.join(out, `r_${t.toFixed(2).padStart(6, '0')}.png`), main.toBuffer('image/png')); }
+} else if (mode === 'reelvideo') {
+  const outp = args[0], N = Math.round(R_DUR * FPS);
+  const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgba', '-s', `${W}x${H}`, '-r', String(FPS), '-i', '-',
+    '-c:v', 'libx264', '-preset', 'medium', '-crf', '17', '-pix_fmt', 'yuv420p', outp], { stdio: ['pipe', 'inherit', 'inherit'] });
+  let f = 0;
+  (function next() {
+    while (f < N) { renderReel(f / FPS); const buf = Buffer.from(mc.getImageData(0, 0, W, H).data.buffer); f++; if (!ff.stdin.write(buf)) { ff.stdin.once('drain', next); return; } }
+    ff.stdin.end();
+  })();
 } else if (mode === 'info') {
   BLOCKS.forEach((b) => console.log(b.i, b.line.sec, b.line.fx || '', 'mv', b.mv0.toFixed(2), b.mv1.toFixed(2), 'first', b.line.t.toFixed(2), b.words.map((w) => w.txt + '@' + w.t.toFixed(2)).join(' ')));
 }
