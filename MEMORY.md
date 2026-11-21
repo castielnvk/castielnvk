@@ -161,6 +161,13 @@ _(notes pending)_
   half-second music drop plus teaser line mid-video, 70 px subtitles, shorter logo outro.
   My reading: for Kadr Xarici, lead with the central *question* on screen from the first frame.
 
+### 7. Lyric video — "Yeter ki sen iste" (21 Nov 2026)
+- Premium cinematic lyric overlay on the user's own 25.5 s Turkish song clip; archived in
+  `lyric-video-yeter-ki-sen-iste/`. User rules: **don't change the video's colours**; confirm lyrics
+  and look before rendering. User picked tonal dark text over the sky (like Billie Eilish WILDFLOWER)
+  "but make sure it reads" → ivory halo behind espresso text. User asked for beat-synced effects and a
+  beautiful ending transition (not the source's hard cut). No feedback on the result yet.
+
 ## User preferences (across all projects)
 - Use only real footage. Never fabricate archive material, reactions, voices or historical scenes,
   and never use cloned or generated voices.
