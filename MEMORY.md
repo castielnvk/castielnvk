@@ -213,3 +213,18 @@ _(notes pending)_
 - HDR iPhone footage: convert HLG→SDR with zscale + `tonemap=hable` (npl=100).
 - Review contact sheets of design frames and transitions before delivering. They catch empty
   frames, gaps and muddy dissolves.
+
+### 7. «Bambaşka biri» — kinetic typography lyric video, 16:9 YouTube (21 Nov 2026)
+- **What:** Turkish song (WAV from Drive), full-length 3:06 lyric video. Archived in `bambaska/`
+  (MP4, thumbnail, `render/` project). Not an Araz FM programme; no logos.
+- **References given:** Billie Eilish "COPYCAT (Animated Lyrics)" (flat illustration, limited
+  palette, grain, screen-filling condensed type) and The Weeknd "Blinding Lights (Kinetic Typography)"
+  (camera rotates/moves between text blocks). YouTube pages unreadable here; only thumbnails
+  (i.ytimg.com/vi/ID/maxres1..3.jpg) were reachable — enough to read the style.
+- **Pipeline:** Demucs vocals → faster-whisper word times → hand-mapped `timeline.js` → Node
+  `@napi-rs/canvas` renderer (~12 fps/process, 4 segments in parallel ≈ 8 min), motion blur only
+  during camera moves. Much faster than Playwright. Backing vocals aren't transcribed; place them
+  in gaps between lead phrases.
+- Song ends with a hard stop at 179.4 s; the outro's key change lands on it.
+- Lesson: after `pkill` of a node renderer, its ffmpeg child may keep writing the same file —
+  re-render to a new filename.
