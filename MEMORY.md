@@ -217,4 +217,4 @@ _(notes pending)_
 ### Düymə olsa — logo concepts (Nov 2026)
 - Separate comedy page (Instagram/TikTok), not Araz FM. Four concepts in `duyme-olsa/logo-concepts/`
   (01 button wordmark, 02 D icon, 03 the tap, 04 xalanın butası); `python3 build.py && node render.js`
-  rebuilds SVGs, `board.png` and previews. Recommended 02; awaiting the user's choice.
+  rebuilds SVGs, `board.png` and previews. User chose 02. Final package in `duyme-olsa/logo/` (SVG/PNG variants, square avatar, 3.6 s animated end-card MP4 with a soft click).
