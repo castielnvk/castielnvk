@@ -1,0 +1,74 @@
+{
+  "id": "ep01",
+  "title": "Bəs sən nə vaxt evlənirsən?",
+  "fps": 30,
+  "duration": 12.0,
+  "width": 1080,
+  "height": 1920,
+  "scene": {
+    "_note": "Seconds. Read by scene/build_scene.py for the 3D action.",
+    "pour_end": 1.25,
+    "teapot_exit": 2.5,
+    "hand_enter": 4.85,
+    "hand_grip": 5.65,
+    "lift_start": 5.8,
+    "lift_stop": 6.55,
+    "lift_height": 0.06,
+    "camera_push": 0.05
+  },
+  "ui": {
+    "_note": "Seconds and copy. Read by ui/overlay.js.",
+    "stack_bottom": 1010,
+    "card_left": 64,
+    "card_width": 896,
+    "ask": {
+      "sender": "Xala",
+      "app": "Mesaj",
+      "time": "indi",
+      "text": "Ay bala, bəs sən nə vaxt evlənirsən?",
+      "settle": [
+        0.0,
+        0.5
+      ]
+    },
+    "buttons": {
+      "reveal": [
+        3.0,
+        3.4
+      ],
+      "secondary": "Qismət, xala",
+      "primary": "Xalanı səssizə al",
+      "press": 3.95,
+      "press_down": 0.11,
+      "press_up": 0.2
+    },
+    "muted": {
+      "text": "Xala səssizə alındı.",
+      "collapse": [
+        4.4,
+        4.9
+      ]
+    },
+    "group": {
+      "chat": "Bizimkilər",
+      "sender": "Ana",
+      "time": "indi",
+      "attachment": "Xalanın göndərdiyi şəkil",
+      "text": "Bir bax da, elə bil evlən deyirik.",
+      "slide_in": [
+        6.15,
+        6.6
+      ],
+      "followup": "Anası da razıdır.",
+      "followup_in": [
+        8.4,
+        8.8
+      ]
+    },
+    "end_card": 11.0
+  },
+  "composite": {
+    "_note": "2D camera push applied over the 3D plate (scale gain across the scene).",
+    "push": 0.045
+  }
+}

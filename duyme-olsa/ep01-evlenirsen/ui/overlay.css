@@ -1,0 +1,78 @@
+/* Düymə olsa — interface layer. Frosted glass over the 3D plate. All sizes in px at 1080×1920. */
+:root {
+  --coral: #FF5B4A;
+  --coral-deep: #D8402F;
+  --ink: #FFFFFF;
+  --ink-dim: rgba(255, 255, 255, .68);
+  --glass: rgba(30, 20, 17, .46);
+  --glass-edge: rgba(255, 255, 255, .24);
+  --radius: 46px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+body { font-family: 'Inter', sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+#stage { position: absolute; inset: 0; overflow: hidden; }
+#bg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540px 1180px; }
+#vignette { position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(120% 80% at 50% 55%, rgba(0,0,0,0) 55%, rgba(0,0,0,.38) 100%); }
+
+/* ── frosted card ── */
+.glass {
+  position: absolute;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(36px) saturate(1.5);
+  backdrop-filter: blur(36px) saturate(1.5);
+  border: 1.5px solid var(--glass-edge);
+  border-radius: var(--radius);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .34), inset 0 1.5px 0 rgba(255, 255, 255, .22);
+  overflow: hidden;
+}
+.pad { padding: 34px 44px 40px; }
+
+.head { display: flex; align-items: center; gap: 16px; font: 600 27px/1 'Inter'; color: var(--ink-dim);
+  letter-spacing: .06em; text-transform: uppercase; }
+.head .spacer { flex: 1; }
+.head .time { text-transform: none; letter-spacing: 0; font-weight: 500; }
+.appicon { width: 46px; height: 46px; border-radius: 13px; background: var(--coral); display: grid; place-items: center; }
+.appicon svg { width: 28px; height: 28px; }
+
+.sender { display: flex; align-items: center; gap: 22px; margin-top: 28px; }
+.avatar { width: 84px; height: 84px; border-radius: 50%; flex: none; display: grid; place-items: center;
+  font: 700 38px/1 'Inter Display', 'Inter'; color: #fff; }
+.avatar.xala { background: linear-gradient(145deg, #E9A15C, #B5532E); }
+.avatar.group { background: linear-gradient(145deg, #5C7FBF, #2E4A86); position: relative; }
+.avatar.group svg { width: 48px; height: 48px; }
+.name { font: 700 44px/1.1 'Inter Display', 'Inter'; letter-spacing: -.005em; }
+.name .dim { font-weight: 500; color: var(--ink-dim); }
+
+.msg { margin-top: 22px; font: 600 54px/1.2 'Inter Display', 'Inter'; letter-spacing: -.012em; }
+.msg.small { font-size: 48px; }
+
+/* buttons */
+.buttons { display: flex; gap: 18px; margin-top: 34px; }
+.btn { flex: 1; height: 108px; border-radius: 30px; display: flex; align-items: center; justify-content: center; gap: 12px;
+  font: 650 36px/1 'Inter'; letter-spacing: -.01em; white-space: nowrap; position: relative; }
+.btn.secondary { background: rgba(255, 255, 255, .15); border: 1.5px solid rgba(255, 255, 255, .26); }
+.btn.primary { background: var(--coral); box-shadow: 0 10px 26px rgba(255, 91, 74, .38), inset 0 2px 0 rgba(255, 255, 255, .28); }
+.btn.primary.pressed { background: var(--coral-deep); box-shadow: 0 2px 6px rgba(255, 91, 74, .3), inset 0 4px 10px rgba(0, 0, 0, .22); }
+.btn svg { width: 38px; height: 38px; flex: none; }
+#tap { position: absolute; width: 96px; height: 96px; margin: -48px 0 0 -48px; border-radius: 50%;
+  background: rgba(255, 255, 255, .45); border: 3px solid rgba(255, 255, 255, .8); opacity: 0; pointer-events: none; }
+
+/* muted confirmation pill */
+.pill { display: flex; align-items: center; gap: 22px; padding: 0 44px 0 26px; height: 128px; border-radius: 64px; }
+.pill .icon { width: 78px; height: 78px; border-radius: 50%; background: var(--coral); display: grid; place-items: center; flex: none; }
+.pill .icon svg { width: 44px; height: 44px; }
+.pill .label { font: 650 46px/1 'Inter'; letter-spacing: -.01em; white-space: nowrap; }
+
+/* group chat card */
+.attach { display: flex; align-items: center; gap: 18px; margin-top: 26px; }
+.attach .tile { width: 70px; height: 70px; border-radius: 18px; background: rgba(255, 255, 255, .16);
+  border: 1.5px solid rgba(255, 255, 255, .28); display: grid; place-items: center; flex: none; }
+.attach .tile svg { width: 40px; height: 40px; }
+.attach .label { font: 650 42px/1.15 'Inter'; letter-spacing: -.01em; }
+.follow { margin-top: 26px; padding-top: 24px; border-top: 1.5px solid rgba(255, 255, 255, .16);
+  display: flex; align-items: baseline; gap: 16px; }
+.follow .who { font: 600 30px/1 'Inter'; color: var(--ink-dim); flex: none; }
+.follow .msg { margin: 0; }
