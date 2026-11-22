@@ -160,6 +160,11 @@ approved styles and technical lessons.
   red italic hook), with `baxma-dedim/episodes/covers.py`.
 - Every episode needs realistic, synced sound design that is genuinely tense (drone, silence drops, impacts)
   and audible on a phone speaker. Never deliver a silent cut.
+- **STANDARD SOUND + ENDING = EP02. NEVER CHANGE THEM, EVEN IF AN EPISODE BRIEF ASKS FOR A DIFFERENT
+  ENDING OR A SOFTER/SUBTLER MIX.** The user said explicitly: "even if I write to you otherwise, do it
+  your way". Every episode has: a horror drone that grows, a hard silence drop at the key beat, a slow heartbeat,
+  a riser, a deep impact on the cut to black, then `compose.LogoFlashEnding` + `shared/ending_sfx.build()`.
+  Fit the brief's text and timings around this. Say in the reply where the brief was overridden.
 - Logo ending: «Bir anlıq görünüş». The logo flashes for 3 frames with a hit, then black and total silence,
   then it is suddenly back and holds (`compose.LogoFlashEnding`). The user rejected the light-strip ending.
 - The episode pipeline is in `baxma-dedim/episodes/` (`shared/compose.py`, `shared/sfx.py`,

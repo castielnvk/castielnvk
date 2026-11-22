@@ -4,6 +4,8 @@
     -> Baxma_Dedim_EP03.mp4 (1080×1920, H.264 + AAC, 16.0 s)
     -> stems/*.wav          (one WAV per sound layer + mix)
 
+Sound and ending follow EP02 (the user's standard): tension drone, silence drop, heartbeat,
+impact on the cut, and the «Bir anlıq görünüş» logo ending from shared/ending_sfx.py.
 The source clip's audio is muted. The curtain moves only once: the shot holds still on frame 18
 (just before the movement), then plays in real time so the shift lands at 7.0 s.
 No "Canlandırma" label (the user's standing rule).
@@ -31,8 +33,8 @@ HOLD_FRAME = 18           # still frame before the curtain moves (motion starts 
 SHIFT_AT = 7.0            # the curtain's visible shift (source frame ~26) lands here
 PLAY_FROM = SHIFT_AT - (26 - HOLD_FRAME) / 24          # 6.67 s: real-time playback from frame 18
 SHOT_END = 13.5
-END_IN = 13.5
-DUR = 16.0
+END_IN = 15.0             # black after the cut: deep impact, then the standard ending
+DUR = END_IN + C.FLASH["LENGTH"]   # 19.0 s
 
 ZOOM = (1.0, 1.08)        # after the shift: slow push toward the doorway (anchored on it)
 DOOR = (945, 840)
@@ -50,11 +52,13 @@ CARDS = [
 SILENCE_AT = CARDS[2]["lines"][1][1]       # room tone + rumble cut as "Səsin çıxmır." appears
 RUSTLE_AT = SHIFT_AT + 0.20                # one soft rustle from the doorway side (right)
 ROOM_BACK = 10.50                          # a trace of the room tone returns
+CREEP_AT = SHIFT_AT + 1.10                 # drone creeps back after the rustle
+HEART_AT = 8.30                            # slow heartbeat while we stare at the doorway
 
-SND = dict(room_db=-18, traffic_db=-16, rumble_db=-16, rustle_db=-4, room_back_db=-28, click_db=-6)
+SND = dict(room_db=-18, traffic_db=-16, rumble_db=-16, rustle_db=-4, room_back_db=-28)
 # logo ending (relative to END_IN): on at 0.10, one 2-frame flicker at 0.55 with the click,
 # hold, fade 1.65 -> 2.40, then silence until the end
-ENDING = dict(on=0.10, flick=0.55, off_frames=2, fade_at=1.65, fade_end=2.40)
+# Standard ending «Bir anlıq görünüş» (EP02, approved; never changed per episode, whatever the brief says)
 # ============================================================================
 
 LAYERS = os.path.join(HERE, "layers")
@@ -82,7 +86,7 @@ for c in CARDS:
 C.render_svgs(jobs, os.path.join(LAYERS, "jobs.json"))
 for L in LINES:
     L["rgb"], L["a"] = C.load_rgba(L["png"])
-ending = C.LogoFlickerEnding(LAYERS, **ENDING)
+ending = C.LogoFlashEnding(LAYERS)
 
 
 def line_state(L, t, d_in=0.32, d_out=0.18, rise=18):
@@ -121,6 +125,8 @@ for n in range(round(DUR * FPS)):
         for L in LINES:
             o, dy = line_state(L, t)
             frame = C.over(frame, L["rgb"], L["a"], o, dy)
+    elif t < END_IN:
+        frame = C.ink_frame()
     else:
         frame = ending.frame(t - END_IN)
     enc.stdin.write((np.clip(frame, 0, 1) * 255 + 0.5).astype(np.uint8).tobytes())
@@ -187,11 +193,29 @@ back = sfx.room_tone(SHOT_END - ROOM_BACK, seed=31)
 room_back = chop(placed(back * db(env([(0, -40), (0.8, 0), (9, 0)], n=len(back))), ROOM_BACK, S["room_back_db"]),
                  SHOT_END)
 
-# 6 · logo: one short, dry click on the flicker, then silence
-click = placed(sfx.dry_tick(tail=0.35, ring=0.25), END_IN + ENDING["flick"], S["click_db"])
+# 6 · EP02-style tension: horror drone grows with the room, dies with it at "Səsin çıxmır.",
+#     creeps back after the rustle with a slow heartbeat and a riser into the cut
+dr = sfx.load_file(os.path.join(LIB, "horror_drone_mixkit1775.mp3"))
+drone = np.zeros((N, 2), np.float32)
+k1 = int(SILENCE_AT * SR) + 4800
+drone[:k1] = dr[:k1]
+k0 = int(CREEP_AT * SR)
+seg = dr[int(0.8 * SR):][: int(SHOT_END * SR) - k0]
+drone[k0:k0 + len(seg)] = seg
+drone *= db(env([(0, -70), (1.0, -15), (SILENCE_AT - 0.05, -5), (SILENCE_AT + 0.02, -120), (CREEP_AT, -120),
+                 (CREEP_AT + 0.02, -26), (SHOT_END - 0.01, -3), (SHOT_END, -120), (DUR, -120)])[..., 0:1])
+heart = chop(placed(sfx.heartbeat(bpm=52, beats=6), HEART_AT, -19), SHOT_END)
+rs = sfx.load_file(os.path.join(LIB, "terror_riser_mixkit2630.mp3"), 1.2, 1.8)
+riser = chop(placed(rs * db(env([(0, -30), (1.75, 0), (1.8, 0)], n=len(rs))), SHOT_END - 1.8, -10), SHOT_END)
+im = sfx.load_file(os.path.join(LIB, "deep_impact_mixkit1687.mp3"))
+impact = placed(im * db(env([(0, 0), (1.0, -3), (END_IN - SHOT_END - 0.45, -30), (END_IN - SHOT_END - 0.05, -90),
+                             (9, -90)], n=len(im))), SHOT_END, -4)
+import ending_sfx  # noqa: E402
+end_stems = ending_sfx.build(END_IN, DUR)
 
 stems = dict(night_roomtone=room, distant_traffic=traffic, low_rumble=rumble, doorway_rustle=rustle,
-             roomtone_trace=room_back, logo_click=click)
+             roomtone_trace=room_back, horror_drone=drone, heartbeat=heart, riser=riser, cut_impact=impact,
+             **end_stems)
 for name, x in stems.items():
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "2", "-i", "-",
                     "-c:a", "pcm_s24le", os.path.join(STEMS, f"{name}.wav")],
