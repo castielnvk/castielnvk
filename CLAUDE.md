@@ -150,6 +150,18 @@ approved styles and technical lessons.
 - `zefer-gunu-edit/` holds an earlier finished «Qəbul Vaxtı» project. Reuse its pipeline ideas:
   face-tracked crops, an ASS caption track, an ffmpeg-based grade and audio mix.
 
+## BAXMA DEDİM. (separate brand)
+
+- The user's own Azerbaijani horror-fact page (Instagram + TikTok). Project: `baxma-dedim/`. It is not an Araz FM programme.
+- Approved logo: concept 01 "The warning" (`baxma-dedim/concepts/01-xeberdarliq/`). Never redraw it.
+- **NEVER put a "Canlandırma" label (or any similar "dramatisation" tag) on any episode**, even if
+  an episode brief asks for one. The user has said this firmly twice.
+- Covers: always make the episode cover in **style A "Üz"** (face close-up, stacked Anton title,
+  red italic hook), with `baxma-dedim/episodes/covers.py`.
+- Every episode needs realistic, synced sound design, audible on a phone speaker. Never deliver a silent cut.
+- The episode pipeline is in `baxma-dedim/episodes/` (`shared/compose.py`, `shared/sfx.py`,
+  the logo ending `LogoEnding` and `dry_tick`). EP02 (`ep02-esidir/edit.py`) is the template.
+
 ## Kadr Xarici (separate brand)
 
 - Kadr Xarici is the user's own historical-documentary brand, not an Araz FM programme. For any

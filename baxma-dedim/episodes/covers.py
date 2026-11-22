@@ -49,6 +49,17 @@ EPISODES = [
         hook="özünü ölü sanır.",                # short red "correction" line
         big="SAĞDIR.", big_sub="Amma buna inanmır.",
     ),
+    dict(
+        num="02", folder="ep02-esidir", styles=["A"],   # from EP02 on: style A only (user's choice)
+        source="source/bedroom_gemini.mp4", crop=(4, 14, 704, 1252),
+        grade=("eq=contrast=1.04:brightness=-0.01:saturation=0.97,"
+               "curves=all='0/0 0.10/0.075 0.5/0.49 1/1',vignette=angle=PI/5"),
+        stills=dict(stare=88 / 24 + 0.01),       # frame 88: the hand stopped, gap clearly visible
+        face=(600, 1239),                         # close-up subject: the gap between the hands
+        name="Bəlkə hələ eşidir",
+        title=("BƏLKƏ HƏLƏ", "EŞİDİR"),
+        hook="ömrünün son saatlarında.",
+    ),
 ]
 
 
@@ -112,12 +123,16 @@ def opt_stare(ep):
     t1, t2 = ep["title"]
     size = min(fit(ANTON, t1, 860), fit(ANTON, t2, 860))
     cap = cap_height(ANTON, size)
-    y2 = 1560
-    y1 = y2 - cap - 0.10 * cap
+    y2 = 1540
+    y1 = y2 - cap - 0.24 * cap           # room for the İ dots of line 2
     p1, b1 = text(ANTON, t1, size, W / 2, y1, BONE, anchor="center")
     p2, b2 = text(ANTON, t2, size, W / 2, y2, BONE, anchor="center")
-    hs = 86
-    ph, _ = text(ISERIF_I, ep["hook"], hs, b2[2] + 20, y2 + cap_height(ISERIF_I, hs) + 26, RED_HI, anchor="right", extra=HOOK)
+    hs = min(86, fit(ISERIF_I, ep["hook"], W - 2 * 84))
+    hw = run(ISERIF_I, ep["hook"], hs).bbox
+    right = min(max(b1[2], b2[2]) + 20, W - 70)
+    right = max(right, 84 + (hw[2] - hw[0]))    # never past the left margin
+    ph, _ = text(ISERIF_I, ep["hook"], hs, right, y2 + 0.30 * cap + cap_height(ISERIF_I, hs) + 22, RED_HI,
+                 anchor="right", extra=HOOK)
     return (image(href) + shade("g", [(0, .55), (.18, 0), (.45, 0), (.62, .55), (.78, .9), (1, .95)]) +
             series_tag(ep["num"], 312) + f'<g id="title" filter="url(#tsh)">{p1}{p2}</g><g id="hook" filter="url(#tsh)">{ph}</g>')
 
@@ -173,7 +188,7 @@ def build(ep):
     out = os.path.join(HERE, ep["folder"], "covers")
     os.makedirs(out, exist_ok=True)
     jobs, made = [], []
-    for key, slug, label, fn in OPTIONS:
+    for key, slug, label, fn in [o for o in OPTIONS if o[0] in ep.get("styles", "ABCD")]:
         base = os.path.join(out, f'{ep["num"]}-cover-{key}-{slug}')
         with open(base + ".svg", "w", encoding="utf-8") as f:
             f.write(svg_doc(W, H, SHADOW_DEF + f'<rect width="{W}" height="{H}" fill="{INK}"/>' + fn(ep),

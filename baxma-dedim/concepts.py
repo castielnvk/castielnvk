@@ -84,7 +84,9 @@ def c01(pid="c01"):
 
     ec = (bg_rect(1080, 1920, INK) + place(inner, bbox, 540, 900, width=900) +
           f'<rect x="490" y="1560" width="100" height="3" fill="{RED}"/>' + caption(1640, ASH) + grain(pid))
-    return dict(wordmark=(inner, bbox), avatar=av, endcard=ec, panel=INK,
+    parts = (f'<g id="{pid}-BAXMA">{top.paths(BONE, idp=pid + "-")}</g>',
+             f'<g id="{pid}-DEDIM">{low.paths(RED, idp=pid + "-")}</g>')
+    return dict(wordmark=(inner, bbox), parts=parts, baxma_bbox=top.bbox, avatar=av, endcard=ec, panel=INK,
                 fonts="Anton · Instrument Serif Italic")
 
 
