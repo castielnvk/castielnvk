@@ -161,6 +161,18 @@ _(notes pending)_
   half-second music drop plus teaser line mid-video, 70 px subtitles, shorter logo outro.
   My reading: for Kadr Xarici, lead with the central *question* on screen from the first frame.
 
+### 7. Araz FM — New Year 2027 film "Bakıda il dəyişdirilir." (22 Nov 2026)
+- **What:** a 12 s cinematic 9:16 Instagram film built entirely in 3D (three.js in headless Chromium,
+  SwiftShader at about 3 s per frame with 4 workers). Two cranes swap the 6 for a 7 on a giant
+  "202_" bulb sign on the Boulevard. Archived in `araz-fm-yeni-il-2027/`.
+- **User correction, mid-render:** "Baku azerbaijan olmagi bilinmelidi. Biz milli radioyuq." Every
+  Araz FM brand film must be unmistakably Baku and Azerbaijan. I added the Flame Towers with LED skins
+  in the flag colours, the giant waving national flag (crescent and 8-pointed star) and a
+  "CANLI · BAKI · Dənizkənarı Bulvar" news bug.
+- No voiceover (no generated voices). The headline carries the joke. The white Araz Radio 103.3 FM
+  logo sits top centre at 330 px wide. No microphone reference was supplied, so the shot uses the
+  clean city composition.
+
 ## User preferences (across all projects)
 - Use only real footage. Never fabricate archive material, reactions, voices or historical scenes,
   and never use cloned or generated voices.
