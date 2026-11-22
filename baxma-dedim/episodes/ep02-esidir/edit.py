@@ -32,7 +32,7 @@ STOP_SRC_FRAME = 88       # last frame with a clear gap between the fingers (tou
 STOP = HOLD_START + STOP_SRC_FRAME / 24      # 4.87 s: the hand stops; still-frame hold from here
 SHOT_END = 10.0           # hard cut to near-black
 END_IN = 13.0             # logo ending starts (2.0 s long)
-DUR = 15.0
+DUR = END_IN + 4.0       # 17.0 s: the logo holds, then fades out slowly with the drone
 
 ZOOM = (1.0, 1.06)        # slow push-in toward the gap, anchored so the dark ceiling stays dark
 ANCHOR = (600, 900)
@@ -218,9 +218,10 @@ flash_hit = chop(placed(im, FL_ON, -1) + placed(sfx.dry_tick(), FL_ON, -4), FL_O
 lg = sfx.load_file(os.path.join(LIB, "logo_hit_mixkit833.mp3"))
 ret_drone_src = dr[int(0.5 * SR):int(0.5 * SR) + int((DUR - RET) * SR)]
 return_hit = placed(lg, RET, -2) + placed(im, RET, -6)
-return_drone = placed(ret_drone_src * db(env([(0, -8), (DUR - RET, -40)], n=len(ret_drone_src))), RET, -4)
+return_drone = placed(ret_drone_src * db(env([(0, -8), (DUR - RET - 1.6, -12), (DUR - RET - 0.15, -50), (DUR - RET, -90)],
+                                             n=len(ret_drone_src))), RET, -4)
 for x in (return_hit, return_drone):
-    x[-int(0.25 * SR):] *= np.linspace(1, 0, int(0.25 * SR))[:, None]
+    x[-int(1.2 * SR):] *= np.linspace(1, 0, int(1.2 * SR))[:, None] ** 2
 
 stems = dict(roomtone=room, fabric_rustle=rust, distant_tone=tone, horror_drone=drone, heartbeat=heart,
              riser=riser, cut_impact=impact, black_pressure=pressure, logo_reverse_swell=swell,

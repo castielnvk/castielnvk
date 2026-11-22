@@ -1,6 +1,6 @@
 # BAXMA DEDİM. — EP02 «Bəlkə hələ eşidir»
 
-`Baxma_Dedim_EP02.mp4`: 1080×1920, H.264 + AAC 48 kHz stereo, 24 fps, 15.0 s, −19.6 LUFS.
+`Baxma_Dedim_EP02.mp4`: 1080×1920, H.264 + AAC 48 kHz stereo, 24 fps, 17.0 s, −19.6 LUFS.
 The source clip's audio is muted. The soundtrack mixes designed sounds (`../shared/sfx.py`) with recorded
 library sounds (`../shared/sfx_library/`, Mixkit free license).
 
@@ -20,7 +20,7 @@ chops the boom off so only the tick keeps ringing.
 | 4.05 | — | "Amma alimlər bir şey görüblər." | One faint, distant designed tone |
 | 4.87–10.0 | **Still hold on frame 88**, the last frame with a clear gap (the source touches from ~frame 92); slow push-in and live grain | 5.85: "Ömrünün son saatlarında olan / bəzi insanların beyni / hələ də səsə reaksiya verib." | Room tone drops out for 1 s when the hand stops, then returns faintly |
 | 10.0–13.0 | Hard cut to near-black | "Deyilən sözləri / anlayıb-anlamadıqlarını / bilmirik." | Silence |
-| 13.0–15.0 | Logo ending «Bir anlıq görünüş»: the full logo flashes for 3 frames (13.00–13.12), black, then it is suddenly back at 13.90 and holds | — | A reverse swell into a sharp hit on the flash, **total silence** while it's black, then a low hit and a dark drone tail on the return |
+| 13.0–17.0 | Logo ending «Bir anlıq görünüş»: the full logo flashes for 3 frames (13.00–13.12), black, then it is suddenly back at 13.90, holds until 15.9, and fades slowly to black by 16.8 (no abrupt end) | — | A reverse swell into a sharp hit on the flash, **total silence** while it's black, then a low hit and a dark drone tail on the return |
 
 No "Canlandırma" label (the user's standing rule).
 

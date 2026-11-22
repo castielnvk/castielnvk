@@ -141,7 +141,7 @@ ENDING = dict(STRIP=0.40, DEDIM_AT=0.80, CUT_AT=1.55, LENGTH=2.0, LOGO_WIDTH=820
 
 # "Bir anlıq görünüş" ending (chosen by the user for EP02 on): the logo flashes for 3 frames,
 # vanishes into total silence, then is suddenly back and holds. Times relative to ending start.
-FLASH = dict(FLASH_ON=0.0, FLASH_OFF=3 / 24, RETURN_AT=0.90, LENGTH=2.0)
+FLASH = dict(FLASH_ON=0.0, FLASH_OFF=3 / 24, RETURN_AT=0.90, FADE_AT=2.9, FADE_END=3.8, LENGTH=4.0)
 
 
 class LogoFlashEnding:
@@ -158,8 +158,10 @@ class LogoFlashEnding:
     def frame(self, t):
         F = FLASH
         f = ink_frame()
-        if F["FLASH_ON"] <= t < F["FLASH_OFF"] or t >= F["RETURN_AT"]:
+        if F["FLASH_ON"] <= t < F["FLASH_OFF"]:
             f = over(f, *self.logo, 1.0)
+        elif t >= F["RETURN_AT"]:                     # back, holds, then sinks slowly into black
+            f = over(f, *self.logo, 1.0 - smooth((t - F["FADE_AT"]) / (F["FADE_END"] - F["FADE_AT"])))
         return f
 # (start, end, brightness) — the light stutters like a dying bulb, then holds
 FLICKER = [(0.00, 0.06, 1.0), (0.06, 0.10, 0.08), (0.10, 0.15, 0.9), (0.15, 0.21, 0.0),
