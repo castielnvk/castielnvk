@@ -51,7 +51,7 @@ FINAL = dict(id="d", t_in=SHOT_END + 0.12, t_out=END_IN - 0.08, size=70, cy=930,
 SND = dict(room_db=-25, room_drop=STOP, room_gap=1.0, room_return_db=-29,
            rustle_from=HOLD_START, rustle_db=-9,
            tone_at=CARDS[1]["t_in"], tone_db=-17,
-           tick_at=END_IN + C.ENDING["DEDIM_AT"], tick_db=-3)
+           tick_at=END_IN + C.ENDING["DEDIM_AT"], tick_db=-3, master_db=0)
 # ============================================================================
 
 LAYERS = os.path.join(HERE, "layers")
@@ -172,7 +172,49 @@ rust = placed(sfx.fabric_rustle(move + 0.1, intensity, pan=0.3), S["rustle_from"
 tone = placed(sfx.distant_tone(), S["tone_at"], S["tone_db"])
 tick = placed(sfx.dry_tick(), S["tick_at"], S["tick_db"])
 
-stems = dict(roomtone=room, fabric_rustle=rust, distant_tone=tone, logo_tick=tick)
+# ---- tension layers (recorded library sounds in ../shared/sfx_library + designed ones) ----
+LIB = os.path.join(HERE, "..", "shared", "sfx_library")
+CUT = SHOT_END
+D_AT = S["tick_at"]                                   # DEDİM. moment
+HARD_CUT = END_IN + C.ENDING["CUT_AT"]                # logo -> black
+
+dr = sfx.load_file(os.path.join(LIB, "horror_drone_mixkit1775.mp3"))
+drone = np.zeros((N, 2), np.float32)
+drone[: int(STOP * SR) + 4800] = dr[: int(STOP * SR) + 4800]          # first half: the approach
+k0 = int((STOP + S["room_gap"] - 0.02) * SR)                          # second half restarts the drone body
+seg = dr[int(0.8 * SR):][: int(SHOT_END * SR) - k0]
+drone[k0:k0 + len(seg)] = seg
+CUT_ROOM = STOP + S["room_gap"] - 0.02
+drone *= db(env([(0, -70), (1.0, -15), (STOP - 0.05, -5), (STOP + 0.05, -120), (CUT_ROOM, -120),
+                 (CUT_ROOM + 0.02, -26), (CUT - 0.01, -3), (CUT, -120), (DUR, -120)])[..., 0:1])
+
+hb_clip = sfx.heartbeat(bpm=52, beats=4)
+heart = placed(hb_clip, CARDS[2]["t_in"], -19)
+heart[int(CUT * SR):] = 0
+
+rs = sfx.load_file(os.path.join(LIB, "terror_riser_mixkit2630.mp3"), 1.2, 1.8)
+riser = placed(rs * db(env([(0, -30), (1.75, 0), (1.8, 0)], n=len(rs))), CUT - 1.8, -10)
+riser[int(CUT * SR):] = 0
+
+im = sfx.load_file(os.path.join(LIB, "deep_impact_mixkit1687.mp3"))
+impact = placed(im, CUT, -4)
+
+pressure = placed(sfx.sub_pressure(2.6) * db(env([(0, -40), (0.8, 0), (1.9, 0), (2.6, -60)], n=int(2.6 * SR))),
+                  CUT + 0.4, -22)
+
+suck = im[: int(1.1 * SR)][::-1] * db(env([(0, -40), (0.9, -6), (1.1, 0)], n=int(1.1 * SR)))
+swell = placed(suck, END_IN - 1.1, -11)
+
+lg = sfx.load_file(os.path.join(LIB, "logo_hit_mixkit833.mp3"))
+logo_hit = placed(lg, END_IN, -2)
+
+subhit = placed(im, D_AT, -9)
+subhit[int(HARD_CUT * SR):] = 0                       # the boom is chopped by the cut; only the tick rings on
+logo_hit[int(HARD_CUT * SR):] = 0
+
+stems = dict(roomtone=room, fabric_rustle=rust, distant_tone=tone, horror_drone=drone, heartbeat=heart,
+             riser=riser, cut_impact=impact, black_pressure=pressure, logo_reverse_swell=swell,
+             logo_hit_baxma=logo_hit, logo_subhit_dedim=subhit, logo_tick=tick)
 for name, x in stems.items():
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "2", "-i", "-",
                     "-c:a", "pcm_s24le", os.path.join(STEMS, f"{name}.wav")],
@@ -183,7 +225,7 @@ subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-
                 "-c:a", "pcm_s24le", os.path.join(STEMS, "logo_tick_standalone.wav")],
                input=(sfx.dry_tick() * db(S["tick_db"])).astype(np.float32).tobytes(), check=True)
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "2", "-i", "-",
-                "-af", "alimiter=limit=0.89:attack=1:release=50:level=false", "-c:a", "pcm_s24le",
+                "-af", f"volume={S['master_db']}dB,alimiter=limit=0.87:attack=1:release=60:level=false", "-c:a", "pcm_s24le",
                 os.path.join(STEMS, "mix.wav")], input=mix.astype(np.float32).tobytes(), check=True)
 
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", OUT + ".video.mp4", "-i", os.path.join(STEMS, "mix.wav"),

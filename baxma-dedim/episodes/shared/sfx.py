@@ -129,3 +129,53 @@ def dry_tick(tail=1.1, seed=9):
     x = click * 1.0 + body + ring
     st = np.stack([x, np.roll(x, 6)], 1)
     return _norm(st)
+
+
+def heartbeat(bpm=52, beats=6, seed=4):
+    """Slow, close heartbeat (lub-dub). Low thump plus upper body harmonics so it still
+    reads on a phone speaker."""
+    period = 60 / bpm
+    n = int((beats * period + 0.6) * SR)
+    out = np.zeros(n)
+
+    def thump(f0, length, amp):
+        m = int(length * SR)
+        t = np.arange(m) / SR
+        f = f0 * (1 + 0.6 * np.exp(-t / 0.02))            # quick pitch drop
+        ph = 2 * np.pi * np.cumsum(f) / SR
+        x = np.sin(ph) + 0.45 * np.sin(2 * ph) + 0.25 * np.sin(3 * ph + 0.3)
+        x *= np.exp(-t / 0.07) * np.minimum(1, t / 0.004)
+        return amp * np.tanh(1.8 * x)                      # soft saturation = audible harmonics
+
+    for k in range(beats):
+        i = int(k * period * SR)
+        for off, f0, amp in ((0.0, 58, 1.0), (0.27, 50, 0.72)):
+            th = thump(f0, 0.32, amp)
+            j = i + int(off * SR)
+            out[j:j + len(th)] += th[: max(0, min(len(th), n - j))]
+    out = _lp(out, 900)
+    return _norm(np.stack([out, out], 1))
+
+
+def sub_pressure(dur, seed=8):
+    """Low, slowly breathing pressure under black: filtered rumble + 41 Hz tone with
+    upper partials for small speakers."""
+    rng = np.random.default_rng(seed)
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    rum = _lp(_hp(rng.standard_normal(n), 25), 180)
+    rum /= np.abs(rum).max()
+    tone = np.sin(2 * np.pi * 41 * t) + 0.3 * np.sin(2 * np.pi * 82 * t) + 0.12 * np.sin(2 * np.pi * 123 * t + 1)
+    x = (0.6 * rum + 0.5 * tone) * (1 + 0.25 * np.sin(2 * np.pi * 0.35 * t))
+    return _norm(np.stack([x, np.roll(x, 90)], 1))
+
+
+def load_file(path, start=0.0, dur=None):
+    """decode any audio file to float32 stereo 48 kHz."""
+    import subprocess
+    cmd = ["ffmpeg", "-v", "error", "-ss", str(start)]
+    if dur:
+        cmd += ["-t", str(dur)]
+    cmd += ["-i", path, "-vn", "-ac", "2", "-ar", str(SR), "-f", "f32le", "-"]
+    a = np.frombuffer(subprocess.run(cmd, capture_output=True, check=True).stdout, np.float32)
+    return _norm(a.reshape(-1, 2).copy())

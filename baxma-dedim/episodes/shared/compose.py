@@ -138,6 +138,16 @@ def ink_frame():
 #   DEDIM_AT  DEDİM. appears at once (pair with sfx.dry_tick)
 #   CUT_AT  hard cut to black (the tick's tail keeps ringing)
 ENDING = dict(STRIP=0.40, DEDIM_AT=0.80, CUT_AT=1.55, LENGTH=2.0, LOGO_WIDTH=820, LOGO_CY=930)
+# (start, end, brightness) — the light stutters like a dying bulb, then holds
+FLICKER = [(0.00, 0.06, 1.0), (0.06, 0.10, 0.08), (0.10, 0.15, 0.9), (0.15, 0.21, 0.0),
+           (0.21, 0.25, 0.55), (0.25, 0.29, 0.05), (0.29, 9.9, 1.0)]
+
+
+def flicker(t):
+    for a, b, v in FLICKER:
+        if a <= t < b:
+            return v
+    return 1.0
 
 
 class LogoEnding:
@@ -174,9 +184,10 @@ class LogoEnding:
         p = ease_out(t / E["STRIP"])
         half = 1.5 + p * ((self.y1 - self.y0) / 2 + 6)
         band = (np.abs(self.yy - self.cy) <= half).astype(np.float32)[..., None]
-        f = over(f, *self.bax, 1.0, mask=band)
+        fl = flicker(t)                               # faulty-bulb stutter while the strip opens
+        f = over(f, *self.bax, fl, mask=band)
         # light: the strip edges glow, brightest while the gap is thin, then fade away
-        glow_amt = (1 - smooth(t / (E["STRIP"] + 0.25))) * 1.0
+        glow_amt = (1 - smooth(t / (E["STRIP"] + 0.25))) * fl
         if glow_amt > 0:
             d = np.minimum(np.abs(self.yy - (self.cy - half)), np.abs(self.yy - (self.cy + half)))[..., None]
             g = (np.exp(-(d / 2.2) ** 2) * 0.9 + np.exp(-(d / 16) ** 2) * 0.22) * self.xfade * glow_amt

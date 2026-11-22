@@ -1,7 +1,14 @@
 # BAXMA DEDİM. — EP02 «Bəlkə hələ eşidir»
 
-`Baxma_Dedim_EP02.mp4`: 1080×1920, H.264 + AAC 48 kHz stereo, 24 fps, 15.0 s, −24.7 LUFS.
-The source clip's audio is muted. The soundtrack is designed in `../shared/sfx.py`.
+`Baxma_Dedim_EP02.mp4`: 1080×1920, H.264 + AAC 48 kHz stereo, 24 fps, 15.0 s, −19.6 LUFS.
+The source clip's audio is muted. The soundtrack mixes designed sounds (`../shared/sfx.py`) with recorded
+library sounds (`../shared/sfx_library/`, Mixkit free license).
+
+**v2 sound (tension pass):** a horror drone grows as the hand approaches. When the hand stops, the drone and
+room tone cut out together for 1 s of real silence. A slow heartbeat then starts and the drone creeps back,
+with a riser into the cut. At 10.0 s a deep impact lands, with low pressure under the black card. The logo ending has a reverse
+swell into a flickering light strip and a low hit on BAXMA. DEDİM. arrives with the tick plus a sub-hit, and the hard cut
+chops the boom off so only the tick keeps ringing.
 
 ## Edit (times are in the finished video)
 | Time | Picture | Text | Sound |
@@ -17,7 +24,8 @@ No "Canlandırma" label (the user's standing rule).
 
 ## Files
 - `edit.py` is the whole edit. The CONFIG block holds all timings, text, layout and levels.
-- `stems/` holds `roomtone.wav`, `fabric_rustle.wav`, `distant_tone.wav`, `logo_tick.wav` (each aligned to the timeline),
+- `stems/` holds one WAV per layer, aligned to the timeline: room tone, fabric rustle, distant tone, horror drone, heartbeat,
+  riser, cut impact, black pressure, the logo reverse swell / BAXMA hit / DEDİM. sub-hit, and the logo tick,
   `logo_tick_standalone.wav` (the ending tick starting at 0, ready to reuse) and `mix.wav`.
 - `layers/*.svg` are the editable vector caption layers and the logo layers.
 - `covers/02-cover-A-uz.*` is the episode cover in style A.
