@@ -1,6 +1,9 @@
 # BAXMA DEDİM. — logo concepts 01–06
 
-Six logo directions for the BAXMA DEDİM. Instagram/TikTok page. **Not final.** Choose one before it is refined or animated.
+Six logo directions for the BAXMA DEDİM. Instagram/TikTok page.
+
+**Selected: 01 — The warning** (2026-11-22). Its avatar was then reworked to read at 48 px: a larger red "D." with a matching stroke, dropped below and past the B.
+The other five directions are kept for reference.
 
 - `BAXMA-DEDIM-board-01-06.png` is the comparison board: wordmark, 48 px avatar and 9:16 end card for each concept.
 - `concepts/NN-slug/` holds each concept's files:

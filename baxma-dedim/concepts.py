@@ -70,15 +70,17 @@ def c01(pid="c01"):
     m = 0.08 * W
     bbox = (x0 - m, y0 - m, max(x1, lb[2]) + m, lb[3] + m)
 
-    # avatar: big B, red italic D. tucked under its right side
+    # avatar: big B, red italic D. dropped just below and past its right side (the late correction).
+    # The serif D. gets a same-colour stroke so it survives 48 px.
     B = run(ANTON, "B", 380)
     bx0, by0, bx1, by1 = B.bbox
-    D = run(ISERIF_I, "D.", 230)
-    dcap = cap_height(ISERIF_I, 230)
-    D = run(ISERIF_I, "D.", 230, x=bx1 - D.width * 0.42, y=by1 + 0.10 * (-by0) + dcap)
+    dsize = 300
+    dcap = cap_height(ISERIF_I, dsize)
+    D = run(ISERIF_I, "D.", dsize, x=bx1 - 0.06 * dsize, y=by1 + 0.36 * dcap)
     db = D.bbox
-    grp = f'{B.paths(BONE)}{D.paths(RED)}'
-    av = avatar_frame(pid + "a", INK, place(grp, (bx0, by0, db[2], db[3]), 262, 256, height=360))
+    thick = f' stroke="{RED}" stroke-width="{fmt(0.035 * dsize)}" stroke-linejoin="round"'
+    grp = f'{B.paths(BONE)}{D.paths(RED, extra=thick)}'
+    av = avatar_frame(pid + "a", INK, place(grp, (bx0, by0, db[2], db[3]), 252, 256, width=290))
 
     ec = (bg_rect(1080, 1920, INK) + place(inner, bbox, 540, 900, width=900) +
           f'<rect x="490" y="1560" width="100" height="3" fill="{RED}"/>' + caption(1640, ASH) + grain(pid))
