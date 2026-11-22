@@ -10,6 +10,8 @@ with a riser into the cut. At 10.0 s a deep impact lands, with low pressure unde
 swell into a flickering light strip and a low hit on BAXMA. DEDİM. arrives with the tick plus a sub-hit, and the hard cut
 chops the boom off so only the tick keeps ringing.
 
+**v3 ending (chosen by the user): «Bir anlıq görünüş»**, which replaces the light-strip ending.
+
 ## Edit (times are in the finished video)
 | Time | Picture | Text | Sound |
 |------|---------|------|-------|
@@ -18,7 +20,7 @@ chops the boom off so only the tick keeps ringing.
 | 4.05 | — | "Amma alimlər bir şey görüblər." | One faint, distant designed tone |
 | 4.87–10.0 | **Still hold on frame 88**, the last frame with a clear gap (the source touches from ~frame 92); slow push-in and live grain | 5.85: "Ömrünün son saatlarında olan / bəzi insanların beyni / hələ də səsə reaksiya verib." | Room tone drops out for 1 s when the hand stops, then returns faintly |
 | 10.0–13.0 | Hard cut to near-black | "Deyilən sözləri / anlayıb-anlamadıqlarını / bilmirik." | Silence |
-| 13.0–15.0 | Logo ending: a light strip opens on BAXMA; DEDİM. appears at 13.80; hard cut to black at 14.55 | — | A dry tick at 13.80, whose tail rings past the cut |
+| 13.0–15.0 | Logo ending «Bir anlıq görünüş»: the full logo flashes for 3 frames (13.00–13.12), black, then it is suddenly back at 13.90 and holds | — | A reverse swell into a sharp hit on the flash, **total silence** while it's black, then a low hit and a dark drone tail on the return |
 
 No "Canlandırma" label (the user's standing rule).
 
@@ -31,5 +33,5 @@ No "Canlandırma" label (the user's standing rule).
 - `covers/02-cover-A-uz.*` is the episode cover in style A.
 
 ## Reusing the ending
-`compose.LogoEnding(layers_dir).frame(t)` together with `sfx.dry_tick()` placed at `ENDING["DEDIM_AT"]`
-(see `edit.py`). The timings are in `compose.ENDING`.
+Picture: `compose.LogoFlashEnding(layers_dir).frame(t)`, with timings in `compose.FLASH`.
+Sound: `stems/ending_sfx_standalone.wav` (it starts 1.1 s before the flash), or the code in `edit.py`.

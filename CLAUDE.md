@@ -158,7 +158,10 @@ approved styles and technical lessons.
   an episode brief asks for one. The user has said this firmly twice.
 - Covers: always make the episode cover in **style A "Üz"** (face close-up, stacked Anton title,
   red italic hook), with `baxma-dedim/episodes/covers.py`.
-- Every episode needs realistic, synced sound design, audible on a phone speaker. Never deliver a silent cut.
+- Every episode needs realistic, synced sound design that is genuinely tense (drone, silence drops, impacts)
+  and audible on a phone speaker. Never deliver a silent cut.
+- Logo ending: «Bir anlıq görünüş». The logo flashes for 3 frames with a hit, then black and total silence,
+  then it is suddenly back and holds (`compose.LogoFlashEnding`). The user rejected the light-strip ending.
 - The episode pipeline is in `baxma-dedim/episodes/` (`shared/compose.py`, `shared/sfx.py`,
   the logo ending `LogoEnding` and `dry_tick`). EP02 (`ep02-esidir/edit.py`) is the template.
 

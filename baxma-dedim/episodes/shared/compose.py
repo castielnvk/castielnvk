@@ -138,6 +138,29 @@ def ink_frame():
 #   DEDIM_AT  DEDİM. appears at once (pair with sfx.dry_tick)
 #   CUT_AT  hard cut to black (the tick's tail keeps ringing)
 ENDING = dict(STRIP=0.40, DEDIM_AT=0.80, CUT_AT=1.55, LENGTH=2.0, LOGO_WIDTH=820, LOGO_CY=930)
+
+# "Bir anlıq görünüş" ending (chosen by the user for EP02 on): the logo flashes for 3 frames,
+# vanishes into total silence, then is suddenly back and holds. Times relative to ending start.
+FLASH = dict(FLASH_ON=0.0, FLASH_OFF=3 / 24, RETURN_AT=0.90, LENGTH=2.0)
+
+
+class LogoFlashEnding:
+    def __init__(self, layers_dir):
+        c = c01("end")
+        inner, bbox = c["wordmark"]
+        svg = os.path.join(layers_dir, "logo-full.svg")
+        with open(svg, "w", encoding="utf-8") as f:
+            f.write(svg_doc(W, H, place(inner, bbox, W / 2, ENDING["LOGO_CY"], width=ENDING["LOGO_WIDTH"]),
+                            "logo-full"))
+        render_svgs([[svg, svg[:-4] + ".png", W, H, 1]], os.path.join(layers_dir, "ending-jobs.json"))
+        self.logo = load_rgba(svg[:-4] + ".png")
+
+    def frame(self, t):
+        F = FLASH
+        f = ink_frame()
+        if F["FLASH_ON"] <= t < F["FLASH_OFF"] or t >= F["RETURN_AT"]:
+            f = over(f, *self.logo, 1.0)
+        return f
 # (start, end, brightness) — the light stutters like a dying bulb, then holds
 FLICKER = [(0.00, 0.06, 1.0), (0.06, 0.10, 0.08), (0.10, 0.15, 0.9), (0.15, 0.21, 0.0),
            (0.21, 0.25, 0.55), (0.25, 0.29, 0.05), (0.29, 9.9, 1.0)]

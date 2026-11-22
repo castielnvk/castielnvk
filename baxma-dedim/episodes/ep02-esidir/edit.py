@@ -5,8 +5,8 @@
     -> stems/*.wav          (separate SFX tracks + full mix, 48 kHz / 24-bit)
 
 Source clip audio is muted; the whole soundtrack is designed in ../shared/sfx.py.
-The logo ending (light strip -> BAXMA, DEDİM. + tick, hard cut) is ../shared/compose.LogoEnding
-plus sfx.dry_tick — reuse both as-is in later episodes.
+The logo ending is "Bir anlıq görünüş" (../shared/compose.LogoFlashEnding + the flash/return sounds
+below; stems/ending_sfx_standalone.wav is the whole ending sound from 0). Reuse it in later episodes.
 """
 import os
 import subprocess
@@ -51,7 +51,7 @@ FINAL = dict(id="d", t_in=SHOT_END + 0.12, t_out=END_IN - 0.08, size=70, cy=930,
 SND = dict(room_db=-25, room_drop=STOP, room_gap=1.0, room_return_db=-29,
            rustle_from=HOLD_START, rustle_db=-9,
            tone_at=CARDS[1]["t_in"], tone_db=-17,
-           tick_at=END_IN + C.ENDING["DEDIM_AT"], tick_db=-3, master_db=0)
+           master_db=0)
 # ============================================================================
 
 LAYERS = os.path.join(HERE, "layers")
@@ -82,7 +82,7 @@ with open(svg, "w", encoding="utf-8") as f:
 jobs.append([svg, svg[:-4] + ".png", W, H, 1])
 C.render_svgs(jobs, os.path.join(LAYERS, "jobs.json"))
 TXT = {c["id"]: C.load_rgba(os.path.join(LAYERS, f'{c["id"]}.png')) for c in CARDS + [FINAL]}
-ending = C.LogoEnding(LAYERS)
+ending = C.LogoFlashEnding(LAYERS)
 
 
 def card_alpha(c, t, d_in=0.30, d_out=0.18, rise=20):
@@ -170,13 +170,10 @@ def intensity(x):  # hand speed: quick start, steady, slowing to a stop
 
 rust = placed(sfx.fabric_rustle(move + 0.1, intensity, pan=0.3), S["rustle_from"], S["rustle_db"])
 tone = placed(sfx.distant_tone(), S["tone_at"], S["tone_db"])
-tick = placed(sfx.dry_tick(), S["tick_at"], S["tick_db"])
 
 # ---- tension layers (recorded library sounds in ../shared/sfx_library + designed ones) ----
 LIB = os.path.join(HERE, "..", "shared", "sfx_library")
 CUT = SHOT_END
-D_AT = S["tick_at"]                                   # DEDİM. moment
-HARD_CUT = END_IN + C.ENDING["CUT_AT"]                # logo -> black
 
 dr = sfx.load_file(os.path.join(LIB, "horror_drone_mixkit1775.mp3"))
 drone = np.zeros((N, 2), np.float32)
@@ -205,25 +202,39 @@ pressure = placed(sfx.sub_pressure(2.6) * db(env([(0, -40), (0.8, 0), (1.9, 0), 
 suck = im[: int(1.1 * SR)][::-1] * db(env([(0, -40), (0.9, -6), (1.1, 0)], n=int(1.1 * SR)))
 swell = placed(suck, END_IN - 1.1, -11)
 
-lg = sfx.load_file(os.path.join(LIB, "logo_hit_mixkit833.mp3"))
-logo_hit = placed(lg, END_IN, -2)
+# "Bir anlıq görünüş" ending: 3-frame flash with a sharp hit -> total silence -> logo is back with a low hit
+F = C.FLASH
+FL_ON, FL_OFF, RET = END_IN + F["FLASH_ON"], END_IN + F["FLASH_OFF"], END_IN + F["RETURN_AT"]
 
-subhit = placed(im, D_AT, -9)
-subhit[int(HARD_CUT * SR):] = 0                       # the boom is chopped by the cut; only the tick rings on
-logo_hit[int(HARD_CUT * SR):] = 0
+
+def chop(x, at, fade=0.008):
+    i, k = int(at * SR), int(fade * SR)
+    x[i:i + k] *= np.linspace(1, 0, k)[:, None]
+    x[i + k:] = 0
+    return x
+
+
+flash_hit = chop(placed(im, FL_ON, -1) + placed(sfx.dry_tick(), FL_ON, -4), FL_OFF + 0.01)
+lg = sfx.load_file(os.path.join(LIB, "logo_hit_mixkit833.mp3"))
+ret_drone_src = dr[int(0.5 * SR):int(0.5 * SR) + int((DUR - RET) * SR)]
+return_hit = placed(lg, RET, -2) + placed(im, RET, -6)
+return_drone = placed(ret_drone_src * db(env([(0, -8), (DUR - RET, -40)], n=len(ret_drone_src))), RET, -4)
+for x in (return_hit, return_drone):
+    x[-int(0.25 * SR):] *= np.linspace(1, 0, int(0.25 * SR))[:, None]
 
 stems = dict(roomtone=room, fabric_rustle=rust, distant_tone=tone, horror_drone=drone, heartbeat=heart,
              riser=riser, cut_impact=impact, black_pressure=pressure, logo_reverse_swell=swell,
-             logo_hit_baxma=logo_hit, logo_subhit_dedim=subhit, logo_tick=tick)
+             logo_flash_hit=flash_hit, logo_return_hit=return_hit, logo_return_drone=return_drone)
 for name, x in stems.items():
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "2", "-i", "-",
                     "-c:a", "pcm_s24le", os.path.join(STEMS, f"{name}.wav")],
                    input=x.astype(np.float32).tobytes(), check=True)
 mix = sum(stems.values())
-# standalone, reusable ending SFX (tick from 0)
+# standalone, reusable ending SFX: everything from the reverse swell to the end, starting at 0
+end_mix = (swell + flash_hit + return_hit + return_drone)[int((END_IN - 1.1) * SR):]
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "2", "-i", "-",
-                "-c:a", "pcm_s24le", os.path.join(STEMS, "logo_tick_standalone.wav")],
-               input=(sfx.dry_tick() * db(S["tick_db"])).astype(np.float32).tobytes(), check=True)
+                "-c:a", "pcm_s24le", os.path.join(STEMS, "ending_sfx_standalone.wav")],
+               input=end_mix.astype(np.float32).tobytes(), check=True)
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "2", "-i", "-",
                 "-af", f"volume={S['master_db']}dB,alimiter=limit=0.87:attack=1:release=60:level=false", "-c:a", "pcm_s24le",
                 os.path.join(STEMS, "mix.wav")], input=mix.astype(np.float32).tobytes(), check=True)
