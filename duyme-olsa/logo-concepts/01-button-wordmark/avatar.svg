@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<title>Düymə olsa — 01 avatar</title>
+<defs><clipPath id="circle"><circle cx="256" cy="256" r="256"/></clipPath></defs><g clip-path="url(#circle)"><rect id="background" width="512" height="512" fill="#C8102E"/><g id="button-O"><circle cx="256.0" cy="256.0" r="150.0" fill="#FFF3DF"/><circle cx="256.0" cy="256.0" r="113.1" fill="#8E0A20"/><circle cx="256.0" cy="266.5" r="105.0" fill="#C77700"/><circle cx="256.0" cy="245.5" r="105.0" fill="#FFB81C"/></g></g>
+</svg>

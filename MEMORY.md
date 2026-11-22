@@ -213,3 +213,8 @@ _(notes pending)_
 - HDR iPhone footage: convert HLG→SDR with zscale + `tonemap=hable` (npl=100).
 - Review contact sheets of design frames and transitions before delivering. They catch empty
   frames, gaps and muddy dissolves.
+
+### Düymə olsa — logo concepts (Nov 2026)
+- Separate comedy page (Instagram/TikTok), not Araz FM. Four concepts in `duyme-olsa/logo-concepts/`
+  (01 button wordmark, 02 D icon, 03 the tap, 04 xalanın butası); `python3 build.py && node render.js`
+  rebuilds SVGs, `board.png` and previews. Recommended 02; awaiting the user's choice.
