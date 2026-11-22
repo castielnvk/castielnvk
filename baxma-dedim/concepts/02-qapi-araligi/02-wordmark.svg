@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600" height="498.28" viewBox="0 0 1600 498.28">
+<title>BAXMA DEDİM. — 02 The door gap (wordmark)</title>
+<g transform="scale(0.82021) translate(42.45 376.65)">
+<defs>
+<linearGradient id="c02gl" gradientUnits="userSpaceOnUse" x1="18.3" y1="0" x2="933.21" y2="0">
+  <stop offset="0" stop-color="#6E675D"/><stop offset="0.75" stop-color="#B9B2A4"/><stop offset="1" stop-color="#E8E1D3"/></linearGradient>
+<linearGradient id="c02gr" gradientUnits="userSpaceOnUse" x1="933.21" y1="0" x2="1847.52" y2="0">
+  <stop offset="0" stop-color="#E8E1D3"/><stop offset="0.25" stop-color="#B9B2A4"/><stop offset="1" stop-color="#6E675D"/></linearGradient>
+<linearGradient id="c02gs" gradientUnits="userSpaceOnUse" x1="0" y1="-315.9" x2="0" y2="24.3">
+  <stop offset="0" stop-color="#FFF1CF" stop-opacity="0.55"/><stop offset="0.35" stop-color="#FFFFFF"/><stop offset="1" stop-color="#FFF1CF"/></linearGradient>
+<linearGradient id="c02gf" gradientUnits="userSpaceOnUse" x1="0" y1="24.3" x2="0" y2="230.85">
+  <stop offset="0" stop-color="#FFF1CF" stop-opacity="0.30"/><stop offset="1" stop-color="#FFF1CF" stop-opacity="0"/></linearGradient>
+<filter id="c02glow" x="-400%" y="-20%" width="900%" height="140%"><feGaussianBlur stdDeviation="12.15"/></filter>
+</defs><path id="c02-floor-light" d="M925.92 24.3L940.5 24.3L1394.91 230.85L714.51 230.85Z" fill="url(#c02gf)"/>
+<path id="c02-glow" d="M929.57 -315.9L936.86 -315.9L940.5 24.3L925.92 24.3Z" fill="#FFF1CF" opacity="0.7" filter="url(#c02glow)"/>
+<path id="c02-door-gap" d="M929.57 -315.9L936.86 -315.9L940.5 24.3L925.92 24.3Z" fill="url(#c02gs)"/>
+<g id="c02-BAXMA"><path id="c02-B-0" fill="url(#c02gl)" d="M18.3 0V-243H79.8Q95.7 -243 109.2 -240.3Q122.7 -237.6 133.05 -230.7Q143.4 -223.8 148.95 -211.65Q154.5 -199.5 154.5 -180Q154.5 -165.3 150.3 -154.95Q146.1 -144.6 138.3 -138.6Q130.5 -132.6 119.1 -130.5Q133.2 -128.4 142.8 -120.9Q152.4 -113.4 157.2 -101.1Q162 -88.8 162 -71.4Q162 -53.1 157.35 -39.6Q152.7 -26.1 143.7 -17.4Q134.7 -8.7 121.5 -4.35Q108.3 0 90.9 0ZM67.8 -34.8H81.6Q100.2 -34.8 107.25 -44.1Q114.3 -53.4 114.3 -72Q114.3 -86.4 111 -94.95Q107.7 -103.5 100.35 -107.55Q93 -111.6 80.7 -111.6H67.8ZM67.8 -144.9H80.1Q93 -144.9 99.6 -148.65Q106.2 -152.4 108.75 -160.05Q111.3 -167.7 111.3 -178.8Q111.3 -189.9 107.55 -196.65Q103.8 -203.4 96.15 -206.4Q88.5 -209.4 76.8 -209.4H67.8Z"/>
+<path id="c02-A-1" fill="url(#c02gl)" d="M187.5 0 234.6 -243H289.5L336.3 0H290.4L281.7 -53.4H243.3L234 0ZM247.8 -83.7H276.9L262.2 -181.8Z"/>
+<path id="c02-X-2" fill="url(#c02gl)" d="M354 0 402 -129.9 355.8 -243H402.6L431.4 -173.1L455.7 -243H497.4L453 -118.5L501.6 0H455.4L423.6 -76.5L395.7 0Z"/>
+<path id="c02-M-3" fill="url(#c02gl)" d="M530.4 0 534.6 -243H587.1L617.1 -89.7L649.2 -243H699.9L704.1 0H668.1L664.2 -164.7L633.3 0H602.4L570 -165.9L566.7 0Z"/>
+<path id="c02-A-4" fill="url(#c02gl)" d="M736.8 0 783.9 -243H838.8L885.6 0H839.7L831 -53.4H792.6L783.3 0ZM797.1 -83.7H826.2L811.5 -181.8Z"/></g>
+<g id="c02-DEDIM"><path id="c02-D-0" fill="url(#c02gr)" d="M992.82 0V-243H1052.22Q1083.12 -243 1100.37 -235.05Q1117.62 -227.1 1124.82 -210.15Q1132.02 -193.2 1132.02 -166.8V-78.3Q1132.02 -51.3 1124.82 -33.9Q1117.62 -16.5 1100.67 -8.25Q1083.72 0 1053.42 0ZM1042.32 -34.5H1052.82Q1066.62 -34.5 1072.47 -38.85Q1078.32 -43.2 1079.82 -51.75Q1081.32 -60.3 1081.32 -72.9V-173.1Q1081.32 -185.7 1079.37 -193.35Q1077.42 -201 1071.57 -204.6Q1065.72 -208.2 1052.52 -208.2H1042.32Z"/>
+<path id="c02-E-1" fill="url(#c02gr)" d="M1173.72 0V-243H1279.62V-208.8H1223.22V-144.3H1266.72V-109.8H1223.22V-33.6H1280.22V0Z"/>
+<path id="c02-D-2" fill="url(#c02gr)" d="M1314.12 0V-243H1373.52Q1404.42 -243 1421.67 -235.05Q1438.92 -227.1 1446.12 -210.15Q1453.32 -193.2 1453.32 -166.8V-78.3Q1453.32 -51.3 1446.12 -33.9Q1438.92 -16.5 1421.97 -8.25Q1405.02 0 1374.72 0ZM1363.62 -34.5H1374.12Q1387.92 -34.5 1393.77 -38.85Q1399.62 -43.2 1401.12 -51.75Q1402.62 -60.3 1402.62 -72.9V-173.1Q1402.62 -185.7 1400.67 -193.35Q1398.72 -201 1392.87 -204.6Q1387.02 -208.2 1373.82 -208.2H1363.62Z"/>
+<path id="c02-Idot-3" fill="url(#c02gr)" d="M1495.62 0V-243H1544.82V0ZM1498.32 -266.4V-310.5H1541.52V-266.4Z"/>
+<path id="c02-M-4" fill="url(#c02gr)" d="M1590.12 0 1594.32 -243H1646.82L1676.82 -89.7L1708.92 -243H1759.62L1763.82 0H1727.82L1723.92 -164.7L1693.02 0H1662.12L1629.72 -165.9L1626.42 0Z"/>
+<path id="c02-period-5" fill="url(#c02gr)" d="M1804.32 0V-44.1H1847.52V0Z"/></g>
+</g>
+</svg>
