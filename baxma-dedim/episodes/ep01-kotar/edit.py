@@ -1,7 +1,7 @@
 """BAXMA DEDİM. — Episode 01 «Kotar sindromu»: editable edit + render source.
 
     cd baxma-dedim/episodes/ep01-kotar && python3 edit.py
-    -> Baxma_Dedim_EP01_Kotar.mp4  (1080×1920, H.264, 24 fps, NO audio stream)
+    -> Baxma_Dedim_EP01_Kotar.mp4  (1080×1920, H.264, 24 fps, AAC stereo sound design — see audio.py)
 
 To make Episode 02: copy this folder, swap SOURCE, set FREEZE/TOUCH/KITCHEN_END to the new
 shot's action, change the text in CARDS and keep everything else. All layout is in the CONFIG block.
@@ -52,7 +52,6 @@ F_BOLD = Font("inter-tight-latin-800-normal.woff2", "inter-tight-latin-ext-800-n
 # Kitchen text: two lines, left-aligned in the dark ceiling above the lamp, clear of the face,
 # the spoon and the IG/TikTok UI (top ~230 px, right icon column, bottom ~480 px).
 KX, KBASE, KMAXW, KMAXSIZE = 84, 352, 880, 66
-LABEL = dict(text="Canlandırma", size=24, left=84, base=262)
 
 # Each card: lines -> list of (text, font) segments. t_in/t_out in edit seconds.
 CARDS = [
@@ -120,14 +119,6 @@ for c in CARDS:
         jobs.append([svg, svg[:-4] + ".png", W, H, 1])
         layers.append(dict(png=svg[:-4] + ".png", card=c, i=i))
 
-# "Canlandırma" label (whole kitchen shot)
-lx = LABEL["left"]
-lbl = run(F_REG, LABEL["text"], LABEL["size"], track=0.06, x=lx, y=LABEL["base"])
-with open(os.path.join(LAYERS, "label.svg"), "w", encoding="utf-8") as f:
-    f.write(svg_doc(W, H, SHADOW.replace('"sh"', '"shl"') + f'<g id="label" filter="url(#shl)" opacity="0.72">'
-                    f'{lbl.paths(BONE)}</g>', "Canlandırma label"))
-jobs.append([os.path.join(LAYERS, "label.svg"), os.path.join(LAYERS, "label.png"), W, H, 1])
-
 # approved logo (concept 01 wordmark, unmodified) on transparent
 inner, bbox = c01("logo")["wordmark"]
 with open(os.path.join(LAYERS, "logo.svg"), "w", encoding="utf-8") as f:
@@ -146,7 +137,6 @@ def load(p):
 
 for L in layers:
     L["rgb"], L["a"] = load(L["png"])
-LBL = load(os.path.join(LAYERS, "label.png"))
 LOGO = load(os.path.join(LAYERS, "logo.png"))
 
 
@@ -234,7 +224,6 @@ for n in range(total):
     if t < KITCHEN_END:
         sn = 0 if t < FREEZE else round((t - FREEZE) * 24)
         frame = push_in(src_frame(sn), t).astype(np.float32) / 255.0
-        frame = over(frame, *LBL, 1.0)
     else:
         frame = np.empty((H, W, 3), np.float32)
         frame[:] = ink
@@ -249,4 +238,14 @@ for n in range(total):
 enc.stdin.close()
 enc.wait()
 dec.kill()
+# ---- sound: build the mix and mux it in (video stream copied, not re-encoded) ----
+import audio  # noqa: E402
+audio.build(os.path.join(HERE, "build_mix.wav"), dict(FREEZE=FREEZE, TOUCH=TOUCH, KITCHEN_END=KITCHEN_END,
+                                                     LOGO_IN=LOGO_IN, DUR=DUR))
+tmp = OUT + ".tmp.mp4"
+os.replace(OUT, tmp)
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", tmp, "-i", os.path.join(HERE, "build_mix.wav"),
+                "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "256k", "-ar", "48000",
+                "-shortest", "-movflags", "+faststart", OUT], check=True)
+os.remove(tmp)
 print("wrote", OUT, f"touch at {TOUCH:.2f}s, kitchen text size {ksize}px")
