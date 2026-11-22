@@ -208,6 +208,7 @@ h2{{margin:0 0 12px;font-size:18px;font-weight:600}} h2 b{{color:#C42A20;margin-
         f.write(html)
     subprocess.run(["node", os.path.join(ROOT, "render.js"), "--board", hp,
                     os.path.join(out, f'EP{ep["num"]}-covers-board.png')], check=True)
+    os.remove(hp)
     print("covers:", out)
 
 

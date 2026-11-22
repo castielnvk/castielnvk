@@ -36,3 +36,8 @@ Every placement and level is a line in `audio.py`.
 For EP02, copy this folder and change the CONFIG block: `SOURCE`, `FREEZE`, `SPOON_TOUCH_SRC_FRAME`
 (the action beat), `KITCHEN_END`, and the text in `CARDS`. The layout, typography and logo end card stay the same.
 `layers/*.svg` are the editable vector text and logo layers.
+
+## Covers (Instagram / TikTok)
+Four options are in `covers/`, with each cover as an SVG plus a PNG at 1080×1920. `EP01-covers-board.png` compares them, including
+the 3:4 crop that the Instagram profile grid shows. Generate them with `python3 ../covers.py 01`. For a new episode, add an entry to
+`EPISODES` in `episodes/covers.py`.
