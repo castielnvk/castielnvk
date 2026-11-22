@@ -166,6 +166,12 @@ _(notes pending)_
   split screen, photo-slides-out ending. Music: "Lightless Dawn" by Kevin MacLeod (CC BY 4.0).
 - **No feedback yet.**
 
+### 8. Kadr Xarici — Şamaxı zəlzələsi, 1902 (22 Nov 2026)
+- Exactly 50 s, no voice-over (text is the narrator), 8 AI-colorised/animated archival clips. Archived in
+  `kadr-xarici-samaxi-1902/`. Music "Dark Walk" (Kevin MacLeod, CC BY 4.0). Correction during the edit:
+  end on the logo alone, no "kadr xaricində qaldı" text. The Ümmü line is shown over rubble without
+  people, so no stranger is implied to be her. No feedback yet.
+
 ## User preferences (across all projects)
 - Use only real footage. Never fabricate archive material, reactions, voices or historical scenes,
   and never use cloned or generated voices.

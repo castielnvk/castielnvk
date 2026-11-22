@@ -8,6 +8,7 @@ The episode folders sit at the repository root and are kept exactly as delivered
 | 1 | BUM / Tağıyev pasajı — the forgotten 1907 cinema | `../kadr-xarici-bum/` | `BUM_Kadr_Xarici_9x16.mp4` | 85.0 s | Delivered. "Sİ ilə canlandırma" label removed on request. Thumbnail added afterwards. No other feedback. |
 | 2 | Bakının yoxa çıxan tramvayları (1924–2004) | `../kadr-xarici-tramvay/` | `Tramvay_Kadr_Xarici_v2_9x16.mp4` | 101.3 s | v1 (102.5 s, quiet opening) → user asked for "more engaging" → v2 with the question hook, split screen, 117 → 0 counter, punch-ins, mid-hook and 70 px subtitles. v2 awaits feedback; v1 survives only in git history. |
 | 3 | «Fantaziya» hamamı — abandoned bathhouse | `../kadr-xarici-fantaziya/` | `Fantaziya_Kadr_Xarici_9x16.mp4` | 92.2 s | Delivered, awaits feedback. No past-scene clips were supplied; the past is evoked by grade and sound only. |
+| 4 | Şamaxı zəlzələsi, 1902 — no voice-over, text as narrator | `../kadr-xarici-samaxi-1902/` | `Samaxi_1902_Kadr_Xarici_9x16.mp4` | 50.0 s exactly | Delivered, awaits feedback. Mid-edit correction: ending = logo only, no "kadr xaricində qaldı" text. |
 
 Each episode folder contains the MP4, thumbnail, SRT, `CREDITS.md` (music, SFX, licences, timeline),
 `project/` (`render.py`, `common.py`, `mix.py`, `thumb.py`, voice-over MP3) and `stems/`.

@@ -48,6 +48,12 @@ mix was measured and checked frame by frame, and ask the user to confirm it by e
 - The voice-over is fixed: never speed it up or cut words. Subtitles follow the script spelling; flag
   spoken differences (e.g. "yeniliydi"/"yenilik idi", "biriydi"/"biri idi", "səssizdi"/"səssizdir")
   instead of silently changing either.
+- Şamaxı 1902 (22 Nov 2026): "Sonuncu səhnədə «kadr xaricində qaldı» yerində sadəcə Kadr Xaricinin
+  logosunu ver. Yazıya ehtiyac yoxdur." That film ends on the logo alone. (My reading: when the phrase is
+  not spoken by a narrator, let the logo complete the sentence; ask if unsure for a voiced episode.)
+- If the user asks for an AI disclosure ("Arxiv fotoları süni intellektlə rəngləndirilib və
+  canlandırılıb"), show it small and unobtrusive (top right, 22–24 px, ~70 % opacity); otherwise never add
+  an AI label (see above).
 - Make routine creative decisions yourself and take creative ownership, but report every
   compromise honestly in the final message.
 
@@ -104,6 +110,9 @@ None of these has been explicitly approved or rejected yet, apart from the rules
 | One warm flash and one sound layer per listed word, then a hard cut to silence | Fantaziya | Unreviewed |
 | "Mənbələrə görə" numbered list (01, 02, 03) and a quote card | Fantaziya | Unreviewed |
 | Light-leak transitions and a dip to black before the key year | BUM | Unreviewed |
+| **No-voice mode**: text cards are the narrator (Inter 60 px at y≈1478, one idea per card, words brighten at 0.17 s/word; hero numbers/dates in Playfair at the top) — exact-length film, music chosen so its natural ending lands on the final frame | Şamaxı 1902 | Unreviewed |
+| Clock tick (12:49 → 12:50) and number counter (0 → 125) as event markers with a sub impact and a light exposure flash | Şamaxı 1902 | Unreviewed |
+| "Kadr xarici" reveal: show only part of a photo early, pull back at the end to reveal the person who was outside the frame | Şamaxı 1902 | Unreviewed |
 
 New ideas are welcome. Keep the identity in §3, explain the idea in one line in the final message,
 and record it in this table with its status.
@@ -142,10 +151,11 @@ inside the centre square (profile-grid crop).
 
 ## 6. Licensed sources already used (avoid repeating a track unless it fits)
 
-- BUM: "Echoes of Time v2". Tramvay: "Colorless Aura". Fantaziya: "Lightless Dawn". All are by
+- BUM: "Echoes of Time v2". Tramvay: "Colorless Aura". Fantaziya: "Lightless Dawn". Şamaxı: "Dark Walk"
+  (0:31–1:21). All are by
   Kevin MacLeod (incompetech.com), CC BY 4.0; credit required. The direct file is
   `https://incompetech.com/music/royalty-free/mp3-royaltyfree/<Title>.mp3`.
-- Auditioned but not used: Dark Times, Deep Haze, Tempting Secrets, Comfortable Mystery, Long Note
+- Auditioned but not used: Despair and Triumph, Night Vigil, Ossuary 6 - Air, Stages of Grief, Dark Times, Deep Haze, Tempting Secrets, Comfortable Mystery, Long Note
   Four, Past the Edge, Dreamy Flashback, Heartbreaking, At Rest, Memory Lane, Lost Time, Time
   Passes, Sad Trio, Bittersweet.
 - SFX IDs used are listed in each episode's `CREDITS.md` (projector 0065, tram 3374/3538/3539/3541,
