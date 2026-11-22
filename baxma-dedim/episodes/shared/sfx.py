@@ -114,7 +114,7 @@ def distant_tone(freq=1000.0, length=0.42, tail=2.6, seed=3):
     return _norm(_lp(x, 3200))
 
 
-def dry_tick(tail=1.1, seed=9):
+def dry_tick(tail=1.1, seed=9, ring=1.0):
     """A short, dry mechanical tick with a faint metallic ring that keeps decaying
     (so the tail can outlive a hard cut to black)."""
     rng = np.random.default_rng(seed)
@@ -124,9 +124,9 @@ def dry_tick(tail=1.1, seed=9):
     k = int(0.0025 * SR)
     click[:k] = _hp(rng.standard_normal(k), 2500) * np.exp(-np.linspace(0, 6, k))
     body = 0.5 * np.sin(2 * np.pi * 190 * t) * np.exp(-t / 0.018)
-    ring = sum(a * np.sin(2 * np.pi * f * t + p) * np.exp(-t / d) for f, d, a, p in
+    ring_sig = sum(a * np.sin(2 * np.pi * f * t + p) * np.exp(-t / d) for f, d, a, p in
                [(1870, 0.55, 0.20, 0.0), (3240, 0.38, 0.12, 1.3), (4980, 0.20, 0.07, 2.1), (7330, 0.08, 0.03, 0.4)])
-    x = click * 1.0 + body + ring
+    x = click * 1.0 + body + ring_sig * ring
     st = np.stack([x, np.roll(x, 6)], 1)
     return _norm(st)
 

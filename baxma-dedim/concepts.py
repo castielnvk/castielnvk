@@ -14,6 +14,7 @@ NAME1, NAME2 = "BAXMA", "DEDİM."
 
 ANTON = Font("anton-latin-400-normal.woff2", "anton-latin-ext-400-normal.woff2", name="Anton")
 ISERIF_I = Font("instrument-serif-latin-400-italic.woff2", "instrument-serif-latin-ext-400-italic.woff2",
+                "playfair-display-latin-ext-400-italic.woff2",   # fallback: Instrument Serif has no ə/Ə
                 name="Instrument Serif Italic")
 OSWALD = Font("oswald-latin-600-normal.woff2", "oswald-latin-ext-600-normal.woff2", name="Oswald SemiBold")
 ITIGHT = Font("inter-tight-latin-700-normal.woff2", "inter-tight-latin-ext-700-normal.woff2", name="Inter Tight Bold")

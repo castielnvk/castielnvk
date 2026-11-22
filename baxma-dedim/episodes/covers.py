@@ -60,6 +60,17 @@ EPISODES = [
         title=("BƏLKƏ HƏLƏ", "EŞİDİR"),
         hook="ömrünün son saatlarında.",
     ),
+    dict(
+        num="03", folder="ep03-yuxu-iflici", styles=["A"],
+        source="source/bedroom_door_gemini.mp4", crop=(4, 14, 704, 1252),
+        grade=("eq=contrast=1.05:brightness=-0.02:saturation=0.95,"
+               "curves=all='0/0 0.12/0.08 0.5/0.47 1/1',vignette=angle=PI/4.8"),
+        stills=dict(stare=7.0),                   # curtain settled after its one shift
+        face=(820, 760),                          # close-up subject: the dark doorway
+        name="Yuxu iflici",
+        title=("YUXU", "İFLİCİ"),
+        hook="elə bil otaqda kimsə var.",
+    ),
 ]
 
 
@@ -121,9 +132,9 @@ def series_tag(num, y, x=W / 2, anchor="center", color="#B7AFA2"):
 def opt_stare(ep):
     href = still(ep, ep["stills"]["stare"], zoom=1.55, center=(ep["face"][0], ep["face"][1] + 120))
     t1, t2 = ep["title"]
-    size = min(fit(ANTON, t1, 860), fit(ANTON, t2, 860))
+    size = min(fit(ANTON, t1, 860), fit(ANTON, t2, 860), 300)   # cap: short words must not swallow the subject
     cap = cap_height(ANTON, size)
-    y2 = 1540
+    y2 = 1500
     y1 = y2 - cap - 0.24 * cap           # room for the İ dots of line 2
     p1, b1 = text(ANTON, t1, size, W / 2, y1, BONE, anchor="center")
     p2, b2 = text(ANTON, t2, size, W / 2, y2, BONE, anchor="center")

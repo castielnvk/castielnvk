@@ -220,3 +220,25 @@ class LogoEnding:
         if t >= E["DEDIM_AT"]:
             f = over(f, *self.ded, 1.0)
         return f
+
+
+class LogoFlickerEnding:
+    """Logo on black: appears at `on`, flickers off once for `off_frames` at `flick`, holds,
+    then fades slowly between `fade_at` and `fade_end` (times relative to the ending start)."""
+
+    def __init__(self, layers_dir, on=0.10, flick=0.55, off_frames=2, fade_at=1.65, fade_end=2.40):
+        self.on, self.flick, self.off, self.fa, self.fe = on, flick, off_frames / 24, fade_at, fade_end
+        c = c01("end")
+        inner, bbox = c["wordmark"]
+        svg = os.path.join(layers_dir, "logo-full.svg")
+        with open(svg, "w", encoding="utf-8") as f:
+            f.write(svg_doc(W, H, place(inner, bbox, W / 2, ENDING["LOGO_CY"], width=ENDING["LOGO_WIDTH"]),
+                            "logo-full"))
+        render_svgs([[svg, svg[:-4] + ".png", W, H, 1]], os.path.join(layers_dir, "ending-jobs.json"))
+        self.logo = load_rgba(svg[:-4] + ".png")
+
+    def frame(self, t):
+        f = ink_frame()
+        if t < self.on or self.flick <= t < self.flick + self.off:
+            return f
+        return over(f, *self.logo, 1.0 - smooth((t - self.fa) / (self.fe - self.fa)))
