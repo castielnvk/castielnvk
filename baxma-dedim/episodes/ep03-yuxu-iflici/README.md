@@ -1,19 +1,19 @@
 # BAXMA DEDİM. — EP03 «Yuxu iflici»
 
-`Baxma_Dedim_EP03.mp4`: 1080×1920, H.264 + AAC 48 kHz stereo, 24 fps, 19.0 s, −19.7 LUFS, peak −1.4 dBFS.
+`Baxma_Dedim_EP03.mp4`: 1080×1920, H.264 + AAC 48 kHz stereo, 24 fps, 21.0 s, −19.1 LUFS, peak −1.7 dBFS.
 The source clip's audio is muted. There is no voice-over, music or jump scare, and no "Canlandırma" label.
 
 | Time | Picture | Text (each line on its own beat) | Sound |
 |------|---------|----------------------------------|-------|
-| 0.00–2.40 | Still hold on source frame 18 (before the curtain moves) | "Gözlərini açırsan." already on screen at frame one | Night room tone and distant traffic behind glass (Mixkit 2708, low-passed) |
-| 2.50–4.90 | Still | "Tərpənmək istəyirsən." then 3.40 "Alınmır." | A low rumble creeps in, barely audible |
-| 5.00–6.88 | Still | "Qışqırmaq istəyirsən." then 5.85 "Səsin çıxmır." | **Everything cuts at 5.85**, followed by silence |
-| 7.00–10.40 | Real-time playback from frame 18: **the curtain shifts once at 7.0**, then a slow push toward the doorway | "Elə bil otaqda kimsə var." | One soft fabric rustle at 7.2, panned right (doorway side), then silence |
-| 10.50–13.50 | Doorway hold | "Buna yuxu iflici deyilir." | A trace of the room tone returns |
-| 13.50–15.00 | Hard cut to black | — | Deep impact on the cut, decaying |
-| 15.00–19.00 | Standard ending «Bir anlıq görünüş» (as in EP02): a 3-frame logo flash, black, the logo returns at 15.9, holds, fades out by 18.8 | — | A reverse swell, a flash hit, **total silence**, a return hit and a drone tail fading out |
+| 0.00–3.35 | Still hold on source frame 18 | "Oyanmısan," (frame one), then 0.90 "amma tərpənə bilmirsən." | Night room tone, distant traffic and a growing horror drone; low rumble from 1.0 |
+| 3.50 | Still | "Səsin çıxmır." | **Everything cuts**, followed by silence |
+| 5.00–7.70 | Real-time from frame 18: **the curtain shifts once at 5.0**, then a slow push toward the doorway | "Elə bil otaqda kimsə var." | One rustle from the doorway side at 5.2; the drone creeps back from 6.1; heartbeat from 6.7 |
+| 7.80–10.10 | Doorway | "Buna yuxu iflici deyilir." | A trace of the room tone returns |
+| 10.20–14.00 | Doorway (the last source frame holds briefly) | "Yuxu iflicində beyin ayılır," then 11.0 "amma əzələlər bir müddət / hərəkətsiz qalır." | Riser into the cut |
+| 14.00–17.00 | Hard cut to black | "Bu hal bir neçə dəqiqəyə / qədər çəkə bilər." (centred) | Deep impact, low pressure, reverse swell |
+| 17.00–21.00 | Standard ending «Bir anlıq görünüş» | — | Flash hit, total silence, return hit, drone fade |
 
-**v2 (user's request):** the sound and ending are the same as EP02. A horror drone grows under the room tone and traffic,
+**v3:** the on-screen text is the user's final copy (5 statements). **v2 (user's request):** the sound and ending are the same as EP02. A horror drone grows under the room tone and traffic,
 then everything dies at "Səsin çıxmır." After the rustle the drone creeps back, a heartbeat starts at 8.3 s, and a riser builds into
 the cut. The brief's own "flicker once + click" ending was replaced by the standard EP02 ending, on the user's instruction.
 

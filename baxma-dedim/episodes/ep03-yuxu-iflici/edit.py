@@ -30,11 +30,11 @@ GRADE = ("eq=contrast=1.05:brightness=-0.02:saturation=0.95,"
          "curves=all='0/0 0.12/0.08 0.5/0.47 1/1',vignette=angle=PI/4.8")
 
 HOLD_FRAME = 18           # still frame before the curtain moves (motion starts ~frame 20)
-SHIFT_AT = 7.0            # the curtain's visible shift (source frame ~26) lands here
+SHIFT_AT = 5.0            # the curtain's visible shift (source frame ~26) lands here
 PLAY_FROM = SHIFT_AT - (26 - HOLD_FRAME) / 24          # 6.67 s: real-time playback from frame 18
-SHOT_END = 13.5
-END_IN = 15.0             # black after the cut: deep impact, then the standard ending
-DUR = END_IN + C.FLASH["LENGTH"]   # 19.0 s
+SHOT_END = 14.0          # (source runs out at 14.4 s; the last frame would simply hold)
+END_IN = 17.0             # black card with the last fact, then the standard ending
+DUR = END_IN + C.FLASH["LENGTH"]   # 21.0 s
 
 ZOOM = (1.0, 1.08)        # after the shift: slow push toward the doorway (anchored on it)
 DOOR = (945, 840)
@@ -43,17 +43,22 @@ TOP_SHADE = 0.50          # darken the top band behind the captions (1 = no chan
 TX, TBASE, TMAXW, TMAX = 84, 300, 900, 66
 # card: lines appear at their own beats; the whole card leaves at t_out
 CARDS = [
-    dict(id="c1", t_out=2.40, lines=[("Gözlərini açırsan.", 0.0)], instant=True),
-    dict(id="c2", t_out=4.90, lines=[("Tərpənmək istəyirsən.", 2.50), ("Alınmır.", 3.40)]),
-    dict(id="c3", t_out=6.88, lines=[("Qışqırmaq istəyirsən.", 5.00), ("Səsin çıxmır.", 5.85)]),
-    dict(id="c4", t_out=10.40, lines=[("Elə bil otaqda kimsə var.", SHIFT_AT)]),
-    dict(id="c5", t_out=SHOT_END, cut_out=True, lines=[("Buna yuxu iflici deyilir.", 10.50)]),
+    dict(id="c1", t_out=3.35, instant=True,
+         lines=[("Oyanmısan,", 0.0), ("amma tərpənə bilmirsən.", 0.90)]),
+    dict(id="c2", t_out=7.70, lines=[("Səsin çıxmır.", 3.50), ("Elə bil otaqda kimsə var.", SHIFT_AT)]),
+    dict(id="c3", t_out=10.10, lines=[("Buna yuxu iflici deyilir.", 7.80)]),
+    dict(id="c4", t_out=SHOT_END, cut_out=True,
+         lines=[("Yuxu iflicində beyin ayılır,", 10.20), ("amma əzələlər bir müddət", 11.00),
+                ("hərəkətsiz qalır.", 11.00)]),
 ]
-SILENCE_AT = CARDS[2]["lines"][1][1]       # room tone + rumble cut as "Səsin çıxmır." appears
+# last fact on the black card after the cut (centred, like EP02)
+FINAL = dict(t_in=SHOT_END + 0.20, t_out=END_IN - 0.08, size=70, cy=930,
+             lines=["Bu hal bir neçə dəqiqəyə", "qədər çəkə bilər."])
+SILENCE_AT = CARDS[1]["lines"][0][1]       # room tone + rumble cut as "Səsin çıxmır." appears
 RUSTLE_AT = SHIFT_AT + 0.20                # one soft rustle from the doorway side (right)
-ROOM_BACK = 10.50                          # a trace of the room tone returns
+ROOM_BACK = 7.80                           # a trace of the room tone returns
 CREEP_AT = SHIFT_AT + 1.10                 # drone creeps back after the rustle
-HEART_AT = 8.30                            # slow heartbeat while we stare at the doorway
+HEART_AT = 6.70                            # slow heartbeat while we stare at the doorway
 
 SND = dict(room_db=-18, traffic_db=-16, rumble_db=-16, rustle_db=-4, room_back_db=-28)
 # logo ending (relative to END_IN): on at 0.10, one 2-frame flicker at 0.55 with the click,
@@ -83,7 +88,15 @@ for c in CARDS:
             f.write(C.text_layer_svg(name, [[(ln, C.F_SEMI)]], size, TX, TBASE + i * lead, lead))
         jobs.append([svg, svg[:-4] + ".png", W, H, 1])
         LINES.append(dict(png=svg[:-4] + ".png", t_in=t_in, card=c))
+fl = round(FINAL["size"] * 1.28)
+fsvg = os.path.join(LAYERS, "final.svg")
+with open(fsvg, "w", encoding="utf-8") as f:
+    f.write(C.text_layer_svg("final", [[(ln, C.F_SEMI)] for ln in FINAL["lines"]], FINAL["size"], 0,
+                             FINAL["cy"] - (len(FINAL["lines"]) - 1) * fl / 2 + FINAL["size"] * 0.36, fl,
+                             align="center", shadow=False))
+jobs.append([fsvg, fsvg[:-4] + ".png", W, H, 1])
 C.render_svgs(jobs, os.path.join(LAYERS, "jobs.json"))
+FINAL_L = C.load_rgba(fsvg[:-4] + ".png")
 for L in LINES:
     L["rgb"], L["a"] = C.load_rgba(L["png"])
 ending = C.LogoFlashEnding(LAYERS)
@@ -127,6 +140,9 @@ for n in range(round(DUR * FPS)):
             frame = C.over(frame, L["rgb"], L["a"], o, dy)
     elif t < END_IN:
         frame = C.ink_frame()
+        if FINAL["t_in"] <= t < FINAL["t_out"]:
+            o = C.ease_out((t - FINAL["t_in"]) / 0.35) * (1 - C.smooth((t - (FINAL["t_out"] - 0.12)) / 0.12))
+            frame = C.over(frame, *FINAL_L, o)
     else:
         frame = ending.frame(t - END_IN)
     enc.stdin.write((np.clip(frame, 0, 1) * 255 + 0.5).astype(np.uint8).tobytes())
@@ -210,11 +226,13 @@ riser = chop(placed(rs * db(env([(0, -30), (1.75, 0), (1.8, 0)], n=len(rs))), SH
 im = sfx.load_file(os.path.join(LIB, "deep_impact_mixkit1687.mp3"))
 impact = placed(im * db(env([(0, 0), (1.0, -3), (END_IN - SHOT_END - 0.45, -30), (END_IN - SHOT_END - 0.05, -90),
                              (9, -90)], n=len(im))), SHOT_END, -4)
+pressure = placed(sfx.sub_pressure(2.6) * db(env([(0, -40), (0.8, 0), (1.9, 0), (2.6, -60)], n=int(2.6 * SR))),
+                  SHOT_END + 0.4, -22)
 import ending_sfx  # noqa: E402
 end_stems = ending_sfx.build(END_IN, DUR)
 
 stems = dict(night_roomtone=room, distant_traffic=traffic, low_rumble=rumble, doorway_rustle=rustle,
-             roomtone_trace=room_back, horror_drone=drone, heartbeat=heart, riser=riser, cut_impact=impact,
+             roomtone_trace=room_back, horror_drone=drone, heartbeat=heart, riser=riser, cut_impact=impact, black_pressure=pressure,
              **end_stems)
 for name, x in stems.items():
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "2", "-i", "-",
