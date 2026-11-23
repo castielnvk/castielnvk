@@ -146,7 +146,8 @@ _(notes pending)_
   deleted (ai1); the earlier «İlk dəfə» Zülfiyyə video was built from it (asked whether to redo; no answer
   yet). "How to make it better?" → user said "do everything": letterbox→full frame, “ARAZ”DA moves behind
   her as masthead, halation + warm film look, shot variety incl. hand detail, centred end card, shimmer SFX.
-  Open question: «anlar» vs «anılar» spelling.
+  Then the user sent a replacement clip (calm, seated, hand at chin, slow push-in) → swapped in as ai3,
+  same design; approved with «Ok». Open question: «anlar» vs «anılar» spelling.
 - Speed: person masks cost ~3.5 s/frame on this 4-core CPU (≈19 min/episode). User will send Mac and
   Windows specs to pick a GPU machine (Remote Control); also asked about connecting the Grok
   (xAI grok-imagine-video) API — needs an api.x.ai key via request_credential, user hasn't decided.
