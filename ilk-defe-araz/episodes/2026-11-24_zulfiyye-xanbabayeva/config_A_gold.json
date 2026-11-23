@@ -1,0 +1,232 @@
+{
+  "title": "Zülfiyyə Xanbabayeva — Bir nəfəs qədər, ilk dəfə Araz FM-də",
+  "fps": 24,
+  "duration": 18.9,
+  "audio": "source/bir_nefes_qeder_audio.wav",
+  "audio_fade_out": 0.6,
+  "output": "Zulfiyye_Xanbabayeva_Ilk_Defe_Araz_9x16.mp4",
+  "clips": {
+    "ai1": "source/ai1.mp4"
+  },
+  "anchors": {
+    "words": 3.88,
+    "words2": 5.57,
+    "words3": 7.27,
+    "settle": 8.94
+  },
+  "shots": [
+    {
+      "start": 0.0,
+      "clip": "ai1",
+      "src": 0.0,
+      "speed": 0.8,
+      "z": [
+        1.0,
+        1.05
+      ],
+      "cx": 0.5,
+      "cy": 0.42,
+      "depth": true
+    },
+    {
+      "start": 3.88,
+      "clip": "ai1",
+      "src": 3.1,
+      "speed": 0.8,
+      "z": [
+        1.06,
+        1.12
+      ],
+      "cx": 0.5,
+      "cy": 0.36,
+      "depth": false
+    },
+    {
+      "start": 8.94,
+      "clip": "ai1",
+      "src": 7.15,
+      "speed": 0.8,
+      "z": [
+        1.0,
+        1.04
+      ],
+      "cx": 0.5,
+      "cy": 0.4,
+      "depth": true
+    },
+    {
+      "start": 12.33,
+      "clip": "ai1",
+      "src": 9.87,
+      "speed": 0.8,
+      "z": [
+        1.14,
+        1.2
+      ],
+      "cx": 0.5,
+      "cy": 0.32,
+      "depth": true,
+      "trans": {
+        "type": "push",
+        "dur": 0.45
+      }
+    },
+    {
+      "start": 14.02,
+      "clip": "ai1",
+      "src": 11.22,
+      "speed": 0.775,
+      "z": [
+        1.0,
+        1.04
+      ],
+      "cx": 0.5,
+      "cy": 0.38,
+      "depth": true
+    }
+  ],
+  "rows": [],
+  "opening": {
+    "type": "lux",
+    "dur": 1.4
+  },
+  "wipes": [
+    {
+      "at": 8.94,
+      "dur": 0.6,
+      "type": "glow"
+    },
+    {
+      "at": 14.02,
+      "dur": 0.6,
+      "type": "glow"
+    }
+  ],
+  "glints": [],
+  "shine": [
+    10.63,
+    14.4,
+    17.39
+  ],
+  "panel": {
+    "in": 8.94,
+    "edge": 143
+  },
+  "lockup": {
+    "date": "24 NOYABR",
+    "time": "11:00 – 12:00",
+    "l1": "İLK DƏFƏ",
+    "l2": "“ARAZ”DA",
+    "l3": "DİNLƏ",
+    "x": 96,
+    "centerY": 1250,
+    "style": {
+      "date": {
+        "y": 1080,
+        "size": 58
+      },
+      "time": {
+        "y": 1150,
+        "size": 50
+      },
+      "l1": {
+        "y": 1300,
+        "size": 112
+      },
+      "l2": {
+        "y": 1432,
+        "size": 128
+      },
+      "l3": {
+        "y": 1556,
+        "size": 112
+      }
+    }
+  },
+  "logoPos": {
+    "y": 1722,
+    "w": 176
+  },
+  "lockupStyle": "lux",
+  "beats": [
+    11.47,
+    13.17,
+    14.86,
+    16.56
+  ],
+  "grade": {
+    "amount": 0.0
+  },
+  "sfx_db": -22,
+  "sfx": [
+    {
+      "type": "riser",
+      "at": 8.9,
+      "dur": 1.6,
+      "gain": 0.35
+    },
+    {
+      "type": "whoosh",
+      "at": 8.94,
+      "dur": 1.0,
+      "gain": 0.5
+    },
+    {
+      "type": "whoosh",
+      "at": 12.36,
+      "dur": 0.6,
+      "gain": 0.3
+    },
+    {
+      "type": "riser",
+      "at": 14.0,
+      "dur": 1.6,
+      "gain": 0.35
+    },
+    {
+      "type": "whoosh",
+      "at": 14.02,
+      "dur": 1.0,
+      "gain": 0.5
+    }
+  ],
+  "scrim": 0.6,
+  "displayFont": "P",
+  "goldText": [
+    "“ARAZ”DA"
+  ],
+  "palette": {
+    "main": "#9C7740",
+    "light": "#C9A15C",
+    "deep": "#5E4524",
+    "dark": "#1B140B",
+    "bright": "#E8C886"
+  },
+  "mast": [
+    {
+      "text": "“ARAZ”DA",
+      "y": 560,
+      "size": 300,
+      "maxW": 1000,
+      "in": 0.6,
+      "out": 3.8
+    },
+    {
+      "text": "“ARAZ”DA",
+      "y": 470,
+      "size": 300,
+      "maxW": 1000,
+      "in": 9.2,
+      "out": 12.33,
+      "style": "outline",
+      "lw": 2.5
+    },
+    {
+      "text": "DİNLƏ",
+      "y": 470,
+      "size": 330,
+      "maxW": 1000,
+      "in": 14.3
+    }
+  ]
+}

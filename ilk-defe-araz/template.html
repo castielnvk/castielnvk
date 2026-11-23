@@ -5,6 +5,10 @@
 @font-face{font-family:M;font-weight:600;src:url(fonts/montserrat-latin-ext-600-normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:M;font-weight:800;src:url(fonts/montserrat-latin-800-normal.woff2)}
 @font-face{font-family:M;font-weight:800;src:url(fonts/montserrat-latin-ext-800-normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:P;font-weight:900;src:url(fonts/playfair-display-latin-900-normal.woff2)}
+@font-face{font-family:P;font-weight:900;src:url(fonts/playfair-display-latin-ext-900-normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:P;font-weight:700;src:url(fonts/playfair-display-latin-700-normal.woff2)}
+@font-face{font-family:P;font-weight:700;src:url(fonts/playfair-display-latin-ext-700-normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:M;font-weight:900;src:url(fonts/montserrat-latin-900-normal.woff2)}
 @font-face{font-family:M;font-weight:900;src:url(fonts/montserrat-latin-ext-900-normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 html,body{margin:0;background:#000}
@@ -94,7 +98,7 @@ function blurred(t, fn, n = 6, span = 1 / 48) {
 function leftOf(p) { ctx.beginPath(); ctx.moveTo(p + K * (-980), -20); ctx.lineTo(p + K * (H + 20 - 960), H + 20); ctx.lineTo(-4000, H + 20); ctx.lineTo(-4000, -20); ctx.closePath(); }
 function band(pA, pB) { ctx.beginPath(); ctx.moveTo(pB + K * (-980), -20); ctx.lineTo(pA + K * (-980), -20); ctx.lineTo(pA + K * (H + 20 - 960), H + 20); ctx.lineTo(pB + K * (H + 20 - 960), H + 20); ctx.closePath(); }
 function orangeFill() { const g = ctx.createLinearGradient(0, 600, 300, H); g.addColorStop(0, OR.light); g.addColorStop(1, OR.main); return g; }
-const F = (w, s) => `${w} ${s}px M`;
+const F = (w, s) => `${w} ${s}px ${w === 900 && CFG && CFG.displayFont ? CFG.displayFont : 'M'}`;
 function textW(str, f, tr = 0) { ctx.save(); ctx.font = f; ctx.letterSpacing = tr + 'px'; const w = ctx.measureText(str).width; ctx.restore(); return w; }
 function fit(str, w, s, maxW) { while (s > 20 && textW(str, F(w, s)) > maxW) s -= 2; return s; }
 
@@ -135,7 +139,19 @@ function row(t, r) {
   }
   ctx.restore();
 }
-function behind(t) { for (const r of (CFG.rows || [])) if (t >= r.in - .05 && (r.out === undefined || t <= r.out + .05)) row(t, r); }
+function mast(t) {                     // magazine-cover masthead behind the person (gold, static, slow push)
+  for (const m of (CFG.mast || [])) {
+    const a = Math.min(clamp((t - m.in) / .9), m.out !== undefined ? clamp((m.out - t) / .5) : 1); if (a <= 0) continue;
+    const size = fit(m.text, 900, m.size, m.maxW || 1000), sc = lerp(1.06, 1, expoOut(prog(t, m.in, 2.5))) + (m.push || 0) * (t - m.in);
+    ctx.save(); ctx.globalAlpha = a; ctx.translate(W / 2, m.y); ctx.scale(sc, sc);
+    ctx.font = F(900, size); ctx.letterSpacing = (m.tr || 0) + 'px'; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+    const g = ctx.createLinearGradient(0, -size * .8, 0, size * .1); g.addColorStop(0, '#FFF1CF'); g.addColorStop(.45, '#E8C886'); g.addColorStop(.75, '#B98E4E'); g.addColorStop(1, '#E9CF96');
+    ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 30;
+    if (m.style === 'outline') { ctx.lineWidth = m.lw || 2; ctx.strokeStyle = g; ctx.strokeText(m.text, 0, 0); } else { ctx.fillStyle = g; ctx.fillText(m.text, 0, 0); }
+    ctx.restore();
+  }
+}
+function behind(t) { mast(t); for (const r of (CFG.rows || [])) if (t >= r.in - .05 && (r.out === undefined || t <= r.out + .05)) row(t, r); }
 
 /* ---------------- member split-screen (3 diagonal slices) ---------------- */
 async function split(t) {
@@ -207,6 +223,22 @@ function decor(t, style, P) {
     if (a2 > 0) { rrect(X - 20, st.time.y - st.time.size * .93, (wt + 40) * a2, st.time.size * 1.3, 40); ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 2.5; ctx.stroke(); }
     const ul = expoOut(prog(t, P.in + .5, .8)), w2 = textW(L.l2, F(900, st.l2.size));
     ctx.fillStyle = OR.bright; ctx.fillRect(X, st.l2.y + 18, w2 * ul, 10);
+  } else if (style === 'lux') {
+    // luxury: hairline gold frame + corner brackets + gold accent bar, soft lower vignette
+    const ins = 34, fe = expoOut(prog(t, P.in, 1.4)), bp = pulse(t);
+    const per = 2 * (W - 2 * ins) + 2 * (H - 2 * ins);
+    ctx.save(); ctx.strokeStyle = `rgba(232,200,134,${.75 + .25 * bp})`; ctx.lineWidth = 1.5;
+    ctx.setLineDash([per * fe, per]); ctx.strokeRect(ins, ins, W - 2 * ins, H - 2 * ins); ctx.restore();
+    const cb = 70 * expoOut(prog(t, P.in + .5, .9)), o = ins - 12;
+    ctx.save(); ctx.strokeStyle = '#E8C886'; ctx.lineWidth = 4;
+    for (const [x, y, sx, sy] of [[o, o, 1, 1], [W - o, o, -1, 1], [o, H - o, 1, -1], [W - o, H - o, -1, -1]]) {
+      ctx.beginPath(); ctx.moveTo(x, y + sy * cb); ctx.lineTo(x, y); ctx.lineTo(x + sx * cb, y); ctx.stroke(); }
+    ctx.restore();
+    const g = ctx.createLinearGradient(0, st.date.y - 160, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(.3, 'rgba(0,0,0,0.5)'); g.addColorStop(1, 'rgba(0,0,0,0.7)');
+    ctx.fillStyle = g; ctx.fillRect(0, st.date.y - 160, W, H);
+    const bh = (st.l3.y - st.date.y + 70) * expoOut(prog(t, P.in + .2, .9));
+    const gg = ctx.createLinearGradient(0, st.date.y - 52, 0, st.date.y - 52 + bh); gg.addColorStop(0, '#FFF1CF'); gg.addColorStop(1, '#B98E4E');
+    ctx.fillStyle = gg; ctx.fillRect(X - 30, st.date.y - 52, 3 + 2 * bp, bh);
   } else if (style === 'frame') {
     // cinematic inset frame in brand teal + vertical accent bar beside the text
     const ins = 26, fe = expoOut(prog(t, P.in, 1.1)), bp = pulse(t);
@@ -222,6 +254,17 @@ function decor(t, style, P) {
 function wipes(t) {
   for (const w of (CFG.wipes || [])) {
     const d = w.dur ?? .42, c = w.at;
+    if (w.type === 'glow') {            // luxury: a soft golden light-leak sweeps across, the cut hides in its peak
+      const p = (t - (c - d)) / (2 * d); if (p < 0 || p > 1) continue;
+      const a = Math.sin(Math.PI * p), x = lerp(-900, 1980, cubicIO(p));
+      ctx.save(); ctx.globalCompositeOperation = 'screen';
+      for (const [wd, al] of [[1400, .55], [600, .6], [160, .7]]) {
+        band(x + wd / 2, x - wd / 2);
+        const g = ctx.createLinearGradient(x - wd / 2, 0, x + wd / 2, 0);
+        g.addColorStop(0, 'rgba(232,200,134,0)'); g.addColorStop(.5, `rgba(255,232,190,${al * a})`); g.addColorStop(1, 'rgba(232,200,134,0)');
+        ctx.fillStyle = g; ctx.fill(); }
+      ctx.restore(); continue;
+    }
     if (t < c - d - .12 || t > c + d + .12) continue;
     for (const [off, col] of [[-.08, OR.dark], [-.04, OR.deep], [0, 'main']]) {
       blurred(t, tt => {
@@ -237,6 +280,14 @@ function wipes(t) {
 }
 function opening(t) {
   const o = CFG.opening; if (!o || t > o.dur + .3) return;
+  if (o.type === 'lux') {               // black → picture, while a gold hairline opens from the centre
+    const p = prog(t, 0, o.dur);
+    ctx.fillStyle = `rgba(0,0,0,${1 - cubicIO(p)})`; ctx.fillRect(0, 0, W, H);
+    const lw = W * .8 * expoOut(prog(t, 0, o.dur * .7)), la = 1 - prog(t, o.dur * .6, o.dur * .4);
+    const g = ctx.createLinearGradient(W / 2 - lw / 2, 0, W / 2 + lw / 2, 0);
+    g.addColorStop(0, 'rgba(232,200,134,0)'); g.addColorStop(.5, `rgba(255,236,200,${la})`); g.addColorStop(1, 'rgba(232,200,134,0)');
+    ctx.fillStyle = g; ctx.fillRect(W / 2 - lw / 2, H / 2 - 1, lw, 2); return;
+  }
   for (const [off, col] of [[0.10, 'main'], [0.05, OR.deep], [0, OR.dark]]) {
     blurred(t, tt => {
       const e = lerp(-700, 1760, quintIO((tt - off - (o.start || 0)) / o.dur)); if (e >= 1760) return;
@@ -261,7 +312,12 @@ function drawText(str, x, y, size, o = {}) {
   ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = o.shadow ?? 18; ctx.shadowOffsetY = 4;
   ctx.globalAlpha = o.a ?? 1;
   if (o.outline) { ctx.lineWidth = o.outline; ctx.strokeStyle = o.color || '#fff'; ctx.strokeText(str, x, y); }
-  else { ctx.fillStyle = o.color || '#fff'; ctx.fillText(str, x, y); }
+  else {
+    let col = o.color || '#fff';
+    if (CFG.goldText && CFG.goldText.includes(str) && !o.color) col = 'gold';
+    if (col === 'gold') { const g = ctx.createLinearGradient(0, y - size * .8, 0, y + size * .1); g.addColorStop(0, '#FFF1CF'); g.addColorStop(.45, '#E8C886'); g.addColorStop(.75, '#B98E4E'); g.addColorStop(1, '#E9CF96'); col = g; }
+    ctx.fillStyle = col; ctx.fillText(str, x, y);
+  }
   ctx.restore();
 }
 function letters(str, x, y, size, t, t0, o = {}) {           // letters rise one by one from a mask
@@ -448,6 +504,8 @@ async function renderAt(t) {
 }
 window.init = async function (cfg) {
   CFG = cfg; A = cfg.anchors; LOGO = await loadImg(cfg.logo);
+  if (cfg.palette) Object.assign(OR, cfg.palette);
+  for (const w of [700, 900]) await document.fonts.load(`${w} 40px P`, 'İƏəŞĞÖÜÇ“”–');
   for (const w of [600, 800, 900]) await document.fonts.load(`${w} 40px M`, 'İƏəŞĞÖÜÇ“”–0123456789');
   await document.fonts.ready; makeGrain(); return true;
 };
