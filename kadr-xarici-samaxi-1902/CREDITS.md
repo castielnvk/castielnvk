@@ -7,7 +7,7 @@ On screen at 39.0–47.5 s: "Arxiv fotoları süni intellektlə rəngləndirilib
 
 ## Music
 - **v2 (current): the user's own supplied track** — a TikTok video credited on screen to `@the_phonkface`
-  (phonk-style, dark and intense), used from 0:04.7 to 0:54.7 so its own decay lands on the logo. The
+  (phonk-style, dark and intense), used from its very start (0:00–0:50, as the user asked), faded out under the logo. The
   whole mix is loudness-normalised to −14.1 LUFS / −1.5 dBTP.
   - **Licence not verified.** The title, composer and licence are unknown. On Instagram, TikTok or YouTube
     the audio may be muted or claimed. Using the platform's own music library for this sound is the safest

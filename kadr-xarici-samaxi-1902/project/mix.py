@@ -31,7 +31,7 @@ mus = np.pad(mus, ((0, N - len(mus)), (0, 0)))
 mus = mus / rms(mus)
 INTENSE = os.environ.get('INTENSE') == '1'
 if os.environ.get('USERTRACK') == '1':   # the user's own track: keep its dynamics, constant level
-    pts = [(0, -40), (.03, -15), (49.6, -15), (DUR, -30)]
+    pts = [(0, -15), (48.2, -15), (49.95, -45), (DUR, -60)]   # song from its very start; fades under the logo
 elif INTENSE:   # very intense and dark throughout; only the logo lets it go
     pts = [(0, -40), (.08, -17), (20, -17), (20.6, -18.5), (27, -18.5), (33, -18.5), (39, -17), (47.9, -17), (48.3, -19.5), (DUR, -45)]
 else:
