@@ -367,7 +367,7 @@ function shine(t, str, x, y, size) {
     const g = L.getContext('2d'); g.font = f; g.fillStyle = '#fff'; g.fillText(str, 10, size * 1.05);
     g.globalCompositeOperation = 'source-in';
     const c = lerp(-200, tw + 200, cubicIO(sp)), gr = g.createLinearGradient(c - 90, 0, c + 90, 0);
-    gr.addColorStop(0, 'rgba(120,220,232,0)'); gr.addColorStop(.5, 'rgba(110,215,228,0.95)'); gr.addColorStop(1, 'rgba(120,220,232,0)');
+    const sc = CFG.shineRGB || '110,215,228'; gr.addColorStop(0, `rgba(${sc},0)`); gr.addColorStop(.5, `rgba(${sc},0.95)`); gr.addColorStop(1, `rgba(${sc},0)`);
     g.fillStyle = gr; g.fillRect(0, 0, L.width, L.height);
     ctx.drawImage(L, x - 10, y - size * 1.05);
   }

@@ -49,6 +49,14 @@ Hər posterdən 3 video (10 s, 9:16), hər biri fərqli promptla; poster yazıs�
 2. **Yan qövs + işıq:** `Slow cinematic camera arc from left to right around the subject, smooth parallax between subject and background, no cuts. The person keeps the exact same face, outfit and pose, only small natural movements: a slight turn of the head toward the camera, a confident look into the lens, fabric and hair moving gently. A warm light sweep slowly passes across the background. High-end fashion editorial feel. Vertical 9:16, 10 seconds.`
 3. **Qrup (2–3 nəfər):** `All people are already in the frame from the first second and stay in their positions the whole time. No one enters, leaves, appears or disappears; faces never blend or change. Slow steady push-in, subtle natural movements only: breathing, blinking, small head turns, a soft smile. Consistent studio lighting, sharp faces, premium album-cover look. Vertical 9:16, 10 seconds.`
 
+## Lüks rejim (xüsusi qonaqlar üçün, məs. Xalq artistləri)
+
+Config-də açılır, standart epizodlara təsir etmir:
+`lockupStyle: "lux"` (incə qızılı çərçivə + künc bucaqları), `displayFont: "P"` (Playfair Display 900),
+`goldText: ["“ARAZ”DA"]`, `palette` (qızılı çalarlar), `mast` (jurnal üz qabığı kimi nəhəng qızılı söz
+insanın arxasında), `wipes[].type: "glow"` (qızılı işıq keçidi), `opening.type: "lux"` (qaranlıqdan açılış +
+qızılı xətt), `shineRGB: "255,240,210"`. Səs effektləri yumşaq (`sfx_db: -22`, zərbəsiz).
+
 ## Sürət qeydləri
 
 - Fayllar gələn kimi maskaları arxa planda başlat: `SEG_RES=512x384 python3 -I segment.py …` (~2 s/kadr, 768x576-da ~3.5 s).
@@ -91,3 +99,4 @@ Tələblər: `pip install playwright librosa`; Chromium `/opt/pw-browsers/chromi
 | `episodes/2026-11-18_yapon-sen-bakisan` | Yapon — «Sən Bakısan» | 18 Noyabr | `Yapon_Sen_Bakisan_Ilk_Defe_Araz_9x16.mp4` (17 s, v5; qırmızı fon, ağ kostyum → `scrim: 0.82`, qızılgül anı) |
 | `episodes/2026-11-19_sivva-serab` | Sivva — «Sərab» | 19 Noyabr | `Sivva_Serab_Ilk_Defe_Araz_9x16.mp4` (18 s, v5; teal neon fon → ağ arxa zolaqlar, qreyd 0.1) |
 | `episodes/2026-11-23_ayten-meherremova` | Aytən Məhərrəmova — «Gecikmiş məhəbbət» | 23 Noyabr | `Ayten_Meherremova_Gecikmis_Mehebbet_Ilk_Defe_Araz_9x16.mp4` (15.8 s, v5; tək 15 s klip, ardıcıl + fərqli kadr ölçüləri) |
+| `episodes/2026-11-24_zulfiyye-xanbabayeva` | Zülfiyyə Xanbabayeva (Xalq artisti) — «Bir nəfəs qədər» fonda | 24 Noyabr | `Zulfiyye_Xanbabayeva_Ilk_Defe_Araz_9x16.mp4` (18.9 s, **lüks rejim A «Gold Couture»**) |

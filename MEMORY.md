@@ -132,6 +132,12 @@ _(notes pending)_
 - Episode 7: Aytən Məhərrəmova — «Gecikmiş məhəbbət», 23 Noyabr, 15.8 s; a single clean 15 s clip
   (wooden veranda, red kəlağayı, slow push to close-up). Used it in order, cutting on beats with
   different framings (wide / medium / close) for a multi-camera feel; slow-mo 0.66× only at the end.
+- Episode 8 (special): Zülfiyyə Xanbabayeva (Xalq artisti, «qonağımız»), 24 Noyabr, 18.9 s. NOT a
+  song-premiere recording: one AI clip + a YouTube screen recording of «Bir nəfəs qədər» used only
+  as background-music audio. User wanted "premium luxury", same «İLK DƏFƏ … DİNLƏ» texts, and said
+  "okeyləmədən heç nə render etmə" → I showed A/B preview stills; user picked **A «Gold Couture»**
+  (black + champagne gold, Playfair Display, gold masthead behind her head, glow wipes, lux frame).
+  Luxury mode is opt-in in config (see README). Don't add her name unless asked (offered, no answer).
 - Speed: person masks cost ~3.5 s/frame on this 4-core CPU (≈19 min/episode). User will send Mac and
   Windows specs to pick a GPU machine (Remote Control); also asked about connecting the Grok
   (xAI grok-imagine-video) API — needs an api.x.ai key via request_credential, user hasn't decided.
