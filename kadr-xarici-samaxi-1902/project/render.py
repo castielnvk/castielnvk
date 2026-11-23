@@ -100,7 +100,8 @@ SHOTS = [
  S(42.0, 45.0, 8, 4.9, (.1, .1), z=(1.04, 1.08)),                                     # relief camp
  S(45.0, 48.2, 3, 2.1, (-.1, -.1), z=(1.5, 1.0), c=(.68, .62, .5, .5), tr=('diss', .5)),  # pull back: the child just outside the earlier frame
 ]
-END_T0, END_SLIDE, LOGO_IN = 46.6, 47.62, 47.95
+END_T0, END_SLIDE, LOGO_IN = 46.6, 47.62, 54.0
+F_EPIC = 'fonts_epic.ttf'   # Cormorant Garamond Bold, capitals (Cinzel lacks Ə/ə; Cormorant SC drops Ə/İ to small caps when tracked)
 
 def shot_frame(s, t):
     cl = CL[s['clip']]
@@ -269,6 +270,25 @@ def logo_img(wd):
     return dict(a=np.pad(a, 40), sh=np.pad(sh, 40), col=np.array([1, 1, 1], np.float32) * .98, w=wd, h=hgt, pad=40)
 LOGO_S = logo_img(236); LOGO_B = logo_img(720)
 BG = (0.012, 0.011, 0.012)
+def epic_text(txt, size, col, track):
+    ti = text_img(txt, F_EPIC, size, col, track, shadow=.0)
+    g = cv2.GaussianBlur(ti['a'], (0, 0), size * .22)        # soft warm glow behind the letters
+    ti['sh'] = np.clip(g * .55, 0, 1) * 0                     # no drop shadow on black
+    ti['glow'] = g
+    return ti
+_esc = {}
+def epic_scaled(ti, sc):
+    k = (id(ti), round(sc, 3))
+    if k not in _esc:
+        a = cv2.resize(ti['a'], None, fx=sc, fy=sc, interpolation=cv2.INTER_LINEAR)
+        _esc[k] = dict(ti, a=a, sh=np.zeros_like(a), w=int(ti['w'] * sc), h=int(ti['h'] * sc), pad=int(ti['pad'] * sc))
+    return _esc[k]
+EPIC = [
+ (epic_text('AMMA BƏZİ İNSAN', 70, IVORY, 9), 48.3, 53.6, 676),
+ (epic_text('HEKAYƏLƏRİ…', 70, IVORY, 9), 48.85, 53.6, 764),
+ (epic_text('KADR XARİCİNDƏ', 100, GOLD, 4), 49.8, 53.6, 894),
+ (epic_text('QALDI.', 100, GOLD, 4), 50.35, 53.6, 1030),
+]
 FLASH = [(0.0, .45, .38), (5.15, .5, .22), (12.55, .3, .1), (36.8, 1.6, .0)]
 
 def render(t, gi):
@@ -314,8 +334,14 @@ def render(t, gi):
     draw_subs(fr, t)
     wm = 1 - ease((t - (END_T0 + .4)) / .5)
     blit(fr, LOGO_S, 54, 150, wm * .9)
+    for ti, t0, t1, y in EPIC:                 # closing sentence in epic cinematic type
+        if t0 - .01 <= t < t1:
+            a = ease((t - t0) / 1.1); o = 1 - ease((t - (t1 - .6)) / .6)
+            sc = 1.035 - .035 * eout((t - t0) / 2.2)
+            img = ti if sc <= 1.001 else epic_scaled(ti, sc)
+            blit(fr, img, (W - img['w']) / 2, y - (img['h'] - ti['h']) / 2, a * o)
     if t >= LOGO_IN:
-        a = ease((t - LOGO_IN) / .9)          # the logo alone completes the sentence (no text)
+        a = ease((t - LOGO_IN) / .9) * (1 - ease((t - (DUR - .8)) / .75))
         ly = (H - LOGO_B['h']) / 2 - 20
         blit(fr, LOGO_B, (W - LOGO_B['w']) / 2, ly + (1 - a) * 8, a)
         ln = ease((t - LOGO_IN - .6) / .8)

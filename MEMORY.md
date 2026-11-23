@@ -172,7 +172,9 @@ _(notes pending)_
   end on the logo alone, no "kadr xaricində qaldı" text. The Ümmü line is shown over rubble without
   people, so no stranger is implied to be her. Music: "Dark Walk" rejected ("Mahnı uyğun deyil"); the user
   wants "çox intense dark" and supplied their own TikTok phonk track (licence unverified), used in v2
-  (`Samaxi_1902_Kadr_Xarici_v2_9x16.mp4`, normalised to −14.1 LUFS).
+  (`Samaxi_1902_Kadr_Xarici_v2_9x16.mp4`). Then: song from its very start, never cut abruptly
+  (phrase-break ending + reverb tail, video extended to 57.4 s), closing sentence written on black in an epic
+  serif (Cormorant Garamond Bold) before the logo. Normalised to −14.0 LUFS.
 
 ## User preferences (across all projects)
 - Use only real footage. Never fabricate archive material, reactions, voices or historical scenes,

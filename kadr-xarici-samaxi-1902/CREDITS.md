@@ -1,13 +1,14 @@
 # Şamaxı zəlzələsi, 1902 (Kadr Xarici, 22 Nov 2026)
 
-Final: `Samaxi_1902_Kadr_Xarici_v2_9x16.mp4` — exactly 50.000 s (1200 frames at 24 fps, the clips' native rate),
+Final: `Samaxi_1902_Kadr_Xarici_v2_9x16.mp4` — 57.4 s (1378 frames at 24 fps; first planned as exactly 50 s, then
+extended at the user's request so the song is not cut: "video birdən bitməsin, mahnı pis kəsilir"),
 1080×1920, H.264 + AAC stereo, −14.1 LUFS / −1.5 dBTP. No voice-over: the on-screen Azerbaijani text is the
 narrator. Separate `Samaxi_1902_Kadr_Xarici.srt` (text cards), cover `Samaxi_1902_Kadr_Xarici_thumbnail.jpg`.
 On screen at 39.0–47.5 s: "Arxiv fotoları süni intellektlə rəngləndirilib və canlandırılıb." (requested).
 
 ## Music
 - **v2 (current): the user's own supplied track** — a TikTok video credited on screen to `@the_phonkface`
-  (phonk-style, dark and intense), used from its very start (0:00–0:50, as the user asked), faded out under the logo. The
+  (phonk-style, dark and intense), used from its very start (as the user asked) to its phrase break at 0:55.6, then a 1.8 s reverb tail so it rings out instead of stopping. The
   whole mix is loudness-normalised to −14.1 LUFS / −1.5 dBTP.
   - **Licence not verified.** The title, composer and licence are unknown. On Instagram, TikTok or YouTube
     the audio may be muted or claimed. Using the platform's own music library for this sound is the safest
@@ -41,5 +42,6 @@ Low impacts (0 s, 12:50, 125, logo) and the short riser are synthesised in `proj
 | 27.0–33.0 | 8 (winter tent camp), 4 (carrying from the ruins) | QIŞ · FEVRAL 1902 / shelters; rescue work |
 | 33.0–39.0 | 5: rubble and minaret, no people (49 %, warm light at "sağ çıxarıldı") | **9 GÜN** SONRA · *Ümmü* / the rescue sentence |
 | 39.0–45.0 | 1 (food crates, 53 %), 8 (camp) | BAKIDAN YARDIM · *Hacı Zeynalabdin Tağıyev* / relief sentences; AI disclosure top right |
-| 45.0–48.0 | 3: pull back from the rubble crop to reveal the child who was outside the frame; becomes a photo and slides out | "Şamaxı yenidən quruldu." "Amma bəzi insan hekayələri…" |
-| 47.95–50.0 | Kadr Xarici logo alone (no text) | — |
+| 45.0–48.0 | 3: pull back from the rubble crop to reveal the child who was outside the frame; becomes a photo and slides out | "Şamaxı yenidən quruldu." |
+| 48.1–53.6 | black; epic closing text in Cormorant Garamond Bold capitals | AMMA BƏZİ İNSAN HEKAYƏLƏRİ… / **KADR XARİCİNDƏ QALDI.** |
+| 54.0–57.4 | Kadr Xarici logo, music rings out | — |

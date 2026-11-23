@@ -48,9 +48,13 @@ mix was measured and checked frame by frame, and ask the user to confirm it by e
 - The voice-over is fixed: never speed it up or cut words. Subtitles follow the script spelling; flag
   spoken differences (e.g. "yeniliydi"/"yenilik idi", "biriydi"/"biri idi", "səssizdi"/"səssizdir")
   instead of silently changing either.
-- Şamaxı 1902 (22 Nov 2026): "Sonuncu səhnədə «kadr xaricində qaldı» yerində sadəcə Kadr Xaricinin
-  logosunu ver. Yazıya ehtiyac yoxdur." That film ends on the logo alone. (My reading: when the phrase is
-  not spoken by a narrator, let the logo complete the sentence; ask if unsure for a voiced episode.)
+- Ending text (Şamaxı 1902): first "only the logo, no text" (22 Nov 2026), then reversed on 23 Nov 2026:
+  "Səs yoxdur deyə «bəzi insan hekayələri kadr xaricində qaldı» yaz. Amma fontu daha epic cinematic et." For
+  films **without a narrator**, write the closing sentence on black in an epic serif (Cormorant Garamond Bold
+  capitals, wide tracking, slow fade + slight scale-down, ivory lead-in, gold "KADR XARİCİNDƏ QALDI."), then the
+  logo. Cinzel lacks Ə/ə; Cormorant SC shows Ə/İ as small caps when tracked — check at full size.
+- **Never cut the music abruptly** ("video birdən bitməsin, mahnı pis kəsilir"): end on a phrase break and let
+  it ring out (reverb tail, ~1.5–2 s) under the logo; extend the video if needed rather than chopping the song.
 - Music taste (Şamaxı 1902, 23 Nov 2026): "Dark Walk" was rejected ("Mahnı uyğun deyil"); calm and
   melancholic options were not chosen. The user said "Mənə çox intense dark lazımdır" and then supplied their
   own phonk-style track ("Bunu qoy. Səsi normalize edib"). For dramatic episodes, start from **very intense,

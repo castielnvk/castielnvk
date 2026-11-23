@@ -3,7 +3,7 @@ CHUNKS are text cards (start, end, text); words brighten at a reading pace."""
 import subprocess, numpy as np
 FPS = 24; W, H = 1080, 1920
 OFF = 0.0
-DUR = 50.0
+DUR = 57.4
 CARDS = [
  (-0.3, 3.95, "1902-ci ildə Şamaxıdakı 5 min evdən *4 mini *dağıldı."),
  (4.05, 5.95, "*13 *fevral *1902-ci il. Saat *12:50."),
@@ -22,8 +22,7 @@ CARDS = [
  (36.8, 38.95, "dağıntılardan *sağ *çıxarıldı."),
  (39.05, 41.9, "Bakıdan *ərzaq, *geyim və *çadırlar göndərildi."),
  (41.95, 44.95, "*Hacı *Zeynalabdin *Tağıyev də yardımın təşkilinə qoşuldu."),
- (45.05, 46.45, "Şamaxı yenidən quruldu."),
- (46.5, 47.85, "Amma bəzi insan hekayələri…"),
+ (45.05, 47.55, "Şamaxı yenidən quruldu."),
 ]
 FINAL = [('kadr', 47.95), ('xaricində', 48.2), ('qaldı.', 48.5)]
 CHUNKS, CHUNK_END = [], []

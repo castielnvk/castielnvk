@@ -31,7 +31,7 @@ mus = np.pad(mus, ((0, N - len(mus)), (0, 0)))
 mus = mus / rms(mus)
 INTENSE = os.environ.get('INTENSE') == '1'
 if os.environ.get('USERTRACK') == '1':   # the user's own track: keep its dynamics, constant level
-    pts = [(0, -15), (48.2, -15), (49.95, -45), (DUR, -60)]   # song from its very start; fades under the logo
+    pts = [(0, -15), (54.95, -15), (55.62, -60), (DUR, -60)]   # song from its very start; ends on its own phrase break at 55.6 s
 elif INTENSE:   # very intense and dark throughout; only the logo lets it go
     pts = [(0, -40), (.08, -17), (20, -17), (20.6, -18.5), (27, -18.5), (33, -18.5), (39, -17), (47.9, -17), (48.3, -19.5), (DUR, -45)]
 else:
@@ -74,9 +74,21 @@ place(fx, lp(seg(X + '3202.flac', 10, 2.8), 4000), 30.3, -37, fi=.2, fo=.5)
 place(fx, lp(seg(X + '1632.flac', 40, 6.0), 3000), 39.0, -40, fi=.8, fo=1.0)
 place(fx, lp(seg(X + '3202.flac', 30, 3.0), 3500), 39.2, -41, fi=.4, fo=.8)
 # logo
-place(fx, thump(3.0, 50, 30), 47.95, -18, fi=.002, fo=1.0, norm=False)
+place(fx, thump(3.0, 50, 30), 54.0, -20, fi=.002, fo=1.0, norm=False)
 # the wind is pulled back under the delicate moment and the ending
 fx *= np.interp(t, [0, 32.8, 33.4, 38.8, 39.2, 46.6, 48.0, DUR], [1, 1, .45, .45, .8, .8, .25, .15])[:, None]
+if os.environ.get('USERTRACK') == '1':
+    # reverb tail so the song does not stop dead: the last 1.6 s ring out for ~1.8 s
+    a0, a1 = int(54.0 * SR), int(55.62 * SR)
+    src = music[a0:a1] * np.linspace(.4, 1, a1 - a0)[:, None]
+    n_ir = int(2.4 * SR); rng = np.random.default_rng(11)
+    ir = rng.normal(0, 1, (n_ir, 2)) * np.exp(-np.arange(n_ir) / SR * 2.6)[:, None]
+    ir = lp(ir, 3200); ir /= np.sqrt((ir ** 2).sum(0))
+    wet = np.stack([sg.fftconvolve(src[:, c], ir[:, c]) for c in range(2)], 1) * .55
+    end = min(N, a0 + len(wet)); music[a0:end] += wet[:end - a0]
+    music[int((DUR - .3) * SR):] *= np.linspace(1, 0, N - int((DUR - .3) * SR))[:, None]
+    place(fx, thump(3.2, 46, 26), 49.8, -19, fi=.002, fo=1.2, norm=False)   # "KADR XARİCİNDƏ QALDI."
+    place(fx, wind(W1, 60, 4.2), DUR - 4.2, -40, fi=1.0, fo=2.0)          # wind returns as the music rings out
 for name, b in [('music', music), ('sfx', fx)]:
     wf.write(f'stem_{name}{TAG}.wav', SR, np.clip(b, -1, 1).astype(np.float32))
 wf.write(f'premix{TAG}.wav', SR, (music + fx).astype(np.float32))
