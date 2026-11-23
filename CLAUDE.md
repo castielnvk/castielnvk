@@ -165,6 +165,8 @@ approved styles and technical lessons.
   your way". Every episode has: a horror drone that grows, a hard silence drop at the key beat, a slow heartbeat,
   a riser, a deep impact on the cut to black, then `compose.LogoFlashEnding` + `shared/ending_sfx.build()`.
   Fit the brief's text and timings around this. Say in the reply where the brief was overridden.
+- Silence drops must never sound like an audio glitch: never cut the room tone to dead silence in the first
+  seconds of a video (the user asked why the sound "suddenly cuts"). Early pauses = the drone sinks softly while the room stays.
 - Logo ending: «Bir anlıq görünüş». The logo flashes for 3 frames with a hit, then black and total silence,
   then it is suddenly back and holds (`compose.LogoFlashEnding`). The user rejected the light-strip ending.
 - The episode pipeline is in `baxma-dedim/episodes/` (`shared/compose.py`, `shared/sfx.py`,

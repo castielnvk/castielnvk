@@ -53,7 +53,7 @@ QUESTION = dict(t_in=CUT + 0.35, t_out=END_IN - 0.08, size=74, cy=930, text="Bə
 # sound beats (edit seconds)
 FOOTSTEP_AT = 2.95         # just before the chin lifts (source frame ~78 = 3.25 s)
 CREAK_AT = 3.22
-LISTEN = (3.9, 5.6)        # everything drops away: the second step never comes
+LISTEN = (3.9, 5.6)        # the drone sinks away softly (room tone stays): the second step never comes
 ROOF_SCRAPE_AT = 14.80     # silhouette leans over the chimney (clip 2 ~4.8 s)
 WIND_CUT = 23.50           # silhouette blocks more of the sky (clip 3 ~3.5 s)
 CHIMNEY_SCRAPE_AT = 23.80
@@ -216,8 +216,8 @@ def chop(x, at, fade=0.006):
 L0, L1 = LISTEN
 # 1 · indoor room tone (child's room): drops out after the creak, the listening pause, returns faintly
 room = placed(sfx.room_tone(20.0, seed=51), 0, S["room"])
-room *= db(env([(0, 0), (L0 - 0.05, 0), (L0 + 0.06, -90), (L1, -90), (L1 + 0.6, -6), (9.98, -6), (10.0, -120),
-                (DUR, -120)]))
+room *= db(env([(0, 0), (L0, 0), (L0 + 0.5, -3), (L1, -3), (L1 + 0.8, -1), (9.98, -1), (10.0, -120),
+                (DUR, -120)]))   # never cut: the room stays, only a slight hush while we listen
 # 2 · footstep overhead + wooden creak
 step = placed(sfx.footstep_overhead(), FOOTSTEP_AT, S["step"])
 creak = placed(sfx.wood_creak(0.55, f0=52), CREAK_AT, S["creak"])
@@ -239,7 +239,7 @@ drone = loop[:N].copy()
 w = int(0.5 * SR)                                            # flatten the file's own swells so the
 pw = np.convolve((drone ** 2).mean(1), np.ones(w) / w, mode="same")  # envelope below sets the growth
 drone = (drone / np.sqrt(pw + 1e-8)[:, None] * 0.12).astype(np.float32)
-drone *= db(env([(0, -60), (2.8, -22), (L0 - 0.05, -14), (L0 + 0.04, -120), (L1, -120), (L1 + 0.05, -30),
+drone *= db(env([(0, -60), (2.8, -22), (L0 - 0.1, -16), (L0 + 0.7, -36), (L1, -36), (L1 + 1.2, -28),
                  (10.0, -20), (20.0, -12), (WIND_CUT, -9), (CUT - 0.01, -3), (CUT, -120), (DUR, -120)]))
 heart = chop(placed(sfx.heartbeat(bpm=54, beats=4), HEART_AT, -18), CUT)
 rs = sfx.load_file(os.path.join(LIB, "terror_riser_mixkit2630.mp3"), 1.2, 1.8)
