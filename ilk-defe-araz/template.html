@@ -376,10 +376,10 @@ function shine(t, str, x, y, size) {
 /* spoken-word captions (the guest's exact words), rising letter by letter, centred */
 function captions(t) {
   for (const c of (CFG.captions || [])) {
-    if (t < c.at || t > c.out + .5) continue;
+    const fo = c.fade ?? .45; if (t < c.at || t > c.out + fo + .05) continue;
     const size = fit(c.text, c.w || 700, c.size || 70, c.maxW || 940);
     const f = F(c.w || 700, size), tw = textW(c.text, f), x = W / 2 - tw / 2;
-    const a = clamp((c.out + .45 - t) / .45);
+    const a = clamp((c.out + fo - t) / fo);
     ctx.save(); ctx.globalAlpha = a;
     // thin gold hairline under the phrase
     const lw = (tw + 60) * expoOut(prog(t, c.at + .1, .8));

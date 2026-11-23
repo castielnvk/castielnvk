@@ -138,6 +138,15 @@ _(notes pending)_
   "okeyləmədən heç nə render etmə" → I showed A/B preview stills; user picked **A «Gold Couture»**
   (black + champagne gold, Playfair Display, gold masthead behind her head, glow wipes, lux frame).
   Luxury mode is opt-in in config (see README). Don't add her name unless asked (offered, no answer).
+- Episode 8b: Zülfiyyə Xanbabayeva invitation, 24 Noyabr, 23.7 s (`config_devet.json`). Her own voice:
+  «Sabah saat 11-də dalğalarınızı Araz FM-ə kökləyin. Gözəl anlar, səmimi söhbətlər və ən sevdiyiniz
+  mahnılarla görüşənədək», then the «Bir nəfəs qədər» chorus. User asked for texts matching the voice →
+  captions in her exact words (SABAH / “ARAZ”DA / GÖZƏL ANLAR / SƏMİMİ SÖHBƏTLƏR / ƏN SEVDİYİNİZ
+  MAHNILARLA / GÖRÜŞƏNƏDƏK; end: 24 NOYABR · SAAT 11:00). User said the FIRST AI clip was a mistake →
+  deleted (ai1); the earlier «İlk dəfə» Zülfiyyə video was built from it (asked whether to redo; no answer
+  yet). "How to make it better?" → user said "do everything": letterbox→full frame, “ARAZ”DA moves behind
+  her as masthead, halation + warm film look, shot variety incl. hand detail, centred end card, shimmer SFX.
+  Open question: «anlar» vs «anılar» spelling.
 - Speed: person masks cost ~3.5 s/frame on this 4-core CPU (≈19 min/episode). User will send Mac and
   Windows specs to pick a GPU machine (Remote Control); also asked about connecting the Grok
   (xAI grok-imagine-video) API — needs an api.x.ai key via request_credential, user hasn't decided.

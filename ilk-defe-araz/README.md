@@ -55,7 +55,10 @@ Config-də açılır, standart epizodlara təsir etmir:
 `lockupStyle: "lux"` (incə qızılı çərçivə + künc bucaqları), `displayFont: "P"` (Playfair Display 900),
 `goldText: ["“ARAZ”DA"]`, `palette` (qızılı çalarlar), `mast` (jurnal üz qabığı kimi nəhəng qızılı söz
 insanın arxasında), `wipes[].type: "glow"` (qızılı işıq keçidi), `opening.type: "lux"` (qaranlıqdan açılış +
-qızılı xətt), `shineRGB: "255,240,210"`. Səs effektləri yumşaq (`sfx_db: -22`, zərbəsiz).
+qızılı xətt), `shineRGB: "255,240,210"`.
+Əlavə lüks elementlər: `captions` (qonağın öz sözləri, hərf-hərf, qızılı xəttlə), `l2mast` (“ARAZ”DA ortadan
+insanın başının arxasına keçir), `letterbox` (danışıqda kino zolaqları → musiqidə tam kadr), `film`
+(`warm`, `halation`), `endCard` (sonda lockup ortaya, loqo böyüyür), `fadeOut`, səs `shimmer`. Səs effektləri yumşaq (`sfx_db: -22`, zərbəsiz).
 
 ## Sürət qeydləri
 
@@ -100,3 +103,4 @@ Tələblər: `pip install playwright librosa`; Chromium `/opt/pw-browsers/chromi
 | `episodes/2026-11-19_sivva-serab` | Sivva — «Sərab» | 19 Noyabr | `Sivva_Serab_Ilk_Defe_Araz_9x16.mp4` (18 s, v5; teal neon fon → ağ arxa zolaqlar, qreyd 0.1) |
 | `episodes/2026-11-23_ayten-meherremova` | Aytən Məhərrəmova — «Gecikmiş məhəbbət» | 23 Noyabr | `Ayten_Meherremova_Gecikmis_Mehebbet_Ilk_Defe_Araz_9x16.mp4` (15.8 s, v5; tək 15 s klip, ardıcıl + fərqli kadr ölçüləri) |
 | `episodes/2026-11-24_zulfiyye-xanbabayeva` | Zülfiyyə Xanbabayeva (Xalq artisti) — «Bir nəfəs qədər» fonda | 24 Noyabr | `Zulfiyye_Xanbabayeva_Ilk_Defe_Araz_9x16.mp4` (18.9 s, **lüks rejim A «Gold Couture»**) |
+| `episodes/2026-11-24_zulfiyye-xanbabayeva` (`config_devet.json`) | Zülfiyyə Xanbabayeva — efirə dəvət («Sabah saat 11-də…») | 24 Noyabr | `Zulfiyye_Xanbabayeva_Devet_9x16.mp4` (23.7 s, lüks A + letterbox, masthead, halation, ortada son kart) |

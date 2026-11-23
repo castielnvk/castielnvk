@@ -324,23 +324,26 @@
     {
       "text": "GÖZƏL ANLAR",
       "at": 5.95,
-      "out": 6.8,
+      "out": 6.7,
       "y": 1580,
-      "size": 88
+      "size": 88,
+      "fade": 0.18
     },
     {
       "text": "SƏMİMİ SÖHBƏTLƏR",
       "at": 6.9,
-      "out": 8.55,
+      "out": 8.5,
       "y": 1580,
-      "size": 88
+      "size": 88,
+      "fade": 0.18
     },
     {
       "text": "ƏN SEVDİYİNİZ MAHNILARLA",
       "at": 8.68,
-      "out": 10.05,
+      "out": 10.0,
       "y": 1580,
-      "size": 88
+      "size": 88,
+      "fade": 0.18
     }
   ],
   "l2mast": {
