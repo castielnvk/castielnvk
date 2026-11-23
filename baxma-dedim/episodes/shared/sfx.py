@@ -179,3 +179,89 @@ def load_file(path, start=0.0, dur=None):
     cmd += ["-i", path, "-vn", "-ac", "2", "-ar", str(SR), "-f", "f32le", "-"]
     a = np.frombuffer(subprocess.run(cmd, capture_output=True, check=True).stdout, np.float32)
     return _norm(a.reshape(-1, 2).copy())
+
+
+def footstep_overhead(seed=41):
+    """One heavy, muffled footstep on the floor/roof above: heel thump + toe, ceiling boom,
+    low-passed as if heard through wood and plaster. Harmonics keep it audible on phones."""
+    rng = np.random.default_rng(seed)
+    n = int(0.9 * SR)
+    t = np.arange(n) / SR
+    out = np.zeros(n)
+
+    def hit(at, amp, decay):
+        i = int(at * SR)
+        tt = t[: n - i]
+        body = sum(a * np.sin(2 * np.pi * f * (1 + 0.25 * np.exp(-tt / 0.015)) * tt + p) * np.exp(-tt / (decay * d))
+                   for f, a, d, p in [(52, 1.0, 1.0, 0), (84, 0.7, 0.8, 1.1), (131, 0.5, 0.6, 2.0), (203, 0.4, 0.4, 0.5),
+                    (310, 0.35, 0.25, 1.7), (470, 0.22, 0.15, 0.9), (690, 0.12, 0.09, 2.4)])
+        k = int(0.018 * SR)
+        tr = np.zeros_like(tt)
+        tr[:k] = _lp(rng.standard_normal(k), 700) * np.exp(-np.linspace(0, 5, k)) * 2.5
+        out[i:] += amp * (body + tr)
+
+    hit(0.0, 1.0, 0.16)          # heel
+    hit(0.075, 0.45, 0.10)       # toe
+    boom = _bp(rng.standard_normal(n), 90, 420) * np.exp(-t / 0.22)
+    x = np.tanh(2.2 * (out + 0.5 * boom / np.abs(boom).max()))
+    x = _lp(x, 1100, order=4)
+    return _norm(np.stack([x, x], 1))
+
+
+def wood_creak(length=0.7, seed=43, f0=55.0):
+    """Short wooden creak: stick-slip impulse train exciting wood resonances."""
+    rng = np.random.default_rng(seed)
+    n = int(length * SR)
+    t = np.arange(n) / SR
+    rate = f0 * (1 + 0.5 * np.sin(np.pi * t / length) + 0.25 * np.sin(2 * np.pi * 3.1 * t))
+    ph = np.cumsum(rate / SR)
+    imp = np.zeros(n)
+    idx = np.where(np.diff(np.floor(ph)) > 0)[0]
+    imp[idx] = rng.uniform(0.5, 1.0, len(idx))
+    m = int(0.03 * SR)
+    tt = np.arange(m) / SR
+    ir = sum(a * np.sin(2 * np.pi * f * tt) * np.exp(-tt / d) for f, a, d in
+             [(480, 1.0, 0.012), (1130, 0.7, 0.008), (2350, 0.4, 0.005), (3900, 0.15, 0.003)])
+    x = np.convolve(imp, ir)[:n]
+    env = np.sin(np.pi * np.clip(t / length, 0, 1)) ** 0.7
+    x = _hp(x * env, 200)
+    return _norm(np.stack([x, np.roll(x, 12)], 1))
+
+
+def wind(dur, seed=45):
+    """Faint outdoor night wind: band-limited noise with slow gusts and a moving centre."""
+    rng = np.random.default_rng(seed)
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    g = np.cumsum(rng.standard_normal(int(dur * 4) + 4))
+    g = np.interp(t, np.arange(len(g)) / 4, (g - g.min()) / (np.ptp(g) + 1e-9))
+    gust = 0.45 + 0.55 * g
+    lo = _bp(rng.standard_normal((n, 2)), 120, 500)
+    hi = _bp(rng.standard_normal((n, 2)), 500, 1800)
+    hi2 = _bp(rng.standard_normal((n, 2)), 1800, 4200)
+    x = lo * 0.8 + hi * (0.3 + 0.7 * gust[:, None]) + hi2 * 0.25 * gust[:, None] ** 2
+    return _norm(x * gust[:, None])
+
+
+def grit_scrape(length=0.45, seed=47, close=False):
+    """Grit/sand dragged against brick: dense micro-clicks + scraping noise with stick-slip.
+    close=True: drier, fuller, with a little chimney-tube resonance."""
+    rng = np.random.default_rng(seed)
+    n = int(length * SR)
+    t = np.arange(n) / SR
+    clicks = np.zeros(n)
+    k = rng.integers(0, n, int(length * 520))
+    clicks[k] = rng.lognormal(0, 0.6, len(k)) * rng.choice([-1, 1], len(k))
+    clicks = _bp(clicks, 1800, 8000)
+    scrape = _bp(rng.standard_normal(n), 1200, 5200) * (0.6 + 0.4 * np.sign(np.sin(2 * np.pi * 23 * t)))
+    env = np.minimum(1, t / 0.03) * np.exp(-np.maximum(0, t - length * 0.55) / (length * 0.18))
+    x = (0.8 * clicks / np.abs(clicks).max() + 0.6 * scrape / np.abs(scrape).max()) * env
+    if close:
+        body = _bp(rng.standard_normal(n), 250, 1200) * env
+        x = x + 0.5 * body / np.abs(body).max()
+        d = int(0.0026 * SR)                     # short tube resonance
+        y = x.copy()
+        for i in range(d, n):
+            y[i] += 0.45 * y[i - d]
+        x = y
+    return _norm(np.stack([x, np.roll(x, 8 if close else 40)], 1))

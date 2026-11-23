@@ -122,7 +122,8 @@ src = C.Source(SOURCE, SRC_CROP, GRADE)
 enc = subprocess.Popen(
     ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS),
      "-i", "-", "-an", "-vf", "scale=out_color_matrix=bt709:out_range=tv,format=yuv420p",
-     "-c:v", "libx264", "-preset", "slow", "-crf", "16", "-profile:v", "high", "-level", "4.1",
+     "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-maxrate", "12M", "-bufsize", "24M",
+     "-profile:v", "high", "-level", "4.1",
      "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", OUT + ".video.mp4"],
     stdin=subprocess.PIPE)
 for n in range(round(DUR * FPS)):

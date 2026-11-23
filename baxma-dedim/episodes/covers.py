@@ -71,6 +71,16 @@ EPISODES = [
         title=("YUXU", "İFLİCİ"),
         hook="elə bil otaqda kimsə var.",
     ),
+    dict(
+        num="04", folder="ep04-damdabaca", styles=["A"],
+        source="source/2_roof_silhouette.mp4", crop=(4, 14, 704, 1252),
+        grade="eq=contrast=1.03:brightness=-0.015:saturation=0.97,vignette=angle=PI/4.6",
+        stills=dict(stare=6.0),                   # silhouette leaning over the chimney
+        face=(840, 720),                          # close-up subject: the silhouette at the chimney (kept above the title)
+        name="Damdabaca",
+        title=("DAMDA", "BACA"),                  # "Adını ayrı-ayrı de: damda baca"
+        hook="bəs sən bacaya baxardın?",
+    ),
 ]
 
 
