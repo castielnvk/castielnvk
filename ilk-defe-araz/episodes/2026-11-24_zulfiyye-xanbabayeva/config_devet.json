@@ -1,0 +1,284 @@
+{
+  "title": "Zülfiyyə Xanbabayeva — efirə dəvət (sabah saat 11:00, Araz FM)",
+  "fps": 24,
+  "duration": 23.7,
+  "audio": "source/ZULFIYYE_TEQDIMAT.mp3",
+  "audio_fade_out": 0.4,
+  "output": "Zulfiyye_Xanbabayeva_Devet_9x16.mp4",
+  "clips": {
+    "ai2": "source/ai2.mp4"
+  },
+  "anchors": {
+    "words": 1.28,
+    "words2": 3.88,
+    "words3": 10.18,
+    "settle": 11.01
+  },
+  "shots": [
+    {
+      "start": 0.0,
+      "clip": "ai2",
+      "src": 0.0,
+      "speed": 0.63,
+      "z": [
+        1.0,
+        1.05
+      ],
+      "cx": 0.5,
+      "cy": 0.42,
+      "depth": false
+    },
+    {
+      "start": 3.88,
+      "clip": "ai2",
+      "src": 2.44,
+      "speed": 0.63,
+      "z": [
+        1.1,
+        1.15
+      ],
+      "cx": 0.5,
+      "cy": 0.36,
+      "depth": false
+    },
+    {
+      "start": 6.9,
+      "clip": "ai2",
+      "src": 4.34,
+      "speed": 0.63,
+      "z": [
+        1.0,
+        1.04
+      ],
+      "cx": 0.5,
+      "cy": 0.42,
+      "depth": false
+    },
+    {
+      "start": 11.01,
+      "clip": "ai2",
+      "src": 6.93,
+      "speed": 0.65,
+      "z": [
+        1.0,
+        1.04
+      ],
+      "cx": 0.5,
+      "cy": 0.4,
+      "depth": true,
+      "trans": {
+        "type": "push",
+        "dur": 0.45
+      }
+    },
+    {
+      "start": 14.37,
+      "clip": "ai2",
+      "src": 9.11,
+      "speed": 0.65,
+      "z": [
+        1.1,
+        1.14
+      ],
+      "cx": 0.5,
+      "cy": 0.36,
+      "depth": true
+    },
+    {
+      "start": 17.74,
+      "clip": "ai2",
+      "src": 11.3,
+      "speed": 0.6,
+      "z": [
+        1.0,
+        1.04
+      ],
+      "cx": 0.5,
+      "cy": 0.38,
+      "depth": true,
+      "trans": {
+        "type": "push",
+        "dur": 0.45
+      }
+    },
+    {
+      "start": 21.0,
+      "clip": "ai2",
+      "src": 13.26,
+      "speed": 0.65,
+      "z": [
+        1.06,
+        1.1
+      ],
+      "cx": 0.5,
+      "cy": 0.36,
+      "depth": true
+    }
+  ],
+  "rows": [],
+  "opening": {
+    "type": "lux",
+    "dur": 1.4
+  },
+  "wipes": [
+    {
+      "at": 14.37,
+      "dur": 0.6,
+      "type": "glow"
+    },
+    {
+      "at": 21.0,
+      "dur": 0.6,
+      "type": "glow"
+    }
+  ],
+  "glints": [],
+  "shine": [
+    14.6,
+    17.74,
+    21.34
+  ],
+  "panel": {
+    "in": 11.01,
+    "edge": 143
+  },
+  "lockup": {
+    "date": "24 NOYABR",
+    "time": "SAAT 11:00",
+    "l1": "SABAH",
+    "l2": "“ARAZ”DA",
+    "l3": "GÖRÜŞƏNƏDƏK",
+    "x": 96,
+    "centerY": 1250,
+    "style": {
+      "date": {
+        "y": 1080,
+        "size": 58
+      },
+      "time": {
+        "y": 1150,
+        "size": 50
+      },
+      "l1": {
+        "y": 1300,
+        "size": 112
+      },
+      "l2": {
+        "y": 1432,
+        "size": 128
+      },
+      "l3": {
+        "y": 1556,
+        "size": 112
+      }
+    }
+  },
+  "logoPos": {
+    "y": 1722,
+    "w": 176
+  },
+  "lockupStyle": "lux",
+  "beats": [
+    16.07,
+    17.74,
+    21.34,
+    22.18
+  ],
+  "grade": {
+    "amount": 0.0
+  },
+  "sfx_db": -22,
+  "sfx": [
+    {
+      "type": "riser",
+      "at": 10.98,
+      "dur": 1.6,
+      "gain": 0.35
+    },
+    {
+      "type": "whoosh",
+      "at": 11.01,
+      "dur": 1.0,
+      "gain": 0.45
+    },
+    {
+      "type": "whoosh",
+      "at": 14.37,
+      "dur": 1.0,
+      "gain": 0.45
+    },
+    {
+      "type": "whoosh",
+      "at": 17.77,
+      "dur": 0.6,
+      "gain": 0.3
+    },
+    {
+      "type": "riser",
+      "at": 20.98,
+      "dur": 1.6,
+      "gain": 0.35
+    },
+    {
+      "type": "whoosh",
+      "at": 21.0,
+      "dur": 1.0,
+      "gain": 0.45
+    }
+  ],
+  "scrim": 0.6,
+  "displayFont": "P",
+  "goldText": [
+    "“ARAZ”DA"
+  ],
+  "palette": {
+    "main": "#9C7740",
+    "light": "#C9A15C",
+    "deep": "#5E4524",
+    "dark": "#1B140B",
+    "bright": "#E8C886"
+  },
+  "mast": [
+    {
+      "text": "“ARAZ”DA",
+      "y": 470,
+      "size": 300,
+      "maxW": 1000,
+      "in": 11.4,
+      "out": 14.37,
+      "style": "outline",
+      "lw": 2.5
+    },
+    {
+      "text": "“ARAZ”DA",
+      "y": 470,
+      "size": 300,
+      "maxW": 1000,
+      "in": 21.2
+    }
+  ],
+  "shineRGB": "255,240,210",
+  "captions": [
+    {
+      "text": "GÖZƏL ANLAR",
+      "at": 5.95,
+      "out": 6.8,
+      "y": 1580,
+      "size": 88
+    },
+    {
+      "text": "SƏMİMİ SÖHBƏTLƏR",
+      "at": 6.9,
+      "out": 8.55,
+      "y": 1580,
+      "size": 88
+    },
+    {
+      "text": "ƏN SEVDİYİNİZ MAHNILARLA",
+      "at": 8.68,
+      "out": 10.05,
+      "y": 1580,
+      "size": 88
+    }
+  ]
+}

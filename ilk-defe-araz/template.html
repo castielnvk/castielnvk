@@ -98,7 +98,7 @@ function blurred(t, fn, n = 6, span = 1 / 48) {
 function leftOf(p) { ctx.beginPath(); ctx.moveTo(p + K * (-980), -20); ctx.lineTo(p + K * (H + 20 - 960), H + 20); ctx.lineTo(-4000, H + 20); ctx.lineTo(-4000, -20); ctx.closePath(); }
 function band(pA, pB) { ctx.beginPath(); ctx.moveTo(pB + K * (-980), -20); ctx.lineTo(pA + K * (-980), -20); ctx.lineTo(pA + K * (H + 20 - 960), H + 20); ctx.lineTo(pB + K * (H + 20 - 960), H + 20); ctx.closePath(); }
 function orangeFill() { const g = ctx.createLinearGradient(0, 600, 300, H); g.addColorStop(0, OR.light); g.addColorStop(1, OR.main); return g; }
-const F = (w, s) => `${w} ${s}px ${w === 900 && CFG && CFG.displayFont ? CFG.displayFont : 'M'}`;
+const F = (w, s) => `${w} ${s}px ${(w === 900 || w === 700) && CFG && CFG.displayFont ? CFG.displayFont : 'M'}`;
 function textW(str, f, tr = 0) { ctx.save(); ctx.font = f; ctx.letterSpacing = tr + 'px'; const w = ctx.measureText(str).width; ctx.restore(); return w; }
 function fit(str, w, s, maxW) { while (s > 20 && textW(str, F(w, s)) > maxW) s -= 2; return s; }
 
@@ -372,6 +372,23 @@ function shine(t, str, x, y, size) {
     ctx.drawImage(L, x - 10, y - size * 1.05);
   }
 }
+/* spoken-word captions (the guest's exact words), rising letter by letter, centred */
+function captions(t) {
+  for (const c of (CFG.captions || [])) {
+    if (t < c.at || t > c.out + .5) continue;
+    const size = fit(c.text, c.w || 700, c.size || 70, c.maxW || 940);
+    const f = F(c.w || 700, size), tw = textW(c.text, f), x = W / 2 - tw / 2;
+    const a = clamp((c.out + .45 - t) / .45);
+    ctx.save(); ctx.globalAlpha = a;
+    // thin gold hairline under the phrase
+    const lw = (tw + 60) * expoOut(prog(t, c.at + .1, .8));
+    const g = ctx.createLinearGradient(W / 2 - lw / 2, 0, W / 2 + lw / 2, 0);
+    g.addColorStop(0, 'rgba(232,200,134,0)'); g.addColorStop(.5, 'rgba(232,200,134,0.9)'); g.addColorStop(1, 'rgba(232,200,134,0)');
+    ctx.fillStyle = g; ctx.fillRect(W / 2 - lw / 2, c.y + size * .32, lw, 2);
+    letters(c.text, x, c.y, size, t, c.at, { w: c.w || 700, color: c.color || '#F6EFE3', stagger: c.stagger ?? .025, dur: .55 });
+    ctx.restore();
+  }
+}
 function kinetic(t) {
   const L = CFG.lockup, k = A.words, s = A.settle, X = L.x, st = L.style;
   if (t < k) return;
@@ -497,6 +514,7 @@ async function renderAt(t) {
   ctx.save();
   if (bp > 0) { const sc = 1 + .014 * bp, ax = L.x, ay = L.style.l3.y; ctx.translate(ax, ay); ctx.scale(sc, sc); ctx.translate(-ax, -ay); }
   kinetic(t);
+  captions(t);
   ctx.restore();
   logo();
   ctx.save(); ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .05;
