@@ -24,11 +24,18 @@ def thump(d=2.6, f0=62, f1=34):
     return np.stack([a, a], 1)
 X = 'dl/sfx/'
 # ---- music ----
-MUS_OFF = 31.0
-mus = seg('dl/music/Dark Walk.mp3', MUS_OFF, DUR)[:N].astype(np.float64)
+import os
+MUSIC = os.environ.get('MUSIC', 'Dark Walk'); MUS_OFF = float(os.environ.get('MUS_OFF', '31.0')); TAG = os.environ.get('TAG', '')
+mus = seg(MUSIC if os.path.exists(MUSIC) else f'dl/music/{MUSIC}.mp3', MUS_OFF, DUR)[:N].astype(np.float64)
 mus = np.pad(mus, ((0, N - len(mus)), (0, 0)))
-mus = mus / rms(mus[:SR * 30])
-pts = [(0, -40), (.12, -21), (9, -21), (12, -19.5), (20, -20), (20.6, -22.5), (27, -23), (27.5, -24.5), (33, -23.5),
+mus = mus / rms(mus)
+INTENSE = os.environ.get('INTENSE') == '1'
+if os.environ.get('USERTRACK') == '1':   # the user's own track: keep its dynamics, constant level
+    pts = [(0, -40), (.03, -15), (49.6, -15), (DUR, -30)]
+elif INTENSE:   # very intense and dark throughout; only the logo lets it go
+    pts = [(0, -40), (.08, -17), (20, -17), (20.6, -18.5), (27, -18.5), (33, -18.5), (39, -17), (47.9, -17), (48.3, -19.5), (DUR, -45)]
+else:
+    pts = [(0, -40), (.12, -21), (9, -21), (12, -19.5), (20, -20), (20.6, -22.5), (27, -23), (27.5, -24.5), (33, -23.5),
        (36.6, -23), (37.8, -18.5), (39, -19), (45, -18.5), (48, -18), (DUR, -18)]
 music = mus * db(np.interp(t, [p[0] for p in pts], [p[1] for p in pts]))[:, None]
 # ---- sound design ----
@@ -71,8 +78,8 @@ place(fx, thump(3.0, 50, 30), 47.95, -18, fi=.002, fo=1.0, norm=False)
 # the wind is pulled back under the delicate moment and the ending
 fx *= np.interp(t, [0, 32.8, 33.4, 38.8, 39.2, 46.6, 48.0, DUR], [1, 1, .45, .45, .8, .8, .25, .15])[:, None]
 for name, b in [('music', music), ('sfx', fx)]:
-    wf.write(f'stem_{name}.wav', SR, np.clip(b, -1, 1).astype(np.float32))
-wf.write('premix.wav', SR, (music + fx).astype(np.float32))
+    wf.write(f'stem_{name}{TAG}.wav', SR, np.clip(b, -1, 1).astype(np.float32))
+wf.write(f'premix{TAG}.wav', SR, (music + fx).astype(np.float32))
 print('t music sfx')
 for tt in range(0, int(DUR), 3):
     print(tt, round(20 * np.log10(rms(music[tt * SR:(tt + 3) * SR]) + 1e-9)), round(20 * np.log10(rms(fx[tt * SR:(tt + 3) * SR]) + 1e-9)))

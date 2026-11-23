@@ -51,6 +51,12 @@ mix was measured and checked frame by frame, and ask the user to confirm it by e
 - Şamaxı 1902 (22 Nov 2026): "Sonuncu səhnədə «kadr xaricində qaldı» yerində sadəcə Kadr Xaricinin
   logosunu ver. Yazıya ehtiyac yoxdur." That film ends on the logo alone. (My reading: when the phrase is
   not spoken by a narrator, let the logo complete the sentence; ask if unsure for a voiced episode.)
+- Music taste (Şamaxı 1902, 23 Nov 2026): "Dark Walk" was rejected ("Mahnı uyğun deyil"); calm and
+  melancholic options were not chosen. The user said "Mənə çox intense dark lazımdır" and then supplied their
+  own phonk-style track ("Bunu qoy. Səsi normalize edib"). For dramatic episodes, start from **very intense,
+  dark** music; offer 2–3 short previews (remux the rendered video with each mix, 720p) instead of guessing.
+  If the user supplies a track, use it, normalise to about −14 LUFS, and state plainly that its licence is
+  unverified.
 - If the user asks for an AI disclosure ("Arxiv fotoları süni intellektlə rəngləndirilib və
   canlandırılıb"), show it small and unobtrusive (top right, 22–24 px, ~70 % opacity); otherwise never add
   an AI label (see above).

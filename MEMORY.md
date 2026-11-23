@@ -170,7 +170,9 @@ _(notes pending)_
 - Exactly 50 s, no voice-over (text is the narrator), 8 AI-colorised/animated archival clips. Archived in
   `kadr-xarici-samaxi-1902/`. Music "Dark Walk" (Kevin MacLeod, CC BY 4.0). Correction during the edit:
   end on the logo alone, no "kadr xaricində qaldı" text. The Ümmü line is shown over rubble without
-  people, so no stranger is implied to be her. No feedback yet.
+  people, so no stranger is implied to be her. Music: "Dark Walk" rejected ("Mahnı uyğun deyil"); the user
+  wants "çox intense dark" and supplied their own TikTok phonk track (licence unverified), used in v2
+  (`Samaxi_1902_Kadr_Xarici_v2_9x16.mp4`, normalised to −14.1 LUFS).
 
 ## User preferences (across all projects)
 - Use only real footage. Never fabricate archive material, reactions, voices or historical scenes,

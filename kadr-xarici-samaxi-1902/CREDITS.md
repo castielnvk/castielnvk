@@ -1,17 +1,19 @@
 # Şamaxı zəlzələsi, 1902 (Kadr Xarici, 22 Nov 2026)
 
-Final: `Samaxi_1902_Kadr_Xarici_9x16.mp4` — exactly 50.000 s (1200 frames at 24 fps, the clips' native rate),
-1080×1920, H.264 + AAC stereo, −14.8 LUFS / −1.5 dBTP. No voice-over: the on-screen Azerbaijani text is the
+Final: `Samaxi_1902_Kadr_Xarici_v2_9x16.mp4` — exactly 50.000 s (1200 frames at 24 fps, the clips' native rate),
+1080×1920, H.264 + AAC stereo, −14.1 LUFS / −1.5 dBTP. No voice-over: the on-screen Azerbaijani text is the
 narrator. Separate `Samaxi_1902_Kadr_Xarici.srt` (text cards), cover `Samaxi_1902_Kadr_Xarici_thumbnail.jpg`.
 On screen at 39.0–47.5 s: "Arxiv fotoları süni intellektlə rəngləndirilib və canlandırılıb." (requested).
 
 ## Music
-- **"Dark Walk" — Kevin MacLeod (incompetech.com)**, 0:31–1:21 of the track (the piece decays to silence on
-  its own at 50 s).
-  - Source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Dark%20Walk.mp3
-  - Licence: Creative Commons Attribution 4.0 (https://creativecommons.org/licenses/by/4.0/). Commercial and
-    monetised use on Instagram, TikTok and YouTube is allowed. **Attribution is required** in the caption:
-    `Music: "Dark Walk" by Kevin MacLeod (incompetech.com), licensed under CC BY 4.0`
+- **v2 (current): the user's own supplied track** — a TikTok video credited on screen to `@the_phonkface`
+  (phonk-style, dark and intense), used from 0:04.7 to 0:54.7 so its own decay lands on the logo. The
+  whole mix is loudness-normalised to −14.1 LUFS / −1.5 dBTP.
+  - **Licence not verified.** The title, composer and licence are unknown. On Instagram, TikTok or YouTube
+    the audio may be muted or claimed. Using the platform's own music library for this sound is the safest
+    option.
+- v1 (rejected: "Mahnı uyğun deyil"): "Dark Walk" by Kevin MacLeod (CC BY 4.0). Previews with Heartbreaking,
+  Sad Trio and Night Vigil were also made and not chosen; the user asked for "çox intense dark".
 
 ## Sound effects — BigSoundBank.com (Joseph Sardin), CC0, no attribution required
 | Sound | Used for | Page |
