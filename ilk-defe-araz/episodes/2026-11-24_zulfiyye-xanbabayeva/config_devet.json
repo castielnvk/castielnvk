@@ -6,7 +6,7 @@
   "audio_fade_out": 0.4,
   "output": "Zulfiyye_Xanbabayeva_Devet_9x16.mp4",
   "clips": {
-    "ai2": "source/ai2.mp4"
+    "ai3": "source/ai3.mp4"
   },
   "anchors": {
     "words": 1.28,
@@ -17,7 +17,7 @@
   "shots": [
     {
       "start": 0.0,
-      "clip": "ai2",
+      "clip": "ai3",
       "src": 0.0,
       "speed": 0.63,
       "z": [
@@ -30,33 +30,33 @@
     },
     {
       "start": 3.88,
-      "clip": "ai2",
+      "clip": "ai3",
       "src": 2.44,
       "speed": 0.63,
       "z": [
         1.45,
         1.5
       ],
-      "cx": 0.5,
+      "cx": 0.52,
       "cy": 0.2,
       "depth": true
     },
     {
       "start": 5.95,
-      "clip": "ai2",
+      "clip": "ai3",
       "src": 3.74,
       "speed": 0.63,
       "z": [
         1.8,
         1.86
       ],
-      "cx": 0.76,
-      "cy": 0.42,
+      "cx": 0.66,
+      "cy": 0.34,
       "depth": true
     },
     {
       "start": 6.9,
-      "clip": "ai2",
+      "clip": "ai3",
       "src": 4.34,
       "speed": 0.63,
       "z": [
@@ -64,12 +64,12 @@
         1.24
       ],
       "cx": 0.5,
-      "cy": 0.3,
+      "cy": 0.28,
       "depth": true
     },
     {
       "start": 8.68,
-      "clip": "ai2",
+      "clip": "ai3",
       "src": 5.46,
       "speed": 0.63,
       "z": [
@@ -82,7 +82,7 @@
     },
     {
       "start": 11.01,
-      "clip": "ai2",
+      "clip": "ai3",
       "src": 6.93,
       "speed": 0.65,
       "z": [
@@ -99,7 +99,7 @@
     },
     {
       "start": 14.37,
-      "clip": "ai2",
+      "clip": "ai3",
       "src": 9.11,
       "speed": 0.65,
       "z": [
@@ -112,7 +112,7 @@
     },
     {
       "start": 17.74,
-      "clip": "ai2",
+      "clip": "ai3",
       "src": 11.3,
       "speed": 0.6,
       "z": [
@@ -129,7 +129,7 @@
     },
     {
       "start": 21.0,
-      "clip": "ai2",
+      "clip": "ai3",
       "src": 13.26,
       "speed": 0.65,
       "z": [
