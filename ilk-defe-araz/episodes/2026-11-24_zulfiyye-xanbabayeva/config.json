@@ -85,104 +85,7 @@
       "depth": true
     }
   ],
-  "rows": [
-    {
-      "text": "İLK DƏFƏ",
-      "y": 560,
-      "size": 220,
-      "style": "outline",
-      "color": "#095D6A",
-      "lw": 4,
-      "speed": 70,
-      "dir": -1,
-      "alpha": 0.9,
-      "in": 0.35,
-      "out": 3.75
-    },
-    {
-      "text": "“ARAZ”DA",
-      "y": 800,
-      "size": 220,
-      "color": "orange",
-      "speed": 90,
-      "dir": 1,
-      "in": 0.5,
-      "out": 3.75
-    },
-    {
-      "text": "DİNLƏ",
-      "y": 1040,
-      "size": 220,
-      "style": "outline",
-      "color": "#095D6A",
-      "lw": 4,
-      "speed": 70,
-      "dir": -1,
-      "alpha": 0.9,
-      "in": 0.65,
-      "out": 3.75
-    },
-    {
-      "text": "“ARAZ”DA",
-      "y": 470,
-      "size": 300,
-      "color": "orange",
-      "speed": 160,
-      "dir": -1,
-      "in": 7.75,
-      "out": 9.82
-    },
-    {
-      "text": "İLK DƏFƏ",
-      "y": 770,
-      "size": 300,
-      "style": "outline",
-      "color": "#095D6A",
-      "lw": 5,
-      "speed": 160,
-      "dir": 1,
-      "alpha": 0.9,
-      "in": 7.85,
-      "out": 9.82
-    },
-    {
-      "text": "“ARAZ”DA",
-      "y": 300,
-      "size": 260,
-      "style": "outline",
-      "color": "#095D6A",
-      "lw": 5,
-      "speed": 60,
-      "dir": -1,
-      "alpha": 0.95,
-      "in": 9.82,
-      "out": 11.94,
-      "push": 0.02
-    },
-    {
-      "text": "DİNLƏ",
-      "y": 520,
-      "size": 420,
-      "color": "orange",
-      "speed": 50,
-      "dir": 1,
-      "in": 11.94,
-      "out": 13.56,
-      "push": 0.015
-    },
-    {
-      "text": "İLK DƏFƏ  “ARAZ”DA  DİNLƏ",
-      "y": 250,
-      "size": 130,
-      "style": "outline",
-      "color": "#095D6A",
-      "lw": 4,
-      "speed": 80,
-      "dir": -1,
-      "alpha": 0.95,
-      "in": 13.7
-    }
-  ],
+  "rows": [],
   "opening": {
     "type": "lux",
     "dur": 1.4
@@ -287,5 +190,43 @@
       "gain": 0.5
     }
   ],
-  "scrim": 0.6
+  "scrim": 0.6,
+  "displayFont": "P",
+  "goldText": [
+    "“ARAZ”DA"
+  ],
+  "palette": {
+    "main": "#9C7740",
+    "light": "#C9A15C",
+    "deep": "#5E4524",
+    "dark": "#1B140B",
+    "bright": "#E8C886"
+  },
+  "mast": [
+    {
+      "text": "“ARAZ”DA",
+      "y": 560,
+      "size": 300,
+      "maxW": 1000,
+      "in": 0.6,
+      "out": 3.8
+    },
+    {
+      "text": "“ARAZ”DA",
+      "y": 470,
+      "size": 300,
+      "maxW": 1000,
+      "in": 9.2,
+      "out": 12.33,
+      "style": "outline",
+      "lw": 2.5
+    },
+    {
+      "text": "DİNLƏ",
+      "y": 470,
+      "size": 330,
+      "maxW": 1000,
+      "in": 14.3
+    }
+  ]
 }
