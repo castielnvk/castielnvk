@@ -75,6 +75,18 @@ def sfx_hit(dur=0.9):
     return out / (np.abs(out).max() + 1e-9)
 
 
+def sfx_shimmer(dur=1.4, seed=0):
+    """soft glassy shimmer: a few gentle partials with slow attack, low-passed (no harsh highs)"""
+    import numpy as np
+    n = int(dur * SR); t = np.arange(n) / SR
+    r = np.random.default_rng(seed); out = np.zeros(n)
+    for f, a in [(880, 1), (1320, .6), (1760, .4), (2640, .2)]:
+        f = f * (1 + r.uniform(-.01, .01)); out += a * np.sin(2 * np.pi * f * t + r.uniform(0, 6))
+    env = (1 - np.exp(-t / .06)) * np.exp(-t / .45)
+    out = _lp(out * env, 4500)
+    return out / (np.abs(out).max() + 1e-9)
+
+
 def sfx_riser(dur=1.6):
     import numpy as np
     n = int(dur * SR); t = np.linspace(0, 1, n)
@@ -101,6 +113,8 @@ def make_sfx_mix(cfg, song_path, out_path):
         if typ == "whoosh":
             d = e.get("dur", 0.7); x = sfx_whoosh(d, seed=k); start = at - d / 2
             pan = np.linspace(-0.6, 0.6, len(x)) * (e.get("dir", 1))
+        elif typ == "shimmer":
+            x = sfx_shimmer(e.get("dur", 1.4), seed=k); start = at; pan = np.linspace(-.3, .3, len(x))
         elif typ == "hit":
             x = sfx_hit(); start = at; pan = np.zeros(len(x))
         else:

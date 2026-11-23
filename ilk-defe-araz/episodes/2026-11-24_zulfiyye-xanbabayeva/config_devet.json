@@ -34,12 +34,25 @@
       "src": 2.44,
       "speed": 0.63,
       "z": [
-        1.1,
-        1.15
+        1.45,
+        1.5
       ],
       "cx": 0.5,
-      "cy": 0.36,
-      "depth": false
+      "cy": 0.2,
+      "depth": true
+    },
+    {
+      "start": 5.95,
+      "clip": "ai2",
+      "src": 3.74,
+      "speed": 0.63,
+      "z": [
+        1.8,
+        1.86
+      ],
+      "cx": 0.76,
+      "cy": 0.42,
+      "depth": true
     },
     {
       "start": 6.9,
@@ -47,12 +60,25 @@
       "src": 4.34,
       "speed": 0.63,
       "z": [
+        1.2,
+        1.24
+      ],
+      "cx": 0.5,
+      "cy": 0.3,
+      "depth": true
+    },
+    {
+      "start": 8.68,
+      "clip": "ai2",
+      "src": 5.46,
+      "speed": 0.63,
+      "z": [
         1.0,
-        1.04
+        1.06
       ],
       "cx": 0.5,
       "cy": 0.42,
-      "depth": false
+      "depth": true
     },
     {
       "start": 11.01,
@@ -190,6 +216,36 @@
   "sfx_db": -22,
   "sfx": [
     {
+      "type": "shimmer",
+      "at": 1.28,
+      "gain": 0.35
+    },
+    {
+      "type": "shimmer",
+      "at": 3.88,
+      "gain": 0.35
+    },
+    {
+      "type": "shimmer",
+      "at": 5.95,
+      "gain": 0.35
+    },
+    {
+      "type": "shimmer",
+      "at": 6.9,
+      "gain": 0.35
+    },
+    {
+      "type": "shimmer",
+      "at": 8.68,
+      "gain": 0.35
+    },
+    {
+      "type": "shimmer",
+      "at": 10.18,
+      "gain": 0.35
+    },
+    {
       "type": "riser",
       "at": 10.98,
       "dur": 1.6,
@@ -224,6 +280,12 @@
       "at": 21.0,
       "dur": 1.0,
       "gain": 0.45
+    },
+    {
+      "type": "shimmer",
+      "at": 21.7,
+      "gain": 0.3,
+      "dur": 1.8
     }
   ],
   "scrim": 0.6,
@@ -280,5 +342,28 @@
       "y": 1580,
       "size": 88
     }
-  ]
+  ],
+  "l2mast": {
+    "at": 4.9,
+    "dur": 1.4,
+    "y": 470,
+    "size": 300,
+    "maxW": 1000
+  },
+  "letterbox": {
+    "h": 200,
+    "until": 11.01,
+    "open": 0.9
+  },
+  "film": {
+    "warm": 0.06,
+    "halation": 0.22
+  },
+  "endCard": {
+    "at": 21.7,
+    "dur": 0.9,
+    "logoW": 300,
+    "logoY": 1700
+  },
+  "fadeOut": 0.6
 }

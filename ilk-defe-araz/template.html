@@ -151,7 +151,7 @@ function mast(t) {                     // magazine-cover masthead behind the per
     ctx.restore();
   }
 }
-function behind(t) { mast(t); for (const r of (CFG.rows || [])) if (t >= r.in - .05 && (r.out === undefined || t <= r.out + .05)) row(t, r); }
+function behind(t) { mast(t); l2Behind(t); for (const r of (CFG.rows || [])) if (t >= r.in - .05 && (r.out === undefined || t <= r.out + .05)) row(t, r); }
 
 /* ---------------- member split-screen (3 diagonal slices) ---------------- */
 async function split(t) {
@@ -238,7 +238,8 @@ function decor(t, style, P) {
     ctx.fillStyle = g; ctx.fillRect(0, st.date.y - 160, W, H);
     const bh = (st.l3.y - st.date.y + 70) * expoOut(prog(t, P.in + .2, .9));
     const gg = ctx.createLinearGradient(0, st.date.y - 52, 0, st.date.y - 52 + bh); gg.addColorStop(0, '#FFF1CF'); gg.addColorStop(1, '#B98E4E');
-    ctx.fillStyle = gg; ctx.fillRect(X - 30, st.date.y - 52, 3 + 2 * bp, bh);
+    const eca = CFG.endCard ? 1 - expoIO(prog(t, CFG.endCard.at, CFG.endCard.dur || .9)) : 1;
+    ctx.save(); ctx.globalAlpha = eca; ctx.fillStyle = gg; ctx.fillRect(X - 30, st.date.y - 52, 3 + 2 * bp, bh); ctx.restore();
   } else if (style === 'frame') {
     // cinematic inset frame in brand teal + vertical accent bar beside the text
     const ins = 26, fe = expoOut(prog(t, P.in, 1.1)), bp = pulse(t);
@@ -389,6 +390,27 @@ function captions(t) {
     ctx.restore();
   }
 }
+function l2State(tt, XE) {
+  const L = CFG.lockup, s = A.settle, st = L.style, cx = W / 2, cy = L.centerY ?? 1000;
+  const s2 = fit(L.l2, 900, 230, 980), s3 = fit(L.l3, 900, 190, 900), m = CFG.l2mast;
+  const f = expoIO(prog(tt, s, .7));
+  let size, y, x;
+  if (m) {                              // centre → masthead behind the head (then → lockup at settle)
+    const q = expoIO(prog(tt, m.at, m.dur || 1.4)), ms = fit(L.l2, 900, m.size || 300, m.maxW || 1000);
+    size = lerp(s2, ms, q); y = lerp(cy, m.y, q);
+  } else { const up = expoOut(prog(tt, A.words3, .5)); size = lerp(s2, s2 * .84, up); y = lerp(cy, cy - s3 * .95, up); }
+  const x0 = cx - textW(L.l2, F(900, size)) / 2;
+  const sz = lerp(size, st.l2.size, f);
+  x = lerp(x0, XE ? XE(L.l2, 900, st.l2.size) : L.x, f); y = lerp(y, st.l2.y, f);
+  return { size: sz, y, x };
+}
+function l2Behind(t) {
+  const m = CFG.l2mast; if (!m || t < m.at || t >= A.settle) return;
+  const S = l2State(t, null);
+  const g = expoIO(prog(t, m.at, m.dur || 1.4));
+  drawText(CFG.lockup.l2, S.x, S.y, S.size, { shadow: 30 + 10 * g });
+  shine(t, CFG.lockup.l2, S.x, S.y, S.size);
+}
 function kinetic(t) {
   const L = CFG.lockup, k = A.words, s = A.settle, X = L.x, st = L.style;
   if (t < k) return;
@@ -396,11 +418,11 @@ function kinetic(t) {
   const s1 = fit(L.l1, 900, 190, 920), s2 = fit(L.l2, 900, 230, 980), s3 = fit(L.l3, 900, 190, 900);
   const T2 = A.words2, T3 = A.words3;
   // state functions for the FLIP (centre → lockup)
-  const st2 = tt => { const up = expoOut(prog(tt, T3, .5)), f = expoIO(prog(tt, s, .7));
-    const size = lerp(lerp(s2, s2 * .84, up), st.l2.size, f), y = lerp(lerp(cy, cy - s3 * .95, up), st.l2.y, f);
-    return { size, y, x: lerp(cx - textW(L.l2, F(900, size)) / 2, X, f) }; };
+  const ec = CFG.endCard ? expoIO(prog(t, CFG.endCard.at, CFG.endCard.dur || .9)) : 0;
+  const XE = (str, w, size) => lerp(X, W / 2 - textW(str, F(w, size)) / 2, ec);      // left lockup → centred end card
+  const st2 = tt => l2State(tt, XE);
   const st3 = tt => { const f = expoIO(prog(tt, s, .7)), size = lerp(s3, st.l3.size, f);
-    return { size, y: lerp(cy + s3 * .3, st.l3.y, f), x: lerp(cx - textW(L.l3, F(900, size)) / 2, X, f), col: f < .55 ? OR.bright : '#fff' }; };
+    return { size, y: lerp(cy + s3 * .3, st.l3.y, f), x: lerp(cx - textW(L.l3, F(900, size)) / 2, XE(L.l3, 900, st.l3.size), f), col: f < .55 ? OR.bright : '#fff' }; };
   // ---- İLK DƏFƏ in the centre: orange block + rising letters, pushed out upward at T2
   if (t < T2 + .1) {
     const w1 = textW(L.l1, F(900, s1)), ex = expoIn(prog(t, T2 - .22, .3));
@@ -412,7 +434,8 @@ function kinetic(t) {
     ctx.restore();
   }
   // ---- “ARAZ”DA: rises in with echo at T2, lifts at T3, flies into the lockup at settle
-  if (t >= T2) {
+  const behindNow = CFG.l2mast && t >= CFG.l2mast.at && t < s;     // drawn behind the person by mast layer
+  if (t >= T2 && !behindNow) {
     const S = st2(t);
     if (t < T3) echo(L.l2, S.x, S.y, S.size, t, T2 + .08);
     const pin = expoOut(prog(t, T2 + .08, .4));
@@ -430,15 +453,16 @@ function kinetic(t) {
   }
   // ---- lines that join in the lockup: İLK DƏFƏ, date, rolling time
   if (t >= s) {
-    letters(L.l1, X, st.l1.y, st.l1.size, t, s + .62, { stagger: .025 });
-    letters(L.date, X, st.date.y, st.date.size, t, s + .5, { w: 800, stagger: .02 });
-    rolling(L.time, X, st.time.y, st.time.size, t, s + .65, { w: 600, color: 'rgba(255,255,255,0.93)' });
+    letters(L.l1, XE(L.l1, 900, st.l1.size), st.l1.y, st.l1.size, t, s + .62, { stagger: .025 });
+    letters(L.date, XE(L.date, 800, st.date.size), st.date.y, st.date.size, t, s + .5, { w: 800, stagger: .02 });
+    rolling(L.time, XE(L.time, 600, st.time.size), st.time.y, st.time.size, t, s + .65, { w: 600, color: 'rgba(255,255,255,0.93)' });
   }
 }
-function logo() {
-  const P = CFG.logoPos, lw = P.w, lh = lw * LOGO.height / LOGO.width;
+function logo(t) {
+  const P = CFG.logoPos, E = CFG.endCard, e = E ? expoIO(prog(t, E.at, E.dur || .9)) : 0;
+  const lw = lerp(P.w, E?.logoW || P.w, e), lh = lw * LOGO.height / LOGO.width, ly = lerp(P.y, E?.logoY || P.y, e);
   ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 12;
-  ctx.drawImage(LOGO, W / 2 - lw / 2, P.y - lh / 2, lw, lh); ctx.restore();
+  ctx.drawImage(LOGO, W / 2 - lw / 2, ly - lh / 2, lw, lh); ctx.restore();
 }
 
 /* beat pulse: 1 on a strong beat, decaying quickly (used for subtle "breathing") */
@@ -449,6 +473,28 @@ function tealGrade() {
   ctx.save(); ctx.globalCompositeOperation = 'soft-light'; ctx.fillStyle = `rgba(9,93,106,${G.amount})`; ctx.fillRect(0, 0, W, H);
   ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = `rgba(200,232,236,${G.amount * .25})`; ctx.fillRect(0, 0, W, H);
   ctx.restore();
+}
+const HB = document.createElement('canvas'); HB.width = 270; HB.height = 480; const HCTX = HB.getContext('2d');
+function film() {
+  const f = CFG.film; if (!f) return;
+  if (f.warm) { ctx.save(); ctx.globalCompositeOperation = 'soft-light'; ctx.fillStyle = `rgba(255,190,120,${f.warm})`; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+  if (f.halation) {                    // highlights bloom softly in warm gold (35 mm feel)
+    HCTX.setTransform(1, 0, 0, 1, 0, 0); HCTX.globalCompositeOperation = 'source-over';
+    HCTX.filter = 'brightness(0.55) contrast(3.2) blur(6px)'; HCTX.drawImage(C, 0, 0, 270, 480); HCTX.filter = 'none';
+    HCTX.globalCompositeOperation = 'multiply'; HCTX.fillStyle = 'rgb(255,196,140)'; HCTX.fillRect(0, 0, 270, 480);
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = f.halation; ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(HB, 0, 0, W, H); ctx.restore();
+  }
+}
+/* cinematic letterbox that opens to full frame when the music arrives */
+function letterbox(t) {
+  const b = CFG.letterbox; if (!b) return;
+  const h = (b.h || 210) * (1 - expoIO(prog(t, b.until, b.open || .9)));
+  if (h < .5) return;
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, h); ctx.fillRect(0, H - h, W, h);
+  const g = ctx.createLinearGradient(W * .15, 0, W * .85, 0);
+  g.addColorStop(0, 'rgba(232,200,134,0)'); g.addColorStop(.5, 'rgba(232,200,134,0.55)'); g.addColorStop(1, 'rgba(232,200,134,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, h - 1, W, 1); ctx.fillRect(0, H - h, W, 1);
 }
 const TA = mk(), TB = mk();
 async function composeShot(idx, t, target) {      // footage + behind rows + person layer, into a canvas
@@ -505,18 +551,21 @@ async function renderAt(t) {
   await footageLayer(t);
   await split(t);
   tealGrade();
+  film();
   grade();
   glints(t);
   panel(t);
   wipes(t);
   opening(t);
+  letterbox(t);
   const bp = t > A.settle + .9 ? pulse(t) : 0, L = CFG.lockup;
   ctx.save();
   if (bp > 0) { const sc = 1 + .014 * bp, ax = L.x, ay = L.style.l3.y; ctx.translate(ax, ay); ctx.scale(sc, sc); ctx.translate(-ax, -ay); }
   kinetic(t);
   captions(t);
   ctx.restore();
-  logo();
+  logo(t);
+  if (CFG.fadeOut) { const a = clamp((t - (CFG.duration - CFG.fadeOut)) / CFG.fadeOut); if (a > 0) { ctx.fillStyle = `rgba(0,0,0,${a})`; ctx.fillRect(0, 0, W, H); } }
   ctx.save(); ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .05;
   ctx.drawImage(GRAIN[Math.floor(t * CFG.fps) % GRAIN.length], 0, 0, W, H); ctx.restore();
 }
