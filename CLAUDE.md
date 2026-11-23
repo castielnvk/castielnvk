@@ -169,6 +169,9 @@ approved styles and technical lessons.
   seconds of a video (the user asked why the sound "suddenly cuts"). Early pauses = the drone sinks softly while the room stays.
 - Logo ending: «Bir anlıq görünüş». The logo flashes for 3 frames with a hit, then black and total silence,
   then it is suddenly back and holds (`compose.LogoFlashEnding`). The user rejected the light-strip ending.
+- Instagram Stories per episode: `baxma-dedim/episodes/stories.py <NN>` (4 slides). **The "Fakt" slide
+  (big red year/number + the real documented fact) must ALWAYS be included.** Fact slides go into the
+  "Faktlar" highlight; its cover is `baxma-dedim/highlights/highlight-faktlar.png` (FAKT. with a red period).
 - The episode pipeline is in `baxma-dedim/episodes/` (`shared/compose.py`, `shared/sfx.py`,
   the logo ending `LogoEnding` and `dry_tick`). EP02 (`ep02-esidir/edit.py`) is the template.
 
