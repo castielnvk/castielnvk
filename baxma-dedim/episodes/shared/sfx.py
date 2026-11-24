@@ -265,3 +265,56 @@ def grit_scrape(length=0.45, seed=47, close=False):
             y[i] += 0.45 * y[i - d]
         x = y
     return _norm(np.stack([x, np.roll(x, 8 if close else 40)], 1))
+
+
+# A wedding-tune phrase in Shur mode on D (MIDI, length in eighth notes). Ornaments are added in synthesis.
+ZURNA_TUNE = [(81, 1), (81, 1), (79, 1), (81, 1), (82, 1), (81, 1), (79, 1), (77, 1),
+              (79, 1), (81, 1), (79, 1), (77, 1), (76, 1), (77, 1), (79, 4),
+              (77, 1), (79, 1), (81, 1), (84, 1), (82, 1), (81, 1), (79, 1), (81, 1),
+              (79, 1), (77, 1), (76, 1), (74, 1), (76, 1), (77, 1), (74, 4)]
+
+
+def zurna(dur, bpm=126, seed=61, tune=ZURNA_TUNE, distant=True):
+    """Synthesised zurna (double-reed shawm): bright, nasal, continuous (circular breathing),
+    vibrato, grace notes and trills on long notes. distant=True: thin, behind the guests."""
+    rng = np.random.default_rng(seed)
+    n = int(dur * SR)
+    eighth = 60 / bpm / 2
+    f = np.zeros(n)
+    t0, k = 0.0, 0
+    while t0 < dur:
+        m, ln = tune[k % len(tune)]
+        d = ln * eighth
+        i0, i1 = int(t0 * SR), min(n, int((t0 + d) * SR))
+        base = 440 * 2 ** ((m - 69) / 12)
+        seg = np.full(i1 - i0, base)
+        g = int(0.045 * SR)                       # grace note from the upper neighbour
+        if ln == 1 and rng.random() < 0.35 and len(seg) > g:
+            seg[:g] = base * 2 ** (2 / 12)
+        if ln >= 3:                               # trill on long notes
+            tt = np.arange(len(seg)) / SR
+            seg = np.where((np.floor(tt * 18) % 2 == 1) & (tt > 0.25) & (tt < d - 0.2), base * 2 ** (1 / 12), seg)
+        f[i0:i1] = seg
+        t0 += d
+        k += 1
+    f = signal.lfilter([0.02], [1, -0.98], f)     # ~20 ms glides between notes
+    f[: int(0.05 * SR)] = f[int(0.05 * SR)]
+    tt = np.arange(n) / SR
+    f *= 1 + 0.006 * np.sin(2 * np.pi * 5.6 * tt + 0.7 * np.sin(2 * np.pi * 0.3 * tt))
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    x = sum((1 / h ** 0.65) * np.sin(h * ph + 0.3 * h) for h in range(1, 22))
+    x = x / np.abs(x).max()
+    reed = _bp(rng.standard_normal(n), 2000, 6000) * 0.04
+    y = x + reed
+    out = 0.35 * y
+    for fc, q, gain in ((1150, 6, 1.0), (2600, 7, 0.8), (3700, 8, 0.45)):   # nasal formants
+        b, a = signal.iirpeak(fc, q, fs=SR)
+        out = out + gain * signal.lfilter(b, a, y)
+    out *= 0.85 + 0.15 * np.sin(2 * np.pi * 0.21 * tt)                       # breath swell
+    out = np.stack([out, out], 1)
+    if distant:
+        out = _lp(_hp(out, 380), 3600, order=4)
+        ir = reverb_ir(2.2, 0.5, seed=seed, lp=3000)
+        wet = np.stack([np.convolve(out[:, c], ir[:, c])[:n] for c in range(2)], 1)
+        out = 0.35 * out / np.abs(out).max() + wet / np.abs(wet).max()
+    return _norm(out)

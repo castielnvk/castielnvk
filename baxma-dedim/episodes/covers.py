@@ -81,6 +81,16 @@ EPISODES = [
         title=("DAMDA", "BACA"),                  # "Adını ayrı-ayrı de: damda baca"
         hook="bəs sən bacaya baxardın?",
     ),
+    dict(
+        num="05", folder="ep05-cin-toyu", styles=["A"],
+        source="source/1_old_man_staring.mp4", crop=(4, 14, 704, 1252),
+        grade="eq=contrast=1.03:brightness=-0.02:saturation=0.96,vignette=angle=PI/4.6",
+        stills=dict(stare=3.0),
+        face=(360, 840),                          # the old man staring into the lens (face above the title)
+        name="Cin toyu",
+        title=("CİN", "TOYU"),
+        hook="gedib baxardın?",
+    ),
 ]
 
 
