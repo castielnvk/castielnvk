@@ -104,3 +104,4 @@ Tələblər: `pip install playwright librosa`; Chromium `/opt/pw-browsers/chromi
 | `episodes/2026-11-23_ayten-meherremova` | Aytən Məhərrəmova — «Gecikmiş məhəbbət» | 23 Noyabr | `Ayten_Meherremova_Gecikmis_Mehebbet_Ilk_Defe_Araz_9x16.mp4` (15.8 s, v5; tək 15 s klip, ardıcıl + fərqli kadr ölçüləri) |
 | `episodes/2026-11-24_zulfiyye-xanbabayeva` | Zülfiyyə Xanbabayeva (Xalq artisti) — «Bir nəfəs qədər» fonda | 24 Noyabr | `Zulfiyye_Xanbabayeva_Ilk_Defe_Araz_9x16.mp4` (18.9 s, **lüks rejim A «Gold Couture»**) |
 | `episodes/2026-11-24_zulfiyye-xanbabayeva` (`config_devet.json`) | Zülfiyyə Xanbabayeva — efirə dəvət («Sabah saat 11-də…») | 24 Noyabr | `Zulfiyye_Xanbabayeva_Devet_9x16.mp4` (23.7 s, lüks A + letterbox, masthead, halation, ortada son kart) |
+| `episodes/2026-11-27_zemine-cox-sevmisem` | Zəminə — «Çox sevmişəm» | 27 Noyabr | `Zemine_Cox_Sevmisem_Ilk_Defe_Araz_9x16.mp4` (20.7 s, v5; tünd vintaj otaq, 4 qısa klip) |
