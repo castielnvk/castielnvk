@@ -33,7 +33,7 @@ CONTACT = 16.0                                     # fingers reach the rice (cli
 
 # shots: (file, start, end, source offset s, zoom from, zoom to, centre from, centre to, caption base, crop)
 SHOTS = [
-    ("1_old_man_staring.mp4", 0.0, 10.0, 0.0, 1.00, 1.03, (540, 960), (520, 960), 300, SRC_CROP),
+    ("1_old_man_staring.mp4", 0.0, 10.0, 0.0, 1.00, 1.10, (540, 960), (430, 860), 300, SRC_CROP),  # push into his stare
     ("build/2_hand_plate_24.mp4", 10.0, 20.0, 0.0, 1.00, 1.10, (540, 960), (589, 873), 300, (0, 0, 1080, 1920)),
     ("3_empty_clearing.mp4", 20.0, 28.0, 0.0, 1.00, 1.04, (540, 960), (420, 900), 300, SRC_CROP),
 ]
@@ -59,7 +59,15 @@ SLEEVE_REACH = (14.7, CONTACT + 0.15)
 SILENCE = (20.0, 21.0)     # zurna killed on the cut frame; one beat of complete silence
 PULLBACK_AT = 22.70        # clip 3 hand pulls back (~2.7 s)
 GHOST_ZURNA = (25.4, 27.7)  # a far-away phrase under the question, almost not there
-SND = dict(zurna=-16, murmur=-22, creak=-15, sleeve=-8, wind=-21, pull_sleeve=-10, ghost=-24)
+SND = dict(zurna=-13, murmur=-22, creak=-15, sleeve=-8, wind=-21, pull_sleeve=-10, ghost=-22)
+# intensity (v2)
+ZURNA_REC = os.path.join(HERE, "source", "zurna_recording_user.wav")   # the user's zurna (real performance)
+ZURNA_WARP = (17.6, 20.0)  # the wedding goes wrong: the zurna slows and sags like tape before it is killed
+HEART_S2 = (12.0, 20.0)    # heartbeat under the reach, speeding up (1.05 s -> 0.6 s between beats)
+GLIMPSE_AT = CONTACT - 0.50  # with "‘Bismillah’": 2 frames of the empty clearing + a muffled hit
+GLIMPSE_FRAMES = 2
+LAMP_FLICKER = [(18.55, 18.62, 0.62), (18.95, 19.0, 0.8), (19.30, 19.42, 0.5), (19.62, 19.67, 0.75),
+                (19.80, 19.88, 0.55)]     # (start, end, brightness): the wedding light stutters before it vanishes
 # ============================================================================
 
 LAYERS = os.path.join(HERE, "layers")
@@ -133,6 +141,12 @@ def line_state(L, t, d_in=0.32, d_out=0.18, rise=18):
 
 
 # ---- picture -----------------------------------------------------------------------------
+yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+VIG = (np.clip(np.hypot((xx - W / 2) / (W * 0.62), (yy - H * 0.55) / (H * 0.62)), 0, 1.4) ** 2.2)[..., None]
+_g = C.Source(os.path.join(HERE, "source", "3_empty_clearing.mp4"), SRC_CROP, GRADE)
+GLIMPSE = _g.frame(150).astype(np.float32) / 255.0 * 0.85      # the clearing, no hand: what is really there
+_g.close()
+del yy, xx
 sources = {}
 enc = subprocess.Popen(
     ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS),
@@ -154,6 +168,15 @@ for n in range(round(DUR * FPS)):
         z = z0 + (z1 - z0) * p
         cen = (c0[0] + (c1[0] - c0[0]) * p, c0[1] + (c1[1] - c0[1]) * p)
         frame = C.push_in(img, z, cen).astype(np.float32) / 255.0
+        if t0 == 10.0:                                           # the table shot closes in
+            frame = frame * (1 - 0.42 * C.smooth((t - 10.0) / 10.0) * VIG)
+            for a, b, v in LAMP_FLICKER:
+                if a <= t < b:
+                    frame = frame * v
+            if GLIMPSE_AT <= t < GLIMPSE_AT + GLIMPSE_FRAMES / 24:
+                frame = C.grain(GLIMPSE.copy())
+                enc.stdin.write((np.clip(frame, 0, 1) * 255 + 0.5).astype(np.uint8).tobytes())
+                continue
         active = [(L, *line_state(L, t)) for L in LINES]
         for L, o, dy in active:
             if o > 0:
@@ -202,8 +225,32 @@ def chop(x, at, fade=0.004):
 
 CUT_SHOT = SILENCE[0]
 # 1 · the wedding: a thin, distant zurna through both table shots, killed on the cut frame
-zur = chop(placed(sfx.zurna(CUT_SHOT + 0.5, seed=61), 0, S["zurna"]) *
-           db(env([(0, -6), (0.4, 0), (CUT_SHOT, 0)])), CUT_SHOT)
+zr = sfx.load_file(ZURNA_REC)
+need = int((CUT_SHOT + 1.0) * SR)
+xf = int(1.0 * SR)
+while len(zr) < need:                                    # extend with a crossfaded repeat of the middle
+    tail = sfx.load_file(ZURNA_REC, 6.0)
+    ramp = np.linspace(0, 1, xf)[:, None]
+    zr = np.concatenate([zr[:-xf], zr[-xf:] * (1 - ramp) + tail[:xf] * ramp, tail[xf:]])
+zr = zr[:need]
+zr = sfx._lp(sfx._hp(zr, 140), 1300, order=4)           # muffled: behind the guests, through bodies and cloth
+w_ = int(1.0 * SR)                                       # even out the level (the opening has no drum)
+pw_ = np.convolve((zr ** 2).mean(1), np.ones(w_) / w_, mode="same")
+zr = zr / (np.sqrt(pw_ + 1e-9)[:, None] ** 0.75)
+mono = zr.mean(1, keepdims=True)
+zr = 0.7 * mono + 0.3 * zr                               # narrow, far
+ir = sfx.reverb_ir(1.8, 0.42, seed=73, lp=1400)
+wet = np.stack([np.convolve(zr[:, c], ir[:, c])[:need] for c in range(2)], 1)
+zr = sfx._norm(0.65 * zr / np.abs(zr).max() + 0.55 * wet / np.abs(wet).max())
+tt = np.arange(need) / SR                                # tape sag: playback rate 1.0 -> 0.84
+w0, w1 = ZURNA_WARP
+rate = 1 - 0.16 * np.clip((tt - w0) / (w1 - w0), 0, 1) ** 1.6
+pos = np.cumsum(rate) - rate[0]
+zr = np.stack([np.interp(pos, np.arange(need), zr[:, c]) for c in range(2)], 1).astype(np.float32)
+zur = placed(zr, 0, S["zurna"]) * db(env([(0, -8), (0.5, 0), (w0, 0), (CUT_SHOT - 0.01, 3)]))
+g0, g1 = int(GLIMPSE_AT * SR), int((GLIMPSE_AT + GLIMPSE_FRAMES / 24) * SR)
+zur[g0:g1] *= 0.02                                       # the wedding drops out for the 2-frame glimpse
+zur = chop(zur, CUT_SHOT)
 # 2 · crowd murmur (real recording, far and indistinct), dies away as the man leans in
 cr = sfx.load_file(os.path.join(LIB, "crowd_talking_mixkit2930.mp3"), 5.0, 6.0)
 cr = sfx._lp(sfx._hp(cr, 150), 2200, order=4)
@@ -234,8 +281,10 @@ def pull(x):
 
 pull_sleeve = placed(sfx.fabric_rustle(1.05, pull, seed=69, pan=0.4), PULLBACK_AT, S["pull_sleeve"])
 # 6 · the question: a far-away zurna phrase in the wind, almost not there
-gz = sfx.zurna(GHOST_ZURNA[1] - GHOST_ZURNA[0], seed=71)
-gz = sfx._lp(gz, 1800, order=4)
+gz = sfx.load_file(ZURNA_REC, 9.0, GHOST_ZURNA[1] - GHOST_ZURNA[0])   # the same wedding, very far away
+gz = sfx._lp(sfx._hp(gz, 200), 650, order=4)
+gir = sfx.reverb_ir(2.8, 0.9, seed=75, lp=900)
+gz = sfx._norm(np.stack([np.convolve(gz[:, c], gir[:, c])[:len(gz)] for c in range(2)], 1))
 ghost = chop(placed(gz * db(env([(0, -40), (0.9, 0), (1.6, 0), (GHOST_ZURNA[1] - GHOST_ZURNA[0], -40)], n=len(gz))),
                     GHOST_ZURNA[0], S["ghost"]), CUT)
 # 7 · standard tension: drone grows under the wedding, dies with the zurna, creeps back; heartbeat; riser; impact
@@ -250,9 +299,19 @@ drone = loop[:N].copy()
 w = int(0.5 * SR)
 pw = np.convolve((drone ** 2).mean(1), np.ones(w) / w, mode="same")
 drone = (drone / np.sqrt(pw + 1e-8)[:, None] * 0.12).astype(np.float32)
-drone *= db(env([(0, -60), (3.0, -27), (CUT_SHOT - 0.01, -12), (CUT_SHOT, -120), (SILENCE[1], -120),
+drone *= db(env([(0, -60), (3.0, -24), (10.0, -18), (CUT_SHOT - 0.01, -5), (CUT_SHOT, -120), (SILENCE[1], -120),
                  (SILENCE[1] + 1.5, -26), (CUT - 0.01, -6), (CUT, -120), (DUR, -120)]))
 heart = chop(placed(sfx.heartbeat(bpm=54, beats=5), 22.2, -18), CUT)
+beat = sfx.heartbeat(bpm=60, beats=1)                    # under the reach: the heart speeds up
+heart2 = np.zeros((N, 2), np.float32)
+tb = HEART_S2[0]
+while tb < HEART_S2[1]:
+    heart2 += placed(beat, tb, -17 + 5 * (tb - HEART_S2[0]) / (HEART_S2[1] - HEART_S2[0]))
+    tb += 1.05 - 0.45 * (tb - HEART_S2[0]) / (HEART_S2[1] - HEART_S2[0])
+heart2 = chop(heart2, CUT_SHOT)
+im0 = sfx.load_file(os.path.join(LIB, "deep_impact_mixkit1687.mp3"))
+hit = im0[: int(0.5 * SR)] * np.linspace(1, 0, int(0.5 * SR))[:, None] ** 2
+glimpse_hit = placed(sfx._lp(hit, 600), GLIMPSE_AT, -6)  # muffled thump under the glimpse
 rs = sfx.load_file(os.path.join(LIB, "terror_riser_mixkit2630.mp3"), 1.2, 1.8)
 riser = chop(placed(rs * db(env([(0, -30), (1.75, 0), (1.8, 0)], n=len(rs))), CUT - 1.8, -11), CUT)
 im = sfx.load_file(os.path.join(LIB, "deep_impact_mixkit1687.mp3"))
@@ -260,7 +319,7 @@ impact = placed(im * db(env([(0, 0), (0.5, -2), (END_IN - CUT - 0.1, -30), (END_
                             n=len(im))), CUT, -4)
 end_stems = ending_sfx.build(END_IN, DUR)
 
-stems = dict(zurna=zur, crowd_murmur=murmur, chair_creak=creak, sleeve_reach=sleeve, outdoor_wind=wind,
+stems = dict(zurna=zur, heartbeat_reach=heart2, glimpse_hit=glimpse_hit, crowd_murmur=murmur, chair_creak=creak, sleeve_reach=sleeve, outdoor_wind=wind,
              sleeve_pullback=pull_sleeve, ghost_zurna=ghost, horror_drone=drone, heartbeat=heart, riser=riser,
              cut_impact=impact, **end_stems)
 for name, x in stems.items():

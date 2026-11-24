@@ -1,6 +1,6 @@
 # BAXMA DEDİM. — EP05 «Cin toyu»
 
-`Baxma_Dedim_EP05.mp4`: 1080×1920, H.264 + AAC 48 kHz stereo, 24 fps, 33.0 s, −22 LUFS.
+`Baxma_Dedim_EP05.mp4`: 1080×1920, H.264 + AAC 48 kHz stereo, 24 fps, 33.0 s, −21.3 LUFS.
 Source audio is muted. No narration, no music beyond the diegetic zurna, no "Canlandırma" label.
 Clip 2 is the user's replacement (`source/2_hand_plate_v2.mov`).
 
@@ -14,7 +14,14 @@ Clip 2 is the user's replacement (`source/2_hand_plate_v2.mov`).
 | 29.0–33.0 | Standard ending «Bir anlıq görünüş» | — | Standard ending sound |
 
 The captions sit in a left column (max 620 px), clear of the lamp, the faces, the plate and the hand, with balanced line breaks.
-The zurna is synthesised (`shared/sfx.py: zurna()`: a Shur-mode wedding phrase, nasal formants, vibrato, grace notes, trills, distance).
+**v2 (user's request: real zurna, muffled, more intense):**
+- The zurna is now the user's own recording (`source/zurna_recording_user.wav`, taken from their screen recording).
+  It is low-passed at 1.3 kHz, narrowed, put in a dark reverb and levelled, so it sounds muffled and distant, behind the guests.
+- 17.6–20.0: the zurna sags like slowing tape (pitch and speed drop to 0.84), then is killed on the cut frame.
+- 15.5, with "‘Bismillah’": a **2-frame glimpse of the empty clearing** with a muffled thump and a zurna dropout; then the wedding is back.
+- The table shot closes in with a darkening vignette, and the wedding lamp stutters at 18.5–19.9.
+- Under the reach, a heartbeat speeds up from 12.0 to 20.0; the drone is louder throughout; a slow push into the old man's stare.
+- The far-away zurna under the question comes from the same recording, very muffled.
 The crowd murmur is a real recording (Mixkit 2930), low-passed so no words come through.
 
 Brief vs delivery: the brief asked for 30 s. The story runs 0–29 s, plus the standard 4 s logo ending, so the video is 33 s.
