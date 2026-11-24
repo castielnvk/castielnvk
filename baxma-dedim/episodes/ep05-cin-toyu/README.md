@@ -27,3 +27,8 @@ The crowd murmur is a real recording (Mixkit 2930), low-passed so no words come 
 Brief vs delivery: the brief asked for 30 s. The story runs 0–29 s, plus the standard 4 s logo ending, so the video is 33 s.
 
 Files: `edit.py` (CONFIG at the top), `stems/` (one WAV per layer plus mix), `layers/*.svg`, `covers/05-cover-A-uz.*`.
+
+**v3:** the captions use style C (`../shared/type_c.py`), with key words: Cinlər · adam · ‘cin toyu’ · ‘Bismillah’ · tək · baxardın?
+Each key word lands with a muffled thud and a camera flinch. The sound changes on the 10.0 cut: a reverse suck and low hit, the zurna jumps
+from far/muffled (1.3 kHz) to close/clear (3.2 kHz), the drone retunes lower and darker, and table foley comes in (a distant spoon clink and
+the hand in the rice).

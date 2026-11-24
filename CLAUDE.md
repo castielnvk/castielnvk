@@ -167,6 +167,13 @@ approved styles and technical lessons.
   Fit the brief's text and timings around this. Say in the reply where the brief was overridden.
 - Silence drops must never sound like an audio glitch: never cut the room tone to dead silence in the first
   seconds of a video (the user asked why the sound "suddenly cuts"). Early pauses = the drone sinks softly while the room stays.
+- **Captions = style C** (`episodes/shared/type_c.py`, chosen by the user): small spaced capitals (Cormorant
+  Garamond) + ONE big red italic key word per card on its own line, keeping the full sentence. Centred in a dark
+  area, slow fade, no slide. Each key word lands with a muffled thud and a 3.5 % camera flinch. Never Inter Tight
+  for episode captions again (the user: it "killed the scariness").
+- **Sound must change with every picture cut** (the user: "the same sound stays when the shots change"): give each
+  shot its own perspective (e.g. a muffled/far vs a close/clear version of the same source, a retuned drone, shot-specific
+  foley), with a reverse-suck + low hit on the cut.
 - Logo ending: «Bir anlıq görünüş». The logo flashes for 3 frames with a hit, then black and total silence,
   then it is suddenly back and holds (`compose.LogoFlashEnding`). The user rejected the light-strip ending.
 - Instagram Stories per episode: `baxma-dedim/episodes/stories.py <NN>` (4 slides). **The "Fakt" slide

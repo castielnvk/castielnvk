@@ -41,16 +41,20 @@ CUT = 28.0
 END_IN = 29.0
 DUR = END_IN + C.FLASH["LENGTH"]                   # 33.0 s
 
-TX, TSIZE, TMAXW = 84, 56, 620                     # left column: clear of lamp, faces, plate and hand
-# each line is its own beat; a card's lines leave together at t_out
+# Caption style C (../shared/type_c.py): small spaced capitals + one big red italic key word per card.
+# Elements in reading order: ("s"|"k", text, t_in). cy = vertical centre of the card per shot.
+CARD_CY = {0: 290, 1: 470, 2: 470}           # shot index -> card centre (dark areas above faces/table/hand)
 CARDS = [
-    dict(t_out=4.40, instant=True, lines=[("Cinlər onu toya çağırdılar.", 0.0)]),
-    dict(t_out=9.85, lines=[("O da hamını adam bilib süfrəyə oturdu.", 4.60)]),
-    dict(t_out=13.90, lines=[("Azərbaycan folklorunda buna ‘cin toyu’ deyilir.", 10.15)]),
-    dict(t_out=20.0, cut_out=True, lines=[("Yolçu yeməyə əl uzadıb", 14.10), ("‘Bismillah’ dedi.", CONTACT - 0.50)]),
-    dict(t_out=24.40, lines=[("Bir də baxdı ki, çölün düzündə tək qalıb.", 21.05)]),
-    dict(t_out=CUT, cut_out=True, lines=[("Gecə çöldən toy səsi gəlsə, gedib baxardın?", 24.60)]),
+    dict(t_out=4.40, instant=True, el=[("k", "Cinlər", 0.0), ("s", "onu toya çağırdılar.", 0.0)]),
+    dict(t_out=9.85, el=[("s", "O da hamını", 4.60), ("k", "adam", 5.10), ("s", "bilib süfrəyə oturdu.", 5.10)]),
+    dict(t_out=13.90, el=[("s", "Azərbaycan folklorunda buna", 10.15), ("k", "‘cin toyu’", 10.75),
+                          ("s", "deyilir.", 10.75)]),
+    dict(t_out=20.0, cut_out=True, el=[("s", "Yolçu yeməyə əl uzadıb", 14.10), ("k", "‘Bismillah’", CONTACT - 0.50),
+                                       ("s", "dedi.", CONTACT - 0.50)]),
+    dict(t_out=24.40, el=[("s", "Bir də baxdı ki, çölün düzündə", 21.05), ("k", "tək", 21.75), ("s", "qalıb.", 21.75)]),
+    dict(t_out=CUT, cut_out=True, el=[("s", "Gecə çöldən toy səsi gəlsə, gedib", 24.60), ("k", "baxardın?", 25.50)]),
 ]
+KEY_HITS = sorted({e[2] for c in CARDS for e in c["el"] if e[0] == "k" and e[2] > 0})
 
 # sound beats (edit seconds)
 LEAN_CREAK_AT = 0.55       # the man leans in (clip 1 motion peaks 0.25–1.5 s)
@@ -105,39 +109,44 @@ def shot_at(t):
     return None
 
 
-# ---- text layers: each card line may wrap; each line keeps its own beat ----------------------
-lead = round(TSIZE * 1.24)
+# ---- text layers (style C) -------------------------------------------------------------------
+import type_c  # noqa: E402
 jobs, LINES = [], []
 for ci, c in enumerate(CARDS):
-    base = shot_at(c["lines"][0][1])[8]
-    row = 0
-    for li, (txt, t_in) in enumerate(c["lines"]):
-        parts = wrap(txt, TSIZE, TMAXW)
-        name = f"c{ci + 1}-{li + 1}"
-        svg = os.path.join(LAYERS, name + ".svg")
-        with open(svg, "w", encoding="utf-8") as f:
-            f.write(C.text_layer_svg(name, [[(p, C.F_SEMI)] for p in parts], TSIZE, TX, base + row * lead, lead))
-        jobs.append([svg, svg[:-4] + ".png", W, H, 1])
-        LINES.append(dict(png=svg[:-4] + ".png", t_in=t_in, card=c,
-                          band=(base + row * lead - TSIZE, base + (row + len(parts) - 1) * lead + 0.3 * TSIZE)))
-        row += len(parts)
+    shot = SHOTS.index(shot_at(c["el"][0][2]))
+    els, js = type_c.build_card(f"c{ci + 1}", c["el"], CARD_CY[shot], LAYERS)
+    jobs += js
+    for e in els:
+        e["card"] = c
+        LINES.append(e)
 C.render_svgs(jobs, os.path.join(LAYERS, "jobs.json"))
 ys = np.arange(H, dtype=np.float32)[:, None, None]
 for L in LINES:
     L["rgb"], L["a"] = C.load_rgba(L["png"])
     y0, y1 = L["band"]
     d = np.maximum(np.maximum(y0 - ys, ys - y1), 0)
-    L["scrim"] = 1 - 0.40 * np.exp(-(d / 120) ** 2)
+    L["scrim"] = 1 - 0.42 * np.exp(-(d / 110) ** 2)
 ending = C.LogoFlashEnding(LAYERS)
 
 
-def line_state(L, t, d_in=0.32, d_out=0.18, rise=18):
+def line_state(L, t, d_out=0.25):
+    """slow fade, no slide; key words come in faster (they land with the thud)."""
     c = L["card"]
     if t < L["t_in"] or t >= c["t_out"]:
         return 0.0, 0
-    p = 1.0 if c.get("instant") and L["t_in"] == 0.0 else C.ease_out((t - L["t_in"]) / d_in)
+    d_in = 0.18 if L["kind"] == "k" else 0.7
+    p = 1.0 if c.get("instant") and L["t_in"] == 0.0 else C.smooth((t - L["t_in"]) / d_in)
     o = p if c.get("cut_out") else p * (1 - C.smooth((t - (c["t_out"] - d_out)) / d_out))
-    return o, round(rise * (1 - p))
+    return o, 0
+
+
+def flinch(t):
+    """camera flinch on each key word: a quick 3.5 % punch-in that settles."""
+    z = 1.0
+    for k in KEY_HITS:
+        if 0 <= t - k < 1.2:
+            z += 0.035 * (1 - np.exp(-(t - k) / 0.03)) * np.exp(-(t - k) / 0.35)
+    return z
 
 
 # ---- picture -----------------------------------------------------------------------------
@@ -165,7 +174,7 @@ for n in range(round(DUR * FPS)):
             sources[name] = C.Source(path, crop, GRADE)
         img = sources[name].frame(round((ss + t - t0) * 24))
         p = C.smooth((t - t0) / (t1 - t0))
-        z = z0 + (z1 - z0) * p
+        z = (z0 + (z1 - z0) * p) * flinch(t)
         cen = (c0[0] + (c1[0] - c0[0]) * p, c0[1] + (c1[1] - c0[1]) * p)
         frame = C.push_in(img, z, cen).astype(np.float32) / 255.0
         if t0 == 10.0:                                           # the table shot closes in
@@ -247,7 +256,18 @@ w0, w1 = ZURNA_WARP
 rate = 1 - 0.16 * np.clip((tt - w0) / (w1 - w0), 0, 1) ** 1.6
 pos = np.cumsum(rate) - rate[0]
 zr = np.stack([np.interp(pos, np.arange(need), zr[:, c]) for c in range(2)], 1).astype(np.float32)
-zur = placed(zr, 0, S["zurna"]) * db(env([(0, -8), (0.5, 0), (w0, 0), (CUT_SHOT - 0.01, 3)]))
+# shot 2 is AT the table: same performance, closer and clearer; the switch happens on the 10.0 cut frame
+zc = sfx.load_file(ZURNA_REC)
+while len(zc) < need:
+    zc = np.concatenate([zc, sfx.load_file(ZURNA_REC, 6.0)])
+zc = sfx._lp(sfx._hp(zc[:need], 120), 3200, order=2)
+pwc = np.convolve((zc ** 2).mean(1), np.ones(w_) / w_, mode="same")
+zc = sfx._norm(zc / (np.sqrt(pwc + 1e-9)[:, None] ** 0.75))
+zc = np.stack([np.interp(pos, np.arange(need), zc[:, c]) for c in range(2)], 1).astype(np.float32)
+k10 = int(10.0 * SR)
+zr[k10:] = zc[k10:] * 0.75                                # hard perspective change on the cut
+zur = placed(zr, 0, S["zurna"]) * db(env([(0, -8), (0.5, 0), (9.6, 0), (9.98, -12), (10.0, 2), (w0, 2),
+                                          (CUT_SHOT - 0.01, 4)]))
 g0, g1 = int(GLIMPSE_AT * SR), int((GLIMPSE_AT + GLIMPSE_FRAMES / 24) * SR)
 zur[g0:g1] *= 0.02                                       # the wedding drops out for the 2-frame glimpse
 zur = chop(zur, CUT_SHOT)
@@ -299,6 +319,8 @@ drone = loop[:N].copy()
 w = int(0.5 * SR)
 pw = np.convolve((drone ** 2).mean(1), np.ones(w) / w, mode="same")
 drone = (drone / np.sqrt(pw + 1e-8)[:, None] * 0.12).astype(np.float32)
+lowd = np.stack([np.interp(np.arange(N) * 0.82, np.arange(N), drone[:, c]) for c in range(2)], 1)
+drone[int(10.0 * SR):int(CUT_SHOT * SR)] = sfx._lp(lowd, 700)[int(10.0 * SR):int(CUT_SHOT * SR)] * 1.4
 drone *= db(env([(0, -60), (3.0, -24), (10.0, -18), (CUT_SHOT - 0.01, -5), (CUT_SHOT, -120), (SILENCE[1], -120),
                  (SILENCE[1] + 1.5, -26), (CUT - 0.01, -6), (CUT, -120), (DUR, -120)]))
 heart = chop(placed(sfx.heartbeat(bpm=54, beats=5), 22.2, -18), CUT)
@@ -319,7 +341,19 @@ impact = placed(im * db(env([(0, 0), (0.5, -2), (END_IN - CUT - 0.1, -30), (END_
                             n=len(im))), CUT, -4)
 end_stems = ending_sfx.build(END_IN, DUR)
 
-stems = dict(zurna=zur, heartbeat_reach=heart2, glimpse_hit=glimpse_hit, crowd_murmur=murmur, chair_creak=creak, sleeve_reach=sleeve, outdoor_wind=wind,
+# cut accent at 10.0: reverse suck into a low hit
+sk = im0[: int(0.7 * SR)][::-1] * db(env([(0, -40), (0.55, -6), (0.7, 0)], n=int(0.7 * SR)))
+cut_accent = placed(sfx._lp(sk, 900), 10.0 - 0.7, -12) + placed(sfx._lp(im0[: int(0.9 * SR)], 400), 10.0, -9)
+# key words land with a muffled thud (Bismillah already has the glimpse hit)
+thud = sfx._lp(im0[: int(0.7 * SR)], 280) * np.linspace(1, 0, int(0.7 * SR))[:, None] ** 2
+key_thuds = sum(placed(thud, k, -10) for k in KEY_HITS if abs(k - GLIMPSE_AT) > 0.05)
+# table foley in shot 2: a spoon on a plate somewhere down the table, then the hand in the rice
+cl = sfx.load_file(os.path.join(LIB, "metal_clink_mixkit2836.mp3"))
+sc = sfx.load_file(os.path.join(LIB, "cutlery_scrape_mixkit3158.mp3"), 0.17, 0.35)
+table = placed(sfx._lp(cl, 2500), 11.3, -27) + placed(sfx._lp(cl[::-1].copy()[::-1], 1800), 13.2, -31) + \
+    placed(sc, CONTACT - 0.05, -18)
+table = chop(table, CUT_SHOT)
+stems = dict(cut_accent=cut_accent, key_thuds=key_thuds, table_foley=table, zurna=zur, heartbeat_reach=heart2, glimpse_hit=glimpse_hit, crowd_murmur=murmur, chair_creak=creak, sleeve_reach=sleeve, outdoor_wind=wind,
              sleeve_pullback=pull_sleeve, ghost_zurna=ghost, horror_drone=drone, heartbeat=heart, riser=riser,
              cut_impact=impact, **end_stems)
 for name, x in stems.items():
