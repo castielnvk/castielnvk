@@ -110,10 +110,10 @@ def PUNCHES(s2o):
     return [o(0.20, 'intro'), o(9.88, 'l2'), o(13.30, 'l3'), o(23.00, 'l5'), o(27.80, 'l6'), o(33.40, 'l8'),
             o(35.70, 'l8'), o(39.00, 'l9'), o(43.20, 'l10'), o(45.20, 'outro')]
 
-MUSIC_LEVEL = 0.11
+MUSIC_LEVEL = 0.0
 def MUSIC_AUTOMATION(s2o):
     o = lambda t, c=None: _o(s2o, t, c)
-    return [(o(45.10, 'outro'), o(49.40, 'outro'), 0.16)]
+    return []
 
 def SFX(s2o):
     o = lambda t, c=None: _o(s2o, t, c)
