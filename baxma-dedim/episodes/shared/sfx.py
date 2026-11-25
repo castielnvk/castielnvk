@@ -318,3 +318,21 @@ def zurna(dur, bpm=126, seed=61, tune=ZURNA_TUNE, distant=True):
         wet = np.stack([np.convolve(out[:, c], ir[:, c])[:n] for c in range(2)], 1)
         out = 0.35 * out / np.abs(out).max() + wet / np.abs(wet).max()
     return _norm(out)
+
+
+def shaky(x, rate=9.0, depth=0.55, seed=81):
+    """make a breath shaky: irregular tremolo (fear)."""
+    rng = np.random.default_rng(seed)
+    n = len(x)
+    t = np.arange(n) / SR
+    jitter = np.cumsum(rng.standard_normal(n)) / np.sqrt(SR) * 4
+    trem = 1 - depth * (0.5 + 0.5 * np.sin(2 * np.pi * rate * t + jitter))
+    return _norm(x * trem[:, None])
+
+
+def proximity(x, pan=0.0):
+    """'right next to the microphone': low-end boost, slight distortion, one-sided."""
+    b, a = signal.butter(2, 260, btype="low", fs=SR)
+    lowb = signal.lfilter(b, a, x, axis=0)
+    y = np.tanh(1.5 * (x + 1.2 * lowb))
+    return _norm(np.stack([y[:, 0] * (1 - pan) ** 0.5, y[:, 1] * (1 + pan) ** 0.5], 1))

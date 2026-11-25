@@ -31,7 +31,7 @@ def _w(font, s, size, track=0.0):
     return r.bbox[2] - r.bbox[0]
 
 
-def wrap(text, maxw=MAXW):
+def wrap(text, maxw=MAXW):  # noqa: C901
     words = text.split()
     for k in range(1, len(words) + 1):
         best = None
@@ -45,22 +45,22 @@ def wrap(text, maxw=MAXW):
     return [text]
 
 
-def _line_paths(font, s, size, y, color, track=0.0):
+def _line_paths(font, s, size, y, color, track=0.0, cx=W / 2):
     r = run(font, s, size, track=track)
     b = r.bbox
-    r = run(font, s, size, track=track, x=W / 2 - (b[0] + b[2]) / 2, y=y)
+    r = run(font, s, size, track=track, x=cx - (b[0] + b[2]) / 2, y=y)
     return r.paths(color)
 
 
-def build_card(name, elements, cy, layers_dir):
+def build_card(name, elements, cy, layers_dir, cx=W / 2, maxw=MAXW):
     """returns [(png, t_in, kind)] after writing one SVG per element (rendered by the caller)."""
     rows = []                                  # (kind, text, t_in, size, height)
     for kind, text, t_in in elements:
         if kind == "s":
-            for part in wrap(az_upper(text)):
+            for part in wrap(az_upper(text), maxw):
                 rows.append(("s", part, t_in, S_SIZE, S_SIZE * S_LEAD))
         else:
-            size = min(K_MAX, K_MAX * MAXW / _w(KEY, text, K_MAX))
+            size = min(K_MAX, K_MAX * maxw / _w(KEY, text, K_MAX))
             rows.append(("k", text, t_in, size, size * 1.08))
     total = sum(r[4] for r in rows)
     y = cy - total / 2
@@ -71,7 +71,7 @@ def build_card(name, elements, cy, layers_dir):
         svg = os.path.join(layers_dir, f"{name}-{i + 1}{kind}.svg")
         with open(svg, "w", encoding="utf-8") as f:
             f.write(svg_doc(W, H, C.SHADOW + f'<g id="{name}-{i + 1}" filter="url(#sh)">'
-                            + _line_paths(font, text, size, base, color, track) + "</g>", f"{name} {kind}"))
+                            + _line_paths(font, text, size, base, color, track, cx) + "</g>", f"{name} {kind}"))
         jobs.append([svg, svg[:-4] + ".png", W, H, 1])
         out.append(dict(png=svg[:-4] + ".png", t_in=t_in, kind=kind, band=(y, y + h)))
         y += h

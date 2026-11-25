@@ -91,6 +91,16 @@ EPISODES = [
         title=("CİN", "TOYU"),
         hook="gedib baxardın?",
     ),
+    dict(
+        num="06", folder="ep06-qayisbaldir", styles=["A"],
+        source="source/2_on_your_back.mp4", crop=(0, 14, 704, 1252),
+        grade="eq=contrast=1.02:brightness=-0.01:saturation=0.97,vignette=angle=PI/4.8",
+        stills=dict(stare=7.0),                   # the old man at your shoulder, staring into the lens
+        face=(760, 700),
+        name="Qayışbaldır",
+        title=("QAYIŞ", "BALDIR"),
+        hook="kömək istəsə, yaxınlaşma.",
+    ),
 ]
 
 
@@ -99,7 +109,7 @@ def still(ep, t, zoom=1.0, center=None, out_w=W, out_h=H):
     """graded frame at source time t, optionally zoomed around center (frame coords)."""
     src = os.path.join(HERE, ep["folder"], ep["source"])
     cx, cy, cw, ch = ep["crop"]
-    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", str(t), "-i", src, "-frames:v", "1", "-vf",
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", str(t), "-i", src, "-map", "0:v:0", "-frames:v", "1", "-vf",
                           f"crop={cw}:{ch}:{cx}:{cy},scale={W}:{H}:flags=lanczos,{ep['grade']},unsharp=5:5:0.35",
                           "-f", "image2pipe", "-vcodec", "png", "-"], capture_output=True, check=True).stdout
     im = Image.open(io.BytesIO(raw)).convert("RGB")
