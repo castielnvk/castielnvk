@@ -1,6 +1,6 @@
 # BAXMA DEDİM. — EP06 «Qayışbaldır»
 
-`Baxma_Dedim_EP06.mp4`: 1080×1920, H.264 + AAC, 24 fps, 35.0 s, −20.9 LUFS, true peak −1.2 dBTP.
+`Baxma_Dedim_EP06.mp4`: 1080×1920, H.264 + AAC, 24 fps, 35.0 s, −21.1 LUFS, peak −2.1 dBFS.
 Three POV clips in order at real speed with the original low light; source audio muted. No music, no narration, no "Canlandırma" label.
 Captions are style C. Sounds move closer to the viewer with each cut.
 
@@ -16,3 +16,9 @@ Brief vs delivery: the brief asked for 30 s. The story runs 30 s, plus 1 s of bl
 Library sounds (Mixkit, free license): `water_flowing_mixkit2473`, `water_splash_mixkit1214`, `mud_steps_mixkit1187`,
 `breath_inhale_mixkit965`, `breath_gasping_mixkit1969`, `breath_slow_mixkit2233` (in `../shared/sfx_library/`).
 Files: `edit.py` (CONFIG at the top), `stems/`, `layers/*.svg`, `covers/06-cover-A-uz.*`.
+
+**v2 (user: "not scary, kind of funny"):** I removed everything that read as cartoon sound-sync: the per-word thuds, the camera flinch,
+the squelch and click in the jolt, and the fast 10 Hz breath tremolo, which can sound like laughter.
+The breaths are now slower, lower and darker. The jolt is a heavy low blow (sub, thump and strain), still the loudest moment.
+New dread bed: sub pressure that grows through the shots, plus a faint beating high tone (2963/2971 Hz) from 8 s; both die at the jolt and creep back.
+Picture: a darker, colder grade, a heavier vignette, slow creeping push-ins (12 % / 10 % / 6 %), and captions that fade in slowly.

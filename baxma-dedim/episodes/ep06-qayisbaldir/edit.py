@@ -27,7 +27,8 @@ import type_c  # noqa: E402
 # =============================== CONFIG ======================================
 OUT = os.path.join(HERE, "Baxma_Dedim_EP06.mp4")
 FPS = 24
-GRADE = "eq=contrast=1.02:brightness=-0.01:saturation=0.97,vignette=angle=PI/4.8"   # keep the low light
+GRADE = ("eq=contrast=1.06:brightness=-0.035:saturation=0.82,curves=all='0/0 0.15/0.09 0.5/0.45 1/0.97',"
+         "colorbalance=bs=0.03:bm=0.015,vignette=angle=PI/3.6")   # v2: darker, colder, heavier vignette
 BUILD = os.path.join(HERE, "build")
 SRC = ["1_old_man_grabs_hand.mp4", "2_on_your_back.mp4", "3_grip_tightens.mp4"]
 CROPS = [(4, 14, 704, 1252), (0, 14, 704, 1252), (0, 14, 704, 1252)]
@@ -109,12 +110,15 @@ def line_state(L, t, d_out=0.25):
     c = L["card"]
     if t < L["t_in"] or t >= c["t_out"]:
         return 0.0
-    d_in = 0.18 if L["kind"] == "k" else 0.7
+    d_in = 0.9 if L["kind"] == "k" else 0.8     # v2: everything fades in slowly; nothing snaps
     p = 1.0 if c.get("instant") and L["t_in"] == 0.0 else C.smooth((t - L["t_in"]) / d_in)
     return p if c.get("cut_out") else p * (1 - C.smooth((t - (c["t_out"] - d_out)) / d_out))
 
 
-def flinch(t):
+CREEP = {0: (1.00, 1.12, (560, 640)), 1: (1.00, 1.10, (700, 620)), 2: (1.00, 1.06, (540, 1100))}  # slow push-ins
+
+
+def flinch(t):  # v2: unused (the flinch read as comedy)
     z = 1.0
     for k in KEY_HITS:
         if 0 <= t - k < 1.2:
@@ -139,7 +143,10 @@ for n in range(round(DUR * FPS)):
         if name not in sources:
             sources[name] = C.Source(os.path.join(HERE, name), (0, 0, 704 if si else 704, 1252), GRADE)
         img = sources[name].frame(round((t - t0) * 24))
-        frame = C.push_in(img, flinch(t), (W / 2, H / 2)).astype(np.float32) / 255.0
+        z0_, z1_, anc = CREEP[si]
+        z = z0_ + (z1_ - z0_) * C.smooth((t - t0) / 10.0)
+        cen = (anc[0] + (W / 2 - anc[0]) / z, anc[1] + (H / 2 - anc[1]) / z)
+        frame = C.push_in(img, z, cen).astype(np.float32) / 255.0
         act = [(L, line_state(L, t)) for L in LINES]
         for L, o in act:
             if o > 0:
@@ -212,14 +219,16 @@ stream *= db(env([(0, -6), (0.3, 0), (PULL, -4), (PULL + 0.6, -4), (PULL + 1.6, 
 # 2 · the pull: a short dry fabric tug + the traveller's sharp inhale behind the phone
 tug = sfx.fabric_rustle(0.30, lambda x: 0 if x > 0.28 else min(1, x / 0.01) * np.exp(-x / 0.06), seed=91, pan=0.1)
 inh = lib("breath_inhale_mixkit965.mp3")[: int(0.45 * SR)]
-inh = sfx.proximity(sfx._hp(inh, 180) * np.linspace(0.3, 1, len(inh))[:, None] ** 0.5, pan=0.0)
-pull = placed(tug, PULL - 0.01, -6) + placed(inh * np.minimum(1, np.linspace(1, 0, len(inh)) * 6)[:, None], PULL + 0.05, -10)
+inh = sfx._lp(sfx._hp(inh, 180), 2600, order=2) * np.linspace(0.3, 1, len(inh))[:, None] ** 0.5
+pull = placed(tug, PULL - 0.01, -14) + placed(inh * np.minimum(1, np.linspace(1, 0, len(inh)) * 6)[:, None], PULL + 0.05, -17)
 
 # 3 · his breath right beside the mic: uneven, dry, from the right (his face is on the right)
 br = lib("breath_gasping_mixkit1969.mp3")
-br = sfx._hp(br, 120)
-br = np.concatenate([br[: int(0.55 * SR)], np.zeros((int(0.18 * SR), 2)), br[int(0.55 * SR):]])   # uneven: a catch
-breath = placed(sfx.proximity(br, pan=0.55), BREATH_AT, -8)
+br = sfx._lp(sfx._hp(br, 90), 1800, order=4)
+br = np.stack([np.interp(np.arange(int(len(br) / 0.78)) * 0.78, np.arange(len(br)), br[:, c]) for c in range(2)], 1)
+br = np.concatenate([br[: int(0.7 * SR)], np.zeros((int(0.25 * SR), 2)), br[int(0.7 * SR):]])   # slow, low; a catch
+br = np.stack([br[:, 0] * 0.55, br[:, 1]], 1)                                             # from the right, close
+breath = placed(sfx._norm(br), BREATH_AT, -15)
 
 # 4 · the jolt (loudest moment): fabric strain + muddy boot scraping wet stone + one blunt phone thump
 strain = sfx.fabric_rustle(0.45, lambda x: 0 if x > 0.42 else min(1, x / 0.015) * (1 - x / 0.42), seed=93, pan=0.0)
@@ -230,15 +239,18 @@ scrape = sfx.grit_scrape(0.5, seed=95, close=True)
 im = lib("deep_impact_mixkit1687.mp3")
 thump = sfx._lp(im[: int(0.35 * SR)], 500) * np.linspace(1, 0, int(0.35 * SR))[:, None] ** 1.5
 click = sfx.dry_tick(tail=0.12, ring=0.0)
-jolt = (placed(strain, JOLT - 0.02, -2) + placed(sfx._norm(squelch), JOLT, -4) + placed(scrape, JOLT + 0.03, -4)
-        + placed(thump, JOLT + 0.01, 0) + placed(click, JOLT + 0.01, -8))
-jolt = np.tanh(2.5 * jolt / (np.abs(jolt).max() + 1e-9)) / np.tanh(2.5) * db(-2.0)   # loudest moment, dense, <= -2 dBFS
+sub = sfx._lp(im[: int(1.6 * SR)], 120, order=4)
+jolt = (placed(strain, JOLT - 0.02, -8) + placed(sfx._lp(sfx._norm(squelch), 900), JOLT, -14)
+        + placed(sfx._lp(scrape, 1600), JOLT + 0.03, -12) + placed(sfx._norm(sub), JOLT, 0)
+        + placed(thump, JOLT + 0.01, -3))
+jolt = jolt / (np.abs(jolt).max() + 1e-9) * db(-2.0)     # v2: a heavy low blow, not a slapstick crunch
 handling = placed(sfx.fabric_rustle(LIGHT_BACK - LIGHT_AWAY - 0.1,
                                     lambda x: 0.55 * np.exp(-x / 0.7), seed=97, pan=-0.2), LIGHT_AWAY, -20)
 
 # 5 · after 0.5 s of silence: one shaky breath (the traveller)
 sb = lib("breath_slow_mixkit2233.mp3")[: int(1.9 * SR)]
-shaky = placed(sfx.proximity(sfx.shaky(sfx._hp(sb, 160), rate=10.5, depth=0.6), pan=-0.15), SHAKY_AT, -9)
+sb = sfx._lp(sfx._hp(sb, 140), 1500, order=4)
+shaky = placed(sfx.shaky(sb, rate=4.2, depth=0.35), SHAKY_AT, -19)        # v2: a slow, held, trembling breath
 
 # 6 · standard tension: drone (retuned per shot), heartbeat, riser, cut accents, key-word thuds, impact
 dr = lib("horror_drone_mixkit1775.mp3")
@@ -270,12 +282,19 @@ sk = im[: int(0.7 * SR)][::-1] * db(env([(0, -40), (0.55, -6), (0.7, 0)], n=int(
 cut_acc = sum(placed(sfx._lp(sk, 900), c - 0.7, -13) + placed(sfx._lp(im[: int(0.9 * SR)], 400), c, -9)
               for c in (10.0, 20.0))
 thud = sfx._lp(im[: int(0.7 * SR)], 280) * np.linspace(1, 0, int(0.7 * SR))[:, None] ** 2
-key_thuds = sum(placed(thud, k, -11) for k in KEY_HITS if k not in NO_THUD)
+key_thuds = np.zeros((N, 2), np.float32)                 # v2: no thud per word (read as comedy)
 impact = placed(im * db(env([(0, 0), (0.5, -2), (END_IN - CUT - 0.1, -30), (END_IN - CUT + 0.6, -90), (9, -90)],
                             n=len(im))), CUT, -10)
 end_stems = {k: v * db(-6) for k, v in ending_sfx.build(END_IN, DUR).items()}   # same ending, kept under the jolt
 
-stems = dict(stream=stream, pull_tug_inhale=pull, breath_at_mic=breath, jolt=jolt, phone_handling=handling,
+tt = np.arange(N) / SR
+pressure = sfx.sub_pressure(DUR, seed=101) * db(env([(0, -40), (3.0, -22), (10.0, -18), (20.0, -12), (JOLT - 0.01, -10),
+                                                    (JOLT, -90), (SHAKY_AT + 0.8, -90), (SHAKY_AT + 3, -14),
+                                                    (CUT - 0.01, -8), (CUT, -120), (DUR, -120)]))
+ring = (np.sin(2 * np.pi * 2963 * tt) + np.sin(2 * np.pi * 2971 * tt))[:, None] * np.array([[1.0, 0.8]])
+ring = ring.astype(np.float32) * db(env([(0, -90), (8.0, -90), (12.0, -46), (20.0, -38), (JOLT - 0.01, -34),
+                                          (JOLT, -90), (SHAKY_AT + 1.5, -90), (CUT - 0.5, -36), (CUT, -120), (DUR, -120)]))
+stems = dict(dread_pressure=pressure, dread_ring=ring, stream=stream, pull_tug_inhale=pull, breath_at_mic=breath, jolt=jolt, phone_handling=handling,
              shaky_breath=shaky, horror_drone=drone, heartbeat=heart, riser=riser, cut_accents=cut_acc,
              key_thuds=key_thuds, cut_impact=impact, **end_stems)
 for name, x in stems.items():

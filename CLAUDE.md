@@ -169,7 +169,9 @@ approved styles and technical lessons.
   seconds of a video (the user asked why the sound "suddenly cuts"). Early pauses = the drone sinks softly while the room stays.
 - **Captions = style C** (`episodes/shared/type_c.py`, chosen by the user): small spaced capitals (Cormorant
   Garamond) + ONE big red italic key word per card on its own line, keeping the full sentence. Centred in a dark
-  area, slow fade, no slide. Each key word lands with a muffled thud and a 3.5 % camera flinch. Never Inter Tight
+  area, slow fade (key word too), no slide. NO thud/flinch per key word: EP06 v1 with per-word thuds, a camera flinch,
+  fast-tremolo breaths and squelch/click foley was called "kind of funny". Tension = restraint: few sounds, low and dark,
+  a constant dread bed (sub pressure + faint beating high tone), slow creeping push-ins, a darker and colder grade. Never Inter Tight
   for episode captions again (the user: it "killed the scariness").
 - **Sound must change with every picture cut** (the user: "the same sound stays when the shots change"): give each
   shot its own perspective (e.g. a muffled/far vs a close/clear version of the same source, a retuned drone, shot-specific
