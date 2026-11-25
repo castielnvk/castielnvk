@@ -7,17 +7,18 @@ def caller_name(st): return ''
 _C = [
     ('intro',  dict(a=0.00,  b=3.70,  lay='stack')),
     ('l1',     dict(a=3.70,  b=7.80,  lay='soloR')),
-    ('l2',     dict(a=7.80,  b=11.60, lay='punchR')),
+    ('l2',     dict(a=7.80,  b=11.60, lay='soloR')),
     ('l3',     dict(a=11.60, b=14.70, lay='stack')),
-    ('l4',     dict(a=14.70, b=19.80, lay='soloR')),
+    ('l4',     dict(a=14.70, b=19.80, lay='stack')),
     ('l5',     dict(a=19.80, b=25.50, lay='stack')),
-    ('l6',     dict(a=25.50, b=28.65, lay='soloR')),
+    ('l6',     dict(a=25.50, b=28.65, lay='stack')),
     ('l7',     dict(a=28.65, b=32.00, lay='stack')),
-    ('l8',     dict(a=32.00, b=36.15, lay='punchR')),
-    ('l9',     dict(a=36.15, b=40.15, lay='stack')),
-    ('l10',    dict(a=40.15, b=45.10, lay='punchR')),
-    ('outro',  dict(a=45.10, b=49.40, lay='stack')),
-    ('host',   dict(a=49.40, b=54.23, lay='stack')),
+    ('l8',     dict(a=32.00, b=36.15, lay='soloR')),
+    ('l9',     dict(a=36.15, b=40.15, lay='soloR')),
+    ('l10',    dict(a=40.15, b=45.10, lay='soloR')),
+    ('outro',  dict(a=45.10, b=49.10, lay='stack')),
+    ('real',   dict(a=49.10, b=51.60, lay='stack', hide='R', trans='cut')),
+    ('host',   dict(a=51.60, b=54.23, lay='stack', trans='cut')),
 ]
 CLIPS = [c for _, c in _C]
 IDX = {n: i for i, (n, _) in enumerate(_C)}
@@ -97,18 +98,16 @@ def GAGS(s2o):
     em('23f3', o(38.30, 'l9'), o(40.15, 'l9'), 880, 420, 170)
     em('1f4dc', o(42.60, 'l10'), o(45.10, 'l10'), 880, 420, 190)
     burst('1f44f', 43.5, 'l10', n=7, dur=1.8)
-    em('1f3b6', o(45.20, 'outro'), o(49.40, 'outro'), 880, 420, 180)
+    em('1f3b6', o(45.20, 'outro'), o(49.05, 'outro'), 880, 420, 180)
     burst('1f3b6', 45.4, 'outro', n=8, dur=2.0)
-    kin('ARDI VAR...', o(45.20, 'outro'), o(49.30, 'outro'), 540, 1560, 100, accent=GOLD2)
-    lab('MƏZAHİR DAYI · 100% SƏHƏR ŞOUSU', o(51.00, 'host'), o(54.20, 'host'), 540, 1740, 40, emoji='1f44f')
+    kin('ARDI VAR...', o(45.20, 'outro'), o(49.05, 'outro'), 540, 1560, 100, accent=GOLD2)
+    lab('MƏZAHİR DAYI · 100% SƏHƏR ŞOUSU', o(51.70, 'host'), o(54.20, 'host'), 540, 1740, 40, emoji='1f44f')
     G.extend(GAG_EXTRA)
     return G
 
 GAG_EXTRA = []
 def PUNCHES(s2o):
-    o = lambda t, c=None: _o(s2o, t, c)
-    return [o(0.20, 'intro'), o(9.88, 'l2'), o(13.30, 'l3'), o(23.00, 'l5'), o(27.80, 'l6'), o(33.40, 'l8'),
-            o(35.70, 'l8'), o(39.00, 'l9'), o(43.20, 'l10'), o(45.20, 'outro')]
+    return []
 
 MUSIC_LEVEL = 0.0
 def MUSIC_AUTOMATION(s2o):
@@ -123,5 +122,5 @@ def SFX(s2o):
         ('pop', o(15.80, 'l4'), 0.06), ('pop', o(16.60, 'l4'), 0.06), ('pop', o(17.40, 'l4'), 0.06), ('pop', o(18.20, 'l4'), 0.06),
         ('whoosh', o(20.10, 'l5'), 0.09), ('pop', o(26.50, 'l6'), 0.07), ('pop2', o(29.90, 'l7'), 0.07),
         ('whoosh', o(33.30, 'l8'), 0.09), ('sparkle', o(35.30, 'l8'), 0.10), ('tick', o(38.30, 'l9'), 0.08),
-        ('sparkle', o(43.20, 'l10'), 0.11), ('ding', o(44.90, 'l10'), 0.10), ('sparkle', o(51.00, 'host'), 0.09),
+        ('sparkle', o(43.20, 'l10'), 0.11), ('ding', o(44.90, 'l10'), 0.10), ('sparkle', o(51.60, 'host'), 0.09),
     ]

@@ -120,7 +120,7 @@ def word_rgba(w, size, col, big):
 
 def caption_layout(cap):
     size = 60 if not cap['big'] else 76
-    words = [w.upper() if cap['big'] else w for w, _ in cap['words']]
+    words = [w.replace('i', 'İ').replace('ı', 'I').upper() if cap['big'] else w for w, _ in cap['words']]
     imgs = [word_rgba(w, size, GOLD if C.norm(cap['words'][i][0]) in {C.norm(h) for h in cap['hi']} else WHITE, cap['big'])
             for i, w in enumerate(words)]
     sp = int(size*0.26)-16
@@ -322,8 +322,8 @@ def render_frame(fi, panels):
         if k not in vs: continue
         x, y, w, h, z, hr = vs[k]
         small = w < 400
-        if c['lay'].startswith('punch') and not small:
-            z *= 1+0.04*eio(min(1, (ot-c['o0'])/0.6))     # slow push-in instead of a bounce
+        if False and c['lay'].startswith('punch') and not small:
+            z *= 1+0.04*eio(min(1, (ot-c['o0'])/0.6))
         if not small:
             for pt in PUNCH_T:
                 dtp = ot-pt
