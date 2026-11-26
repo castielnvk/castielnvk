@@ -1,0 +1,714 @@
+<title>O Əsrdə brend baxışı</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Caveat:wght@500;700&family=Commissioner:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Onest:wght@400;500;600&family=Unbounded:wght@300;400;500;700&family=Young+Serif&display=swap">
+<style>
+/* Layout: sticky view switcher; four stacked direction sections (wordmark stage → asset rail → spec column); a side-by-side matrix view; a dark full-size viewer. */
+:root{
+  --bg:#F2F2EF; --surface:#FFFFFF; --fg:#18181B; --muted:#5D5D66; --line:#DADAD5; --accent:#2F3C58; --chip:#E7E7E2;
+  --ui:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  /* fixed brand fonts (direction-owned, theme-independent) */
+  --f-unb:"Unbounded", "Arial Black", sans-serif;
+  --f-onest:"Onest", "Inter", system-ui, sans-serif;
+  --f-bs:"Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --f-jb:"JetBrains Mono", ui-monospace, monospace;
+  --f-news:"Newsreader", Georgia, "Times New Roman", serif;
+  --f-cav:"Caveat", "Comic Sans MS", cursive;
+  --f-plex:"IBM Plex Mono", ui-monospace, monospace;
+  --f-young:"Young Serif", Georgia, serif;
+  --f-comm:"Commissioner", "Inter", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#111114; --surface:#1A1A1F; --fg:#EDEDEF; --muted:#A3A3AD; --line:#2D2D34; --accent:#B4C3E8; --chip:#25252B; color-scheme:dark }
+}
+:root[data-theme="dark"]{ --bg:#111114; --surface:#1A1A1F; --fg:#EDEDEF; --muted:#A3A3AD; --line:#2D2D34; --accent:#B4C3E8; --chip:#25252B; color-scheme:dark }
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--ui);font-size:15px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1400px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ---------- page header ---------- */
+.top{padding-block:28px 8px}
+.top h1{font-size:clamp(26px,4vw,40px);line-height:1.1;margin:0 0 8px;letter-spacing:-.02em;text-wrap:balance;font-weight:700}
+.top p{margin:0;max-width:68ch;color:var(--muted)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding-block:10px}
+.seg{display:inline-flex;background:var(--chip);border-radius:999px;padding:3px}
+.seg button{border:0;background:none;padding:6px 14px;border-radius:999px;font-weight:500;font-size:14px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 2px rgb(0 0 0 / .12)}
+.jump{display:flex;gap:6px;flex-wrap:wrap}
+.jump a{font-size:13px;text-decoration:none;color:var(--fg);padding:5px 10px;border:1px solid var(--line);border-radius:999px;white-space:nowrap}
+.jump a .n{color:var(--muted);margin-right:4px;font-variant-numeric:tabular-nums}
+.pickstate{margin-left:auto;font-size:13px;color:var(--muted)}
+.pickstate b{color:var(--fg)}
+
+/* ---------- direction section ---------- */
+.dir{padding-block:40px 8px;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+.dir-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 24px;align-items:end;margin-bottom:18px}
+.dir-no{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.dir-head h2{margin:2px 0 6px;font-size:clamp(24px,3vw,32px);letter-spacing:-.015em;line-height:1.15}
+.dir-head p{margin:0;max-width:70ch;color:var(--muted)}
+.dir-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--surface);padding:8px 14px;border-radius:8px;font-weight:500;font-size:14px;white-space:nowrap}
+.btn.primary{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.btn[aria-pressed="true"]{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.picked-badge{display:none;font-size:12px;font-weight:600;color:var(--accent);margin-left:8px;letter-spacing:.04em;text-transform:uppercase}
+.dir.is-picked .picked-badge{display:inline}
+.dir-body{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:24px;align-items:start}
+.dir-main{display:grid;gap:16px;min-width:0}
+.rail{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;align-items:start}
+figure{margin:0;min-width:0}
+figcaption{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;font-size:13px;color:var(--muted)}
+figcaption b{color:var(--fg);font-weight:600}
+.zoom{border:0;background:none;padding:2px 4px;font-size:12px;color:var(--accent);font-weight:600;white-space:nowrap}
+.preview-btn{display:block;width:100%;padding:0;border:0;background:none;text-align:inherit;border-radius:12px}
+@media (max-width:1100px){ .dir-body{grid-template-columns:minmax(0,1fr)} .spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px} }
+@media (max-width:780px){ .rail{grid-template-columns:repeat(2,minmax(0,1fr))} .dir-head{grid-template-columns:minmax(0,1fr)} }
+
+/* ---------- spec panel ---------- */
+.spec{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0}
+.spec h4{margin:0 0 10px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.spec-block + .spec-block{margin-top:18px}
+@media (max-width:1100px){ .spec-block + .spec-block{margin-top:0} }
+.sw{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.sw li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:center}
+.chip{width:34px;height:34px;border-radius:8px;border:1px solid var(--line)}
+.sw b{display:block;font-size:13px;font-weight:600}
+.sw small{display:block;font-size:12px;color:var(--muted);line-height:1.3}
+.sw code{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-left:6px}
+.font + .font{margin-top:12px}
+.font-sample{font-size:24px;line-height:1.2;overflow-wrap:anywhere}
+.font-meta{font-size:12px;color:var(--muted)}
+.font-meta b{color:var(--fg)}
+.spec p{margin:0;font-size:13.5px;color:var(--fg)}
+.hourstrip{display:grid;grid-template-columns:repeat(24,1fr);height:16px;border-radius:4px;overflow:hidden;margin-top:6px}
+.hourlabels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:3px}
+
+/* ---------- shared frames ---------- */
+.frame{position:relative;width:100%;aspect-ratio:9/16;max-width:100%;container-type:inline-size;overflow:hidden;border-radius:12px;isolation:isolate}
+.card4{position:relative;width:100%;aspect-ratio:4/5;max-width:100%;container-type:inline-size;overflow:hidden;border-radius:12px;isolation:isolate}
+.scene{position:absolute;inset:0;background-image:var(--scene);background-size:cover;background-position:center}
+.stage{position:relative;width:100%;aspect-ratio:2.4/1;max-width:100%;container-type:inline-size;overflow:hidden;border-radius:12px;display:grid;place-items:center}
+@media (max-width:600px){ .stage{aspect-ratio:1.45/1} }
+.replay{position:absolute;right:12px;bottom:12px;border:0;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600}
+.sym{display:block;width:100%;height:100%}
+
+/* ---------- profile card ---------- */
+.prof{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:12px}
+.prof-top{display:flex;gap:12px;align-items:center;min-width:0}
+.av{border-radius:50%;overflow:hidden;flex:none;display:block}
+.av-ring{padding:3px;border-radius:50%;border:2px solid var(--line);flex:none}
+.prof-id{min-width:0}
+.prof-name{font-weight:700;font-size:15px;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.prof-handle{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.prof-test{display:grid;gap:6px}
+.pt{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:8px}
+.pt-light{background:#FFFFFF;border:1px solid #E4E4E4}
+.pt-dark{background:#000000}
+.pt-note{font-size:11.5px;color:var(--muted)}
+.nw{white-space:nowrap}
+.pt-light span{color:#6B6B6B}.pt-dark span{color:#9A9A9A}
+
+/* =========================================================
+   1 · GÖZ AÇILIŞI  (night #15132F, dawn #F5B35C, light #FFF0D9)
+   ========================================================= */
+.d1-wm{display:inline-flex;align-items:center;gap:.17em;font-family:var(--f-unb);font-weight:500;line-height:1;letter-spacing:-.015em;color:#FFF0D9;white-space:nowrap}
+.d1-wm .sym{width:.84em;height:.84em;flex:none;transform:translateY(-.015em)}
+.d1-lens{transform-origin:50px 50px;transform-box:view-box}
+.s1{background:radial-gradient(60% 90% at 50% 50%,#2B2550 0%,#15132F 70%)}
+.s1 .d1-wm{font-size:12.5cqw}
+.s1 .replay{background:#F5B35C;color:#15132F}
+.s1::after{content:"";position:absolute;inset:0;background:radial-gradient(40% 60% at 50% 50%,rgb(255 240 217 / .55),transparent 70%);opacity:0;pointer-events:none}
+.s1.play .d1-lens{animation:lidOpen 1s cubic-bezier(.2,.9,.25,1.15) both}
+.s1.play .d1-word{animation:focusIn 1.1s .45s ease-out both}
+.s1.play::after{animation:flash 1.3s .35s ease-out both}
+@keyframes lidOpen{0%{transform:scaleY(.04)}35%{transform:scaleY(.04)}100%{transform:scaleY(1)}}
+@keyframes focusIn{0%{filter:blur(10px);opacity:0;letter-spacing:.08em}100%{filter:blur(0);opacity:1;letter-spacing:-.015em}}
+@keyframes flash{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
+
+.f1-cover,.f1-open,.f1-card{background:#15132F;color:#FFF0D9}
+.f1-rim{position:absolute;inset:0;background:#F5B35C}
+.f1-top{position:absolute;top:5.5cqw;left:7cqw;font-size:6.2cqw}
+.f1-title{position:absolute;left:7cqw;right:6cqw;top:73%;font-family:var(--f-unb);font-weight:500;font-size:7.4cqw;line-height:1.1;letter-spacing:-.02em}
+.f1-title span,.f1-title em{display:block;font-style:normal}
+.f1-title em{color:#F5B35C}
+.f1-meta{position:absolute;left:7cqw;bottom:5.5cqw;font-family:var(--f-onest);font-size:3.4cqw;letter-spacing:.14em;text-transform:uppercase;color:rgb(255 240 217 / .72)}
+.f1-meta i{display:inline-block;width:5cqw;height:.35cqw;background:#F5B35C;vertical-align:middle;margin-right:2.2cqw}
+.f1-clock{position:absolute;left:0;right:0;top:4.6%;text-align:center;font-family:var(--f-unb);font-weight:300;font-size:10cqw;letter-spacing:.02em;font-variant-numeric:tabular-nums;color:#FFF0D9;text-shadow:0 0 6cqw rgb(21 19 47 / .9)}
+.f1-clock small{display:block;font-family:var(--f-onest);font-weight:500;font-size:2.8cqw;letter-spacing:.3em;color:#F5B35C;margin-top:1cqw;text-transform:uppercase}
+.f1-line{position:absolute;left:9cqw;right:9cqw;bottom:6.5%;text-align:center;font-family:var(--f-onest);font-weight:600;font-size:6.2cqw;line-height:1.25;text-wrap:balance}
+.f1-mark{position:absolute;top:5cqw;left:6cqw;width:9cqw;height:9cqw}
+.f1-card .f1-clock{top:6%;font-size:13cqw}
+.f1-card .f1-cap{position:absolute;bottom:5cqw;left:0;right:0;text-align:center;font-family:var(--f-onest);font-size:3.6cqw;letter-spacing:.2em;text-transform:uppercase;color:rgb(255 240 217 / .7)}
+
+/* =========================================================
+   2 · SAAT  (ink #111418, white, hour colour)
+   ========================================================= */
+.d2-wm{display:inline-flex;align-items:flex-start;font-family:var(--f-bs);font-weight:900;line-height:.82;color:#111418;letter-spacing:.005em;white-space:nowrap}
+.d2-stamp{font-weight:800;font-size:.31em;line-height:1;background:var(--hc,#F1A78A);color:#111418;padding:.1em .16em .06em;margin-left:.22em;margin-top:.02em;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.s2{background:#FFFFFF;align-content:center;gap:4cqw}
+.s2 .d2-wm{font-size:19cqw}
+.ruler{width:62cqw;display:grid;grid-template-columns:repeat(24,1fr);gap:.5cqw;align-items:end}
+.ruler i{height:1.6cqw;background:#111418;opacity:.22}
+.ruler i:nth-child(6n+1){height:2.8cqw;opacity:.5}
+.ruler i.on{background:var(--hc,#F1A78A);opacity:1;height:3.4cqw}
+.ruler-l{width:62cqw;display:flex;justify-content:space-between;font-family:var(--f-jb);font-size:1.5cqw;color:#5B6068;margin-top:-3cqw}
+.s2 .replay{background:#111418;color:#fff}
+
+.f2-cover,.f2-open,.f2-card{background:#111418;color:#fff}
+.f2-band{position:absolute;left:0;right:0;top:0;background:var(--hc,#F1A78A);color:#111418;display:flex;align-items:center;justify-content:space-between;padding:0 6cqw}
+.f2-cover .f2-band{height:11%}
+.f2-cover .f2-band .d2-wm{font-size:10cqw}
+.f2-meta{font-family:var(--f-jb);font-weight:600;font-size:3cqw;letter-spacing:.06em}
+.f2-day{position:absolute;left:0;right:0;display:grid;grid-template-columns:repeat(24,1fr);gap:.5cqw;height:1.6cqw;padding:0 6cqw}
+.f2-day i{background:rgb(255 255 255 / .35);position:relative;overflow:hidden}
+.f2-day i.done{background:#fff}
+.f2-day i b{position:absolute;inset:0;background:var(--hc,#F1A78A);transform-origin:left;transform:scaleX(var(--f,0))}
+.f2-cover .f2-day{top:calc(11% + 2.4cqw)}
+.f2-panel{position:absolute;left:0;right:0;bottom:0;top:63%;background:#111418;padding:6cqw 6cqw 0}
+.f2-title{font-family:var(--f-bs);font-weight:900;font-size:14.6cqw;line-height:.9;letter-spacing:.005em}
+.f2-title span{display:block}
+.f2-title span:nth-child(2){color:var(--hc,#F1A78A)}
+.f2-foot{position:absolute;left:6cqw;right:6cqw;bottom:5cqw;display:flex;justify-content:space-between;font-family:var(--f-jb);font-size:2.8cqw;color:rgb(255 255 255 / .65);letter-spacing:.06em}
+.f2-open .f2-band{height:21%;align-items:flex-end;padding-bottom:2cqw}
+.f2-time{font-family:var(--f-bs);font-weight:900;font-size:30cqw;line-height:.78;letter-spacing:.005em;font-variant-numeric:tabular-nums;display:inline-flex;align-items:flex-end}
+.f2-time .colon{margin:0 .01em}
+.f2-open .f2-day{top:calc(21% + 2.4cqw)}
+.f2-hand{width:13cqw;height:13cqw;align-self:center;flex:none}
+.f2-line{position:absolute;left:6cqw;right:6cqw;bottom:6cqw;font-family:var(--f-bs);font-weight:800;font-size:10.4cqw;line-height:.98;text-shadow:0 .6cqw 3cqw rgb(0 0 0 / .45)}
+.f2-shade{position:absolute;left:0;right:0;bottom:0;height:42%;background:linear-gradient(to top,rgb(17 20 24 / .92),rgb(17 20 24 / 0))}
+.f2-card .f2-band{height:31%;align-items:flex-end;padding-bottom:2.4cqw}
+.f2-card .f2-time{font-size:26cqw}
+.f2-card .f2-day{top:calc(31% + 2.6cqw)}
+.roll{display:inline-block;height:.78em;overflow:hidden;vertical-align:bottom}
+.roll .col{display:flex;flex-direction:column;transition:transform .45s cubic-bezier(.6,0,.2,1)}
+.roll .col i{font-style:normal;height:.78em;line-height:.78}
+
+/* =========================================================
+   3 · ARXİV  (paper #ECEDE8, ink #1A2442, red pencil #C1283E)
+   ========================================================= */
+.paper{background-color:#ECEDE8;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--rule,6cqw) - 1px),#C3CEDE calc(var(--rule,6cqw) - 1px),#C3CEDE var(--rule,6cqw))}
+.d3-wm{font-family:var(--f-news);font-weight:500;color:#1A2442;line-height:1;letter-spacing:-.02em;white-space:nowrap;font-optical-sizing:auto}
+.d3-e{position:relative;display:inline-block}
+.d3-e svg{position:absolute;left:-.2em;top:-.2em;width:1.05em;height:1.25em;overflow:visible;pointer-events:none}
+.s3{--rule:4.2cqw;align-content:center;justify-items:start;padding-left:16cqw;gap:3cqw}
+.s3::before{content:"";position:absolute;top:0;bottom:0;left:10cqw;width:.25cqw;background:#C1283E;opacity:.7}
+.s3 .d3-wm{font-size:14cqw}
+.form{display:flex;gap:5cqw;font-family:var(--f-plex);font-size:1.7cqw;letter-spacing:.14em;color:#6E7178;align-items:flex-end}
+.form .fld{display:flex;align-items:flex-end;gap:1.2cqw}
+.form .val{font-family:var(--f-cav);font-weight:700;letter-spacing:0;font-size:4.6cqw;color:#C1283E;line-height:.9;border-bottom:.2cqw solid #1A2442;min-width:13cqw;padding:0 1cqw .2cqw;transform:rotate(-2deg)}
+.s3 .replay{background:#1A2442;color:#ECEDE8}
+
+.f3-cover{--rule:6.2cqw;color:#1A2442}
+.f3-margin{position:absolute;top:0;bottom:0;left:10cqw;width:.35cqw;background:#C1283E;opacity:.75}
+.f3-head{position:absolute;top:4.6cqw;left:14cqw;right:6cqw;display:flex;justify-content:space-between;align-items:baseline}
+.f3-head .d3-wm{font-size:6.6cqw}
+.f3-cat{font-family:var(--f-plex);font-weight:500;font-size:2.7cqw;letter-spacing:.14em;color:#6E7178}
+.f3-photo{position:absolute;top:13%;left:14cqw;right:6cqw;height:45%;border:.5cqw solid #1A2442;background:#1A2442}
+.f3-photo .scene{inset:0}
+.f3-ticks{position:absolute;inset:-2.2cqw;pointer-events:none;background:
+  linear-gradient(#1A2442,#1A2442) 0 0/3cqw .3cqw no-repeat, linear-gradient(#1A2442,#1A2442) 0 0/.3cqw 3cqw no-repeat,
+  linear-gradient(#1A2442,#1A2442) 100% 100%/3cqw .3cqw no-repeat, linear-gradient(#1A2442,#1A2442) 100% 100%/.3cqw 3cqw no-repeat}
+.f3-note{position:absolute;top:58.6%;right:7cqw;font-family:var(--f-cav);font-weight:700;font-size:6.4cqw;color:#C1283E;transform:rotate(-4deg);display:flex;align-items:center;gap:1cqw}
+.f3-note svg{width:7cqw;height:7cqw}
+.f3-title{position:absolute;left:14cqw;right:6cqw;top:66%;font-family:var(--f-news);font-weight:500;font-size:10.4cqw;line-height:1.02;letter-spacing:-.025em;text-wrap:balance}
+.f3-title em{font-style:italic;position:relative;white-space:nowrap}
+.f3-title em svg{position:absolute;left:-2%;right:-2%;bottom:-.2em;width:104%;height:.3em;overflow:visible}
+.f3-open{background:#1A2442;color:#1A2442}
+.f3-open .scene{top:19%}
+.f3-sheet{position:absolute;left:0;right:0;top:0;height:19%;--rule:5.4cqw;display:flex;align-items:flex-end;gap:3cqw;padding:0 6cqw 2.4cqw 14cqw}
+.f3-sheet .f3-margin{opacity:.75}
+.f3-lab{font-family:var(--f-plex);font-weight:500;font-size:2.8cqw;letter-spacing:.16em;color:#6E7178;padding-bottom:1.6cqw}
+.f3-typed{font-family:var(--f-plex);font-weight:600;font-size:15cqw;line-height:.95;font-variant-numeric:tabular-nums;letter-spacing:-.03em;position:relative}
+.f3-tick{position:absolute;left:-2%;bottom:-1.4cqw;width:104%;height:2.4cqw;overflow:visible}
+.f3-caption{position:absolute;left:6cqw;right:6cqw;bottom:6cqw;background:#ECEDE8;padding:4.4cqw 5cqw 4.4cqw 7cqw;border-left:.9cqw solid #C1283E;box-shadow:0 1.4cqw 4cqw rgb(10 14 30 / .35)}
+.f3-caption p{margin:0;font-family:var(--f-news);font-weight:500;font-size:7.4cqw;line-height:1.12;letter-spacing:-.015em}
+.f3-caption small{display:block;font-family:var(--f-plex);font-size:2.6cqw;letter-spacing:.14em;color:#6E7178;margin-bottom:2cqw}
+.f3-card{background:#1A2442;color:#1A2442}
+.f3-card .scene{top:38%}
+.f3-card .f3-sheet{height:38%;--rule:7cqw;padding-bottom:5cqw;align-items:flex-end}
+.f3-card .f3-typed{font-size:17cqw}
+.f3-card .stack{position:relative;display:inline-grid}
+.f3-card .stack > span{grid-area:1/1}
+.f3-strike{position:absolute;left:-3%;right:-3%;top:48%;height:1.3cqw;background:#C1283E;border-radius:1cqw;transform-origin:left;transform:scaleX(0) rotate(-2deg)}
+.f3-hand{position:absolute;right:8cqw;top:5%;font-family:var(--f-cav);font-weight:700;font-size:12cqw;color:#C1283E;transform:rotate(-5deg);clip-path:inset(0 100% 0 0)}
+
+/* =========================================================
+   4 · GÜNDƏLİK  (linen #D9D8D0, walnut #3B2F27, copper #A65E36)
+   ========================================================= */
+.d4-wm{font-family:var(--f-young);color:#3B2F27;line-height:1;letter-spacing:-.01em;white-space:nowrap}
+.d4-wm .o{color:#A65E36}
+.s4{background:#D9D8D0;align-content:center;justify-items:center;gap:3.4cqw}
+.s4 .d4-wm{font-size:13cqw}
+.s4 .s4-sym{width:11cqw;height:11cqw;border-radius:50%;overflow:hidden}
+.mat{display:grid;grid-template-columns:repeat(5,1fr);height:var(--mh,1cqw);width:var(--mw,30cqw);border-radius:99px;overflow:hidden}
+.mat i:nth-child(1){background:#D7A665}.mat i:nth-child(2){background:#A65E36}.mat i:nth-child(3){background:#2F3C58}.mat i:nth-child(4){background:#3B2F27}.mat i:nth-child(5){background:#8E8F86}
+.s4 .replay{background:#3B2F27;color:#D9D8D0}
+
+.f4-cover{background:#D9D8D0;color:#3B2F27}
+.f4-head{position:absolute;top:5.2cqw;left:0;right:0;text-align:center}
+.f4-head .d4-wm{font-size:6.4cqw}
+.f4-window{position:absolute;top:12.5%;left:7cqw;right:7cqw;height:49%;border-radius:5cqw;overflow:hidden;box-shadow:inset 0 0 0 .4cqw rgb(59 47 39 / .25)}
+.f4-title{position:absolute;left:7cqw;right:7cqw;top:66%;font-family:var(--f-young);font-size:9.6cqw;line-height:1.1;letter-spacing:-.01em;text-wrap:balance}
+.f4-tag{position:absolute;left:7cqw;bottom:11cqw;display:flex;align-items:center;gap:2cqw;font-family:var(--f-comm);font-weight:500;font-size:3.6cqw;color:#5A4C42}
+.f4-tag svg{width:4.4cqw;height:4.4cqw}
+.f4-cover .mat{position:absolute;left:7cqw;right:7cqw;bottom:6cqw;--mw:auto;--mh:1.2cqw}
+.f4-open,.f4-card{background:#3B2F27;color:#3B2F27}
+.f4-pill{position:absolute;top:6cqw;left:50%;transform:translateX(-50%);background:#D9D8D0;border-radius:99px;padding:1.8cqw 5cqw 1.6cqw;font-family:var(--f-young);font-size:7.4cqw;line-height:1;font-variant-numeric:tabular-nums;display:grid;box-shadow:0 1cqw 3cqw rgb(30 20 14 / .25)}
+.f4-pill > span{grid-area:1/1;text-align:center}
+.f4-pill .b{opacity:0}
+.f4-panel{position:absolute;left:0;right:0;bottom:0;background:#D9D8D0;border-radius:6cqw 6cqw 0 0;padding:7cqw 7cqw 6cqw;display:grid;gap:4.4cqw}
+.f4-panel p{margin:0;font-family:var(--f-young);font-size:7cqw;line-height:1.16;text-wrap:balance}
+.f4-panel .mat{--mw:30cqw;--mh:1.1cqw}
+.f4-light{position:absolute;inset:0;background:radial-gradient(38% 30% at 50% 50%,rgb(255 226 180 / .45),transparent 70%);mix-blend-mode:soft-light;pointer-events:none}
+.f4-cool{position:absolute;inset:0;background:#2F3C58;mix-blend-mode:multiply;opacity:.35;pointer-events:none}
+.f4-warm{position:absolute;inset:0;background:#D7A665;mix-blend-mode:soft-light;opacity:0;pointer-events:none}
+.f4-thread{position:absolute;top:calc(6cqw + 14cqw);left:50%;width:30cqw;height:.5cqw;margin-left:-15cqw;background:#D9D8D0;transform-origin:left;transform:scaleX(0);border-radius:1cqw;opacity:.85}
+.f4-card .f4-pill{top:8cqw;font-size:10cqw;padding:2.4cqw 6.4cqw 2.2cqw}
+.f4-card .f4-thread{top:calc(8cqw + 19cqw)}
+.f4-card .f4-cap{position:absolute;bottom:5cqw;left:0;right:0;text-align:center;font-family:var(--f-comm);font-size:3.6cqw;color:#D9D8D0;letter-spacing:.06em}
+
+/* ---------- compare matrix ---------- */
+.cmp{padding-block:24px 40px}
+.cmp-row + .cmp-row{margin-top:34px}
+.cmp-row h3{margin:0 0 12px;font-size:18px;letter-spacing:-.01em}
+.cmp-scroll{overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}
+.cmp-grid{display:grid;grid-template-columns:repeat(4,minmax(210px,1fr));gap:14px}
+.cmp-grid.wide{grid-template-columns:repeat(4,minmax(280px,1fr))}
+.cmp-cell{scroll-snap-align:start;min-width:0}
+.cmp-name{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;margin-bottom:8px}
+.cmp-name span{color:var(--muted);font-weight:500}
+.cmp-name .pk{font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;display:none}
+.cmp-cell.is-picked .pk{display:inline}
+.cmp-cell.is-picked .frame,.cmp-cell.is-picked .card4,.cmp-cell.is-picked .stage,.cmp-cell.is-picked .prof{outline:3px solid var(--accent);outline-offset:3px}
+@media (min-width:1100px){ .cmp-grid.tall{max-width:1100px} }
+
+/* ---------- full-size viewer (always dark) ---------- */
+.full{position:fixed;inset:0;z-index:50;background:#0D0D10;color:#F0F0F2;display:flex;flex-direction:column}
+.full-bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding-top:calc(env(safe-area-inset-top,0px) + 10px);padding-bottom:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid #26262C}
+.full-title{font-weight:600;font-size:15px;min-width:0}
+.full-title span{color:#9C9CA6;font-weight:500;margin-right:6px}
+.full-nav{display:flex;gap:6px;margin-left:auto}
+.full .btn{background:#1D1D22;border-color:#33333A;color:#F0F0F2}
+.full .btn[aria-pressed="true"]{background:#F0F0F2;color:#0D0D10;border-color:#F0F0F2}
+.full-tabs{display:flex;gap:6px;overflow-x:auto;width:100%;padding-bottom:2px}
+.full-tabs button{border:1px solid #33333A;background:none;color:#C9C9D1;border-radius:999px;padding:6px 12px;font-size:13px;white-space:nowrap}
+.full-tabs button[aria-selected="true"]{background:#F0F0F2;color:#0D0D10;border-color:#F0F0F2}
+.full-body{flex:1;overflow:auto;display:grid;place-items:center;padding-block:16px calc(16px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.full-body .frame{width:min(100%,calc((100dvh - 200px) * 9 / 16));border-radius:16px}
+.full-body .card4{width:min(100%,calc((100dvh - 200px) * 4 / 5));border-radius:16px}
+.full-body .stage{width:min(100%,1200px)}
+.full-body .prof{width:min(100%,420px);--surface:#1A1A1F;--line:#2D2D34;--muted:#A3A3AD;color:#F0F0F2}
+.full-body .spec{width:min(100%,520px);--surface:#1A1A1F;--line:#2D2D34;--muted:#A3A3AD;--fg:#EDEDEF;color:#EDEDEF;display:block}
+.full-body .spec .spec-block + .spec-block{margin-top:18px}
+.full-body .trio{display:flex;gap:16px;align-items:flex-start;justify-content:center;width:100%;max-width:100%}
+.full-body .trio > *{flex:none}
+.full-body .trio .frame{width:min(31vw,calc((100dvh - 200px) * 9 / 16))}
+.full-body .trio .card4{width:min(31vw,calc((100dvh - 200px) * 4 / 5 * .7))}
+@media (max-width:760px){ .full-body .trio{flex-direction:column;align-items:center} .full-body .trio .frame,.full-body .trio .card4{width:min(100%,360px)} }
+
+.note{font-size:13px;color:var(--muted);padding-block:24px 48px}
+@media (prefers-reduced-motion:reduce){ .s1.play .d1-lens,.s1.play .d1-word,.s1.play::after{animation:none} .roll .col{transition:none} }
+</style>
+
+<div class="wrap top">
+  <h1>O Əsrdə · dörd vizual istiqamət</h1>
+  <p>Eyni fon təsviri və eyni mətnlər, dörd fərqli kimlik. Hər istiqamətdə loqo, profil şəkli, Reels örtüyü, açılış kadrı və 06:00 → 07:00 saat keçidi var. İstənilən elementə toxunub tam ölçüdə baxa bilərsiniz.</p>
+</div>
+<div class="bar">
+  <div class="wrap">
+    <div class="seg" role="group" aria-label="Görünüş">
+      <button id="v-dirs" aria-pressed="true">İstiqamətlər</button>
+      <button id="v-cmp" aria-pressed="false">Yan-yana</button>
+    </div>
+    <nav class="jump" id="jump" aria-label="İstiqamətə keç"></nav>
+    <div class="pickstate" id="pickstate">Seçim: <b>hələ yoxdur</b></div>
+  </div>
+</div>
+
+<main>
+  <div id="view-dirs" class="wrap"></div>
+  <div id="view-cmp" class="wrap cmp" hidden></div>
+  <div class="wrap note">Fon təsviri bütün istiqamətlərdə eynidir: 1501-ci il Təbrizində şəfəq vaxtı, pəncərədən baxış (müvəqqəti illüstrasiya, son çəkilişdə real kadr olacaq). Profil adı <code>@o.esrde</code> nümunədir. “Bunu seç” düyməsi seçiminizi yalnız bu brauzerdə yadda saxlayır; qərarınızı mənə yazın.</div>
+</main>
+
+<div class="full" id="full" hidden role="dialog" aria-modal="true" aria-labelledby="full-title">
+  <div class="full-bar">
+    <div class="full-title" id="full-title"></div>
+    <div class="full-nav">
+      <button class="btn" id="full-prev" aria-label="Əvvəlki istiqamət">←</button>
+      <button class="btn" id="full-next" aria-label="Növbəti istiqamət">→</button>
+      <button class="btn" id="full-pick" aria-pressed="false">Bunu seç</button>
+      <button class="btn" id="full-close">Bağla</button>
+    </div>
+    <div class="full-tabs" id="full-tabs" role="tablist"></div>
+  </div>
+  <div class="full-body" id="full-body"></div>
+</div>
+
+<script>
+(function(){
+/* ---------------- shared copy ---------------- */
+const COPY = {
+  title:'Şah İsmayılın gözündən bir gün',
+  place:'Təbriz, 1501',
+  time:'06:00',
+  line:'Bu gün <span class="nw">1501-ci</span> ildə oyanırsan.',
+  handle:'@o.esrde'
+};
+
+/* ---------------- shared scene (identical in every direction) ---------------- */
+const SCENE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1600" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="s" x1="0" y1="0" x2="0" y2="1600" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#1F2650"/><stop offset=".26" stop-color="#3F3F76"/><stop offset=".44" stop-color="#8C6A8E"/><stop offset=".56" stop-color="#D98F80"/><stop offset=".63" stop-color="#F3BE8A"/><stop offset=".7" stop-color="#F8D9A6"/></linearGradient>
+<radialGradient id="g"><stop offset="0" stop-color="#FFF4D8"/><stop offset=".22" stop-color="#FFD9A0" stop-opacity=".85"/><stop offset="1" stop-color="#F6B880" stop-opacity="0"/></radialGradient>
+<linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#241C2B"/><stop offset=".55" stop-color="#3A2B33"/><stop offset="1" stop-color="#261C24"/></linearGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD7A3" stop-opacity=".34"/><stop offset="1" stop-color="#FFD7A3" stop-opacity="0"/></linearGradient>
+<radialGradient id="h" cx=".5" cy=".55" r=".5"><stop offset="0" stop-color="#F3B57E" stop-opacity=".22"/><stop offset="1" stop-color="#F3B57E" stop-opacity="0"/></radialGradient>
+<pattern id="l" width="46" height="46" patternUnits="userSpaceOnUse" x="15" y="0"><path d="M23 0L46 23L23 46L0 23Z" fill="none" stroke="#241C2B" stroke-width="5"/><circle cx="23" cy="23" r="5.5" fill="#241C2B"/></pattern>
+<pattern id="k" width="900" height="40" patternUnits="userSpaceOnUse"><rect width="900" height="40" fill="#6E2C38"/><rect y="7" width="900" height="6" fill="#C89A5A"/><rect y="24" width="900" height="3" fill="#2F3C58"/></pattern>
+<clipPath id="a"><path d="M220 640C220 470 330 360 450 290C570 360 680 470 680 640V1250H220Z"/></clipPath>
+<radialGradient id="v" cx=".5" cy=".46" r=".78"><stop offset=".55" stop-color="#0B0710" stop-opacity="0"/><stop offset="1" stop-color="#0B0710" stop-opacity=".62"/></radialGradient>
+</defs>
+<g clip-path="url(#a)">
+<rect width="900" height="1600" fill="url(#s)"/>
+<circle cx="500" cy="1010" r="320" fill="url(#g)"/>
+<circle cx="500" cy="1012" r="40" fill="#FFF3D2"/>
+<path d="M0 1000L90 962L200 986L320 934L430 976L560 944L680 978L800 952L900 972V1250H0Z" fill="#9A7590" opacity=".7"/>
+<g fill="#4A3A57">
+<rect y="1036" width="900" height="260"/>
+<rect x="0" y="1020" width="150" height="20"/><rect x="150" y="1012" width="92" height="28"/><rect x="460" y="1018" width="80" height="22"/><rect x="640" y="1010" width="112" height="30"/><rect x="752" y="1024" width="148" height="16"/>
+<rect x="300" y="990" width="120" height="50"/><path d="M300 992C300 934 360 908 360 872C360 908 420 934 420 992Z"/><rect x="357" y="852" width="6" height="22"/>
+<rect x="282" y="906" width="14" height="134"/><rect x="278" y="950" width="22" height="7"/><path d="M279 906L289 878L299 906Z"/>
+<rect x="424" y="916" width="14" height="124"/><rect x="420" y="956" width="22" height="7"/><path d="M421 916L431 888L441 916Z"/>
+<rect x="562" y="1008" width="62" height="32"/><path d="M562 1010C562 978 593 966 593 946C593 966 624 978 624 1010Z"/>
+</g>
+<rect x="200" y="270" width="500" height="312" fill="url(#l)" opacity=".9"/>
+<rect x="200" y="578" width="500" height="16" fill="#241C2B"/>
+</g>
+<path fill="url(#w)" fill-rule="evenodd" d="M0 0H900V1600H0Z M220 640C220 470 330 360 450 290C570 360 680 470 680 640V1250H220Z"/>
+<ellipse cx="450" cy="860" rx="440" ry="620" fill="url(#h)"/>
+<path d="M220 640C220 470 330 360 450 290C570 360 680 470 680 640V1250H220Z" fill="none" stroke="#5A4440" stroke-width="16"/>
+<path d="M220 1284H680L870 1600H30Z" fill="url(#b)"/>
+<rect x="186" y="1248" width="528" height="36" rx="4" fill="#5E4741"/><rect x="186" y="1248" width="528" height="6" fill="#92705A"/>
+<ellipse cx="305" cy="1240" rx="64" ry="15" fill="#B97F44"/><ellipse cx="305" cy="1235" rx="52" ry="10" fill="#DDA764"/>
+<g fill="#A0603A"><circle cx="290" cy="1234" r="2.5"/><circle cx="305" cy="1232" r="2.5"/><circle cx="320" cy="1235" r="2.5"/></g>
+<path d="M560 1250C548 1222 556 1196 576 1186L572 1160H600L596 1186C616 1196 624 1222 612 1250Z" fill="#A8613A"/>
+<path d="M612 1206L642 1174L647 1180L619 1222Z" fill="#A8613A"/>
+<path d="M566 1196C544 1196 540 1228 559 1238" fill="none" stroke="#86492A" stroke-width="5"/>
+<path d="M573 1200C567 1214 567 1230 573 1243" stroke="#E9AC7A" stroke-width="4" fill="none" opacity=".75"/>
+<path d="M0 1430C180 1396 360 1420 520 1404C680 1390 800 1410 900 1398V1600H0Z" fill="url(#k)"/>
+<path d="M0 1430C180 1396 360 1420 520 1404C680 1390 800 1410 900 1398V1440C780 1452 660 1436 520 1450C360 1466 180 1440 0 1470Z" fill="#000" opacity=".22"/>
+<rect width="900" height="1600" fill="url(#v)"/>
+</svg>`;
+document.documentElement.style.setProperty('--scene', 'url("data:image/svg+xml,' + encodeURIComponent(SCENE) + '")');
+
+/* ---------------- helpers ---------------- */
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const lerp=(a,b,t)=>a+(b-a)*t;
+function lens(x0,x1,yTop,yMid,yBot,n=22){
+  const cx=(x0+x1)/2, cT=2*yTop-yMid, cB=2*yBot-yMid, pts=[];
+  const q=(t,c)=>[(1-t)**2*x0+2*(1-t)*t*cx+t*t*x1,(1-t)**2*yMid+2*(1-t)*t*c+t*t*yMid];
+  for(let i=0;i<=n;i++){const [x,y]=q(i/n,cT);pts.push(`${x.toFixed(2)}% ${y.toFixed(2)}%`)}
+  for(let i=n-1;i>=1;i--){const [x,y]=q(i/n,cB);pts.push(`${x.toFixed(2)}% ${y.toFixed(2)}%`)}
+  return `polygon(${pts.join(',')})`;
+}
+function hex2rgb(h){h=h.replace('#','');return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16))}
+function mix(a,b,t){const A=hex2rgb(a),B=hex2rgb(b);return '#'+A.map((v,i)=>Math.round(lerp(v,B[i],t)).toString(16).padStart(2,'0')).join('')}
+const HOURKEYS=[[0,'#22304F'],[5,'#6E5E95'],[6,'#F1A78A'],[7,'#F4CB62'],[10,'#E9E39A'],[13,'#9CCBE6'],[16,'#F0B35E'],[19,'#D9695A'],[21,'#4A4F86'],[24,'#22304F']];
+function hourColor(h){for(let i=0;i<HOURKEYS.length-1;i++){const [a,ca]=HOURKEYS[i],[b,cb]=HOURKEYS[i+1];if(h>=a&&h<=b)return mix(ca,cb,(h-a)/(b-a))}return HOURKEYS[0][1]}
+
+/* ---------------- symbols & wordmarks ---------------- */
+const sym1=()=>`<svg class="sym" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="43" fill="#15132F" stroke="#F5B35C" stroke-width="12"/><g class="d1-lens"><path d="M16 50Q50 13 84 50Q50 87 16 50Z" fill="#FFF0D9"/><circle cx="50" cy="50" r="10" fill="#F5B35C"/></g></svg>`;
+const wm1=()=>`<span class="d1-wm" role="img" aria-label="O Əsrdə">${sym1()}<span class="d1-word">Əsrdə</span></span>`;
+
+const sym2=(h=6,bg=true)=>`<svg class="sym" viewBox="0 0 100 100" aria-hidden="true">${bg?`<rect width="100" height="100" fill="${hourColor(h)}"/>`:''}<ellipse cx="50" cy="50" rx="21" ry="32" fill="none" stroke="#111418" stroke-width="11"/><g class="d2-handg" transform="rotate(${(h-6)*15} 50 50)"><rect x="49" y="46" width="17" height="8" fill="#111418"/></g><circle cx="50" cy="50" r="6" fill="#111418"/></svg>`;
+const wm2=(t='06:00',h=6)=>`<span class="d2-wm" role="img" aria-label="O ƏSRDƏ" style="--hc:${hourColor(h)}"><span>O ƏSRDƏ</span><span class="d2-stamp">${t}</span></span>`;
+
+const ring3=`<svg viewBox="0 0 100 120" aria-hidden="true"><path d="M78 26C64 6 22 8 13 46C5 84 36 112 66 104C94 96 100 56 80 32" fill="none" stroke="#C1283E" stroke-width="4.5" stroke-linecap="round"/></svg>`;
+const sym3=()=>`<svg class="sym" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="#ECEDE8"/><path d="M0 74H100M0 88H100M0 60H100M0 46H100M0 32H100M0 18H100" stroke="#C3CEDE" stroke-width="1.1"/><path d="M20 0V100" stroke="#C1283E" stroke-width="1.6" opacity=".7"/><text x="53" y="72" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-weight="600" font-size="60" fill="#1A2442">Ə</text><path d="M77 29C65 16 34 17 27 42C20 69 45 85 66 78C86 71 89 44 72 28" fill="none" stroke="#C1283E" stroke-width="3.6" stroke-linecap="round"/></svg>`;
+const wm3=()=>`<span class="d3-wm" role="img" aria-label="O Əsrdə">O <span class="d3-e">Ə${ring3}</span>srdə</span>`;
+
+const sym4=(bg='#3B2F27')=>`<svg class="sym" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="${bg}"/><ellipse cx="50" cy="50.5" rx="27" ry="25.5" transform="rotate(-12 50 50)" fill="none" stroke="#A65E36" stroke-width="12"/><path d="M30 38C35 30 43 26 52 25.5" fill="none" stroke="#D89466" stroke-width="3" stroke-linecap="round" opacity=".8"/><ellipse cx="50" cy="50" rx="9.5" ry="9" fill="none" stroke="#D7A665" stroke-width="2.6"/></svg>`;
+const wm4=()=>`<span class="d4-wm" role="img" aria-label="O Əsrdə"><span class="o">O</span> Əsrdə</span>`;
+const mat=(style='')=>`<div class="mat" style="${style}" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>`;
+const daybar=(cls,h=6,f=0)=>`<div class="f2-day ${cls}" aria-hidden="true">${Array.from({length:24},(_,i)=>`<i class="${i<h?'done':''}">${i===h?`<b style="--f:${f}"></b>`:''}</i>`).join('')}</div>`;
+
+/* ---------------- directions ---------------- */
+const DIRS=[
+{ id:'goz', n:1, name:'Göz açılışı', kind:'Birinci şəxs',
+  concept:'Loqodakı “O” göz kimi açılır. Hər bölüm qaranlıqdan işığa açılan bir baxışla başlayır, saat dəyişəndə isə göz qırpılır. Kadr göz qapaqlarının arasından görünür.',
+  colors:[['Gecə','#15132F','Fon, göz qapağı'],['Şəfəq','#F5B35C','Əsas vurğu, simvol'],['Göz işığı','#FFF0D9','Mətn, açılan işıq'],['Kirpik','#2B2550','İkinci fon, kölgə']],
+  fonts:[['Unbounded','var(--f-unb)',500,'Loqo, başlıq, saat (300)'],['Onest','var(--f-onest)',600,'Açılış cümləsi, mətn']],
+  motion:'Göz qırpımı. Loqo açılışında “O” qapalı xətdən göz kimi açılır, söz fokusa gəlir. Saat keçidində göz yumulur, açılanda artıq 07:00-dır.',
+  stage:()=>`<div class="stage s1 play" data-stage="goz">${wm1()}<button class="replay" data-replay>Açılışı göstər</button></div>`,
+  sym:sym1,
+  cover:()=>`<div class="frame f1-cover">
+      <div class="f1-rim" style="clip-path:${lens(-19,119,12.9,39.5,66.1)}"></div>
+      <div class="scene" style="clip-path:${lens(-18,118,13.6,39.5,65.4)}"></div>
+      <div class="f1-top">${wm1()}</div>
+      <div class="f1-title"><span>Şah İsmayılın</span><em>gözündən</em><span>bir gün</span></div>
+      <div class="f1-meta"><i></i>${COPY.place}</div></div>`,
+  opening:()=>`<div class="frame f1-open">
+      <div class="scene" style="clip-path:${lens(-40,140,3,43,84)}"></div>
+      <div class="f1-clock">06:00</div>
+      <div class="f1-line">${COPY.line}</div></div>`,
+  clock:()=>`<div class="card4 f1-card" data-clock="goz">
+      <div class="scene" style="clip-path:${lens(-40,140,4,50,96)}"></div>
+      <div class="f1-clock"><span class="t">06:00</span></div>
+      <div class="f1-cap">göz qırpımı · 1 saat</div></div>`,
+  update(el,p){
+    let o; if(p<.32)o=1-ease(p/.32); else if(p<.56)o=0; else o=ease((p-.56)/.44);
+    o=Math.max(o,.015);
+    el.querySelector('.scene').style.clipPath=lens(-40,140,lerp(50,4,o),50,lerp(50,96,o));
+    el.querySelector('.t').textContent=p<.44?'06:00':'07:00';
+  }
+},
+{ id:'saat', n:2, name:'Saat', kind:'Zaman',
+  concept:'Brendin özü saatdır. Loqonun yanındakı rəngli qutu ekrandakı saatın eynisidir və hər saatın öz rəngi var. Simvolda “O” 24 saatlıq siferblatdır, içindəki əqrəb günün saatını göstərir.',
+  colors:[['Mürəkkəb','#111418','Mətn, fon'],['Ağ','#FFFFFF','Fon, mətn'],['06:00 · Dan','#F1A78A','Saat rəngi'],['07:00 · Səhər','#F4CB62','Saat rəngi'],['13:00 · Günorta','#9CCBE6','Saat rəngi']],
+  extra:()=>`<div class="spec-block"><h4>Günün rəngləri</h4><div class="hourstrip">${Array.from({length:24},(_,i)=>`<i style="background:${hourColor(i+.5)}"></i>`).join('')}</div><div class="hourlabels"><span>00</span><span>06</span><span>12</span><span>18</span><span>24</span></div></div>`,
+  fonts:[['Big Shoulders Display','var(--f-bs)',900,'Loqo, saat, başlıq'],['JetBrains Mono','var(--f-jb)',600,'Tarix, məkan, köməkçi mətn']],
+  motion:'Dəqiqələr sayılır, saat rəqəmi yuxarı fırlanır. Zolağın rəngi dandan səhərə keçir, gün xəttində yeddinci seqment dolur, simvoldakı əqrəb 15° dönür.',
+  stage:()=>`<div class="stage s2" data-stage="saat">${wm2()}<div><div class="ruler" style="--hc:${hourColor(6)}">${Array.from({length:24},(_,i)=>`<i class="${i===6?'on':''}"></i>`).join('')}</div></div><div class="ruler-l"><span>00</span><span>06</span><span>12</span><span>18</span><span>24</span></div></div>`,
+  sym:()=>sym2(6),
+  cover:()=>`<div class="frame f2-cover" style="--hc:${hourColor(6)}">
+      <div class="scene"></div>
+      <div class="f2-band">${wm2()}<span class="f2-meta">TƏBRİZ · 1501</span></div>
+      ${daybar('',6,0)}
+      <div class="f2-panel"><div class="f2-title"><span>ŞAH İSMAYILIN</span><span>GÖZÜNDƏN</span><span>BİR GÜN</span></div></div>
+      <div class="f2-foot"><span>O ƏSRDƏ</span><span>24 SAAT</span></div></div>`,
+  opening:()=>`<div class="frame f2-open" style="--hc:${hourColor(6)}">
+      <div class="scene"></div><div class="f2-shade"></div>
+      <div class="f2-band"><span class="f2-time">06<span class="colon">:</span>00</span><span class="f2-hand">${sym2(6,false)}</span></div>
+      ${daybar('',6,0)}
+      <div class="f2-line">${COPY.line}</div></div>`,
+  clock:()=>`<div class="card4 f2-card" data-clock="saat" style="--hc:${hourColor(6)}">
+      <div class="scene"></div>
+      <div class="f2-band"><span class="f2-time"><span class="roll"><span class="col"><i>06</i><i>07</i></span></span><span class="colon">:</span><span class="mm">00</span></span><span class="f2-hand">${sym2(6,false)}</span></div>
+      ${daybar('',6,0)}</div>`,
+  update(el,p){
+    const k=clamp(p/.86), m=Math.floor(k*60), done=m>=60;
+    el.style.setProperty('--hc',hourColor(6+k));
+    el.querySelector('.mm').textContent=String(done?0:m).padStart(2,'0');
+    el.querySelector('.col').style.transform=done?'translateY(-50%)':'translateY(0)';
+    const seg=el.querySelector('.f2-day b'); if(seg)seg.style.setProperty('--f',k);
+    el.querySelector('.d2-handg').setAttribute('transform',`rotate(${k*15} 50 50)`);
+  }
+},
+{ id:'arxiv', n:3, name:'Arxiv', kind:'Qeyd dəftəri',
+  concept:'Loqo bir qeyd blankıdır: “il” və “saat” xanaları hər bölümdə əl ilə doldurulur. Kəskin serif başlıqlar, kənar qeydlər, qırmızı qələm düzəlişləri. Kağız köhnə deyil, təmiz və sərindir.',
+  colors:[['Kağız','#ECEDE8','Fon'],['Mürəkkəb','#1A2442','Başlıq, mətn'],['Qırmızı qələm','#C1283E','Kənar qeyd, düzəliş'],['Xətt','#C3CEDE','Dəftər xətləri'],['Qrafit','#6E7178','Kataloq yazısı']],
+  fonts:[['Newsreader','var(--f-news)',500,'Loqo, başlıq, cümlə'],['IBM Plex Mono','var(--f-plex)',600,'Saat, tarix, kataloq'],['Caveat','var(--f-cav)',700,'Yalnız qısa kənar qeydlər']],
+  motion:'Qələmlə düzəliş. 06:00 qırmızı xətlə pozulur, kənara əl ilə 07:00 yazılır, sonra çap rəqəmi yenilənir. Əl yazısı yalnız qısa qeydlərdə işlənir, əsas mətn həmişə çap şriftidir.',
+  stage:()=>`<div class="stage s3 paper" data-stage="arxiv">${wm3()}<div class="form"><span class="fld">İL <span class="val">1501</span></span><span class="fld">SAAT <span class="val">06:00</span></span></div></div>`,
+  sym:sym3,
+  cover:()=>`<div class="frame f3-cover paper">
+      <div class="f3-margin"></div>
+      <div class="f3-head">${wm3()}<span class="f3-cat">TƏBRİZ · 1501</span></div>
+      <div class="f3-photo"><div class="scene"></div><div class="f3-ticks"></div></div>
+      <div class="f3-note"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M34 34C22 30 12 22 8 8M8 8L4 18M8 8L17 12" fill="none" stroke="#C1283E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>il 1501</div>
+      <div class="f3-title">Şah İsmayılın <em>gözündən<svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M1 6C30 3 70 2 99 5" fill="none" stroke="#C1283E" stroke-width="2.6" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg></em> bir gün</div></div>`,
+  opening:()=>`<div class="frame f3-open">
+      <div class="scene"></div>
+      <div class="f3-sheet paper"><div class="f3-margin"></div><span class="f3-lab">SAAT</span><span class="f3-typed">06:00<svg class="f3-tick" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M1 6C30 3 70 3 99 6" fill="none" stroke="#C1283E" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg></span></div>
+      <div class="f3-caption"><small>İL 1501 · QEYD 1</small><p>${COPY.line}</p></div></div>`,
+  clock:()=>`<div class="card4 f3-card" data-clock="arxiv">
+      <div class="scene"></div>
+      <div class="f3-sheet paper"><div class="f3-margin"></div><span class="f3-lab">SAAT</span>
+        <span class="f3-typed stack"><span class="a">06:00</span><span class="b" style="opacity:0">07:00</span><span class="f3-strike"></span></span>
+        <span class="f3-hand">07:00</span></div></div>`,
+  update(el,p){
+    const s=ease(clamp(p/.28)), w=clamp((p-.3)/.4), f=clamp((p-.8)/.2);
+    el.querySelector('.f3-strike').style.transform=`scaleX(${s}) rotate(-2deg)`;
+    el.querySelector('.f3-strike').style.opacity=1-f;
+    const h=el.querySelector('.f3-hand'); h.style.clipPath=`inset(0 ${(100-w*100).toFixed(1)}% 0 0)`; h.style.opacity=1-f;
+    el.querySelector('.a').style.opacity=1-f; el.querySelector('.b').style.opacity=f;
+  }
+},
+{ id:'gundelik', n:4, name:'Gündəlik həyat', kind:'Materiallar',
+  concept:'Gün boyu əlin toxunduğu materiallar: çörək, mis, yun, qoz ağacı, kül. “O” yuxarıdan görünən kasanın ağzıdır; o kasa həm fəhlə evində, həm sarayda var. Sakit, yumşaq və geniş boşluqlu.',
+  colors:[['Kətan','#D9D8D0','Fon, panel'],['Qoz','#3B2F27','Mətn, tünd fon'],['Mis','#A65E36','Simvol, vurğu'],['Çörək','#D7A665','İsti işıq'],['İndiqo yun','#2F3C58','Sərin kölgə']],
+  fonts:[['Young Serif','var(--f-young)',400,'Loqo, başlıq, saat'],['Commissioner','var(--f-comm)',500,'Etiket, köməkçi mətn']],
+  motion:'İşığın yavaş sürüşməsi. Sərin səhər kölgəsi isti işığa keçir, rəqəmlər yumşaq bulanıqlıqla əvəzlənir, saatın altında nazik bir sap uzanır.',
+  stage:()=>`<div class="stage s4" data-stage="gundelik"><div class="s4-sym">${sym4()}</div>${wm4()}${mat()}</div>`,
+  sym:()=>sym4(),
+  cover:()=>`<div class="frame f4-cover">
+      <div class="f4-head">${wm4()}</div>
+      <div class="f4-window"><div class="scene"></div></div>
+      <div class="f4-title">${COPY.title}</div>
+      <div class="f4-tag">${sym4('#D9D8D0')}${COPY.place}</div>
+      ${mat()}</div>`,
+  opening:()=>`<div class="frame f4-open">
+      <div class="scene"></div><div class="f4-light"></div>
+      <div class="f4-pill"><span>06:00</span></div>
+      <div class="f4-panel"><p>${COPY.line}</p>${mat()}</div></div>`,
+  clock:()=>`<div class="card4 f4-card" data-clock="gundelik">
+      <div class="scene"></div><div class="f4-cool"></div><div class="f4-warm"></div><div class="f4-light"></div>
+      <div class="f4-pill"><span class="a">06:00</span><span class="b">07:00</span></div>
+      <div class="f4-thread"></div>
+      <div class="f4-cap">səhər işığı</div></div>`,
+  update(el,p){
+    const k=ease(clamp(p)), x=clamp((p-.3)/.4);
+    el.querySelector('.f4-cool').style.opacity=lerp(.38,0,k);
+    el.querySelector('.f4-warm').style.opacity=lerp(0,.55,k);
+    el.querySelector('.f4-light').style.transform=`translate(${lerp(-22,18,k)}%,${lerp(6,-4,k)}%)`;
+    const a=el.querySelector('.a'), b=el.querySelector('.b');
+    a.style.opacity=1-x; a.style.filter=`blur(${(x*1.2).toFixed(2)}cqw)`; a.style.transform=`translateY(${-x*20}%)`;
+    b.style.opacity=x; b.style.filter=`blur(${((1-x)*1.2).toFixed(2)}cqw)`; b.style.transform=`translateY(${(1-x)*20}%)`;
+    el.querySelector('.f4-thread').style.transform=`scaleX(${ease(clamp(p/.9))})`;
+  }
+}];
+const BYID=Object.fromEntries(DIRS.map(d=>[d.id,d]));
+
+function profile(d){
+  const av=(s)=>`<span class="av" style="width:${s}px;height:${s}px">${d.sym()}</span>`;
+  return `<div class="prof">
+    <div class="prof-top"><span class="av-ring">${av(76)}</span><div class="prof-id"><div class="prof-name">O Əsrdə</div><div class="prof-handle">${COPY.handle} · nümunə</div></div></div>
+    <div class="prof-test">
+      <div class="pt pt-light">${av(44)}${av(28)}${av(20)}</div>
+      <div class="pt pt-dark">${av(44)}${av(28)}${av(20)}</div>
+      <div class="pt-note">Kiçik ölçü testi: 44, 28 və 20 px, ağ və qara fonda</div>
+    </div></div>`;
+}
+function spec(d){
+  return `<div class="spec-block"><h4>Əsas rənglər</h4><ul class="sw">${d.colors.map(([n,h,r])=>`<li><span class="chip" style="background:${h}"></span><span><b>${n}<code>${h}</code></b><small>${r}</small></span></li>`).join('')}</ul></div>
+  ${d.extra?d.extra():''}
+  <div class="spec-block"><h4>Şriftlər</h4>${d.fonts.map(([n,css,w,r])=>`<div class="font"><div class="font-sample" style="font-family:${css};font-weight:${w}">Əə İı Şş Çç Ğğ Öö Üü</div><div class="font-meta"><b>${n}</b> · ${r}</div></div>`).join('')}</div>
+  <div class="spec-block"><h4>Hərəkət</h4><p>${d.motion}</p></div>`;
+}
+const KINDS=[
+  ['wordmark','Əsas loqo'],['profile','Profil şəkli'],['cover','Reels örtüyü'],['opening','Açılış kadrı'],['clock','Saat keçidi 06:00 → 07:00'],['spec','Rəng və şrift']
+];
+const LABEL=Object.fromEntries(KINDS);
+function render(d,kind){
+  switch(kind){
+    case 'wordmark':return d.stage();
+    case 'profile':return profile(d);
+    case 'cover':return d.cover();
+    case 'opening':return d.opening();
+    case 'clock':return d.clock();
+    case 'spec':return `<div class="spec">${spec(d)}</div>`;
+    case 'trio':return `<div class="trio">${d.cover()}${d.opening()}${d.clock()}</div>`;
+  }
+}
+
+/* ---------------- main view ---------------- */
+const vd=document.getElementById('view-dirs');
+vd.innerHTML=DIRS.map(d=>`
+<section class="dir" id="d-${d.id}" data-dir="${d.id}">
+  <div class="dir-head">
+    <div><div class="dir-no">İstiqamət ${d.n} · ${d.kind}<span class="picked-badge">Seçilib</span></div><h2>${d.name}</h2><p>${d.concept}</p></div>
+    <div class="dir-actions"><button class="btn primary" data-open="${d.id}" data-kind="trio">Tam ölçüdə aç</button><button class="btn" data-pick="${d.id}" aria-pressed="false">Bunu seç</button></div>
+  </div>
+  <div class="dir-body">
+    <div class="dir-main">
+      <figure>${render(d,'wordmark')}<figcaption><b>${LABEL.wordmark}</b><button class="zoom" data-open="${d.id}" data-kind="wordmark">Böyüt</button></figcaption></figure>
+      <div class="rail">
+        ${['profile','cover','opening','clock'].map(k=>`<figure><button class="preview-btn" data-open="${d.id}" data-kind="${k}" aria-label="${LABEL[k]}, tam ölçüdə aç">${render(d,k)}</button><figcaption><b>${LABEL[k]}</b><button class="zoom" data-open="${d.id}" data-kind="${k}">Böyüt</button></figcaption></figure>`).join('')}
+      </div>
+    </div>
+    <aside class="spec">${spec(d)}</aside>
+  </div>
+</section>`).join('');
+document.getElementById('jump').innerHTML=DIRS.map(d=>`<a href="#d-${d.id}"><span class="n">${d.n}</span>${d.name}</a>`).join('');
+
+/* ---------------- compare view ---------------- */
+const vc=document.getElementById('view-cmp');
+vc.innerHTML=KINDS.map(([k,l])=>`
+<section class="cmp-row"><h3>${l}</h3><div class="cmp-scroll"><div class="cmp-grid ${k==='wordmark'||k==='spec'?'wide':''}">
+${DIRS.map(d=>`<div class="cmp-cell" data-dir="${d.id}"><div class="cmp-name">${d.n} · ${d.name}<span class="pk">Seçilib</span></div>${k==='spec'?render(d,k):`<button class="preview-btn" data-open="${d.id}" data-kind="${k}" aria-label="${d.name}, ${l}, tam ölçüdə aç">${render(d,k)}</button>`}</div>`).join('')}
+</div></div></section>`).join('');
+
+function setView(v){
+  const cmp=v==='cmp';
+  vd.hidden=cmp; vc.hidden=!cmp;
+  document.getElementById('v-dirs').setAttribute('aria-pressed',!cmp);
+  document.getElementById('v-cmp').setAttribute('aria-pressed',cmp);
+  document.getElementById('jump').style.visibility=cmp?'hidden':'visible';
+  refreshClocks();
+}
+document.getElementById('v-dirs').onclick=()=>{setView('dirs');if(location.hash==='#muqayise')history.replaceState(null,'',location.pathname+location.search)};
+document.getElementById('v-cmp').onclick=()=>{setView('cmp');history.replaceState(null,'','#muqayise')};
+
+/* ---------------- pick ---------------- */
+let pick=null; try{pick=localStorage.getItem('oesrde-pick')}catch(e){}
+function applyPick(){
+  document.querySelectorAll('[data-pick]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.pick===pick));
+  document.querySelectorAll('.dir').forEach(s=>s.classList.toggle('is-picked',s.dataset.dir===pick));
+  document.querySelectorAll('.cmp-cell').forEach(s=>s.classList.toggle('is-picked',s.dataset.dir===pick));
+  document.querySelectorAll('[data-pick]').forEach(b=>b.textContent=b.dataset.pick===pick?'Seçilib ✓':'Bunu seç');
+  document.getElementById('pickstate').innerHTML='Seçim: <b>'+(pick?BYID[pick].n+' · '+BYID[pick].name:'hələ yoxdur')+'</b>';
+  const fp=document.getElementById('full-pick'); if(cur){fp.setAttribute('aria-pressed',cur.d===pick);fp.textContent=cur.d===pick?'Seçilib ✓':'Bunu seç'}
+}
+function togglePick(id){pick=pick===id?null:id;try{pick?localStorage.setItem('oesrde-pick',pick):localStorage.removeItem('oesrde-pick')}catch(e){}applyPick()}
+
+/* ---------------- full viewer ---------------- */
+const full=document.getElementById('full'), fb=document.getElementById('full-body'), ft=document.getElementById('full-tabs');
+const FTABS=[['trio','Hamısı'],['cover','Örtük'],['opening','Açılış kadrı'],['clock','Saat keçidi'],['wordmark','Loqo'],['profile','Profil'],['spec','Rəng və şrift']];
+let cur=null, lastFocus=null;
+function openFull(id,kind){
+  if(!cur)lastFocus=document.activeElement;
+  cur={d:id,k:kind||'trio'}; const d=BYID[id];
+  document.getElementById('full-title').innerHTML=`<span>İstiqamət ${d.n}</span>${d.name}`;
+  ft.innerHTML=FTABS.map(([k,l])=>`<button role="tab" aria-selected="${k===cur.k}" data-tab="${k}">${l}</button>`).join('');
+  fb.innerHTML=render(d,cur.k);
+  full.hidden=false; document.body.style.overflow='hidden';
+  history.replaceState(null,'','#tam-'+d.n);
+  applyPick(); refreshClocks();
+  const st=fb.querySelector('.s1'); if(st)replayStage(st);
+  document.getElementById('full-close').focus({preventScroll:true});
+}
+function closeFull(){
+  full.hidden=true; cur=null; fb.innerHTML=''; document.body.style.overflow='';
+  history.replaceState(null,'',vc.hidden?location.pathname+location.search:'#muqayise');
+  refreshClocks(); if(lastFocus)lastFocus.focus({preventScroll:true});
+}
+function step(dlt){const i=DIRS.findIndex(x=>x.id===cur.d);openFull(DIRS[(i+dlt+DIRS.length)%DIRS.length].id,cur.k)}
+document.getElementById('full-close').onclick=closeFull;
+document.getElementById('full-prev').onclick=()=>step(-1);
+document.getElementById('full-next').onclick=()=>step(1);
+document.getElementById('full-pick').onclick=()=>togglePick(cur.d);
+ft.addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(b)openFull(cur.d,b.dataset.tab)});
+document.addEventListener('keydown',e=>{if(full.hidden)return;if(e.key==='Escape')closeFull();if(e.key==='ArrowRight')step(1);if(e.key==='ArrowLeft')step(-1)});
+
+document.addEventListener('click',e=>{
+  const r=e.target.closest('[data-replay]'); if(r){e.stopPropagation();replayStage(r.closest('.stage'));return}
+  const o=e.target.closest('[data-open]'); if(o){openFull(o.dataset.open,o.dataset.kind);return}
+  const p=e.target.closest('[data-pick]'); if(p){togglePick(p.dataset.pick)}
+});
+function replayStage(st){st.classList.remove('play');void st.offsetWidth;st.classList.add('play')}
+
+/* ---------------- hash routing ---------------- */
+function route(){
+  const h=location.hash.slice(1);
+  const m=h.match(/^tam-([1-4])$/);
+  if(m){openFull(DIRS[+m[1]-1].id,cur?cur.k:'trio');return}
+  if(!full.hidden)closeFull();
+  if(h==='muqayise')setView('cmp');
+}
+window.addEventListener('hashchange',route);
+
+/* ---------------- clock loop ---------------- */
+let clocks=[];
+function refreshClocks(){clocks=[...document.querySelectorAll('[data-clock]')].filter(el=>el.offsetParent!==null)}
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const CYCLE=6800, HOLD0=1300, RUN=3600;
+function frame(t){
+  let p;
+  const c=t%CYCLE;
+  if(reduce){p=c<CYCLE/2?0:1}else{p=clamp((c-HOLD0)/RUN)}
+  for(const el of clocks){const d=BYID[el.dataset.clock];if(d)d.update(el,p)}
+  requestAnimationFrame(frame);
+}
+applyPick(); route(); refreshClocks(); requestAnimationFrame(frame);
+window.addEventListener('resize',refreshClocks);
+})();
+</script>
