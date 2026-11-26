@@ -639,7 +639,7 @@ document.getElementById('v-dirs').onclick=()=>{setView('dirs');if(location.hash=
 document.getElementById('v-cmp').onclick=()=>{setView('cmp');history.replaceState(null,'','#muqayise')};
 
 /* ---------------- pick ---------------- */
-let pick=null; try{pick=localStorage.getItem('oesrde-pick')}catch(e){}
+let pick='saat'; try{pick=localStorage.getItem('oesrde-pick')||'saat'}catch(e){}
 function applyPick(){
   document.querySelectorAll('[data-pick]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.pick===pick));
   document.querySelectorAll('.dir').forEach(s=>s.classList.toggle('is-picked',s.dataset.dir===pick));

@@ -161,6 +161,13 @@ _(notes pending)_
   half-second music drop plus teaser line mid-video, 70 px subtitles, shorter logo outro.
   My reading: for Kadr Xarici, lead with the central *question* on screen from the first frame.
 
+### 7. O Əsrdə — brand identity (26 Nov 2026)
+- **What:** the user's Instagram/TikTok series (first-person "a day in another century"). Built a
+  four-direction brand preview page (`o-esrde/brend-baxisi.html`, artifact
+  https://claude.ai/artifact/MaD7AgJrLzJEdUpuRdJHNG).
+- **User chose direction 2 · Saat** (clock-based typographic identity, hour colours). Full spec in
+  `o-esrde/README.md` — follow it for any O Əsrdə work.
+
 ## User preferences (across all projects)
 - Use only real footage. Never fabricate archive material, reactions, voices or historical scenes,
   and never use cloned or generated voices.
