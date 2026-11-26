@@ -1,13 +1,13 @@
-# Reel cover template — "B / Poster" (approved)
+# Reel cover template — "Comic POW" (current, approved)
 
-Canvas 1080x1920, aurora background. All key content inside the profile-grid crop (y 240..1680).
+Canvas 1080x1920. Script: cover_template_comic.py (function n1).
 
-| Element | Position |
-|---|---|
-| Araz logo (white) left, 100% Səhər Şousu logo right | centre y = 322 |
-| Title line 1 (Montserrat 900, 118px, gold) | y = 420, centred |
-| Title line 2 (Montserrat 900, 80px, white) | y = 560, centred |
-| Main photo, gold 6px frame, radius 60 | x 50, y 700, 980x900 |
-| Second person, circle with gold rim | 340px, x 690..1030, y 1310..1650 |
+- Background: yellow/orange comic rays + halftone + white speed lines, black frame border.
+- Logos: transparent PNGs top-left / top-right (y = 300) with a soft dark shadow, no plate.
+- Title: Bangers font (supports ə ı İ ş ğ), white line + red line, black outline, tilted.
+- Main person: cut-out (rembg u2net_human_seg) with white sticker outline, anchored to the bottom.
+- Second person: smaller cut-out sticker bottom-left, face inside the grid crop (y < 1680).
+- Speech bubble with a real line from the clip; emoji stickers tied to the topic; one "HA-HA!" burst; small tag.
+- Never cover faces; keep faces, title and logos inside the profile-grid crop (y 240..1680).
 
-Script: cover_template_B.py (function B). Use real reaction frames, premium grade, title = real line or name.
+Previous template: cover_template_B.py ("B / Poster").
