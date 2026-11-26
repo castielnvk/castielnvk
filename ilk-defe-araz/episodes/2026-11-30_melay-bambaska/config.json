@@ -9,7 +9,9 @@
     "ai1": "source/ai1.mp4",
     "ai2": "source/ai2.mp4",
     "ai3": "source/ai3.mp4",
-    "ai4": "source/ai4.mp4"
+    "ai4": "source/ai4.mp4",
+    "ai5": "source/ai5.mp4",
+    "ai6": "source/ai6.mp4"
   },
   "anchors": {
     "words": 5.2,
@@ -33,9 +35,8 @@
     },
     {
       "start": 5.2,
-      "clip": "ai4",
+      "clip": "ai6",
       "src": 0.0,
-      "speed": 0.72,
       "z": [
         1.04,
         1.09
@@ -46,7 +47,7 @@
     },
     {
       "start": 8.68,
-      "clip": "ai3",
+      "clip": "ai5",
       "src": 0.0,
       "z": [
         1.0,
@@ -70,7 +71,7 @@
     },
     {
       "start": 11.8,
-      "clip": "ai3",
+      "clip": "ai5",
       "src": 3.0,
       "z": [
         1.2,
@@ -86,14 +87,14 @@
     },
     {
       "start": 14.2,
-      "clip": "ai2",
-      "src": 5.0,
+      "clip": "ai6",
+      "src": 4.0,
       "z": [
-        1.06,
-        1.1
+        1.04,
+        1.08
       ],
       "cx": 0.5,
-      "cy": 0.4,
+      "cy": 0.36,
       "depth": true
     }
   ],
