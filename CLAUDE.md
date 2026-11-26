@@ -178,9 +178,11 @@ approved styles and technical lessons.
   foley), with a reverse-suck + low hit on the cut.
 - Logo ending: «Bir anlıq görünüş». The logo flashes for 3 frames with a hit, then black and total silence,
   then it is suddenly back and holds (`compose.LogoFlashEnding`). The user rejected the light-strip ending.
-- Instagram Stories per episode: `baxma-dedim/episodes/stories.py <NN>` (4 slides). **The "Fakt" slide
-  (big red year/number + the real documented fact) must ALWAYS be included.** Fact slides go into the
-  "Faktlar" highlight; its cover is `baxma-dedim/highlights/highlight-faktlar.png` (FAKT. with a red period).
+- Instagram Stories per episode: **ONLY the Fakt slide** (the user: "I only want the facts story, the others
+  aren't needed"). Use `baxma-dedim/episodes/facts.py <NN>` (dark, cold, desaturated episode still with grain; a big
+  glowing red italic number; the fact in style-C small caps; an italic sting line; the source; the logo). Facts must be
+  real and documented, with the source on the slide. They go into the "Faktlar" highlight; its cover is
+  `baxma-dedim/highlights/highlight-faktlar.png`. (`stories.py`, the 4-slide set, is retired.)
 - The episode pipeline is in `baxma-dedim/episodes/` (`shared/compose.py`, `shared/sfx.py`,
   the logo ending `LogoEnding` and `dry_tick`). EP02 (`ep02-esidir/edit.py`) is the template.
 
