@@ -153,7 +153,8 @@ _(notes pending)_
   «dinləyiciləri». Standard v5 teal treatment, white/teal rows.
 - Episode 10: Melay — «Bambaşqa biri», 30 Noyabr, 17.5 s; four clips (mountains ×2, red-string set,
   night-garden desk). One mountain clip's face drifts after ~2.5 s (AI identity drift) → used only its
-  first 2.5 s. Masks: compute only the depth-shot frames (computing every frame cost 2–3× the time).
+  first 2.5 s. User then sent a new desk clip (replace), a new mountain clip (prettier; replaced the
+  drifting one) and a landscape red-string close-up (cropped to 9:16, inserted at 10.54 s). Masks: compute only the depth-shot frames (computing every frame cost 2–3× the time).
 - Speed: person masks cost ~3.5 s/frame on this 4-core CPU (≈19 min/episode). User will send Mac and
   Windows specs to pick a GPU machine (Remote Control); also asked about connecting the Grok
   (xAI grok-imagine-video) API — needs an api.x.ai key via request_credential, user hasn't decided.

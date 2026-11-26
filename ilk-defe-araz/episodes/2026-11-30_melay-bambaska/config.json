@@ -11,7 +11,8 @@
     "ai3": "source/ai3.mp4",
     "ai4": "source/ai4.mp4",
     "ai5": "source/ai5.mp4",
-    "ai6": "source/ai6.mp4"
+    "ai6": "source/ai6.mp4",
+    "ai7": "source/ai7.mp4"
   },
   "anchors": {
     "words": 5.2,
@@ -67,6 +68,18 @@
       ],
       "cx": 0.5,
       "cy": 0.42,
+      "depth": true
+    },
+    {
+      "start": 10.54,
+      "clip": "ai7",
+      "src": 6.0,
+      "z": [
+        1.0,
+        1.04
+      ],
+      "cx": 0.53,
+      "cy": 0.45,
       "depth": true
     },
     {
