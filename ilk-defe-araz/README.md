@@ -105,3 +105,4 @@ Tələblər: `pip install playwright librosa`; Chromium `/opt/pw-browsers/chromi
 | `episodes/2026-11-24_zulfiyye-xanbabayeva` | Zülfiyyə Xanbabayeva (Xalq artisti) — «Bir nəfəs qədər» fonda | 24 Noyabr | `Zulfiyye_Xanbabayeva_Ilk_Defe_Araz_9x16.mp4` (18.9 s, **lüks rejim A «Gold Couture»**) |
 | `episodes/2026-11-24_zulfiyye-xanbabayeva` (`config_devet.json`) | Zülfiyyə Xanbabayeva — efirə dəvət («Sabah saat 11-də…») | 24 Noyabr | `Zulfiyye_Xanbabayeva_Devet_9x16.mp4` (23.7 s, lüks A + letterbox, masthead, halation, ortada son kart) |
 | `episodes/2026-11-27_zemine-cox-sevmisem` | Zəminə — «Çox sevmişəm» | 27 Noyabr | `Zemine_Cox_Sevmisem_Ilk_Defe_Araz_9x16.mp4` (20.7 s, v5; tünd vintaj otaq, 4 qısa klip) |
+| `episodes/2026-11-30_melay-bambaska` | Melay — «Bambaşqa biri» | 30 Noyabr | `Melay_Bambaska_Biri_Ilk_Defe_Araz_9x16.mp4` (17.5 s, v5; dağ / qırmızı iplər / gecə bağı, 4 klip) |
