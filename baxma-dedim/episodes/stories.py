@@ -31,6 +31,25 @@ STORIES = {
         s3="Bunu əvvəl eşitmişdin?",
         s4=["Tam hekayə profildə."], s4_red="Amma mən sənə…",
     ),
+    "02": dict(
+        hook_still=("stare", 88 / 24 + 0.01), hook_center=(600, 1150), hook_zoom=1.3,
+        s1=["Yanındakı adam", "sənə cavab vermir."], s1_red="Bəlkə hələ eşidir.",
+        s2_year="2020",
+        s2=["2020-ci ildə Kanadada alimlər", "hospisdə ömrünün son saatlarında", "olan xəstələrin beynini ölçüblər."],
+        s2b=["Huşsuz vəziyyətdə olan bəzi", "xəstələrin beyni səslərə sağlam", "insanlarınkına bənzər reaksiya verib.",
+             "Eşitdiklərini anlayıb-anlamadıqları", "isə bilinmir."],
+        s3="Onunla danışmağa davam edərdin?",
+        s4=["Tam hekayə profildə."], s4_red="Amma mən sənə…",
+    ),
+    "03": dict(
+        hook_still=("stare", 7.0), hook_center=(700, 1000), hook_zoom=1.25,
+        s1=["Oyanmısan,", "amma tərpənə bilmirsən."], s1_red="Otaqda kimsə var.",
+        s2_year="7,6%",
+        s2=["2011-ci ildə 35 araşdırmanın", "icmalı göstərib ki, insanların", "7,6%-i ən azı bir dəfə", "yuxu iflici yaşayıb."],
+        s2b=["Tələbələr arasında", "bu rəqəm 28%-ə çatır."],
+        s3="Sən heç yuxu iflici yaşamısan?",
+        s4=["Tam hekayə profildə."], s4_red="Amma mən sənə…",
+    ),
 }
 
 
