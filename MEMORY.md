@@ -213,3 +213,12 @@ _(notes pending)_
 - HDR iPhone footage: convert HLG→SDR with zscale + `tonemap=hable` (npl=100).
 - Review contact sheets of design frames and transitions before delivering. They catch empty
   frames, gaps and muddy dissolves.
+
+### Log footage grading (2026-11-26)
+- User sent an iPhone 16 Pro Apple Log clip (HEVC 10-bit, tagged bt709 but actually Apple Log; black
+  sits at ~0.15) — a dusk drive through the windshield — asking for a cinematic grade + cinematic SFX.
+- Delivered `log-grade/Log_Cinematic_Grade_9x16.mp4`. Pipeline: `mklut.py` (Apple Log decode →
+  Rec.2020→709 → ×2.0 exposure → ACES filmic → teal shadows/amber highlights) → `grade.cube`;
+  `finish.py` (halation, soft vignette, grain in numpy/OpenCV); `sfx.py` (original drone, sub
+  booms, whooshes, riser — all low-passed). Mix −16 LUFS.
+- Lesson: ffmpeg `blend`/`vignette` on gbrp16le misbehaved (garish or too dark); do finishing in Python.
