@@ -20,7 +20,7 @@ LS = 3
 LW, LH = W // LS, H // LS
 TAU = 2 * math.pi
 
-NAMEF = {'AB': 'AlexBrush-Regular.ttf', 'GV': 'GreatVibes-Regular.ttf', 'AL': 'Allura-Regular.ttf'}
+NAMEF = {'AB': 'AlexBrush-Regular.ttf', 'GV': 'GreatVibes-Regular.ttf'}
 AMPF = 'Parisienne-Regular.ttf'
 
 
@@ -108,7 +108,7 @@ VARIANTS = [
     # Azərbaycanca
     dict(id='az1', group='AZ', style='blush', layout='stack', font='AB', names=AZ),
     dict(id='az2', group='AZ', style='night', layout='stack', font='GV', names=AZ),
-    dict(id='az3', group='AZ', style='rose', layout='stack', font='AL', names=AZ),
+    dict(id='az3', group='AZ', style='rose', layout='stack', font='AB', names=AZ),
     dict(id='az4', group='AZ', style='champagne', layout='stack', font='GV', names=AZ),
     dict(id='az5', group='AZ', style='mauve', layout='stack', font='AB', names=AZ),
     dict(id='az6', group='AZ', style='night', layout='stack', font='AB', names=AZ),
@@ -116,28 +116,28 @@ VARIANTS = [
     dict(id='en1', group='EN', style='blush', layout='stack', font='GV', names=EN),
     dict(id='en2', group='EN', style='night', layout='stack', font='AB', names=EN),
     dict(id='en3', group='EN', style='rose', layout='stack', font='GV', names=EN),
-    dict(id='en4', group='EN', style='champagne', layout='stack', font='AL', names=EN),
-    dict(id='en5', group='EN', style='mauve', layout='stack', font='AL', names=EN),
+    dict(id='en4', group='EN', style='champagne', layout='stack', font='AB', names=EN),
+    dict(id='en5', group='EN', style='mauve', layout='stack', font='AB', names=EN),
     dict(id='en6', group='EN', style='night', layout='stack', font='GV', names=EN),
     # Monoqram (baş hərflər)
     dict(id='mono1', group='MONO', style='blush', layout='mono', font='AB', letters=('M', 'Ə')),
     dict(id='mono2', group='MONO', style='night', layout='mono', font='GV', letters=('M', 'Ə')),
-    dict(id='mono3', group='MONO', style='rose', layout='mono', font='AL', letters=('M', 'Ə')),
+    dict(id='mono3', group='MONO', style='rose', layout='mono', font='AB', letters=('M', 'Ə')),
     dict(id='mono4', group='MONO', style='champagne', layout='mono', font='GV', letters=('M', 'A')),
     dict(id='mono5', group='MONO', style='mauve', layout='mono', font='AB', letters=('M', 'A')),
-    dict(id='mono6', group='MONO', style='night', layout='mono', font='AL', letters=('M', 'A')),
+    dict(id='mono6', group='MONO', style='night', layout='mono', font='AB', letters=('M', 'A')),
     # Ulduzlu fon (qara və tema rəngləri)
     dict(id='star1', group='AZ', style='stars_black', layout='stack', font='GV', names=AZ),
     dict(id='star2', group='EN', style='stars_black', layout='stack', font='AB', names=EN),
     dict(id='star3', group='MONO', style='stars_black', layout='mono', font='AB', letters=('M', 'Ə')),
-    dict(id='star4', group='AZ', style='stars_gold', layout='stack', font='AL', names=AZ),
+    dict(id='star4', group='AZ', style='stars_gold', layout='stack', font='AB', names=AZ),
     dict(id='star5', group='EN', style='stars_gold', layout='stack', font='GV', names=EN),
     dict(id='star6', group='MONO', style='stars_gold', layout='mono', font='GV', letters=('M', 'A')),
     dict(id='star7', group='AZ', style='stars_rose', layout='stack', font='AB', names=AZ),
     dict(id='star8', group='EN', style='stars_rose', layout='stack', font='GV', names=EN),
-    dict(id='star9', group='MONO', style='stars_rose', layout='mono', font='AL', letters=('M', 'Ə')),
+    dict(id='star9', group='MONO', style='stars_rose', layout='mono', font='AB', letters=('M', 'Ə')),
     dict(id='star10', group='AZ', style='stars_pink', layout='stack', font='GV', names=AZ),
-    dict(id='star11', group='EN', style='stars_pink', layout='stack', font='AL', names=EN),
+    dict(id='star11', group='EN', style='stars_pink', layout='stack', font='AB', names=EN),
     dict(id='star12', group='MONO', style='stars_pink', layout='mono', font='AB', letters=('M', 'A')),
 ]
 
@@ -169,7 +169,7 @@ def runs_width(runs):
     return sum(f.getlength(t) for t, f in runs)
 
 
-STROKE = {'AB': 2, 'GV': 1, 'AL': 2}
+STROKE = {'AB': 2, 'GV': 1}
 
 
 def draw_runs(draw, runs, cx, baseline, fill=255, stroke=0):

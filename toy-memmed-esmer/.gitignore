@@ -2,3 +2,4 @@ render*.log
 __pycache__/
 preview/
 videolar/
+zip/
