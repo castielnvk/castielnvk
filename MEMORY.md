@@ -135,6 +135,12 @@ programmes, 4) everything else.
     wiping, laughter (`seher-anons/sfx_01_dekabr/`); music "Jingle Bells" (Kevin MacLeod, CC BY 4.0)
     for the December/snow look. Spray timing found by measuring white pixels per frame in the
     nozzle area — tile sheets misled me. Feedback pending.
+  - 2 Dec ("Nəyə həvəslə başlayıb yarıda qoymusunuz?"): gym, grandpa tries a sit-up, gives up and
+    sleeps. Music gag: "Hyperfun" 0–4 s with a tape stop at the give-up, then "Lobby Time" from
+    ~5 s (both Kevin MacLeod, CC BY 4.0), premixed into one file and passed with `"music_t0":0`,
+    `"bq":0.6001` (new build.py option). Real SFX grunts, sigh, snoring, chuckles, gym bed. Stickers
+    at y 620 because the trainer stands top-right: HOP! / UFF! / BƏSDİR! / XORRR... / SABAHDAN!.
+    Feedback pending.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 

@@ -21,7 +21,9 @@ for B in np.arange(B0*.97,B0*1.03,B0*.0008):
         if best is None or s>best[0]: best=(s,B,ph)
 _,B,ph=best; g=np.arange(o0+ph,o0+19,B); acc=np.interp(g,tt,oe)
 i0=next(i for i in range(len(g)) if g[i]>=cfg.get('music_from',0)-.05 and acc[i]>.6*acc.max())
-t0=g[i0]-.015; print('beat',round(B,4),'bpm',round(60/B,1),'music start',round(t0,3),'accents',np.round(acc[i0:i0+12],1))
+t0=g[i0]-.015
+if cfg.get('music_t0') is not None: t0=cfg['music_t0']
+print('beat',round(B,4),'bpm',round(60/B,1),'music start',round(t0,3),'accents',np.round(acc[i0:i0+12],1))
 beat=lambda t:round(t/B)*B
 tg={'m':.55,'tag':1.1,'c1':2.45,'c2':3.0,'c3':3.55,'ft':4.15,'w1':6.0,'w2':10.9,'bd':12.5,'end':13.1}; ev={}; last=0
 for k,v in tg.items():
