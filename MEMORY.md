@@ -130,6 +130,11 @@ programmes, 4) everything else.
     Real SFX: ambience, bite, chewing, lid, gulp (`seher-anons/sfx_30_noyabr/`). Music "Comic
     Plodding" (Kevin MacLeod) — build.py picked 31.27 s as start; "Marty Gots a Plan" was dropped
     because its stop-time breaks left random silences. Check a track's RMS for dropouts first.
+  - 1 Dec ("Hansı hadisədən sonra sizə ləqəb qoyublar?"): 15 s car-wash clip, grandpa foamed into a
+    snowman. `shift 80`; stickers FIŞŞŞ! / PÜF! / QAR ADAM! / ŞAXTA BABA!; real SFX spray, foam,
+    wiping, laughter (`seher-anons/sfx_01_dekabr/`); music "Jingle Bells" (Kevin MacLeod, CC BY 4.0)
+    for the December/snow look. Spray timing found by measuring white pixels per frame in the
+    nozzle area — tile sheets misled me. Feedback pending.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 
