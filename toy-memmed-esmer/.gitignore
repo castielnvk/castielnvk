@@ -1,2 +1,4 @@
-render.log
+render*.log
 __pycache__/
+preview/
+videolar/

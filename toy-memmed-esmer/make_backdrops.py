@@ -77,6 +77,30 @@ PAL = {
                   petals=[C(255, 247, 241), C(250, 226, 220)], glitter=None),
 }
 
+
+STAR_BASE = dict(bloom_k=0.0, metal=0.0, sub=C(255, 255, 255), orn=C(255, 255, 255), shadow=None,
+                 ribbons=None, petals=None, glitter=None, bokeh=None, dark=True, spark_k=1.0)
+PAL['stars_black'] = dict(STAR_BASE, bg_in=C(18, 14, 20), bg_out=C(2, 2, 3), bloom=C(40, 30, 50),
+                          name_top=C(255, 255, 255), name_bot=C(238, 236, 244), glow=(C(230, 236, 255), 0.30),
+                          shimmer=C(255, 250, 235), sparkle=C(255, 236, 205), beams=(C(215, 228, 255), 0.30),
+                          stars=[C(255, 214, 150), C(255, 240, 215), C(255, 255, 255), C(255, 190, 120)])
+PAL['stars_gold'] = dict(STAR_BASE, bg_in=C(22, 14, 12), bg_out=C(2, 2, 2), bloom=C(60, 36, 20),
+                         name_top=C(255, 242, 218), name_bot=C(210, 162, 100), metal=0.35, glow=(C(255, 196, 140), 0.40),
+                         shimmer=C(255, 255, 240), sparkle=C(255, 222, 170), beams=None,
+                         stars=[C(255, 206, 130), C(255, 226, 170), C(255, 244, 220), C(255, 180, 100)])
+PAL['stars_rose'] = dict(STAR_BASE, bg_in=C(92, 28, 54), bg_out=C(16, 4, 10), bloom=C(140, 50, 80),
+                         name_top=C(255, 255, 255), name_bot=C(255, 228, 236), glow=(C(255, 205, 222), 0.35),
+                         shimmer=C(255, 255, 255), sparkle=C(255, 232, 238), beams=(C(255, 232, 240), 0.12),
+                         stars=[C(255, 226, 236), C(255, 255, 255), C(255, 214, 160), C(255, 190, 210)])
+PAL['stars_pink'] = dict(STAR_BASE, bg_in=C(226, 104, 146), bg_out=C(110, 20, 58), bloom=C(255, 170, 200),
+                         name_top=C(255, 255, 255), name_bot=C(255, 236, 242), glow=(C(255, 230, 238), 0.35),
+                         shimmer=C(255, 255, 255), sparkle=C(255, 245, 248), beams=(C(255, 240, 246), 0.10),
+                         stars=[C(255, 255, 255), C(255, 236, 244), C(255, 226, 190)], dark=False,
+                         shadow=(C(90, 10, 40), 0.30))
+for _k in ('blush', 'night', 'rose', 'champagne', 'mauve'):
+    PAL[_k].setdefault('dark', _k == 'night')
+    PAL[_k].setdefault('stars', None)
+
 # --------------------------------------------------------------------- variants
 AZ = ('Məmməd', 'Əsmər')
 EN = ('Mammad', 'Asmar')
@@ -102,9 +126,22 @@ VARIANTS = [
     dict(id='mono4', group='MONO', style='champagne', layout='mono', font='GV', letters=('M', 'A')),
     dict(id='mono5', group='MONO', style='mauve', layout='mono', font='AB', letters=('M', 'A')),
     dict(id='mono6', group='MONO', style='night', layout='mono', font='AL', letters=('M', 'A')),
+    # Ulduzlu fon (qara və tema rəngləri)
+    dict(id='star1', group='AZ', style='stars_black', layout='stack', font='GV', names=AZ),
+    dict(id='star2', group='EN', style='stars_black', layout='stack', font='AB', names=EN),
+    dict(id='star3', group='MONO', style='stars_black', layout='mono', font='AB', letters=('M', 'Ə')),
+    dict(id='star4', group='AZ', style='stars_gold', layout='stack', font='AL', names=AZ),
+    dict(id='star5', group='EN', style='stars_gold', layout='stack', font='GV', names=EN),
+    dict(id='star6', group='MONO', style='stars_gold', layout='mono', font='GV', letters=('M', 'A')),
+    dict(id='star7', group='AZ', style='stars_rose', layout='stack', font='AB', names=AZ),
+    dict(id='star8', group='EN', style='stars_rose', layout='stack', font='GV', names=EN),
+    dict(id='star9', group='MONO', style='stars_rose', layout='mono', font='AL', letters=('M', 'Ə')),
+    dict(id='star10', group='AZ', style='stars_pink', layout='stack', font='GV', names=AZ),
+    dict(id='star11', group='EN', style='stars_pink', layout='stack', font='AL', names=EN),
+    dict(id='star12', group='MONO', style='stars_pink', layout='mono', font='AB', letters=('M', 'A')),
 ]
 
-FILENAMES = {'AZ': 'Azerbaycanca', 'EN': 'English', 'MONO': 'Monoqram'}
+FILENAMES = {'AZ': 'Azerbaycanca', 'EN': 'English', 'MONO': 'Monoqram'}  # ulduzlu fonlar da bu qruplardadır
 
 
 def out_name(v):
@@ -416,6 +453,23 @@ class Scene:
             self.gl = dict(x=rng.uniform(0, W, ng), y=rng.uniform(0, 1, ng), si=rng.choice(3, ng),
                            m=rng.choice([1, 2], ng), sw=rng.uniform(10, 40, ng), ph=rng.uniform(0, 1, ng),
                            tw=rng.choice([2, 3, 4], ng))
+        if pal['stars'] is not None:
+            # star field: uniform scatter + glittery clusters (like the stage LED examples)
+            n_u, n_c = 1000, 1400
+            cl = rng.uniform([150, 60], [W - 150, H - 120], (7, 2))
+            cx_ = np.concatenate([rng.uniform(0, W, n_u)] + [rng.normal(c[0], rng.uniform(90, 200), n_c // 7) for c in cl])
+            cy_ = np.concatenate([rng.uniform(0, H, n_u)] + [rng.normal(c[1], rng.uniform(60, 140), n_c // 7) for c in cl])
+            ns_ = len(cx_)
+            self.st_spr = [dot_sprite(s) for s in (3, 4, 6, 8)]
+            self.st = dict(x=cx_, y=cy_, si=rng.choice(4, ns_, p=[0.55, 0.28, 0.12, 0.05]),
+                           ci=rng.integers(0, len(pal['stars']), ns_), ph=rng.uniform(0, 1, ns_),
+                           f=rng.choice([1, 2, 3, 4], ns_), base=rng.uniform(0.35, 0.8, ns_),
+                           dx=rng.choice([-1, 0, 0, 1], ns_) * rng.uniform(8, 25, ns_))
+            # warm glowing orbs (bigger soft lights)
+            no = 60
+            self.orb_spr = [dot_sprite(s) for s in (10, 14, 20)]
+            self.orb = dict(x=rng.uniform(60, W - 60, no), y=rng.uniform(40, H - 40, no), si=rng.choice(3, no),
+                            ph=rng.uniform(0, 1, no), f=rng.choice([1, 2], no))
         self.noise = [rng.uniform(-0.5, 0.5, (H, W, 1)).astype(np.float32) / 255 * 1.6 for _ in range(4)]
 
     # low-res animated light
@@ -451,6 +505,8 @@ class Scene:
                 # source glow
                 acc += (np.exp(-((dx / 5) ** 2 + ((ly - 2) / 5) ** 2)) * 1.2)[..., None] * col * k * 2
         # bokeh
+        if pal['bokeh'] is None:
+            return acc
         col, k = pal['bokeh']
         b = self.bk
         span = LH + 60
@@ -481,6 +537,8 @@ class Scene:
         f = self.bg + self.upscale(self.lowres(p))
         if not pal['shadow']:
             pass
+        if pal['stars'] is not None:
+            self.draw_stars(f, p)
         # petals behind text
         if self.petals:
             self.draw_petals(f, p, front=False)
@@ -499,7 +557,7 @@ class Scene:
         breathe = 0.85 + 0.15 * math.sin(TAU * p * 2)
         gcol, gk = pal['glow']
         ga = (t['glow'] * gk * breathe)[..., None]
-        reg = reg * (1 - ga) + gcol * ga if pal is not PAL['night'] else reg + gcol * ga * 0.55
+        reg = reg * (1 - ga) + gcol * ga if not pal['dark'] else reg + gcol * ga * 0.55
         if pal['shadow']:
             scol, sk = pal['shadow']
             sa = (t['shadow'] * sk)[..., None]
@@ -529,6 +587,17 @@ class Scene:
             blit_add(f, self.sp_spr[s['si'][j]], s['x'][j], s['y'][j], pal['sparkle'], tw * pal['spark_k'])
         f += self.noise[i % 4]
         return (np.clip(f, 0, 1) * 255 + 0.5).astype(np.uint8)
+
+    def draw_stars(self, f, p):
+        st, pal = self.st, self.pal
+        for j in range(len(st['x'])):
+            tw = st['base'][j] + (1 - st['base'][j]) * max(0.0, math.sin(TAU * (p * st['f'][j] + st['ph'][j]))) ** 6
+            xx = st['x'][j] + st['dx'][j] * math.sin(TAU * (p + st['ph'][j]))
+            blit_add(f, self.st_spr[st['si'][j]], xx, st['y'][j], pal['stars'][st['ci'][j]], tw * 1.6)
+        o = self.orb
+        for j in range(len(o['x'])):
+            tw = 0.75 + 0.45 * (0.5 + 0.5 * math.sin(TAU * (p * o['f'][j] + o['ph'][j])))
+            blit_add(f, self.orb_spr[o['si'][j]], o['x'][j], o['y'][j], pal['stars'][0], tw)
 
     def draw_petals(self, f, p, front):
         pe, pal = self.pet, self.pal
