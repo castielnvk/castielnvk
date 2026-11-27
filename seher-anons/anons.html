@@ -53,7 +53,7 @@ if(P==='1'){
     anims.push(t=>{const k=(t-t0)/.35;ln.style.opacity=k<=0||k>=1?0:.9*(1-k);const r=28+k*22;ln.style.maskImage=`radial-gradient(circle,transparent ${r}%,#000 ${r+3}%,#000 ${r+16}%,transparent ${r+19}%)`});
   });
   el('','left:0;top:0;width:1080px;height:680px;background:linear-gradient(rgba(10,6,48,.9),rgba(10,6,48,.55) 45%,transparent)');
-  const gb=el('','left:0;top:1120px;width:1080px;height:800px;background:linear-gradient(transparent,rgba(10,6,48,.93) 55%)');
+  const gb=el('','left:0;top:'+(C.gtop||1120)+'px;width:1080px;height:'+(1920-(C.gtop||1120))+'px;background:linear-gradient(transparent,rgba(10,6,48,.93) 55%)');
   const gapK=t=>C.gap?out((t-C.gap[0])/.3)-out((t-C.gap[1])/.35):0;
   anims.push(t=>gb.style.opacity=cl((t-(E.c1-.35))/.5)*(1-.8*gapK(t)));
   // loop-cut comic wipes (also the intro reveal)
@@ -86,7 +86,7 @@ if(P==='1'){
   // big word: burst + pop + beat pulse + wiggling question mark
   const bu=el('','left:-120px;top:1165px;width:900px;height:900px;border-radius:50%;background:repeating-conic-gradient(#FFE500 0 3deg,transparent 3deg 12deg)');
   anims.push(t=>{const k=(t-E.c3)/.5;bu.style.opacity=k<=0||k>=1?0:(1-k);const r=12+k*34;bu.style.maskImage=`radial-gradient(circle,transparent ${r}%,#000 ${r+2}%,#000 ${r+12}%,transparent ${r+15}%)`});
-  const c3=el('<div class="cap bc" style="background:#6A2BFF;color:#FFE500;font-size:130px;padding:6px 36px 14px;box-shadow:11px 11px 0 #8CFF3C">'+C.big+'<span id="qm" style="display:inline-block;transform-origin:50% 85%">?</span></div>','left:64px;top:1534px;transform-origin:20% 60%','qx');
+  const c3=el('<div class="cap bc" style="background:#6A2BFF;color:#FFE500;font-size:'+(C.bigfs||130)+'px;padding:6px 36px 14px;box-shadow:11px 11px 0 #8CFF3C">'+C.big+'<span id="qm" style="display:inline-block;transform-origin:50% 85%">?</span></div>','left:64px;top:1534px;transform-origin:20% 60%','qx');
   const qm=c3.querySelector('#qm');
   anims.push(t=>{const t0=E.c3,k=(t-t0)/.3;c3.style.opacity=k<=0?0:1;let s=k<=0?0:back(k);
     if(t>t0+.6){const ph=((t/B)%1+1)%1;s=1+.035*Math.exp(-ph*5)}
@@ -97,7 +97,7 @@ if(P==='1'){
   anims.push(t=>{const k=out((t-E.ft)/.4);ft.style.opacity=t>E.bd-.15?cl(1-(t-(E.bd-.15))/.12):k;ft.style.transform=`translateY(${(1-k)*24}px)`});
   const eb=el('<div style="display:flex;align-items:center;gap:22px"><div class="an" style="background:#FFE500;color:#111;font-size:62px;padding:6px 26px 10px;border:6px solid #111;box-shadow:8px 8px 0 #8CFF3C;letter-spacing:2px">08:00 — 10:30</div><span class="sm" style="font-size:30px;color:#fff;line-height:1.15">HƏFTƏİÇİ<br>HƏR SƏHƏR</span></div>','left:64px;top:1722px;transform-origin:15% 50%');
   anims.push(t=>{const k=(t-E.bd)/.3;eb.style.opacity=k<=0?0:1;eb.style.transform=`rotate(-1.5deg) scale(${(k<=0?0:back(k))+(t>=END?.07*Math.exp(-(t-END)*7):0)})`});
-  const cw=el('','inset:0');document.querySelectorAll('.qx').forEach(e=>cw.appendChild(e));anims.push(t=>cw.style.transform=`translateX(${-1150*gapK(t)}px)`);
+  const cw=el('','inset:0');document.querySelectorAll('.qx').forEach(e=>cw.appendChild(e));anims.push(t=>cw.style.transform=`translateX(${(C.capdx||0)-1150*gapK(t)}px)`);
   const fl=el('','inset:0;background:#fff;z-index:90');anims.push(t=>fl.style.opacity=(t>=END?.22*Math.exp(-(t-END)*10):0)+(t>=E.c3?.16*Math.exp(-(t-E.c3)*12):0));
 }
 if(P==='2'){

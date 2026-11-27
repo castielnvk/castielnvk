@@ -141,6 +141,11 @@ programmes, 4) everything else.
     `"bq":0.6001` (new build.py option). Real SFX grunts, sigh, snoring, chuckles, gym bed. Stickers
     at y 620 because the trainer stands top-right: HOP! / UFF! / BƏSDİR! / XORRR... / SABAHDAN!.
     Feedback pending.
+  - **User correction (2 Dec): "Digər aparıcının üzü görünmür"** — every character's face must be
+    visible, including background presenters, not only the main gag. v1 hid the dumbbell guy behind
+    the title. v2 fix: `"shift":360` (both trainers below the title), captions moved right with
+    `"capdx":300` and `"bigfs":104` so the grandpa's face on the left stays clear, and the bottom
+    shading starts lower with `"gtop":1380`. Check all faces in test frames before rendering.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 
