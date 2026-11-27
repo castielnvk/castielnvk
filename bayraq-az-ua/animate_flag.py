@@ -8,7 +8,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 W, H, FPS, DUR = 1920, 1080, 30, 10
 N = FPS * DUR
 TAU = 2 * math.pi
-OVER = 1.07  # overscan so warped edges never show
+OVER = 1.13  # overscan so warped edges never show
 
 src = Image.open(os.path.join(HERE, 'bayraq_orijinal.jpg')).convert('RGB')
 sc = max(W / src.width, H / src.height) * OVER
@@ -20,7 +20,7 @@ ox, oy = (BW - W) / 2, (BH - H) / 2
 
 yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
 # waves: (wavelength px, temporal cycles per loop, amplitude px, vertical tilt, phase)
-WAVES = [(1150, 1, 14.0, 0.35, 0.0), (620, 2, 7.0, -0.25, 1.7), (380, 3, 3.0, 0.5, 4.1)]
+WAVES = [(1100, 2, 30.0, 0.35, 0.0), (600, 3, 16.0, -0.25, 1.7), (360, 4, 7.0, 0.5, 4.1)]
 
 
 def frame(i):
@@ -32,15 +32,15 @@ def frame(i):
         ph_xy = TAU * ((xx + tilt * yy) / lam - cyc * p) + ph
         s, c = np.sin(ph_xy), np.cos(ph_xy)
         dy += amp * s
-        dx += amp * 0.35 * c
-        shade += (amp / 14.0) * c  # slope -> light/shadow
+        dx += amp * 0.45 * c
+        shade += (amp / 30.0) * c  # slope -> light/shadow
     sx = np.clip(xx + ox + dx, 0, BW - 1.001)
     sy = np.clip(yy + oy + dy, 0, BH - 1.001)
     x0, y0 = sx.astype(np.int32), sy.astype(np.int32)
     fx, fy = (sx - x0)[..., None], (sy - y0)[..., None]
     a = img[y0, x0]; b = img[y0, x0 + 1]; c_ = img[y0 + 1, x0]; d = img[y0 + 1, x0 + 1]
     out = (a * (1 - fx) + b * fx) * (1 - fy) + (c_ * (1 - fx) + d * fx) * fy
-    k = 1.0 + 0.075 * shade[..., None]
+    k = 1.0 + 0.13 * shade[..., None]
     out = out * k + np.maximum(shade[..., None] - 0.9, 0) * 0.05  # soft satin sheen on crests
     return (np.clip(out, 0, 1) * 255 + 0.5).astype(np.uint8)
 
