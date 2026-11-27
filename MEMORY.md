@@ -125,6 +125,11 @@ programmes, 4) everything else.
     each sound by measured loudness (splats prominent, whistles low), and feed the mix to build.py
     via `"extra_sfx"`; set a sticker's sound to `"none"` when a real effect covers that moment.
     Worked example with credits: `seher-anons/sfx_27_noyabr/`. Feedback pending on 27 Nov v3.
+  - 30 Nov ("Övladınız müəlliminə sizdən nəyə görə şikayət edərdi?"): cafeteria, grandpa eats the
+    kid's lunch. `shift 150` (heads hit MÖVZUSU), `gap [7.9,9.95]` to show the empty lunchbox.
+    Real SFX: ambience, bite, chewing, lid, gulp (`seher-anons/sfx_30_noyabr/`). Music "Comic
+    Plodding" (Kevin MacLeod) — build.py picked 31.27 s as start; "Marty Gots a Plan" was dropped
+    because its stop-time breaks left random silences. Check a track's RMS for dropouts first.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 
