@@ -146,6 +146,13 @@ programmes, 4) everything else.
     the title. v2 fix: `"shift":360` (both trainers below the title), captions moved right with
     `"capdx":300` and `"bigfs":104` so the grandpa's face on the left stays clear, and the bottom
     shading starts lower with `"gtop":1380`. Check all faces in test frames before rendering.
+  - 3 Dec ("Toy dəvətnaməsində “uşaq gətirməyin” yazılsa, nə edərsiniz?"): wedding hall, grandpa in
+    a kids' toy car, two dancers and a pop-up shocked face — faces fill the whole frame, so a new
+    layout: title small at top centre between the logos (`"tw":[312,-155,0.72]` = translate x, y,
+    scale of the title group) and captions scaled down and lower (`"cs":0.85`, `"capdy":319`;
+    the end badge moves with them). Long first line `"fs1":50`. Stickers alternate left/right at
+    y 560; gap [5.15,7.7] shows the drift. Music "Bushwick Tarantella" (Kevin MacLeod, CC BY 4.0).
+    Feedback pending.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 

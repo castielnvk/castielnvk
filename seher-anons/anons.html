@@ -69,7 +69,7 @@ if(P==='1'){
   const tg=el(`<span class="sm" style="font-size:30px;color:#111;background:#FFE500;padding:4px 14px 4px 18px">BURAXILIŞ • ${C.date}</span>`,'left:70px;top:292px;transform-origin:30% 50%');
   anims.push(t=>{const k=cl((t-E.tag)/.2);tg.style.opacity=t<E.tag?0:1;tg.style.transform=`rotate(${-2-10*(1-out(k))}deg) scale(${2.2-1.2*out(k)})`});
   // SABAHIN — per-letter drop, back (stroke+extrude) and front (fill) layers
-  const mk=(front)=>{const row=el('','left:66px;top:342px;display:flex;transform:rotate(-2deg);transform-origin:0 50%');return [...'SABAHIN'].map(ch=>{const s=document.createElement('span');s.className='an';s.textContent=ch;s.style.cssText=`display:block;font-size:150px;margin-right:5px;transform-origin:50% 100%;`+(front?'color:#FFE500':`color:#0b0820;-webkit-text-stroke:13px #0b0820;text-shadow:${ext(12,'#6A2BFF')}`);row.appendChild(s);return s})};
+  const trows=[];const mk=(front)=>{const row=el('','left:66px;top:342px;display:flex;transform:rotate(-2deg);transform-origin:0 50%');trows.push(row);return [...'SABAHIN'].map(ch=>{const s=document.createElement('span');s.className='an';s.textContent=ch;s.style.cssText=`display:block;font-size:150px;margin-right:5px;transform-origin:50% 100%;`+(front?'color:#FFE500':`color:#0b0820;-webkit-text-stroke:13px #0b0820;text-shadow:${ext(12,'#6A2BFF')}`);row.appendChild(s);return s})};
   const bk=mk(false),fn=mk(true);
   anims.push(t=>{for(let i=0;i<7;i++){const k=(t-(.08+i*.05))/.3;let y=0,sx=1,sy=1,op=k<=0?0:1;
       if(k<1){const e=back(k);y=-260*(1-e);const q=cl((k-.55)/.45);sy=1-.18*Math.sin(Math.PI*q);sx=1+.14*Math.sin(Math.PI*q)}
@@ -81,7 +81,7 @@ if(P==='1'){
   const cap=(html,x,y,t0,bar)=>{const c=el(html,`left:${x}px;top:${y}px`,'qx');const br=el('',`left:${x-10}px;top:${y-6}px;width:40px;height:120px;background:${bar};border:6px solid #111`);
     anims.push(t=>{const k=out((t-t0)/.34);const w=c.offsetWidth+20;c.style.opacity=t<t0?0:1;c.style.clipPath=`inset(-20px ${(1-k)*100}% -20px -20px)`;c.style.transform=`translateX(${-30*(1-k)}px) rotate(-1.5deg)`;
       br.style.opacity=t<t0||k>=.999?0:1;br.style.transform=`translateX(${k*w}px) rotate(-1.5deg)`});return c};
-  cap('<div class="cap bc" style="background:#FFF6C9;color:#111;font-size:70px">'+C.l1+'</div>',64,1330,E.c1,'#6A2BFF');
+  cap('<div class="cap bc" style="background:#FFF6C9;color:#111;font-size:'+(C.fs1||70)+'px">'+C.l1+'</div>',64,1330,E.c1,'#6A2BFF');
   cap('<div class="cap bc" style="background:#FFF6C9;color:#111;font-size:'+(C.fs2||70)+'px">'+C.l2+'</div>',120,1432,E.c2,'#FF3D2E');
   // big word: burst + pop + beat pulse + wiggling question mark
   const bu=el('','left:-120px;top:1165px;width:900px;height:900px;border-radius:50%;background:repeating-conic-gradient(#FFE500 0 3deg,transparent 3deg 12deg)');
@@ -97,7 +97,8 @@ if(P==='1'){
   anims.push(t=>{const k=out((t-E.ft)/.4);ft.style.opacity=t>E.bd-.15?cl(1-(t-(E.bd-.15))/.12):k;ft.style.transform=`translateY(${(1-k)*24}px)`});
   const eb=el('<div style="display:flex;align-items:center;gap:22px"><div class="an" style="background:#FFE500;color:#111;font-size:62px;padding:6px 26px 10px;border:6px solid #111;box-shadow:8px 8px 0 #8CFF3C;letter-spacing:2px">08:00 — 10:30</div><span class="sm" style="font-size:30px;color:#fff;line-height:1.15">HƏFTƏİÇİ<br>HƏR SƏHƏR</span></div>','left:64px;top:1722px;transform-origin:15% 50%');
   anims.push(t=>{const k=(t-E.bd)/.3;eb.style.opacity=k<=0?0:1;eb.style.transform=`rotate(-1.5deg) scale(${(k<=0?0:back(k))+(t>=END?.07*Math.exp(-(t-END)*7):0)})`});
-  const cw=el('','inset:0');document.querySelectorAll('.qx').forEach(e=>cw.appendChild(e));anims.push(t=>cw.style.transform=`translateX(${(C.capdx||0)-1150*gapK(t)}px)`);
+  if(C.tw){const tw=el('','inset:0;transform-origin:0 0;transform:translate('+C.tw[0]+'px,'+C.tw[1]+'px) scale('+C.tw[2]+')');[tg,...trows,b2].forEach(e=>tw.appendChild(e));}
+  eb.classList.add('qx');const cw=el('','inset:0;transform-origin:0 0');document.querySelectorAll('.qx').forEach(e=>cw.appendChild(e));anims.push(t=>cw.style.transform=`translate(${(C.capdx||0)-1150*gapK(t)}px,${C.capdy||0}px) scale(${C.cs||1})`);
   const fl=el('','inset:0;background:#fff;z-index:90');anims.push(t=>fl.style.opacity=(t>=END?.22*Math.exp(-(t-END)*10):0)+(t>=E.c3?.16*Math.exp(-(t-E.c3)*12):0));
 }
 if(P==='2'){
