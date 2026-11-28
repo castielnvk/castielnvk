@@ -153,6 +153,10 @@ programmes, 4) everything else.
     the end badge moves with them). Long first line `"fs1":50`. Stickers alternate left/right at
     y 560; gap [5.15,7.7] shows the drift. Music "Bushwick Tarantella" (Kevin MacLeod, CC BY 4.0).
     Feedback pending.
+  - 4 Dec ("Kimə borc verdiyinizə peşmansınız?"): mall, grandpa takes selfies while the lender
+    holds "BORC" and an empty wallet. `shift 80`; stickers ÇİK! / BOŞDUR! / TELEFON! / QAYTAR!;
+    real SFX shutter, paper, velcro wallet, crickets for the empty wallet, mall bed; music "Funk
+    Game Loop" (Kevin MacLeod, CC BY 4.0). Feedback pending.
   - The station's old announcement audio is music only (no voice-over), so it can be replaced.
   - `apt-get update` is needed before `apt-get install fluidsynth fluid-soundfont-gm`.
 
